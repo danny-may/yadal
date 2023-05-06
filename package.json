@@ -16,8 +16,9 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "scripts": {
+    "build:all": "tsc --noemit && lerna run build",
     "watch": "tsc --noemit -w",
-    "build": "lerna run build && npm run build:cjs && npm run build:esm",
+    "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "esbuild src/index.ts --bundle --packages=external --loader:.ts=ts --outdir=dist --sourcemap --format=cjs --out-extension:.js=.cjs",
     "build:esm": "esbuild src/index.ts --bundle --packages=external --loader:.ts=ts --outdir=dist --sourcemap --format=esm --out-extension:.js=.mjs"
   },
