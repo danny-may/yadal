@@ -14,8 +14,8 @@
   },
   "scripts": {
     "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "esbuild src/index.ts --bundle --packages=external --loader:.ts=ts --outdir=dist --sourcemap --format=cjs --out-extension:.js=.cjs",
-    "build:esm": "esbuild src/index.ts --bundle --packages=external --loader:.ts=ts --outdir=dist --sourcemap --format=esm --out-extension:.js=.mjs",
+    "build:cjs": "esbuild src/index.ts --bundle --packages=external --external:*.json --loader:.ts=ts --outdir=dist --sourcemap --format=cjs --out-extension:.js=.cjs",
+    "build:esm": "esbuild src/index.ts --bundle --packages=external --external:*.json --loader:.ts=ts --outdir=dist --sourcemap --format=esm --out-extension:.js=.mjs",
     "watch": "tsc --noemit -w"
   },
   "repository": {
