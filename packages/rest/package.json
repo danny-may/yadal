@@ -28,5 +28,8 @@
   "dependencies": {
     "@yadal/dep": "^1.0.0-alpha.2",
     "discord-api-types": "^0.37.41"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
