@@ -1,6 +1,6 @@
 {
   "name": "yadal",
-  "version": "1.0.0-aplha",
+  "version": "1.0.0-alpha.1",
   "description": "Yet another discord api library",
   "main": "dist/index.js",
   "repository": {
@@ -34,9 +34,9 @@
     "."
   ],
   "devDependencies": {
+    "esbuild": "^0.17.18",
     "lerna": "^6.6.2",
-    "typescript": "^5.0.4",
-    "esbuild": "^0.17.18"
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "@yadal/dep": "^1.0.0",
