@@ -1,0 +1,4 @@
+{
+  "name": "YADAL development",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-20"
+}
