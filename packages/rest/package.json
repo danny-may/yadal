@@ -1,6 +1,6 @@
 {
   "name": "@yadal/rest",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Yet another discord api rest client",
   "author": "Danny May <dannyjmay97@gmail.com>",
   "homepage": "https://github.com/danny-may/yadal/tree/main/packages/rest#readme",
@@ -26,7 +26,7 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "dependencies": {
-    "@yadal/dep": "^1.0.0-alpha.1",
+    "@yadal/dep": "^1.0.0-alpha.2",
     "discord-api-types": "^0.37.41"
   }
 }
