@@ -4,7 +4,7 @@
   "description": "Dependency injection for yadal",
   "author": "Danny May <dannyjmay97@gmail.com>",
   "homepage": "https://github.com/danny-may/yadal/tree/main/packages/dep#readme",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "GPL-3.0-or-later",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",

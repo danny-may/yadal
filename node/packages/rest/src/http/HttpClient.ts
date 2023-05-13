@@ -1,4 +1,4 @@
-import { AbortController, AbortSignal, Timeout } from "@yadal/dep";
+import { AbortController, AbortSignal, Timeout, chainAbort } from "@yadal/dep";
 import { IHttpHandler } from "./IHttpHandler.js";
 import { IHttpRequest } from "./IHttpRequest.js";
 import { defaultHttpHandler } from "./defaultHttpHandler.js";
@@ -38,24 +38,11 @@ export class HttpClient {
 
     #makeAbortSignal(signal?: AbortSignal) {
         const requestController = new AbortController();
-        const cleanup = [(): void => requestController.signal.removeEventListener('abort', aborted)];
-        const aborted = () => cleanup.forEach(c => c());
-        const abortInflight = this.#abortInflight.signal;
-        const abort = () => requestController.abort();
+        const signals = [this.#abortInflight.signal];
+        if (signal !== undefined)
+            signals.push(signal);
 
-        requestController.signal.addEventListener('abort', aborted);
-        abortInflight.addEventListener('abort', abort);
-        cleanup.push(() => abortInflight.removeEventListener('abort', abort));
-        if (signal !== undefined) {
-            signal.addEventListener('abort', abort);
-            cleanup.push(() => signal.removeEventListener('abort', abort));
-        }
-        else if (!isNaN(this.#defaultTimeoutMs)) {
-            const timeout = new Timeout(abort, this.#defaultTimeoutMs).unref();
-            cleanup.push(() => timeout.remove());
-        }
-
-        return Object.assign(requestController.signal, { dispose: aborted });
+        return Object.assign(requestController.signal, { dispose: chainAbort(requestController, signals) });
     }
 }
 

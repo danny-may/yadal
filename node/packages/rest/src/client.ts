@@ -37,7 +37,7 @@ export class DiscordRestClient {
         }
     }
 
-    constructor(options: DiscordApiClientOptions = {}) {
+    constructor(options: DiscordRestClientOptions = {}) {
         this.ratelimit = options.ratelimit ?? new RateLimitManager({
             globalLimit: 50,
             globalReset: 1000,
@@ -60,7 +60,7 @@ export class DiscordRestClient {
     }
 }
 
-export interface DiscordApiClientOptions {
+export interface DiscordRestClientOptions {
     readonly authHeader?: string;
     readonly http?: HttpClient;
     readonly apiUrl?: URL;

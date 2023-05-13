@@ -1,6 +1,6 @@
 import { AbortSignal } from "@yadal/dep";
 import { HttpHeaders } from "../../http/index.js";
-import { sleep } from "../../timeout/index.js";
+import { sleep } from "../../../../dep/src/util.js";
 import { IEndpointResponse } from "../IEndpointResponse.js";
 import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware.js";
 

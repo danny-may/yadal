@@ -1,25 +1,65 @@
-export let Timeout: TimeoutConstructor = makeTimeouts();
+import { Deferred } from "./Deferred";
+
+export let Timeout: TimeoutConstructor = makeTimeout();
 export let AbortController: AbortControllerConstructor = getGlobal('AbortController');
 export let AbortSignal: AbortSignalConstructor = getGlobal('AbortSignal');
 export let URL: URLConstructor = getGlobal('URL');
+export let WebSocket: WebSocketConstructor = getGlobal('WebSocket');
 export let Blob: BlobConstructor = getGlobal('Blob');
 export let fetch: Fetch = getGlobal('fetch');
 
-export interface TimeoutConstructor {
-    new(callback: () => void, timeout: number): Timeout
+export interface WebSocketConstructor {
+    new(url: string | URL): WebSocket;
 }
 
-export interface Timeout {
+export interface WebSocket {
+    onmessage: (x: any) => void;
+    binaryType: 'blob' | 'arrayBuffer';
+    addEventListener(event: 'close', listener: (event: { code: number, reason: string }) => void): void;
+    removeEventListener(event: 'close', listener: (event: { code: number, reason: string }) => void): void;
+    addEventListener(event: 'message', listener: (message: WebSocketMessage) => void): void;
+    removeEventListener(event: 'message', listener: (message: WebSocketMessage) => void): void;
+    addEventListener(event: 'open', listener: () => void): void;
+    removeEventListener(event: 'open', listener: () => void): void;
+    addEventListener(event: 'error', listener: () => void): void;
+    removeEventListener(event: 'error', listener: () => void): void;
+    close(code?: number, reason?: string): void;
+    send(message: Blob): void;
+}
+
+export interface WebSocketMessage {
+    data: Blob | string | ArrayBuffer;
+}
+
+export interface TimeoutConstructor {
+    new <T>(callback: () => T, timeout: number): Timeout<T>
+}
+
+export interface Timeout<T = void> {
     remove(): void;
     unref(): this;
     ref(): this;
+    wait(): Promise<T>;
+}
+
+export interface IntervalConstructor {
+    new(callback: () => void, delay: number): Interval
+}
+
+export interface Interval {
+    unref(): this;
+    ref(): this;
+    stop(): void;
+    wait(): Promise<void>
 }
 
 export interface AbortSignal {
+    readonly aborted: boolean;
     readonly reason?: unknown;
     addEventListener(event: 'abort', handler: () => void): void;
     removeEventListener(event: 'abort', handler: () => void): void;
 }
+
 export interface AbortSignalConstructor {
     new(): AbortSignal
 }
@@ -98,23 +138,31 @@ export function setFetch(impl: Fetch) {
     fetch = impl;
 }
 
+export function setWebSocket(impl: WebSocketConstructor) {
+    WebSocket = impl;
+}
+
 function getGlobal<T>(key: string): T {
     return (globalThis as unknown as { [x: string]: T })[key] as T;
 }
 
-function makeTimeouts(): TimeoutConstructor {
+function makeTimeout(): TimeoutConstructor {
     const setTimeout = getGlobal<(action: () => void, timeout: number) => number | { ref(): void; unref(): void }>('setTimeout');
     const clearTimeout = getGlobal<(timeout: number | { ref(): void; unref(): void }) => void>('clearTimeout');
 
     if (setTimeout === undefined || clearTimeout === undefined)
         return undefined!;
 
-    return class Timeout {
-        #timeout: number | { ref(): void; unref(): void; };
-        #refUnref?: { ref(): void; unref(): void; };
+    return class Timeout<T> {
+        readonly #waiter: Deferred<T>;
+        readonly #timeout: number | { ref(): void; unref(): void; };
+        readonly #refUnref?: { ref(): void; unref(): void; };
 
         constructor(...args: ConstructorParameters<TimeoutConstructor>) {
-            this.#timeout = setTimeout(...args);
+            this.#waiter = new Deferred<T>();
+            this.#timeout = setTimeout(() => {
+                this.#waiter.resolve(args[0]() as T)
+            }, args[1]);
             this.#refUnref = typeof this.#timeout === 'number' ? undefined : this.#timeout;
         }
 
@@ -131,5 +179,9 @@ function makeTimeouts(): TimeoutConstructor {
             this.#refUnref?.unref();
             return this;
         }
-    } satisfies TimeoutConstructor;
+
+        wait() {
+            return this.#waiter.wait();
+        }
+    };
 }

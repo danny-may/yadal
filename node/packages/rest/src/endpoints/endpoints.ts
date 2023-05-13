@@ -259,7 +259,7 @@ function* query<T>(values?: T) {
         yield [key, String(value)] as const;
 }
 
-async function jsonResponse<T>(response: IHttpResponse): Promise<never extends T ? void : T>
+async function jsonResponse<T>(response: IHttpResponse): Promise<T extends never ? void : T>
 async function jsonResponse(response: IHttpResponse): Promise<unknown> {
     if (response.status === 204)
         return undefined;

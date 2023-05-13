@@ -2,9 +2,12 @@
   "name": "@yadal/rest",
   "version": "1.0.0-alpha.5",
   "description": "Yet another discord api rest client",
+  "keywords": [
+    "discord"
+  ],
   "author": "Danny May <dannyjmay97@gmail.com>",
   "homepage": "https://github.com/danny-may/yadal/tree/main/packages/rest#readme",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "GPL-3.0-or-later",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",

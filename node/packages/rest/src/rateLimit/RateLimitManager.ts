@@ -1,6 +1,7 @@
 import { RateLimitHeaders } from "./RateLimitHeaders";
 import { IRateLimitManager } from "./IRateLimitManager";
-import { Deferred, KeepAlive } from "../timeout";
+import { KeepAlive } from "../../../dep/src/util";
+import { Deferred } from "../../../dep/src/Deferred";
 import { IRateLimitResult } from ".";
 import { AbortSignal, Timeout } from "@yadal/dep";
 
