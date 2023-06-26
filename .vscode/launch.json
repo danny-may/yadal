@@ -5,17 +5,31 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Test",
             "type": "node",
             "request": "launch",
-            "name": "Launch Current file",
+            "runtimeArgs": [
+                "--test"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${file}",
+            "preLaunchTask": "npm: build:all",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Launch Root",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/dist/index.mjs",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
-            "preLaunchTask": "npm: build:all"
+            "preLaunchTask": "npm: build:all",
+            "console": "integratedTerminal"
         }
     ]
 }

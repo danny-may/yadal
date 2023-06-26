@@ -1,0 +1,23 @@
+{
+  "cache": false,
+  "check-coverage": true,
+  "exclude": [
+    "coverage/**",
+    "*/*/test/**",
+    "**/*.d.{ts,mts,cts}",
+    "build.mjs",
+    "**/*.json"
+  ],
+  "sourceMap": true,
+  "reporter": [
+    "html",
+    "text",
+    "text-summary"
+  ],
+  "all": true,
+  "instrument": true,
+  "branches": 27,
+  "lines": 34,
+  "functions": 33,
+  "statements": 34
+}

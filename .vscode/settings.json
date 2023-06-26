@@ -1,0 +1,12 @@
+{
+    "javascript.preferences.importModuleSpecifierEnding": "js",
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.js, $(capture).cjs, $(capture).mjs, $(capture).d.ts",
+        "*.cjs": "$(capture).cjs.map",
+        "*.mjs": "$(capture).mjs.map"
+    },
+    "files.exclude": {
+        "**/.nyc_output": true,
+        "node_modules": true
+    }
+}

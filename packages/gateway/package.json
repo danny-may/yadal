@@ -1,0 +1,44 @@
+{
+  "name": "@yadal/gateway",
+  "version": "1.0.0-alpha.5",
+  "description": "Yet another discord api gateway library",
+  "keywords": [
+    "discord"
+  ],
+  "author": "Danny May <dannyjmay97@gmail.com>",
+  "homepage": "https://github.com/danny-may/yadal/tree/main/packages/gateway#readme",
+  "license": "GPL-3.0-or-later",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "node ../../build.mjs",
+    "watch": "tsc --noemit -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danny-may/yadal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danny-may/yadal/issues"
+  },
+  "dependencies": {
+    "@yadal/core": "^1.0.0-alpha.3",
+    "discord-api-types": "^0.37.41"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.4",
+    "@types/websocket": "^1.0.5",
+    "erlpack": "^0.1.4",
+    "ws": "^8.13.0",
+    "websocket": "^1.0.34",
+    "zlib-sync": "^0.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

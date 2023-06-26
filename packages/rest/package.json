@@ -1,0 +1,36 @@
+{
+  "name": "@yadal/rest",
+  "version": "1.0.0-alpha.5",
+  "description": "Yet another discord api rest client",
+  "keywords": [
+    "discord"
+  ],
+  "author": "Danny May <dannyjmay97@gmail.com>",
+  "homepage": "https://github.com/danny-may/yadal/tree/main/packages/rest#readme",
+  "license": "GPL-3.0-or-later",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "node ../../build.mjs",
+    "watch": "tsc --noemit -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danny-may/yadal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danny-may/yadal/issues"
+  },
+  "dependencies": {
+    "@yadal/core": "^1.0.0-alpha.3",
+    "discord-api-types": "^0.37.41"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
