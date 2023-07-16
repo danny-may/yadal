@@ -1,3 +1,4 @@
+export * from './BaseUrlMiddleware';
 export * from './EndpointHeaderMiddleware';
 export * from './HttpRequestEndpointMiddleware';
 export * from './IEndpointClientMiddleware';

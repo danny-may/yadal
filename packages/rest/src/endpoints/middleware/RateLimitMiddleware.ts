@@ -11,18 +11,14 @@ export class RateLimitMiddleware implements IEndpointClientMiddleware {
         this.#rateLimits = rateLimits;
     }
 
-    handle<TModel, TResult>(request: IEndpointRequest<TModel, TResult>, next: () => PromiseLike<IEndpointResponse<TModel, TResult>>, signal?: AbortSignal | undefined): PromiseLike<IEndpointResponse<TModel, TResult>> {
-        return this.#rateLimits.request(
-            request.rateLimitKey,
-            request.endpoint.globalRateLimit,
-            async () => {
-                const result = await next();
-                return {
-                    headers: new RateLimitHeaders(result.headers),
-                    value: result
-                };
-            },
-            signal
-        )
+    async handle<TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, next: () => PromiseLike<IEndpointResponse<TModel, TResult>>, signal?: AbortSignal | undefined): Promise<IEndpointResponse<TModel, TResult>> {
+        const ratelimit = this.#rateLimits.get(request.http.method, request.endpoint.route, request.model);
+        if (ratelimit === undefined)
+            return await next();
+
+        await ratelimit.wait(signal);
+        const result = await next();
+        ratelimit.update(new RateLimitHeaders(result.http.headers));
+        return result;
     }
 }

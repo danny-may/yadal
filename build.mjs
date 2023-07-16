@@ -1,27 +1,34 @@
-import { build as esbuild } from 'esbuild';
-import { glob } from 'glob';
+import { execSync } from 'child_process';
+import * as rimraf from 'rimraf';
 
-async function build(entrypoints, outdir, format, ext) {
-    const files = await glob(entrypoints);
+rimraf.sync(`${process.cwd()}/dist`);
+execSync(`npx tsc --outDir dist --project ${process.cwd()}/tsconfig.json --rootDir .`);
 
-    await esbuild({
-        entryPoints: files,
-        bundle: files.length === 1,
-        loader: {
-            '.ts': 'ts'
-        },
-        outExtension: {
-            '.js': ext
-        },
-        outdir: outdir,
-        sourcemap: true,
-        packages: 'external',
-        format: format
-    })
-}
+// import { build as esbuild } from 'esbuild';
+// import { glob } from 'glob';
 
-await Promise.all([
-    build('src/index.ts', 'dist', 'cjs', '.cjs'),
-    build('src/index.ts', 'dist', 'esm', '.mjs'),
-    build('test/**/*.test.ts', 'test', 'esm', '.mjs')
-])
+// async function build(entrypoints, outdir, format, ext) {
+//     const files = await glob(entrypoints);
+
+//     await esbuild({
+//         entryPoints: files,
+//         bundle: files.length === 1,
+//         loader: {
+//             '.ts': 'ts'
+//         },
+//         outExtension: {
+//             '.js': ext
+//         },
+//         outdir: outdir,
+//         sourcemap: true,
+//         packages: 'external',
+//         format: format
+//     })
+// }
+
+// await Promise.all([
+//     build('src/index.ts', 'dist', 'cjs', '.cjs'),
+//     build('src/index.ts', 'dist', 'esm', '.mjs'),
+//     build('test/**/*.test.ts', 'test', 'esm', '.mjs')
+// ])
+

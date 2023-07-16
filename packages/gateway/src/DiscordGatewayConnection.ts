@@ -7,7 +7,6 @@ import { Heartbeat } from './Heartbeat';
 import { URL } from 'url';
 import { IMessageCompressor, IMessageCompressorFactory } from './compression';
 import { IMessageSerializer, IMessageSerializerFactory } from './serialization';
-import { inflateSync } from 'zlib';
 
 export interface IDiscordGatewayConnectionFactory {
     createConnection(config: SessionConfig): IDiscordGatewayConnection;

@@ -2,7 +2,6 @@ import { ISerializer } from './ISerializer';
 import { ErlpackAdapter } from './adapters';
 import { MessageSerializerFactory } from './IMessageSerializer';
 import type { Erlpack } from './adapters/extern';
-import { inflateSync } from 'zlib';
 
 export * from './adapters';
 export * from './IMessageSerializer';

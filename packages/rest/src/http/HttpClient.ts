@@ -1,4 +1,4 @@
-import { chainAbort } from "@yadal/core";
+import { CompositeAbortController, TimedAbortController } from "@yadal/core";
 import { IHttpHandler } from "./IHttpHandler.js";
 import { IHttpRequest } from "./IHttpRequest.js";
 import { defaultHttpHandler } from "./defaultHttpHandler.js";
@@ -22,27 +22,18 @@ export class HttpClient {
     }
 
     async send(request: IHttpRequest, signal?: AbortSignal) {
-        const s = this.#makeAbortSignal(signal);
-        try {
-            return await this.#handler(request, s);
-        } finally {
-            s.dispose();
-        }
+        using controller = new CompositeAbortController(
+            new TimedAbortController(this.#defaultTimeoutMs),
+            signal,
+            this.#abortInflight
+        );
+        return await this.#handler(request, controller.signal);
     }
 
     abort() {
         const controller = this.#abortInflight;
         this.#abortInflight = new AbortController();
         controller.abort();
-    }
-
-    #makeAbortSignal(signal?: AbortSignal) {
-        const requestController = new AbortController();
-        const signals = [this.#abortInflight.signal];
-        if (signal !== undefined)
-            signals.push(signal);
-
-        return Object.assign(requestController.signal, { dispose: chainAbort(requestController, signals) });
     }
 }
 

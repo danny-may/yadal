@@ -1,10 +1,9 @@
-import { IEndpointRequest } from "./IEndpointRequest";
-import { HttpHeaders } from "../http";
+import { IHttpResponse } from "../http";
+import { IEndpoint } from "./IEndpoint";
 
-export interface IEndpointResponse<TModel, TResult> {
-    readonly request: IEndpointRequest<TModel, TResult>;
-    status: number;
-    headers: HttpHeaders;
-    body: () => PromiseLike<Blob>;
-    model: (recompute?: boolean) => PromiseLike<TResult>
+
+export interface IEndpointResponse<TModel extends object, TResult> {
+    readonly endpoint: IEndpoint<TModel, TResult>;
+    result: TResult;
+    http: IHttpResponse;
 }

@@ -1,5 +1,5 @@
 export * from './middleware';
-export * as endpoints from './endpoints';
+export * from './endpoints';
 export * from './DiscordFile';
 export * from './IEndpoint';
 export * from './IEndpointClient';

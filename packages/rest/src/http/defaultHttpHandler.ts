@@ -3,32 +3,48 @@ import { request as createRequest } from 'node:https';
 import { IHttpRequest } from "./IHttpRequest";
 import { Deferred } from "@yadal/core";
 import { IncomingMessage } from "node:http";
+import { IHttpResponse } from "./IHttpResponse";
 
-export async function defaultHttpHandler(request: IHttpRequest, signal?: AbortSignal) {
-    const response = new Deferred<IncomingMessage>(signal);
+export async function defaultHttpHandler(request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
+    const responsePromise = new Deferred<IncomingMessage>(signal);
     const message = createRequest(request.url, {
         method: request.method,
-        headers: request.headers.toDict(),
-    }, response.resolve);
-    message.on('error', response.reject);
+        headers: {
+            ...request.headers.toDict(),
+            ...request.body?.headers?.toDict()
+        },
+    }, responsePromise.resolve);
+    message.on('error', responsePromise.reject);
     if (request.body !== undefined) {
         for await (const chunk of request.body.stream())
             message.write(chunk);
     }
     message.end();
-    const x = await response.wait();
-    const headers = new HttpHeaders(x.headers);
-    const getBody = async () => {
-        const chunks = []
-        for await (const chunk of x)
-            chunks.push(chunk as Uint8Array);
-        return new Blob(chunks, { type: headers.get('content-type') });
-    }
-    let body: Promise<Blob> | undefined;
+    const response = await responsePromise.wait();
+    const headers = new HttpHeaders(response.headers);
 
     return {
-        status: x.statusCode ?? 0,
-        body: () => body ??= getBody(),
+        status: response.statusCode ?? 0,
+        body: {
+            headers: headers.pick(contentHeaders),
+            async * stream() {
+                yield* response;
+            },
+        },
         headers
     }
 }
+
+const contentHeaders = [
+    'allow',
+    'content-disposition',
+    'content-encoding',
+    'content-language',
+    'content-length',
+    'content-location',
+    'content-md5',
+    'content-range',
+    'content-type',
+    'expires',
+    'last-modified'
+]

@@ -1,7 +1,14 @@
-import { IRateLimitResult } from "./IRateLimitResult.js";
+import { HttpMethod } from "..";
+import { IRoute } from "../paths";
+import { RateLimitHeaders } from "./RateLimitHeaders";
 
 export interface IRateLimitManager {
-    request<TResult>(key: string, global: boolean, getResult: () => PromiseLike<IRateLimitResult<TResult>>, signal?: AbortSignal): PromiseLike<TResult>;
-    clear(key: string): void;
+    get<T extends object>(method: HttpMethod, route: IRoute<T>, model: T): IRateLimiter | undefined;
+    clear(): void;
+}
+
+export interface IRateLimiter {
+    wait(signal?: AbortSignal): PromiseLike<void>;
+    update(headers: RateLimitHeaders): void
     clear(): void;
 }

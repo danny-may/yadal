@@ -33,23 +33,6 @@ export async function sleep(durationMs: number, signal?: AbortSignal) {
     }
 }
 
-export function chainAbort(controller: AbortController, signals: Iterable<AbortSignal>) {
-    const handlers: Array<[AbortSignal, () => void]> = [];
-    for (const signal of new Set(signals)) {
-        const abort = () => controller.abort(signal.reason);
-        signal.addEventListener('abort', abort);
-        handlers.push([signal, abort]);
-    }
-    const detach = () => {
-        for (const [signal, abort] of handlers)
-            signal.removeEventListener('abort', abort);
-        controller.signal.removeEventListener('abort', detach);
-    };
-
-    controller.signal.addEventListener('abort', detach);
-    return detach;
-}
-
 export async function asyncHandler<TEvent, TMessage>(event: TEvent, events: { [P in 'addEventListener' | 'removeEventListener']: (event: TEvent, handler: (message: TMessage) => Promise<void>) => void }, handler: (message: TMessage) => void | PromiseLike<void>, signal?: AbortSignal): Promise<void> {
     const done = new Deferred();
     const pending = new Set<Promise<void>>();
@@ -71,7 +54,7 @@ export async function asyncHandler<TEvent, TMessage>(event: TEvent, events: { [P
     signal?.removeEventListener('abort', done.resolve);
     await Promise.all(pending);
     if (errors.length > 0)
-        throw new AggregateError(errors);
+        throw errors[0];
 }
 
 export async function abortable<T>(promise: PromiseLike<T>, signal?: AbortSignal): Promise<T> {

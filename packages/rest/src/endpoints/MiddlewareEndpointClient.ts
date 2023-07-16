@@ -1,25 +1,35 @@
 import { IEndpoint } from "./IEndpoint";
 import { IEndpointClient } from "./IEndpointClient";
-import { IEndpointClientMiddleware } from "./middleware/IEndpointClientMiddleware";
 import { IEndpointRequest } from "./IEndpointRequest";
 import { IEndpointResponse } from "./IEndpointResponse";
+import { IEndpointClientMiddleware } from "./middleware/IEndpointClientMiddleware";
 
 export class MiddlewareEndpointClient implements IEndpointClient {
-    readonly #send: <TModel, TResult>(request: IEndpointRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IEndpointResponse<TModel, TResult>>;
+    readonly #send: <TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IEndpointResponse<TModel, TResult>>;
 
     constructor(middleware: Iterable<IEndpointClientMiddleware>) {
         this.#send = [...middleware]
-            .reduceRight<<TModel, TResult>(request: IEndpointRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IEndpointResponse<TModel, TResult>>>(
+            .reduceRight<<TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IEndpointResponse<TModel, TResult>>>(
                 (p, c) => (req, sig1) => c.handle(req, sig2 => p(req, mergeSignals(sig1, sig2)), sig1),
                 () => { throw new Error('No middleware handled the request') }
             )
     }
 
-    async send<TModel, TResult>(endpoint: IEndpoint<TModel, TResult>, model: TModel, signal?: AbortSignal | undefined): Promise<TResult>
-    async send<TResult>(endpoint: IEndpoint<void, TResult>, model?: undefined, signal?: AbortSignal | undefined): Promise<TResult>
-    async send<TModel, TResult>(endpoint: IEndpoint<TModel, TResult>, model: TModel, signal?: AbortSignal | undefined) {
-        const response = await this.#send<TModel, TResult>(endpoint.createRequest(model), signal);
-        return await response.model();
+    async send<TModel extends object, TResult>(endpoint: IEndpoint<TModel, TResult>, model: TModel, signal?: AbortSignal | undefined): Promise<TResult>
+    async send<TResult>(endpoint: IEndpoint<{}, TResult>, model?: undefined, signal?: AbortSignal | undefined): Promise<TResult>
+    async send<TModel extends object, TResult>(endpoint: IEndpoint<TModel, TResult>, model: TModel, signal?: AbortSignal | undefined) {
+        let request;
+        const { result } = await this.#send<TModel, TResult>({ 
+            endpoint, 
+            model,
+            get http() {
+                return request ??= this.endpoint.createRequest(this.model);
+            },
+            set http(value) {
+                request = value;
+            }
+        }, signal);
+        return result;
     }
 }
 

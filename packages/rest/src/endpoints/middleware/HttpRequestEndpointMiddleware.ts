@@ -6,40 +6,24 @@ import { IEndpointRequest } from "../IEndpointRequest";
 
 export class HttpRequestEndpointMiddleware implements IEndpointClientMiddleware {
     readonly #client: HttpClient;
-    readonly #baseUrls: Record<string, URL>;
 
-    constructor(client: HttpClient, baseUrls: Record<string, URL>) {
+    constructor(client: HttpClient) {
         this.#client = client;
-        this.#baseUrls = { ...baseUrls };
     }
 
-    async handle<TModel, TResult>(request: IEndpointRequest<TModel, TResult>, _: unknown, signal: AbortSignal | undefined) {
-        let url = request.url;
-        const baseUrl = this.#baseUrls[url.protocol.slice(0, -1)]
-        if (baseUrl !== undefined) {
-            const oldUrl = url;
-            url = new URL(baseUrl.toString())
-            url.pathname = [url.pathname, oldUrl.host || '.', oldUrl.pathname,].map(removeMiddleSlashes).join('/');
-            for (const [name, value] of oldUrl.searchParams)
-                url.searchParams.append(name, value);
-            if (oldUrl.hash.length > 0)
-                url.hash = oldUrl.hash;
+    async handle<TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, _: unknown, signal: AbortSignal | undefined) {
+        const response = await this.#client.send(request.http, signal);
+        let result;
+        return {
+            endpoint: request.endpoint,
+            get result() {
+                return result ??= request.endpoint.readResponse(response)
+            },
+            set result(value) {
+                result = value;
+            },
+            http: response
         }
-
-        const response = await this.#client.send({
-            headers: request.headers,
-            method: request.endpoint.method,
-            url,
-            body: await request.body?.()
-        }, signal);
-        const result: IEndpointResponse<TModel, TResult> = {
-            request,
-            status: response.status,
-            headers: response.headers,
-            body: response.body.bind(response),
-            model: () => request.endpoint.readResponse(result)
-        };
-        return result;
     }
 }
 

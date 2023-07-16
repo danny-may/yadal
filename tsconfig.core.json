@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noUncheckedIndexedAccess": true,
+        "sourceMap": true,
+        "target": "ES2022",
+        "moduleResolution": "Node",
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true,
+        "resolveJsonModule": true,
+        "lib": [
+            "ESNext.Disposable"
+        ],
+        "typeRoots": [
+            "./node_modules/@types",
+            "./node_modules/@yadal",
+        ]
+    }
+}

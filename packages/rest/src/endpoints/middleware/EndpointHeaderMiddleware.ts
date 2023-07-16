@@ -13,9 +13,9 @@ export class EndpointHeaderMiddleware implements IEndpointClientMiddleware {
             : new HttpHeaders(headers);
     }
 
-    handle<TModel, TResult>(request: IEndpointRequest<TModel, TResult>, next: () => PromiseLike<IEndpointResponse<TModel, TResult>>) {
+    handle<TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, next: () => PromiseLike<IEndpointResponse<TModel, TResult>>) {
         for (const [key, values] of this.#headers) {
-            request.headers.add(key, values);
+            request.http.headers.set(key, values);
         }
         return next();
     }

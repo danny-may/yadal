@@ -4,10 +4,10 @@ import { IEndpointResponse } from "../IEndpointResponse.js";
 import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware.js";
 
 export class RetryMiddleware implements IEndpointClientMiddleware {
-    async handle<TModel, TResult>(_: unknown, next: (signal?: AbortSignal | undefined) => PromiseLike<IEndpointResponse<TModel, TResult>>, signal?: AbortSignal | undefined) {
+    async handle<TModel extends object, TResult>(_: unknown, next: (signal?: AbortSignal | undefined) => PromiseLike<IEndpointResponse<TModel, TResult>>, signal?: AbortSignal | undefined) {
         while (true) {
             const response = await next();
-            const retryAfter = this.#getRetryAfter(response.headers);
+            const retryAfter = this.#getRetryAfter(response.http.headers);
             if (retryAfter === undefined)
                 return response;
 
