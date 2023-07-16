@@ -133,3 +133,4 @@ dist
 *.mjs
 *.cjs
 !build.mjs
+**/test.ts
