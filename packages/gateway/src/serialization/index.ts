@@ -1,11 +1,11 @@
-import { ISerializer } from './ISerializer';
-import { ErlpackAdapter } from './adapters';
-import { MessageSerializerFactory } from './IMessageSerializer';
-import type { Erlpack } from './adapters/extern';
+import { ISerializer } from './ISerializer.js';
+import { ErlpackAdapter } from './adapters/index.js';
+import { MessageSerializerFactory } from './IMessageSerializer.js';
+import type { Erlpack } from './adapters/extern.js';
 
-export * from './adapters';
-export * from './IMessageSerializer';
-export * from './ISerializer';
+export * from './adapters/index.js';
+export * from './IMessageSerializer.js';
+export * from './ISerializer.js';
 
 export const messageSerializer = Object.freeze({
     etf(serializer: ISerializer) {

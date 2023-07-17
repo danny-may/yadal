@@ -1,5 +1,5 @@
-import { IHttpResponse } from "../http";
-import { IEndpoint } from "./IEndpoint";
+import { IHttpResponse } from "../http/index.js";
+import { IEndpoint } from "./IEndpoint.js";
 
 
 export interface IEndpointResponse<TModel extends object, TResult> {

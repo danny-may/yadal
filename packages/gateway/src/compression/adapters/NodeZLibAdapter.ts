@@ -1,5 +1,5 @@
-import { IInflator } from "../IInflator";
-import { NodeInflate } from "./extern";
+import { IInflator } from "../IInflator.js";
+import { NodeInflate } from "./extern.js";
 
 export class NodeZLibAdapter implements IInflator {
     readonly #inflator: typeof NodeInflate;

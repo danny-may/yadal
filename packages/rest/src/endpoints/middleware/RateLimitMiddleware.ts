@@ -1,7 +1,7 @@
-import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware";
-import { IEndpointRequest } from "../IEndpointRequest";
-import { IEndpointResponse } from "../IEndpointResponse";
-import { IRateLimitManager, RateLimitHeaders } from "../../rateLimit";
+import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware.js";
+import { IEndpointRequest } from "../IEndpointRequest.js";
+import { IEndpointResponse } from "../IEndpointResponse.js";
+import { IRateLimitManager, RateLimitHeaders } from "../../rateLimit/index.js";
 
 
 export class RateLimitMiddleware implements IEndpointClientMiddleware {

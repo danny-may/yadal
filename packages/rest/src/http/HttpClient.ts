@@ -22,12 +22,16 @@ export class HttpClient {
     }
 
     async send(request: IHttpRequest, signal?: AbortSignal) {
-        using controller = new CompositeAbortController(
+        const controller = new CompositeAbortController(
             new TimedAbortController(this.#defaultTimeoutMs),
             signal,
             this.#abortInflight
         );
-        return await this.#handler(request, controller.signal);
+        try {
+            return await this.#handler(request, controller.signal);
+        } finally {
+            controller[Symbol.dispose]();
+        }
     }
 
     abort() {

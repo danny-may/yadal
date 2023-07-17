@@ -1,4 +1,4 @@
-import { IRoute } from "./IRoute";
+import { IRoute } from "./IRoute.js";
 
 export type RouteTemplateArg<Name extends PropertyKey, Type> = {
     (value: Type): string;

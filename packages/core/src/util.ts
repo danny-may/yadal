@@ -1,5 +1,5 @@
-import { Deferred } from "./Deferred";
-import { Timeout } from "./Timeout";
+import { Deferred } from "./Deferred.js";
+import { Timeout } from "./Timeout.js";
 
 export class KeepAlive {
     #timer: Timeout;
@@ -57,22 +57,3 @@ export async function asyncHandler<TEvent, TMessage>(event: TEvent, events: { [P
         throw errors[0];
 }
 
-export async function abortable<T>(promise: PromiseLike<T>, signal?: AbortSignal): Promise<T> {
-    if (signal === undefined)
-        return await promise;
-
-    const deferred = new Deferred<never>(signal);
-    const timeout = deferred.wait();
-
-    // The timeout throwing but not being caught isnt a problem, this guarantees
-    // that the error will never be unhandled and cause the process to crash
-    timeout.catch(() => { });
-    try {
-        return await Promise.race([timeout, promise]);
-    } finally {
-        // Either the promise resolved first or the signal triggered.
-        // If the promise resolved first, the timeout will never be re-awaited
-        // If the timeout rejected first, this will do nothing
-        deferred.resolve(undefined as never);
-    }
-}

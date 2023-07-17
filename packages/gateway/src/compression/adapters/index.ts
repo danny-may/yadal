@@ -1,3 +1,3 @@
-export * from './ZLibError';
-export * from './ZLibSyncAdapter';
-export * from './NodeZLibAdapter';
+export * from './ZLibError.js';
+export * from './ZLibSyncAdapter.js';
+export * from './NodeZLibAdapter.js';

@@ -1,4 +1,4 @@
-import { IMessageCompressor, IMessageCompressorFactory } from './IMessageCompressor';
+import { IMessageCompressor, IMessageCompressorFactory } from './IMessageCompressor.js';
 
 export class NoOpCompressorFactory implements IMessageCompressorFactory {
     createCompressor() {

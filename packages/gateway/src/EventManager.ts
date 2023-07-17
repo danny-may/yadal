@@ -1,5 +1,4 @@
 import { Deferred, DeferredIterable } from "@yadal/core";
-import { nextTick } from "process";
 
 export interface IEventHandle {
     remove(): void;
@@ -178,7 +177,7 @@ export class EventManager<Events extends Record<string, readonly unknown[]>> ext
     }
 
     #emit<Args extends readonly unknown[]>(event: EventFrom<Events>, handlers: Iterable<(...args: Args) => unknown>, args: Args) {
-        nextTick(() => {
+        process.nextTick(() => {
             for (const handler of handlers)
                 void this.#callHandler(event, handler, args);
         })

@@ -1,2 +1,2 @@
-export * from './wc3WebSocketAdapter';
-export * from './wsWebSocketAdapter';
+export * from './wc3WebSocketAdapter.js';
+export * from './wsWebSocketAdapter.js';

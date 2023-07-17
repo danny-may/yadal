@@ -1,5 +1,5 @@
 import * as Discord from 'discord-api-types/v10';
-import { EventManager } from './EventManager';
+import { EventManager } from './EventManager.js';
 
 export type DiscordMessageEvents =
     & { message: [message: Discord.GatewayReceivePayload] }

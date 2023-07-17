@@ -1,4 +1,4 @@
-import { id, route, str } from "./route";
+import { id, route, str } from "./route.js";
 
 const icon = str('icon');
 const guildId = id('guildId');

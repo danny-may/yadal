@@ -1,8 +1,8 @@
-export * from './WebSocket';
-export * from './adapters';
+export * from './WebSocket.js';
+export * from './adapters/index.js';
 
-import { Wc3WebSocketFactory, WsWebSocketFactory } from './adapters';
-import { Wc3WebSocket as Wc3WebSocket, WsWebSocket } from './adapters/extern';
+import { Wc3WebSocketFactory, WsWebSocketFactory } from './adapters/index.js';
+import { Wc3WebSocket as Wc3WebSocket, WsWebSocket } from './adapters/extern.js';
 
 export const webSocket = Object.freeze({
     ws(impl: typeof WsWebSocket) {

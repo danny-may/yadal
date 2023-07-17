@@ -1,16 +1,16 @@
-import { NodeZLibAdapter, ZLibSyncAdapter, ZLibSyncContextAdapterFactory } from './adapters';
-import { NoOpCompressorFactory } from './NoOpCompressor';
-import { ZLibStreamTransportCompressorFactory } from './ZLibStreamTransportCompressor';
-import type { ZLibSyncInflate } from './adapters/extern';
-import { ZLibPayloadCompressorFactory } from './ZLibPayloadCompressor';
-import { IInflator, IInflatorFactory } from './IInflator';
-import { inflateSync } from 'zlib';
+import { NodeZLibAdapter, ZLibSyncAdapter, ZLibSyncContextAdapterFactory } from './adapters/index.js';
+import { NoOpCompressorFactory } from './NoOpCompressor.js';
+import { ZLibStreamTransportCompressorFactory } from './ZLibStreamTransportCompressor.js';
+import type { ZLibSyncInflate } from './adapters/extern.js';
+import { ZLibPayloadCompressorFactory } from './ZLibPayloadCompressor.js';
+import { IInflator, IInflatorFactory } from './IInflator.js';
+import { inflateSync } from 'node:zlib';
 
-export * from './adapters';
-export * from './IMessageCompressor';
-export * from './IInflator';
-export * from './NoOpCompressor';
-export * from './ZLibStreamTransportCompressor';
+export * from './adapters/index.js';
+export * from './IMessageCompressor.js';
+export * from './IInflator.js';
+export * from './NoOpCompressor.js';
+export * from './ZLibStreamTransportCompressor.js';
 
 export const messageCompressor = Object.freeze({
     uncompressed() {

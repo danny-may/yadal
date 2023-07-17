@@ -1,1 +1,1 @@
-export * from './ErlpackAdapter';
+export * from './ErlpackAdapter.js';

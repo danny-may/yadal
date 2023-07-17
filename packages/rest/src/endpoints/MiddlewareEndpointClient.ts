@@ -1,8 +1,8 @@
-import { IEndpoint } from "./IEndpoint";
-import { IEndpointClient } from "./IEndpointClient";
-import { IEndpointRequest } from "./IEndpointRequest";
-import { IEndpointResponse } from "./IEndpointResponse";
-import { IEndpointClientMiddleware } from "./middleware/IEndpointClientMiddleware";
+import { IEndpoint } from "./IEndpoint.js";
+import { IEndpointClient } from "./IEndpointClient.js";
+import { IEndpointRequest } from "./IEndpointRequest.js";
+import { IEndpointResponse } from "./IEndpointResponse.js";
+import { IEndpointClientMiddleware } from "./middleware/IEndpointClientMiddleware.js";
 
 export class MiddlewareEndpointClient implements IEndpointClient {
     readonly #send: <TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IEndpointResponse<TModel, TResult>>;

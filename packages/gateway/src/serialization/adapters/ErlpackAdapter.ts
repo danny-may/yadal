@@ -1,5 +1,5 @@
-import { ISerializer } from '../ISerializer';
-import { Erlpack } from './extern';
+import { ISerializer } from '../ISerializer.js';
+import { Erlpack } from './extern.js';
 
 export class ErlpackAdapter implements ISerializer {
     readonly #erlpack: typeof Erlpack;

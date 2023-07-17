@@ -1,6 +1,6 @@
-import { WebSocket, WebSocketFactory } from "../WebSocket";
+import { WebSocket, WebSocketFactory } from "../WebSocket.js";
 import { EventEmitter } from 'node:events';
-import { Wc3WebSocket } from "./extern";
+import { Wc3WebSocket } from "./extern.js";
 
 export class Wc3WebSocketFactory implements WebSocketFactory {
     readonly #impl: typeof Wc3WebSocket;

@@ -1,7 +1,7 @@
-import { BaseUrlMiddleware, EndpointHeaderMiddleware, HttpRequestEndpointMiddleware, IEndpoint, IEndpointClientMiddleware, MiddlewareEndpointClient, RateLimitMiddleware, RetryMiddleware, apiEndpoints, cdnEndpoints } from "./endpoints";
-import { HttpClient } from "./http";
-import { IRateLimitService, RateLimitManager, RateLimitService, apiRateLimits, cdnRateLimits } from "./rateLimit";
-import path from "node:path";
+import { BaseUrlMiddleware, EndpointHeaderMiddleware, HttpRequestEndpointMiddleware, IEndpoint, IEndpointClientMiddleware, MiddlewareEndpointClient, RateLimitMiddleware, RetryMiddleware, apiEndpoints, cdnEndpoints } from "./endpoints/index.js";
+import { HttpClient } from "./http/index.js";
+import { IRateLimitService, RateLimitManager, RateLimitService, apiRateLimits, cdnRateLimits } from "./rateLimit/index.js";
+import { name, repository, version } from '../package.json';
 
 type RestMethods<T extends Record<PropertyKey, IEndpoint<object, unknown>>> = {
     [P in keyof T]: T[P] extends IEndpoint<infer Model, infer Result> ? [{}] extends [Model]
@@ -10,8 +10,7 @@ type RestMethods<T extends Record<PropertyKey, IEndpoint<object, unknown>>> = {
     : never;
 }
 
-const { name, repository: { url }, version }: { name: string, version: string, repository: { url: string } } = JSON.parse(path.join(__dirname, '../../package.json'))
-const defaultUserAgent = `${name} (${url.split('+').slice(-1)[0]}, ${version})`;
+const defaultUserAgent = `${name} (${repository.url}, ${version})`;
 
 export interface DiscordRestClient extends RestMethods<typeof apiEndpoints>, RestMethods<typeof cdnEndpoints> { }
 export class DiscordRestClient {
@@ -22,6 +21,7 @@ export class DiscordRestClient {
     static {
         for (const endpoints of [apiEndpoints, cdnEndpoints] as const) {
             for (const [key, endpoint] of Object.entries(endpoints)) {
+                const send = (client: DiscordRestClient, args: unknown[]) => (client.#apiClient.send as Function)(endpoint, ...args);
                 Object.defineProperty(this.prototype, key, {
                     configurable: false,
                     enumerable: false,
@@ -32,7 +32,7 @@ export class DiscordRestClient {
                                 args.unshift({});
                             else
                                 args[0] ??= {};
-                            return await (this.#apiClient.send as Function)(endpoint, ...args)
+                            return await send(this, args);
                         }
                     }[key]
                 });

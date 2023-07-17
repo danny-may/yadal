@@ -130,7 +130,10 @@ dist
 .pnp.*
 
 *.js
+*.js.map
 *.mjs
+*.mjs.map
 *.cjs
+*.cjs.map
 !build.mjs
-**/test.ts
+**/sandpit.ts

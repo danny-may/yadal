@@ -1,5 +1,5 @@
-import { HttpMethod, IHttpRequest, IHttpResponse } from "../http";
-import { IRoute } from "../paths";
+import { HttpMethod, IHttpRequest, IHttpResponse } from "../http/index.js";
+import { IRoute } from "../paths/index.js";
 
 export interface IEndpoint<TModel extends object, TResult> {
     readonly name: string;

@@ -1,7 +1,7 @@
-import { HttpMethod } from "..";
-import { IRoute } from "../paths";
-import { IRateLimitManager, IRateLimiter } from "./IRateLimitManager";
-import { IRateLimitService } from "./RateLimitService";
+import { HttpMethod } from "../http/index.js";
+import { IRoute } from "../paths/index.js";
+import { IRateLimitManager, IRateLimiter } from "./IRateLimitManager.js";
+import { IRateLimitService } from "./RateLimitService.js";
 
 export interface IRouteRateLimitConfig<T extends object> {
     readonly route: IRoute<T>;

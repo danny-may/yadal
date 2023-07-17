@@ -1,5 +1,5 @@
-import { IRouteRateLimitConfig } from "./RateLimitManager";
-import { IRoute, RouteModel, apiRoutes, cdnRoutes } from "../paths";
+import { IRouteRateLimitConfig } from "./RateLimitManager.js";
+import { IRoute, RouteModel, apiRoutes, cdnRoutes } from "../paths/index.js";
 
 type CDN = typeof cdnRoutes;
 export const cdnRateLimits: { [P in keyof CDN]: IRouteRateLimitConfig<RouteModel<CDN[P]>> } = {

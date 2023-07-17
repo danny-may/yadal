@@ -1,4 +1,4 @@
-import { HttpHeaders } from "../http";
+import { HttpHeaders } from "../http/index.js";
 
 export class RateLimitHeaders {
     readonly #headers: HttpHeaders;

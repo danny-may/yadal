@@ -1,5 +1,5 @@
 import * as Discord from 'discord-api-types/v10';
-import { ISerializer } from './ISerializer';
+import { ISerializer } from './ISerializer.js';
 
 export interface IMessageSerializerFactory {
     createSerializer(): IMessageSerializer;

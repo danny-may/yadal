@@ -1,7 +1,6 @@
-import { IEndpointResponse } from "../IEndpointResponse";
-import { HttpClient } from "../../http";
-import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware";
-import { IEndpointRequest } from "../IEndpointRequest";
+import { HttpClient } from "../../http/index.js";
+import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware.js";
+import { IEndpointRequest } from "../IEndpointRequest.js";
 
 
 export class HttpRequestEndpointMiddleware implements IEndpointClientMiddleware {
@@ -25,12 +24,4 @@ export class HttpRequestEndpointMiddleware implements IEndpointClientMiddleware 
             http: response
         }
     }
-}
-
-function removeMiddleSlashes(value: string, index: number, array: string[]): string {
-    if (index > 0)
-        value = value.replace(/^\/+/, '');
-    if (index < array.length + 1)
-        value = value.replace(/\/+$/, '');
-    return value;
 }

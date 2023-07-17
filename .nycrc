@@ -1,14 +1,13 @@
 {
   "cache": false,
   "check-coverage": true,
-  "exclude": [
-    "coverage/**",
-    "*/*/test/**",
-    "**/*.d.{ts,mts,cts}",
-    "build.mjs",
-    "**/*.json"
-  ],
   "sourceMap": true,
+  "exclude": [
+    "build.mjs",
+    "coverage",
+    "**/test/**/*",
+    "**/*.cjs"
+  ],
   "reporter": [
     "html",
     "text",

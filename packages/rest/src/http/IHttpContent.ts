@@ -1,4 +1,4 @@
-import { HttpHeaders } from "./HttpHeaders";
+import { HttpHeaders } from "./HttpHeaders.js";
 
 export interface IHttpContent {
     readonly headers?: HttpHeaders;

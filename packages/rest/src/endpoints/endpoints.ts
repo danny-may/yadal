@@ -1,10 +1,10 @@
-import { DiscordRateLimitError, DiscordRestError } from "../errors";
-import { HttpHeaders, HttpMethod, IHttpContent, IHttpResponse } from "../http";
-import { IEndpoint } from "./IEndpoint";
+import { DiscordRateLimitError, DiscordRestError } from "../errors/index.js";
+import { HttpHeaders, HttpMethod, IHttpContent, IHttpResponse } from "../http/index.js";
+import { IEndpoint } from "./IEndpoint.js";
 import * as Discord from 'discord-api-types/v10'
-import { apiRoutes, cdnRoutes } from "../paths/default";
-import { DiscordFile } from "./DiscordFile";
-import { IRoute } from "../paths";
+import { apiRoutes, cdnRoutes } from "../paths/default.js";
+import { DiscordFile } from "./DiscordFile.js";
+import { IRoute } from "../paths/index.js";
 
 export const cdnEndpoints = {
     getGuildBanner: buildEndpoint('getGuildBanner', 'GET', cdnRoutes.guildBanner, contentResponse, noBody, noHeaders, noQuery),

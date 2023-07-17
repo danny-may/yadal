@@ -1,4 +1,4 @@
-import { HttpHeaders, IEndpoint, IHttpRequest, IHttpResponse, IRoute } from '@yadal/rest';
+import { HttpHeaders, IHttpRequest, IHttpResponse, IRoute } from '@yadal/rest';
 import { randomUUID } from 'node:crypto';
 
 export interface IDiscordRestProxyHandler {

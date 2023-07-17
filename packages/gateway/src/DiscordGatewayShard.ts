@@ -1,11 +1,11 @@
-import { IDiscordGatewayConnectionFactory, SessionConfig } from "./DiscordGatewayConnection";
+import { IDiscordGatewayConnectionFactory, SessionConfig } from "./DiscordGatewayConnection.js";
 
 export class DiscordGatewayShard {
-    constructor(options: IDiscordGatewaySessionOptions) {
+    constructor(_options: IDiscordGatewaySessionOptions) {
 
     }
 
-    connect(config: SessionConfig) {
+    connect(_config: SessionConfig) {
 
     }
 

@@ -1,5 +1,5 @@
-import { IHttpRequest } from "../http";
-import { IEndpoint } from "./IEndpoint";
+import { IHttpRequest } from "../http/index.js";
+import { IEndpoint } from "./IEndpoint.js";
 
 
 export interface IEndpointRequest<TModel extends object, TResult> {

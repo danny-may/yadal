@@ -1,4 +1,4 @@
-import { IHttpContent } from "../http";
+import { IHttpContent } from "../http/index.js";
 
 export class DiscordFile {
     readonly content: IHttpContent;

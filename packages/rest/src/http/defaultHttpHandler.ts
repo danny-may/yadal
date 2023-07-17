@@ -1,9 +1,9 @@
-import { HttpHeaders } from "./HttpHeaders";
+import { HttpHeaders } from "./HttpHeaders.js";
 import { request as createRequest } from 'node:https';
-import { IHttpRequest } from "./IHttpRequest";
+import { IHttpRequest } from "./IHttpRequest.js";
 import { Deferred } from "@yadal/core";
 import { IncomingMessage } from "node:http";
-import { IHttpResponse } from "./IHttpResponse";
+import { IHttpResponse } from "./IHttpResponse.js";
 
 export async function defaultHttpHandler(request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
     const responsePromise = new Deferred<IncomingMessage>(signal);

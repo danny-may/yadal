@@ -1,4 +1,4 @@
-import { Deferred } from "./Deferred";
+import { Deferred } from "./Deferred.js";
 
 export class DeferredIterable<TYield, TReturn = void> {
     readonly #next: Array<TYield | PromiseLike<TYield>>;

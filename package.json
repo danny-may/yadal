@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danny-may/yadal.git"
+    "url": "https://github.com/danny-may/yadal.git"
   },
   "keywords": [
     "discord"
@@ -15,17 +15,16 @@
   "bugs": {
     "url": "https://github.com/danny-may/yadal/issues"
   },
-  "types": "./src/index.ts",
   "scripts": {
-    "build:all": "lerna run build && tsc --noemit",
-    "watch": "tsc --noemit -w",
-    "build": "node ./build.mjs",
-    "test": "lerna run build && tsc --noemit && c8 node --test"
+    "build:all": "lerna run build",
+    "watch": "tsc -w",
+    "build": "tsc",
+    "test": "lerna run build && c8 node --test"
   },
+  "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/src/index.js",
-      "import": "./dist/src/index.js",
+      "import": "./src/index.js",
       "types": "./src/index.ts"
     }
   },
@@ -35,16 +34,20 @@
     "."
   ],
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
     "@types/node": "^20.4.2",
     "c8": "^7.14.0",
-    "esbuild": "^0.17.18",
     "glob": "^10.2.6",
     "lerna": "^6.6.2",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.26.2",
     "typescript": "^5.2.0-beta",
     "websocket": "^1.0.34",
-    "why-is-node-running": "^2.2.2",
-    "ws": "^8.13.0",
-    "rimraf": "^5.0.1"
+    "ws": "^8.13.0"
   },
   "dependencies": {
     "@yadal/core": "^1.0.0",

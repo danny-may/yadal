@@ -5,21 +5,16 @@
   "author": "Danny May <dannyjmay97@gmail.com>",
   "homepage": "https://github.com/danny-may/yadal/tree/main/packages/core#readme",
   "license": "GPL-3.0-or-later",
+  "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/src/index.js",
-      "import": "./dist/src/index.js",
+      "import": "./src/index.js",
       "types": "./src/index.ts"
     }
   },
-  "types": "./src/index.ts",
-  "scripts": {
-    "build": "node ../../build.mjs",
-    "watch": "tsc --noemit -w"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danny-may/yadal.git"
+    "url": "https://github.com/danny-may/yadal.git"
   },
   "bugs": {
     "url": "https://github.com/danny-may/yadal/issues"

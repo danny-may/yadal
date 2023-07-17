@@ -3,14 +3,13 @@ import { describe, it } from 'node:test';
 import { ZLibSyncContextAdapter, ZLibSyncContextAdapterFactory } from '@yadal/gateway';
 import ZLibSync from 'zlib-sync';
 import assert from 'node:assert';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
+import { fileURLToPath } from 'url';
 
 
 describe(ZLibSyncContextAdapter.name, () => {
     it('Should decompress test case 1', async () => {
         // arrange
-        const steps = [...deserializeTestCase(await fs.readFile(path.join(__dirname, './zlibData/testCase1.dat')))];
+        const steps = [...deserializeTestCase(await fs.readFile(fileURLToPath(new URL('zlibData/testCase1.dat', import.meta.url))))];
         const sut = new ZLibSyncContextAdapterFactory(ZLibSync.Inflate).createInflator();
         const expected = steps.map(v => v.output).filter(o => o !== undefined);
         const actual = [] as Uint8Array[];

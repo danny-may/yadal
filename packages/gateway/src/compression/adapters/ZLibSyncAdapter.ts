@@ -1,7 +1,7 @@
 import { constants } from "node:zlib";
-import { IInflator, IInflatorContext, IInflatorFactory } from '../IInflator';
-import { ZLibError } from "./ZLibError";
-import { ZLibSyncInflate } from './extern';
+import { IInflator, IInflatorContext, IInflatorFactory } from '../IInflator.js';
+import { ZLibError } from "./ZLibError.js";
+import { ZLibSyncInflate } from './extern.js';
 
 export class ZLibSyncAdapter implements IInflator {
     readonly #factory: ZLibSyncContextAdapterFactory;

@@ -1,12 +1,11 @@
 import * as Discord from 'discord-api-types/v10';
-import { IRateLimit, IRateLimitFactory } from './IRateLimit';
-import { WebSocket, WebSocketFactory } from './socket';
-import { EventListener, EventManager } from './EventManager';
-import { DiscordMessageEvents, emitDiscordMessage } from './emitDiscordMessage';
-import { Heartbeat } from './Heartbeat';
-import { URL } from 'url';
-import { IMessageCompressor, IMessageCompressorFactory } from './compression';
-import { IMessageSerializer, IMessageSerializerFactory } from './serialization';
+import { IRateLimit, IRateLimitFactory } from './IRateLimit.js';
+import { WebSocket, WebSocketFactory } from './socket/index.js';
+import { EventListener, EventManager } from './EventManager.js';
+import { DiscordMessageEvents, emitDiscordMessage } from './emitDiscordMessage.js';
+import { Heartbeat } from './Heartbeat.js';
+import { IMessageCompressor, IMessageCompressorFactory } from './compression/index.js';
+import { IMessageSerializer, IMessageSerializerFactory } from './serialization/index.js';
 
 export interface IDiscordGatewayConnectionFactory {
     createConnection(config: SessionConfig): IDiscordGatewayConnection;

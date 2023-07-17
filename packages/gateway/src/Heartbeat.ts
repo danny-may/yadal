@@ -1,7 +1,7 @@
 import * as Discord from "discord-api-types/v10";
 import { Deferred } from "@yadal/core";
-import { IDiscordGatewayConnection } from "./DiscordGatewayConnection";
-import { IEventHandle } from "./EventManager";
+import { IDiscordGatewayConnection } from "./DiscordGatewayConnection.js";
+import { IEventHandle } from "./EventManager.js";
 
 export class Heartbeat {
     #ack: boolean;

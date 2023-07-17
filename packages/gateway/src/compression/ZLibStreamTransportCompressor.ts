@@ -1,5 +1,5 @@
-import { IInflatorContext, IInflatorFactory } from './IInflator';
-import { IMessageCompressor, IMessageCompressorFactory } from './IMessageCompressor';
+import { IInflatorContext, IInflatorFactory } from './IInflator.js';
+import { IMessageCompressor, IMessageCompressorFactory } from './IMessageCompressor.js';
 
 export class ZLibStreamTransportCompressorFactory implements IMessageCompressorFactory {
     readonly #inflator: IInflatorFactory;

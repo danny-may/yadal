@@ -1,6 +1,5 @@
-import { RateLimitHeaders } from "./RateLimitHeaders";
+import { RateLimitHeaders } from "./RateLimitHeaders.js";
 import { Deferred, KeepAlive, Timeout } from "@yadal/core";
-import { IRateLimitResult } from "./IRateLimitResult";
 
 export interface IRateLimitServiceOptions {
     readonly globalLimit: number;

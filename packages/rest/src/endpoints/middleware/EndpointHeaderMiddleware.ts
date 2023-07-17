@@ -1,7 +1,7 @@
-import { HttpHeaders } from "../../http";
-import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware";
-import { IEndpointRequest } from "../IEndpointRequest";
-import { IEndpointResponse } from "../IEndpointResponse";
+import { HttpHeaders } from "../../http/index.js";
+import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware.js";
+import { IEndpointRequest } from "../IEndpointRequest.js";
+import { IEndpointResponse } from "../IEndpointResponse.js";
 
 
 export class EndpointHeaderMiddleware implements IEndpointClientMiddleware {

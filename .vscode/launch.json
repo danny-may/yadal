@@ -18,15 +18,15 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Launch Root",
+            "name": "Launch current",
             "type": "node",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/dist/index.mjs",
+            "program": "${file}",
             "outFiles": [
-                "${workspaceFolder}/**/*.js"
+                "${workspaceFolder}/**/*.mjs"
             ],
             "preLaunchTask": "npm: build:all",
             "console": "integratedTerminal"
