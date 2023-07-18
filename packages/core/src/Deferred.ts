@@ -1,58 +1,51 @@
 export class Deferred<T> {
-    readonly #promise: Promise<(signal?: AbortSignal) => T | PromiseLike<T>>;
+    readonly #promise: Promise<() => T>;
     readonly resolve: (value: T) => void;
     readonly reject: (error: unknown) => void;
-    readonly defer: (action: (signal?: AbortSignal) => T | PromiseLike<T>) => void;
 
     constructor(signal?: AbortSignal) {
-        const [promise, resolve, reject] = deferredParts<(signal?: AbortSignal) => T | PromiseLike<T>>();
+        const [promise, resolve] = deferredParts<() => T>();
         this.resolve = v => resolve(() => v);
-        this.reject = err => reject(err);
-        this.defer = resolve;
+        this.reject = v => resolve(() => { throw v; });
         this.#promise = promise;
 
         if (signal !== undefined) {
-            const abort = () => this.defer(() => { throw signal.reason });
+            const abort = () => this.reject(signal.reason);
             signal.addEventListener('abort', abort);
             this.#promise.finally(() => signal.removeEventListener('abort', abort));
         }
     }
 
-    async wait(signal?: AbortSignal): Promise<T> {
-        const result = await abortable(this.#promise, signal);
-        return await result(signal);
+    async #wait() {
+        const res = await this.#promise;
+        return res();
+    }
+
+    async #waitAbortable(signal: AbortSignal) {
+        const abort = () => this.reject(signal.reason);
+        signal.addEventListener('abort', abort);
+        try {
+            return await this.#wait();
+        } finally {
+            signal.removeEventListener('abort', abort);
+        }
+    }
+
+    wait(signal?: AbortSignal): Promise<T> {
+        return signal === undefined
+            ? this.#wait()
+            : this.#waitAbortable(signal)
+    }
+
+    [Symbol.dispose]() {
+        this.reject(new Error('Deferred was disposed'));
     }
 }
 
 function deferredParts<T>() {
     let resolve: (value: T) => void;
-    let reject: (error: unknown) => void;
     return [
-        new Promise<T>((res, rej) => {
-            resolve = res;
-            reject = rej;
-        }),
-        resolve!,
-        reject!
+        new Promise<T>(res => resolve = res),
+        resolve!
     ] as const
-}
-
-export async function abortable<T>(promise: PromiseLike<T>, signal?: AbortSignal): Promise<T> {
-    if (signal === undefined)
-        return await promise;
-
-    const deferred = new Deferred<never>(signal);
-    const timeout = deferred.wait();
-
-    // The timeout throwing but not being caught isnt a problem, this guarantees
-    // that the error will never be unhandled and cause the process to crash
-    timeout.catch(() => { });
-    try {
-        return await Promise.race([timeout, promise]);
-    } finally {
-        // Either the promise resolved first or the signal triggered.
-        // If the promise resolved first, the timeout will never be re-awaited
-        // If the timeout rejected first, this will do nothing
-        deferred.resolve(undefined as never);
-    }
 }

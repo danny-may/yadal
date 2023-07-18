@@ -69,6 +69,7 @@ export class DiscordGatewayConnection extends EventListener<GatewayConnectionEve
     constructor(options: DiscordGatewayConnectionOptions) {
         const events = new EventManager<GatewayConnectionEvents>();
         super(events);
+
         this.#events = events;
 
         this.#rateLimit = options.rateLimit.createRateLimit();

@@ -3,13 +3,13 @@ import { HttpHeaders } from "../http/index.js";
 export class RateLimitHeaders {
     readonly #headers: HttpHeaders;
     readonly isGlobal: boolean;
-    readonly bucket?: string;
-    readonly limit?: number;
-    readonly remaining?: number;
-    readonly reset?: Date;
-    readonly retryAfterS?: number;
-    readonly resetAfterS?: number
-    readonly timestamp?: Date
+    readonly bucket: string | undefined;
+    readonly limit: number | undefined;
+    readonly remaining: number | undefined;
+    readonly reset: Date | undefined;
+    readonly retryAfterS: number | undefined;
+    readonly resetAfterS: number | undefined
+    readonly timestamp: Date | undefined
 
     constructor(headers: HttpHeaders) {
         this.#headers = headers;

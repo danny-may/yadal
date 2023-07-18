@@ -14,7 +14,7 @@ export class DiscordRestError extends Error implements RESTError {
 }
 
 export class DiscordRateLimitError extends Error implements RESTRateLimit {
-    readonly code?: number | undefined;
+    readonly code?: number;
     readonly global: boolean;
     readonly retry_after: number;
 

@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
-import { ErlpackAdapter } from "@yadal/gateway";
 import Erlpack from 'erlpack';
 import assert from "node:assert";
+import { ErlpackAdapter } from "../../../src/index.js";
 
 describe(ErlpackAdapter.name, () => {
     const cases = getCases();

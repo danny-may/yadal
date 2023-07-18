@@ -1,7 +1,7 @@
-import { BaseUrlMiddleware, EndpointHeaderMiddleware, HttpRequestEndpointMiddleware, IEndpoint, IEndpointClientMiddleware, MiddlewareEndpointClient, RateLimitMiddleware, RetryMiddleware, apiEndpoints, cdnEndpoints } from "./endpoints/index.js";
+import { BaseUrlMiddleware, EndpointHeaderMiddleware, HttpRequestMiddleware, IEndpoint, IEndpointClientMiddleware, MiddlewareEndpointClient, RateLimitMiddleware, RetryMiddleware, apiEndpoints, cdnEndpoints } from "./endpoints/index.js";
 import { HttpClient } from "./http/index.js";
 import { IRateLimitService, RateLimitManager, RateLimitService, apiRateLimits, cdnRateLimits } from "./rateLimit/index.js";
-import { name, repository, version } from '../package.json';
+import pkg from '../package.json' assert { type: 'json' };
 
 type RestMethods<T extends Record<PropertyKey, IEndpoint<object, unknown>>> = {
     [P in keyof T]: T[P] extends IEndpoint<infer Model, infer Result> ? [{}] extends [Model]
@@ -10,7 +10,7 @@ type RestMethods<T extends Record<PropertyKey, IEndpoint<object, unknown>>> = {
     : never;
 }
 
-const defaultUserAgent = `${name} (${repository.url}, ${version})`;
+const defaultUserAgent = `${pkg.name} (${pkg.repository.url}, ${pkg.version})`;
 
 export interface DiscordRestClient extends RestMethods<typeof apiEndpoints>, RestMethods<typeof cdnEndpoints> { }
 export class DiscordRestClient {
@@ -67,7 +67,7 @@ export class DiscordRestClient {
                 ['api:']: options.apiUrl ?? new URL('https://discord.com/api/v10'),
                 ['cdn:']: options.cdnUrl ?? new URL('https://cdn.discordapp.com/')
             }),
-            new HttpRequestEndpointMiddleware(this.http)
+            new HttpRequestMiddleware(this.http)
         ]);
     }
 }

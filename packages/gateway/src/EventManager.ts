@@ -1,8 +1,5 @@
-import { Deferred, DeferredIterable } from "@yadal/core";
-
-export interface IEventHandle {
-    remove(): void;
-}
+import { Deferred, abortListener } from "@yadal/core";
+import { ReadableStream } from "node:stream/web";
 
 type EventFrom<Events extends Record<string, readonly unknown[]>> = 'error' | keyof Events;
 type EventArgs<Event extends EventFrom<Events>, Events extends Record<string, readonly unknown[]>> =
@@ -39,67 +36,70 @@ export class EventListenerBase<Events extends Record<string, readonly unknown[]>
         return this;
     }
 
-    handle<Event extends EventFrom<Events>>(event: Event, handler: (...args: EventArgs<Event, Events>) => unknown, maxCount?: number): IEventHandle {
-        const handlers = this.#handlers[event] ??= new Set();
-        handlers.add(handler);
-        if (maxCount === undefined)
-            return { remove: () => handlers.delete(handler) };
-        let remain = maxCount;
-        const remove = () => handlers.delete(checkRemove) && handlers.delete(handler);
-        const checkRemove = () => {
-            if (--remain <= 0)
-                remove();
+    handle<Event extends EventFrom<Events>>(event: Event, handler: (...args: EventArgs<Event, Events>) => unknown, maxCount = Infinity): Disposable {
+        const stack = new DisposableStack();
+        stack.use(this.#addHandler(event, handler));
+        if (maxCount < Infinity) {
+            let remain = maxCount;
+            stack.use(this.#addHandler(event, () => {
+                if (--remain <= 0)
+                    stack.dispose();
+            }))
+        }
+
+        return {
+            [Symbol.dispose]: stack[Symbol.dispose].bind(stack)
         };
-        handlers.add(checkRemove);
-        return { remove };
     }
 
-    wait<Return extends EventFrom<Events>, Throw extends EventFrom<Events>>(events: Return | Return[], options: { throw?: Throw | Throw[]; signal?: AbortSignal } = {}) {
+    #addHandler<Event extends EventFrom<Events>>(event: Event, handler: (...args: EventArgs<Event, Events>) => unknown): Disposable {
+        const handlers = this.#handlers[event] ??= new Set();
+        handlers.add(handler);
+        return {
+            [Symbol.dispose]() { handlers.delete(handler) }
+        }
+    }
+
+    async wait<Return extends EventFrom<Events>, Throw extends EventFrom<Events>>(events: Return | Return[], options: { throw?: Throw | Throw[]; signal?: AbortSignal } = {}) {
         const returnKeys = toArray<Return>(events);
         if (returnKeys.length === 0)
             throw new Error('No events to return were given');
         const throwKeys = toArray<Throw>(options.throw);
+
+        using stack = new DisposableStack();
+
         const result = new Deferred<Events[Return][0]>(options.signal);
-        return this.#wrapPromise(result, [
-            ...returnKeys.map(e => this.handle(e, (...args) => result.resolve(args[0]))),
-            ...throwKeys.map(e => this.handle(e, (...args) => result.reject(new Error(`Event ${String(e)} was raised.: ${String(args)}`)))),
-        ]);
+        stack.use(result);
+
+        for (const key of returnKeys)
+            stack.use(this.handle(key, (...args) => result.resolve(args[0])));
+        for (const key of throwKeys)
+            stack.use(this.handle(key, (...args) => result.reject(new Error(`Event ${String(key)} was raised.: ${String(args)}`))));
+
+        return await result.wait();
     }
 
-    async #wrapPromise<T>(source: Deferred<T>, handles: Iterable<IEventHandle>) {
-        try {
-            return await source.wait();
-        } finally {
-            for (const handle of handles)
-                handle.remove();
-        }
-    }
-
-    stream<
+    async * stream<
         Yield extends EventFrom<Events>,
-        Return extends EventFrom<Events>,
         Throw extends EventFrom<Events>
-    >(events: Yield | Yield[], options: { return?: Return | Return[]; throw?: Throw | Throw[]; signal?: AbortSignal } = {}) {
+    >(events: Yield | Yield[], options: { throw?: Throw | Throw[]; signal?: AbortSignal } = {}) {
         const yieldKeys = toArray<Yield>(events);
         if (yieldKeys.length === 0)
             throw new Error('No events to yield were given');
-        const returnKeys = toArray<Return>(options.return);
         const throwKeys = toArray<Throw>(options.throw);
-        const result = new DeferredIterable<Events[Yield][0], Events[Return][0]>(options.signal);
-        return this.#wrapStream(result, [
-            ...yieldKeys.map(e => this.handle(e, (...args) => result.yield(args[0]))),
-            ...returnKeys.map(e => this.handle(e, (...args) => result.resolve(args[0]))),
-            ...throwKeys.map(e => this.handle(e, (...args) => result.raise(args[0] ?? new Error(`Event ${String(e)} was raised.`))))
-        ]);
-    }
 
-    async * #wrapStream<Yield, Return>(source: DeferredIterable<Yield, Return>, handles: Iterable<IEventHandle>) {
-        try {
-            return yield* source.items
-        } finally {
-            for (const handle of handles)
-                handle.remove();
-        }
+        await using stack = new AsyncDisposableStack();
+        yield* new ReadableStream<Events[Yield][0]>({
+            start: (controller) => {
+                stack.defer(controller.close.bind(controller));
+                stack.use(abortListener(options.signal, controller.error.bind(controller)));
+
+                for (const key of yieldKeys)
+                    stack.use(this.handle(key, (...args) => controller.enqueue(args[0])));
+                for (const key of throwKeys)
+                    stack.use(this.handle(key, (...args) => controller.error(args[0] ?? new Error(`Event ${String(key)} was raised.`))))
+            }
+        },);
     }
 }
 

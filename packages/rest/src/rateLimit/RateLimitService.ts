@@ -21,7 +21,7 @@ export class RateLimitService implements IRateLimitService {
     readonly #resetDelay: number;
     readonly #fallbackReset: number;
     #remain: number;
-    #reset?: Timeout;
+    #reset?: Timeout | undefined;
 
     constructor(options: IRateLimitServiceOptions) {
         this.#idHashMap = {};
@@ -65,7 +65,7 @@ export class RateLimitService implements IRateLimitService {
         if (headers.isGlobal) {
             this.#remain = 0;
             if (headers.retryAfterS !== undefined) {
-                this.#reset?.remove();
+                this.#reset?.cancel();
                 this.#reset = undefined;
                 this.#resetGlobal(headers.retryAfterS * 1000);
             }
@@ -77,7 +77,7 @@ export class RateLimitService implements IRateLimitService {
                 bucket.limit = bucket.remain = Infinity;
         } else if (bucket.reset === undefined || bucket.reset < reset) {
             bucket.reset = reset;
-            bucket.timeout?.remove();
+            bucket.timeout?.cancel();
             bucket.timeout = new Timeout(() => this.#process(), Math.max(0, reset.valueOf() - Date.now())).unref();
         }
     }
@@ -102,9 +102,9 @@ export class RateLimitService implements IRateLimitService {
 
         const reset = bucket.reset ?? bucket.lastRequest + this.#fallbackReset;
         if (reset <= now) {
-            bucket.timeout?.remove();
+            bucket.timeout?.cancel();
             bucket.remain = bucket.limit;
-            bucket.reset = undefined;
+            delete bucket.reset;
         }
 
         if (bucket.remain <= 0 || (global && this.#remain-- <= 0))
@@ -156,8 +156,8 @@ export class RateLimitService implements IRateLimitService {
 interface IRateLimitState {
     limit: number;
     remain: number;
-    reset?: number;
-    timeout?: Timeout;
+    reset?: number | undefined;
+    timeout?: Timeout | undefined;
     lastRequest: number;
 }
 

@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import { describe, it } from 'node:test';
-import { ZLibSyncContextAdapter, ZLibSyncContextAdapterFactory } from '@yadal/gateway';
 import ZLibSync from 'zlib-sync';
 import assert from 'node:assert';
 import { fileURLToPath } from 'url';
+import { ZLibSyncContextAdapter, ZLibSyncContextAdapterFactory } from '../../../src/index.js';
 
 
 describe(ZLibSyncContextAdapter.name, () => {

@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
-import { NoOpCompressor, NoOpCompressorFactory } from "@yadal/gateway";
 import assert from "node:assert";
+import { NoOpCompressor, NoOpCompressorFactory } from "../../src/index.js";
 
 describe(NoOpCompressor.name, () => {
     describe('type', () => {

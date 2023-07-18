@@ -3,24 +3,33 @@ export class CompositeAbortController extends AbortController implements Disposa
 
     constructor(...args: AbortSignalConvertable[]) {
         super();
-        this.#add(this.abort.bind(this), args);
+        for (const signal of CompositeAbortController.#distinctSignals(args))
+            this.#bind(signal);
     }
 
-    #add(listener: () => void, value: AbortSignalConvertable) {
+    #bind(signal: AbortSignal) {
+        const listener = () => this.abort(signal.reason);
+        signal.addEventListener('abort', listener);
+        this.#unbind.push(signal.removeEventListener.bind(signal, 'abort', listener));
+    }
+
+    static * #distinctSignals(value: AbortSignalConvertable) {
+        const seen = new Set<Abortable>();
+        for (const signal of this.#findSignals(value))
+            if (seen.size < seen.add(signal).size)
+                yield signal;
+    }
+
+    static * #findSignals(value: AbortSignalConvertable): Generator<AbortSignal> {
         if (value === undefined)
             return;
-        if (Symbol.dispose in value && value[Symbol.dispose] !== undefined)
-            this.#unbind.push(value[Symbol.dispose].bind(value));
-        if ('signal' in value) {
-            value = value.signal;
-        } else if (!('addEventListener' in value)) {
-            for (const v of value)
-                this.#add(listener, v);
-            return;
-        }
-
-        value.addEventListener('abort', listener);
-        this.#unbind.push(value.removeEventListener.bind(value, 'abort', listener, undefined));
+        if ('signal' in value)
+            yield value.signal;
+        else if (Symbol.iterator in value)
+            for (const x of value)
+                yield* this.#findSignals(x);
+        else
+            yield value;
     }
 
     abort(reason?: any): void {
@@ -35,8 +44,5 @@ export class CompositeAbortController extends AbortController implements Disposa
     }
 }
 
-
-type MaybeDisposable = (Disposable | {})
-type DisposableAbortSignal = AbortSignal & MaybeDisposable;
-type DisposableAbortController = AbortController & MaybeDisposable & { readonly signal: DisposableAbortSignal };
-type AbortSignalConvertable = DisposableAbortSignal | DisposableAbortController | undefined | Iterable<AbortSignalConvertable>
+type Abortable = AbortSignal | { readonly signal: AbortSignal };
+type AbortSignalConvertable = Abortable | undefined | Iterable<AbortSignalConvertable>

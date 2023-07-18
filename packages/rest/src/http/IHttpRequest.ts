@@ -3,7 +3,7 @@ import { IHttpContent } from "./IHttpContent.js";
 
 export interface IHttpRequest {
     method: HttpMethod;
-    body?: IHttpContent;
+    body?: IHttpContent | undefined;
     headers: HttpHeaders;
     url: URL;
 }

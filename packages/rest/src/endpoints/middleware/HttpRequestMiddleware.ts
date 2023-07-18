@@ -3,7 +3,7 @@ import { IEndpointClientMiddleware } from "./IEndpointClientMiddleware.js";
 import { IEndpointRequest } from "../IEndpointRequest.js";
 
 
-export class HttpRequestEndpointMiddleware implements IEndpointClientMiddleware {
+export class HttpRequestMiddleware implements IEndpointClientMiddleware {
     readonly #client: HttpClient;
 
     constructor(client: HttpClient) {

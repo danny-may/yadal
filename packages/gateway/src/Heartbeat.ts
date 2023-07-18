@@ -1,16 +1,12 @@
 import * as Discord from "discord-api-types/v10";
-import { Deferred } from "@yadal/core";
+import { Deferred, Timeout } from "@yadal/core";
 import { IDiscordGatewayConnection } from "./DiscordGatewayConnection.js";
-import { IEventHandle } from "./EventManager.js";
 
 export class Heartbeat {
     #ack: boolean;
-    #beatInterval?: NodeJS.Timer;
     readonly #connection: IDiscordGatewayConnection;
     readonly #stopped: Deferred<void>;
-    readonly #waitStart: NodeJS.Timeout;
-    readonly #ackHandle: IEventHandle;
-    readonly #defibrilateHandle: IEventHandle;
+    readonly #stack: DisposableStack;
 
     readonly startTime: Date;
     readonly interval: number;
@@ -29,17 +25,15 @@ export class Heartbeat {
         this.#connection = connection;
         this.#ack = false;
         this.#stopped = new Deferred<void>();
-        this.#waitStart = setTimeout(this.#start.bind(this), this.nextBeat.valueOf() - Date.now());
-        this.#ackHandle = this.#connection.handle(Discord.GatewayOpcodes.HeartbeatAck, () => void (this.#ack = true));
-        this.#defibrilateHandle = this.#connection.handle(Discord.GatewayOpcodes.Heartbeat, () => this.#beat(true));
+        this.#stack = new DisposableStack();
+        this.#stack.use(new Timeout(this.#start.bind(this), this.nextBeat.valueOf() - Date.now()));
+        this.#stack.use(this.#connection.handle(Discord.GatewayOpcodes.HeartbeatAck, () => void (this.#ack = true)));
+        this.#stack.use(this.#connection.handle(Discord.GatewayOpcodes.Heartbeat, () => this.#beat(true)));
     }
 
     stop() {
-        clearTimeout(this.#waitStart);
-        clearInterval(this.#beatInterval);
-        this.#ackHandle.remove();
-        this.#defibrilateHandle.remove();
         this.#stopped.resolve();
+        this.#stack[Symbol.dispose]();
     }
 
     async throwIfErrored() {
@@ -47,7 +41,8 @@ export class Heartbeat {
     }
 
     async #start() {
-        this.#beatInterval = setInterval(() => this.#beat(true), this.interval)
+        const i = setInterval(() => this.#beat(true), this.interval);
+        this.#stack.defer(() => clearInterval(i));
         await this.#beat(false);
     }
 

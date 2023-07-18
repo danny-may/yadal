@@ -5,11 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Test",
+            "name": "Test current",
             "type": "node",
             "request": "launch",
             "runtimeArgs": [
-                "--test"
+                "--test",
+                "${fileDirname}/${fileBasenameNoExtension}.js"
             ],
             "skipFiles": [
                 "<node_internals>/**"
@@ -21,12 +22,11 @@
             "name": "Launch current",
             "type": "node",
             "request": "launch",
+            "runtimeArgs": [
+                "${fileDirname}/${fileBasenameNoExtension}.js"
+            ],
             "skipFiles": [
                 "<node_internals>/**"
-            ],
-            "program": "${file}",
-            "outFiles": [
-                "${workspaceFolder}/**/*.mjs"
             ],
             "preLaunchTask": "npm: build:all",
             "console": "integratedTerminal"

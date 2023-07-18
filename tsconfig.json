@@ -14,7 +14,8 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "lib": [
-            "ESNext"
+            "ES2022",
+            "ESNext.Disposable"
         ]
     }
 }

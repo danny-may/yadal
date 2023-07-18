@@ -9,9 +9,7 @@
     "**/*.cjs"
   ],
   "reporter": [
-    "html",
-    "text",
-    "text-summary"
+    "html"
   ],
   "all": true,
   "instrument": true,
