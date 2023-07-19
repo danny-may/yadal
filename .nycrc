@@ -5,8 +5,7 @@
   "exclude": [
     "build.mjs",
     "coverage",
-    "**/test/**/*",
-    "**/*.cjs"
+    "**/*.test.*"
   ],
   "reporter": [
     "html"

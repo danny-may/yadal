@@ -24,8 +24,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.js",
-      "types": "./src/index.ts"
+      "import": "./lib/index.js",
+      "types": "./lib/index.ts"
     }
   },
   "homepage": "https://github.com/danny-may/yadal#readme",
@@ -34,17 +34,9 @@
     "."
   ],
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.3",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "@rollup/plugin-terser": "^0.4.3",
-    "@rollup/plugin-typescript": "^11.1.2",
     "@types/node": "^20.4.2",
     "c8": "^7.14.0",
-    "glob": "^10.2.6",
     "lerna": "^6.6.2",
-    "rimraf": "^5.0.1",
-    "rollup": "^3.26.2",
     "typescript": "^5.2.0-beta",
     "websocket": "^1.0.34",
     "ws": "^8.13.0"
