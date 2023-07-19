@@ -5,7 +5,9 @@
   "exclude": [
     "build.mjs",
     "coverage",
-    "**/*.test.*"
+    "**/*.test.*",
+    "**/test",
+    "testUtil"
   ],
   "reporter": [
     "html"

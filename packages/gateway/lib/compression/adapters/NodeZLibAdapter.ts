@@ -24,8 +24,10 @@ function concatBuffers(buffers: readonly ArrayBufferView[]): Uint8Array {
             const size = buffers.reduce((p, c) => p + c.byteLength, 0);
             const result = new Uint8Array(size);
             let i = 0;
-            for (const buffer of buffers)
-                result.set(new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength), i += buffer.byteLength);
+            for (const buffer of buffers) {
+                result.set(new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength), i);
+                i += buffer.byteLength;
+            }
             return result;
         }
     }
