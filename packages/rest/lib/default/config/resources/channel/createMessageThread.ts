@@ -1,0 +1,18 @@
+/** @docs https://discord.com/developers/docs/resources/channel#start-thread-from-message */
+import { POST, channelId, messageId, Discord, auditLogReason, IHttpResponse, jsonResponse, requestBody, byChannelId } from "../../../util.js";
+
+export const rateLimit = byChannelId;
+export const route = POST`api:/channels/${channelId}/messages/${messageId}/threads`;
+export type Result = Discord.RESTPostAPIChannelMessagesThreadsResult;
+export type Body = Discord.RESTPostAPIChannelMessagesThreadsJSONBody;
+export const headers = auditLogReason;
+export function read(response: IHttpResponse) {
+    return jsonResponse<Result>(response);
+}
+export function body(model: Body) {
+    return requestBody(model, {
+        auto_archive_duration: true,
+        name: true,
+        rate_limit_per_user: true
+    });
+}

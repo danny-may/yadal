@@ -1,4 +1,4 @@
-export * from './BaseUrlMiddleware.js';
+export * from './URLResolverMiddleware.js';
 export * from './EndpointHeaderMiddleware.js';
 export * from './HttpRequestMiddleware.js';
 export * from './IEndpointClientMiddleware.js';

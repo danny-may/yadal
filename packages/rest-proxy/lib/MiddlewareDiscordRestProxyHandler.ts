@@ -1,5 +1,5 @@
 import { CompositeAbortController } from "@yadal/core";
-import { IHttpRequest, IHttpResponse, IRoute } from "@yadal/rest";
+import { IHttpRequest, IHttpResponse, Route } from "@yadal/rest";
 import { IDiscordRestProxyHandler } from './IDiscordRestProxyHandler.js';
 import { IDiscordRestProxyMiddleware } from "./middleware/index.js";
 
@@ -19,7 +19,7 @@ export class MiddlewareDiscordRestProxyHandler implements IDiscordRestProxyHandl
             )
     }
 
-    async handleRequest<T extends object>(route: IRoute<T>, params: T, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
+    async handleRequest<T extends object>(route: Route<T>, params: T, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
         return await this.#send(route, params, request, signal);
     }
 }

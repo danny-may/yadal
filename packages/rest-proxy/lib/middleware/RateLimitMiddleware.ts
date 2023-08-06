@@ -1,4 +1,4 @@
-import { IHttpRequest, IHttpResponse, IRateLimitManager, IRoute, RateLimitHeaders } from "@yadal/rest";
+import { IHttpResponse, IRateLimitManager, Route, RateLimitHeaders } from "@yadal/rest";
 import { IDiscordRestProxyMiddleware } from "./IDiscordRestProxyMiddleware.js";
 
 
@@ -9,8 +9,8 @@ export class RateLimitMiddleware implements IDiscordRestProxyMiddleware {
         this.#rateLimits = rateLimits;
     }
 
-    async handle<T extends object>(route: IRoute<T>, params: T, request: IHttpRequest, next: (signal?: AbortSignal | undefined) => PromiseLike<IHttpResponse>, signal?: AbortSignal | undefined): Promise<IHttpResponse> {
-        const ratelimit = this.#rateLimits.get(request.method, route, params);
+    async handle<T extends object>(route: Route<T>, params: T, _: unknown, next: (signal?: AbortSignal | undefined) => PromiseLike<IHttpResponse>, signal?: AbortSignal | undefined): Promise<IHttpResponse> {
+        const ratelimit = this.#rateLimits.get(route, params);
         if (ratelimit === undefined)
             return await next();
 

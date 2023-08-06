@@ -1,0 +1,1 @@
+export * as getVoiceRegions from './getVoiceRegions.js';

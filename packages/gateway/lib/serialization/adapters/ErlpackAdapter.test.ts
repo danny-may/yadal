@@ -2,39 +2,41 @@ import { describe, it } from "node:test";
 import Erlpack from 'erlpack';
 import assert from "node:assert";
 import { ErlpackAdapter } from "./ErlpackAdapter.js";
+import { describeFile } from "../../../../../root.test.util.js";
 
-describe(ErlpackAdapter.name, () => {
-    const cases = getCases();
-    describe('serialize', () => {
-        for (const { name, buffer: expected, input } of cases) {
-            it('should serialize ' + name, () => {
-                // arrange
-                const sut = new ErlpackAdapter(Erlpack);
+describeFile(() => {
+    describe(ErlpackAdapter.name, () => {
+        const cases = getCases();
+        describe('serialize', () => {
+            for (const { name, buffer: expected, input } of cases) {
+                it('should serialize ' + name, () => {
+                    // arrange
+                    const sut = new ErlpackAdapter(Erlpack);
 
-                // act
-                const actual = sut.serialize(input);
+                    // act
+                    const actual = sut.serialize(input);
 
-                // assert
-                assert.deepStrictEqual(Buffer.from(actual.buffer, actual.byteOffset, actual.byteLength), expected);
-            })
-        }
+                    // assert
+                    assert.deepStrictEqual(Buffer.from(actual.buffer, actual.byteOffset, actual.byteLength), expected);
+                })
+            }
+        });
+        describe('deserialize', () => {
+            for (const { name, buffer, output: expected } of cases) {
+                it('should deserialize ' + name, () => {
+                    // arrange
+                    const sut = new ErlpackAdapter(Erlpack);
+
+                    // act
+                    const actual = sut.deserialize(buffer);
+
+                    // assert
+                    assert.deepStrictEqual(actual, expected);
+                });
+            }
+        });
     });
-    describe('deserialize', () => {
-        for (const { name, buffer, output: expected } of cases) {
-            it('should deserialize ' + name, () => {
-                // arrange
-                const sut = new ErlpackAdapter(Erlpack);
-
-                // act
-                const actual = sut.deserialize(buffer);
-
-                // assert
-                assert.deepStrictEqual(actual, expected);
-            })
-        }
-    })
-})
-
+});
 function getCases() {
     return rawCases().map(c => ({ ...c, buffer: Buffer.from(c.buffer, 'base64') }))
 }

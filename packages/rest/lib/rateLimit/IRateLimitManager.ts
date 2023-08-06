@@ -1,9 +1,8 @@
-import { HttpMethod } from "../http/index.js";
-import { IRoute } from "../paths/index.js";
+import { Route } from "../routes/index.js";
 import { RateLimitHeaders } from "./RateLimitHeaders.js";
 
 export interface IRateLimitManager {
-    get<T extends object>(method: HttpMethod, route: IRoute<T>, model: T): IRateLimiter | undefined;
+    get<T extends object>(route: Route<T>, model: T): IRateLimiter | undefined;
     clear(): void;
 }
 

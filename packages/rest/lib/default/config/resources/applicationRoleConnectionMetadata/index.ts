@@ -1,0 +1,2 @@
+export * as getApplicationRoleConnectionMetadata from './getApplicationRoleConnectionMetadata.js';
+export * as updateApplicationRoleConnectionMetadata from './updateApplicationRoleConnectionMetadata.js';

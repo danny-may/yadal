@@ -3,28 +3,31 @@ import { Wc3WebSocketFactory, WsWebSocketFactory, webSocket } from "./index.js";
 import * as wc3 from "websocket";
 import * as ws from "ws";
 import assert from "node:assert";
+import { describeFile } from "../../../../root.test.util.js";
 
-describe('webSocket', () => {
-    describe('wc3', () => {
-        it('Should create an instance of the wc3 factory', () => {
-            // arrange
+describeFile(() => {
+    describe('webSocket', () => {
+        describe('wc3', () => {
+            it('Should create an instance of the wc3 factory', () => {
+                // arrange
 
-            // act
-            const actual = webSocket.wc3(wc3.w3cwebsocket);
+                // act
+                const actual = webSocket.wc3(wc3.w3cwebsocket);
 
-            // assert
-            assert(actual instanceof Wc3WebSocketFactory);
+                // assert
+                assert(actual instanceof Wc3WebSocketFactory);
+            });
         });
-    });
-    describe('ws', () => {
-        it('Should create an instance of the ws adapter', () => {
-            // arrange
+        describe('ws', () => {
+            it('Should create an instance of the ws adapter', () => {
+                // arrange
 
-            // act
-            const actual = webSocket.ws(ws.WebSocket);
+                // act
+                const actual = webSocket.ws(ws.WebSocket);
 
-            // assert
-            assert(actual instanceof WsWebSocketFactory);
+                // assert
+                assert(actual instanceof WsWebSocketFactory);
+            });
         });
     });
 });

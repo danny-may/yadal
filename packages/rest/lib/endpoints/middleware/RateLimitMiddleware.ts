@@ -12,7 +12,7 @@ export class RateLimitMiddleware implements IEndpointClientMiddleware {
     }
 
     async handle<TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, next: () => PromiseLike<IEndpointResponse<TModel, TResult>>, signal?: AbortSignal | undefined): Promise<IEndpointResponse<TModel, TResult>> {
-        const ratelimit = this.#rateLimits.get(request.http.method, request.endpoint.route, request.model);
+        const ratelimit = this.#rateLimits.get(request.endpoint.route, request.model);
         if (ratelimit === undefined)
             return await next();
 

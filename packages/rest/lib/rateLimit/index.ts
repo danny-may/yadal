@@ -1,4 +1,3 @@
-export * from './default.js';
 export * from './IRateLimitManager.js';
 export * from './IRateLimitResult.js';
 export * from './RateLimitHeaders.js';
