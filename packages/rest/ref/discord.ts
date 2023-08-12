@@ -15,10 +15,14 @@ export type SlashCommandMessageTag = `</${string}:${bigint}>`;
 export type CustomEmojiMessageTag = `<${'a'|''}:${string}:${bigint}>`;
 export type TimestampMessageTag = `<t:${bigint}${''|`:${'t'|'T'|'d'|'D'|'f'|'F'|'R'}`}>`;
 export type MessageTag = UserMessageTag | ChannelMessageTag | RoleMessageTag | SlashCommandMessageTag | CustomEmojiMessageTag | TimestampMessageTag;
+export const AccountResponseKeys = ["id","name"] as const satisfies ReadonlyArray<keyof AccountResponse>;
+Object.freeze(AccountResponseKeys);
 export interface AccountResponse {
     id: string;
     name?: (string | null);
 }
+export const ActionRowKeys = ["type","components"] as const satisfies ReadonlyArray<keyof ActionRow>;
+Object.freeze(ActionRowKeys);
 export interface ActionRow {
     type: typeof MessageComponentType["ACTION_ROW"];
     /**
@@ -52,6 +56,8 @@ export const AllowedMentionType = {
     EVERYONE: "everyone"
 } as const;
 Object.freeze(AllowedMentionType);
+export const ApplicationCommandAttachmentOptionKeys = ["type","name","name_localizations","description","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandAttachmentOption>;
+Object.freeze(ApplicationCommandAttachmentOptionKeys);
 export interface ApplicationCommandAttachmentOption {
     type: typeof ApplicationCommandOptionType["ATTACHMENT"];
     /**
@@ -86,6 +92,8 @@ export interface ApplicationCommandAttachmentOption {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandAttachmentOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandAttachmentOptionResponse>;
+Object.freeze(ApplicationCommandAttachmentOptionResponseKeys);
 export interface ApplicationCommandAttachmentOptionResponse {
     type: typeof ApplicationCommandOptionType["ATTACHMENT"];
     name: string;
@@ -100,10 +108,14 @@ export interface ApplicationCommandAttachmentOptionResponse {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandAutocompleteCallbackRequestKeys = ["type","data"] as const satisfies ReadonlyArray<keyof ApplicationCommandAutocompleteCallbackRequest>;
+Object.freeze(ApplicationCommandAutocompleteCallbackRequestKeys);
 export interface ApplicationCommandAutocompleteCallbackRequest {
     type: typeof InteractionCallbackType["APPLICATION_COMMAND_AUTOCOMPLETE_RESULT"];
     data: (InteractionApplicationCommandAutocompleteCallbackIntegerData | InteractionApplicationCommandAutocompleteCallbackNumberData | InteractionApplicationCommandAutocompleteCallbackStringData);
 }
+export const ApplicationCommandBooleanOptionKeys = ["type","name","name_localizations","description","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandBooleanOption>;
+Object.freeze(ApplicationCommandBooleanOptionKeys);
 export interface ApplicationCommandBooleanOption {
     type: typeof ApplicationCommandOptionType["BOOLEAN"];
     /**
@@ -138,6 +150,8 @@ export interface ApplicationCommandBooleanOption {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandBooleanOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandBooleanOptionResponse>;
+Object.freeze(ApplicationCommandBooleanOptionResponseKeys);
 export interface ApplicationCommandBooleanOptionResponse {
     type: typeof ApplicationCommandOptionType["BOOLEAN"];
     name: string;
@@ -152,6 +166,8 @@ export interface ApplicationCommandBooleanOptionResponse {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandChannelOptionKeys = ["type","name","name_localizations","description","description_localizations","required","channel_types"] as const satisfies ReadonlyArray<keyof ApplicationCommandChannelOption>;
+Object.freeze(ApplicationCommandChannelOptionKeys);
 export interface ApplicationCommandChannelOption {
     type: typeof ApplicationCommandOptionType["CHANNEL"];
     /**
@@ -190,6 +206,8 @@ export interface ApplicationCommandChannelOption {
      */
     channel_types?: (Array<ChannelType> | null);
 }
+export const ApplicationCommandChannelOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required","channel_types"] as const satisfies ReadonlyArray<keyof ApplicationCommandChannelOptionResponse>;
+Object.freeze(ApplicationCommandChannelOptionResponseKeys);
 export interface ApplicationCommandChannelOptionResponse {
     type: typeof ApplicationCommandOptionType["CHANNEL"];
     name: string;
@@ -208,6 +226,8 @@ export interface ApplicationCommandChannelOptionResponse {
      */
     channel_types?: (Array<ChannelType> | null);
 }
+export const ApplicationCommandIntegerOptionKeys = ["type","name","name_localizations","description","description_localizations","required","autocomplete","choices","min_value","max_value"] as const satisfies ReadonlyArray<keyof ApplicationCommandIntegerOption>;
+Object.freeze(ApplicationCommandIntegerOptionKeys);
 export interface ApplicationCommandIntegerOption {
     type: typeof ApplicationCommandOptionType["INTEGER"];
     /**
@@ -257,6 +277,8 @@ export interface ApplicationCommandIntegerOption {
      */
     max_value?: (number | null);
 }
+export const ApplicationCommandIntegerOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required","autocomplete","choices","min_value","max_value"] as const satisfies ReadonlyArray<keyof ApplicationCommandIntegerOptionResponse>;
+Object.freeze(ApplicationCommandIntegerOptionResponseKeys);
 export interface ApplicationCommandIntegerOptionResponse {
     type: typeof ApplicationCommandOptionType["INTEGER"];
     name: string;
@@ -283,6 +305,8 @@ export interface ApplicationCommandIntegerOptionResponse {
      */
     max_value?: (number | null);
 }
+export const ApplicationCommandMentionableOptionKeys = ["type","name","name_localizations","description","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandMentionableOption>;
+Object.freeze(ApplicationCommandMentionableOptionKeys);
 export interface ApplicationCommandMentionableOption {
     type: typeof ApplicationCommandOptionType["MENTIONABLE"];
     /**
@@ -317,6 +341,8 @@ export interface ApplicationCommandMentionableOption {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandMentionableOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandMentionableOptionResponse>;
+Object.freeze(ApplicationCommandMentionableOptionResponseKeys);
 export interface ApplicationCommandMentionableOptionResponse {
     type: typeof ApplicationCommandOptionType["MENTIONABLE"];
     name: string;
@@ -331,6 +357,8 @@ export interface ApplicationCommandMentionableOptionResponse {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandNumberOptionKeys = ["type","name","name_localizations","description","description_localizations","required","autocomplete","choices","min_value","max_value"] as const satisfies ReadonlyArray<keyof ApplicationCommandNumberOption>;
+Object.freeze(ApplicationCommandNumberOptionKeys);
 export interface ApplicationCommandNumberOption {
     type: typeof ApplicationCommandOptionType["NUMBER"];
     /**
@@ -372,6 +400,8 @@ export interface ApplicationCommandNumberOption {
     min_value?: (number | null);
     max_value?: (number | null);
 }
+export const ApplicationCommandNumberOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required","autocomplete","choices","min_value","max_value"] as const satisfies ReadonlyArray<keyof ApplicationCommandNumberOptionResponse>;
+Object.freeze(ApplicationCommandNumberOptionResponseKeys);
 export interface ApplicationCommandNumberOptionResponse {
     type: typeof ApplicationCommandOptionType["NUMBER"];
     name: string;
@@ -390,6 +420,8 @@ export interface ApplicationCommandNumberOptionResponse {
     min_value?: (number | null);
     max_value?: (number | null);
 }
+export const ApplicationCommandOptionIntegerChoiceKeys = ["name","name_localizations","value"] as const satisfies ReadonlyArray<keyof ApplicationCommandOptionIntegerChoice>;
+Object.freeze(ApplicationCommandOptionIntegerChoiceKeys);
 export interface ApplicationCommandOptionIntegerChoice {
     /**
      * @maxLength 100
@@ -412,6 +444,8 @@ export interface ApplicationCommandOptionIntegerChoice {
      */
     value: number;
 }
+export const ApplicationCommandOptionIntegerChoiceResponseKeys = ["name","name_localized","name_localizations","value"] as const satisfies ReadonlyArray<keyof ApplicationCommandOptionIntegerChoiceResponse>;
+Object.freeze(ApplicationCommandOptionIntegerChoiceResponseKeys);
 export interface ApplicationCommandOptionIntegerChoiceResponse {
     name: string;
     name_localized?: (string | null);
@@ -424,6 +458,8 @@ export interface ApplicationCommandOptionIntegerChoiceResponse {
      */
     value: number;
 }
+export const ApplicationCommandOptionNumberChoiceKeys = ["name","name_localizations","value"] as const satisfies ReadonlyArray<keyof ApplicationCommandOptionNumberChoice>;
+Object.freeze(ApplicationCommandOptionNumberChoiceKeys);
 export interface ApplicationCommandOptionNumberChoice {
     /**
      * @maxLength 100
@@ -442,6 +478,8 @@ export interface ApplicationCommandOptionNumberChoice {
     } | null);
     value: number;
 }
+export const ApplicationCommandOptionNumberChoiceResponseKeys = ["name","name_localized","name_localizations","value"] as const satisfies ReadonlyArray<keyof ApplicationCommandOptionNumberChoiceResponse>;
+Object.freeze(ApplicationCommandOptionNumberChoiceResponseKeys);
 export interface ApplicationCommandOptionNumberChoiceResponse {
     name: string;
     name_localized?: (string | null);
@@ -450,6 +488,8 @@ export interface ApplicationCommandOptionNumberChoiceResponse {
     } | null);
     value: number;
 }
+export const ApplicationCommandOptionStringChoiceKeys = ["name","name_localizations","value"] as const satisfies ReadonlyArray<keyof ApplicationCommandOptionStringChoice>;
+Object.freeze(ApplicationCommandOptionStringChoiceKeys);
 export interface ApplicationCommandOptionStringChoice {
     /**
      * @maxLength 100
@@ -471,6 +511,8 @@ export interface ApplicationCommandOptionStringChoice {
      */
     value: string;
 }
+export const ApplicationCommandOptionStringChoiceResponseKeys = ["name","name_localized","name_localizations","value"] as const satisfies ReadonlyArray<keyof ApplicationCommandOptionStringChoiceResponse>;
+Object.freeze(ApplicationCommandOptionStringChoiceResponseKeys);
 export interface ApplicationCommandOptionStringChoiceResponse {
     name: string;
     name_localized?: (string | null);
@@ -527,6 +569,8 @@ export const ApplicationCommandOptionType = {
     ATTACHMENT: 11
 } as const;
 Object.freeze(ApplicationCommandOptionType);
+export const ApplicationCommandPermissionKeys = ["id","type","permission"] as const satisfies ReadonlyArray<keyof ApplicationCommandPermission>;
+Object.freeze(ApplicationCommandPermissionKeys);
 export interface ApplicationCommandPermission {
     id: Snowflake;
     type: ApplicationCommandPermissionType;
@@ -539,6 +583,8 @@ export const ApplicationCommandPermissionType = {
     CHANNEL: 3
 } as const;
 Object.freeze(ApplicationCommandPermissionType);
+export const ApplicationCommandResponseKeys = ["id","application_id","version","default_member_permissions","type","name","name_localized","name_localizations","description","description_localized","description_localizations","guild_id","dm_permission","options","nsfw"] as const satisfies ReadonlyArray<keyof ApplicationCommandResponse>;
+Object.freeze(ApplicationCommandResponseKeys);
 export interface ApplicationCommandResponse {
     id: Snowflake;
     application_id: Snowflake;
@@ -560,6 +606,8 @@ export interface ApplicationCommandResponse {
     options?: (Array<(ApplicationCommandAttachmentOptionResponse | ApplicationCommandBooleanOptionResponse | ApplicationCommandChannelOptionResponse | ApplicationCommandIntegerOptionResponse | ApplicationCommandMentionableOptionResponse | ApplicationCommandNumberOptionResponse | ApplicationCommandRoleOptionResponse | ApplicationCommandStringOptionResponse | ApplicationCommandSubcommandGroupOptionResponse | ApplicationCommandSubcommandOptionResponse | ApplicationCommandUserOptionResponse)> | null);
     nsfw?: (boolean | null);
 }
+export const ApplicationCommandRoleOptionKeys = ["type","name","name_localizations","description","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandRoleOption>;
+Object.freeze(ApplicationCommandRoleOptionKeys);
 export interface ApplicationCommandRoleOption {
     type: typeof ApplicationCommandOptionType["ROLE"];
     /**
@@ -594,6 +642,8 @@ export interface ApplicationCommandRoleOption {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandRoleOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandRoleOptionResponse>;
+Object.freeze(ApplicationCommandRoleOptionResponseKeys);
 export interface ApplicationCommandRoleOptionResponse {
     type: typeof ApplicationCommandOptionType["ROLE"];
     name: string;
@@ -608,6 +658,8 @@ export interface ApplicationCommandRoleOptionResponse {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandStringOptionKeys = ["type","name","name_localizations","description","description_localizations","required","autocomplete","min_length","max_length","choices"] as const satisfies ReadonlyArray<keyof ApplicationCommandStringOption>;
+Object.freeze(ApplicationCommandStringOptionKeys);
 export interface ApplicationCommandStringOption {
     type: typeof ApplicationCommandOptionType["STRING"];
     /**
@@ -657,6 +709,8 @@ export interface ApplicationCommandStringOption {
      */
     choices?: (Array<ApplicationCommandOptionStringChoice> | null);
 }
+export const ApplicationCommandStringOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required","autocomplete","choices","min_length","max_length"] as const satisfies ReadonlyArray<keyof ApplicationCommandStringOptionResponse>;
+Object.freeze(ApplicationCommandStringOptionResponseKeys);
 export interface ApplicationCommandStringOptionResponse {
     type: typeof ApplicationCommandOptionType["STRING"];
     name: string;
@@ -683,6 +737,8 @@ export interface ApplicationCommandStringOptionResponse {
      */
     max_length?: (Int32 | null);
 }
+export const ApplicationCommandSubcommandGroupOptionKeys = ["type","name","name_localizations","description","description_localizations","required","options"] as const satisfies ReadonlyArray<keyof ApplicationCommandSubcommandGroupOption>;
+Object.freeze(ApplicationCommandSubcommandGroupOptionKeys);
 export interface ApplicationCommandSubcommandGroupOption {
     type: typeof ApplicationCommandOptionType["SUB_COMMAND_GROUP"];
     /**
@@ -721,6 +777,8 @@ export interface ApplicationCommandSubcommandGroupOption {
      */
     options?: (Array<ApplicationCommandSubcommandOption> | null);
 }
+export const ApplicationCommandSubcommandGroupOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required","options"] as const satisfies ReadonlyArray<keyof ApplicationCommandSubcommandGroupOptionResponse>;
+Object.freeze(ApplicationCommandSubcommandGroupOptionResponseKeys);
 export interface ApplicationCommandSubcommandGroupOptionResponse {
     type: typeof ApplicationCommandOptionType["SUB_COMMAND_GROUP"];
     name: string;
@@ -736,6 +794,8 @@ export interface ApplicationCommandSubcommandGroupOptionResponse {
     required?: (boolean | null);
     options?: (Array<ApplicationCommandSubcommandOptionResponse> | null);
 }
+export const ApplicationCommandSubcommandOptionKeys = ["type","name","name_localizations","description","description_localizations","required","options"] as const satisfies ReadonlyArray<keyof ApplicationCommandSubcommandOption>;
+Object.freeze(ApplicationCommandSubcommandOptionKeys);
 export interface ApplicationCommandSubcommandOption {
     type: typeof ApplicationCommandOptionType["SUB_COMMAND"];
     /**
@@ -774,6 +834,8 @@ export interface ApplicationCommandSubcommandOption {
      */
     options?: (Array<(ApplicationCommandAttachmentOption | ApplicationCommandBooleanOption | ApplicationCommandChannelOption | ApplicationCommandIntegerOption | ApplicationCommandMentionableOption | ApplicationCommandNumberOption | ApplicationCommandRoleOption | ApplicationCommandStringOption | ApplicationCommandUserOption)> | null);
 }
+export const ApplicationCommandSubcommandOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required","options"] as const satisfies ReadonlyArray<keyof ApplicationCommandSubcommandOptionResponse>;
+Object.freeze(ApplicationCommandSubcommandOptionResponseKeys);
 export interface ApplicationCommandSubcommandOptionResponse {
     type: typeof ApplicationCommandOptionType["SUB_COMMAND"];
     name: string;
@@ -805,6 +867,8 @@ export const ApplicationCommandType = {
     MESSAGE: 3
 } as const;
 Object.freeze(ApplicationCommandType);
+export const ApplicationCommandUserOptionKeys = ["type","name","name_localizations","description","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandUserOption>;
+Object.freeze(ApplicationCommandUserOptionKeys);
 export interface ApplicationCommandUserOption {
     type: typeof ApplicationCommandOptionType["USER"];
     /**
@@ -839,6 +903,8 @@ export interface ApplicationCommandUserOption {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationCommandUserOptionResponseKeys = ["type","name","name_localized","name_localizations","description","description_localized","description_localizations","required"] as const satisfies ReadonlyArray<keyof ApplicationCommandUserOptionResponse>;
+Object.freeze(ApplicationCommandUserOptionResponseKeys);
 export interface ApplicationCommandUserOptionResponse {
     type: typeof ApplicationCommandOptionType["USER"];
     name: string;
@@ -853,6 +919,8 @@ export interface ApplicationCommandUserOptionResponse {
     } | null);
     required?: (boolean | null);
 }
+export const ApplicationFormPartialKeys = ["description","icon","cover_image","team_id","flags","interactions_endpoint_url","max_participants","type","tags","custom_install_url","install_params","role_connections_verification_url"] as const satisfies ReadonlyArray<keyof ApplicationFormPartial>;
+Object.freeze(ApplicationFormPartialKeys);
 export interface ApplicationFormPartial {
     description?: ({
         /**
@@ -894,6 +962,8 @@ export interface ApplicationFormPartial {
      */
     role_connections_verification_url?: (URIString | null);
 }
+export const ApplicationIncomingWebhookResponseKeys = ["application_id","avatar","channel_id","guild_id","id","name","type","user"] as const satisfies ReadonlyArray<keyof ApplicationIncomingWebhookResponse>;
+Object.freeze(ApplicationIncomingWebhookResponseKeys);
 export interface ApplicationIncomingWebhookResponse {
     application_id?: (Snowflake | null);
     avatar?: (string | null);
@@ -904,6 +974,8 @@ export interface ApplicationIncomingWebhookResponse {
     type: typeof WebhookType["APPLICATION_INCOMING"];
     user?: (null | UserResponse);
 }
+export const ApplicationOAuth2ParamsKeys = ["scopes","permissions"] as const satisfies ReadonlyArray<keyof ApplicationOAuth2Params>;
+Object.freeze(ApplicationOAuth2ParamsKeys);
 export interface ApplicationOAuth2Params {
     /**
      * @minItems 1
@@ -916,6 +988,8 @@ export interface ApplicationOAuth2Params {
      */
     permissions?: (number | null);
 }
+export const ApplicationOAuth2ParamsResponseKeys = ["scopes","permissions"] as const satisfies ReadonlyArray<keyof ApplicationOAuth2ParamsResponse>;
+Object.freeze(ApplicationOAuth2ParamsResponseKeys);
 export interface ApplicationOAuth2ParamsResponse {
     /**
      * @distinct 
@@ -923,6 +997,8 @@ export interface ApplicationOAuth2ParamsResponse {
     scopes: Array<(typeof OAuth2Scope["APPLICATIONS_COMMANDS"] | typeof OAuth2Scope["BOT"])>;
     permissions: string;
 }
+export const ApplicationResponseKeys = ["id","name","icon","description","type","cover_image","primary_sku_id","bot","slug","guild_id","rpc_origins","bot_public","bot_require_code_grant","terms_of_service_url","privacy_policy_url","custom_install_url","install_params","verify_key","flags","max_participants","tags"] as const satisfies ReadonlyArray<keyof ApplicationResponse>;
+Object.freeze(ApplicationResponseKeys);
 export interface ApplicationResponse {
     id: Snowflake;
     name: string;
@@ -957,6 +1033,8 @@ export interface ApplicationResponse {
      */
     tags?: (Array<string> | null);
 }
+export const ApplicationRoleConnectionsMetadataItemRequestKeys = ["type","key","name","name_localizations","description","description_localizations"] as const satisfies ReadonlyArray<keyof ApplicationRoleConnectionsMetadataItemRequest>;
+Object.freeze(ApplicationRoleConnectionsMetadataItemRequestKeys);
 export interface ApplicationRoleConnectionsMetadataItemRequest {
     type: MetadataItemType;
     /**
@@ -995,6 +1073,8 @@ export interface ApplicationRoleConnectionsMetadataItemRequest {
         [key: string]: (string | null);
     } | null);
 }
+export const ApplicationRoleConnectionsMetadataItemResponseKeys = ["type","key","name","name_localizations","description","description_localizations"] as const satisfies ReadonlyArray<keyof ApplicationRoleConnectionsMetadataItemResponse>;
+Object.freeze(ApplicationRoleConnectionsMetadataItemResponseKeys);
 export interface ApplicationRoleConnectionsMetadataItemResponse {
     type: MetadataItemType;
     key: string;
@@ -1012,6 +1092,8 @@ export const ApplicationType = {
     GUILD_ROLE_SUBSCRIPTIONS: 4
 } as const;
 Object.freeze(ApplicationType);
+export const ApplicationUserRoleConnectionResponseKeys = ["platform_name","platform_username","metadata"] as const satisfies ReadonlyArray<keyof ApplicationUserRoleConnectionResponse>;
+Object.freeze(ApplicationUserRoleConnectionResponseKeys);
 export interface ApplicationUserRoleConnectionResponse {
     platform_name?: (string | null);
     platform_username?: (string | null);
@@ -1093,6 +1175,8 @@ export const AuditLogActionType = {
     HOME_SETTINGS_UPDATE: 191
 } as const;
 Object.freeze(AuditLogActionType);
+export const AuditLogEntryResponseKeys = ["id","action_type","user_id","target_id","changes","options","reason"] as const satisfies ReadonlyArray<keyof AuditLogEntryResponse>;
+Object.freeze(AuditLogEntryResponseKeys);
 export interface AuditLogEntryResponse {
     id: Snowflake;
     action_type: AuditLogActionType;
@@ -1104,6 +1188,8 @@ export interface AuditLogEntryResponse {
     } | null);
     reason?: (string | null);
 }
+export const AuditLogObjectChangeResponseKeys = ["key","new_value","old_value"] as const satisfies ReadonlyArray<keyof AuditLogObjectChangeResponse>;
+Object.freeze(AuditLogObjectChangeResponseKeys);
 export interface AuditLogObjectChangeResponse {
     key?: (string | null);
     new_value?: unknown;
@@ -1317,6 +1403,8 @@ export const AvailableLocale = {
     "ZH-TW": "zh-TW"
 } as const;
 Object.freeze(AvailableLocale);
+export const BaseCreateMessageCreateRequestKeys = ["content","embeds","allowed_mentions","sticker_ids","components","flags","attachments"] as const satisfies ReadonlyArray<keyof BaseCreateMessageCreateRequest>;
+Object.freeze(BaseCreateMessageCreateRequestKeys);
 export interface BaseCreateMessageCreateRequest {
     /**
      * @maxLength 4000
@@ -1341,6 +1429,8 @@ export interface BaseCreateMessageCreateRequest {
      */
     attachments?: (Array<MessageAttachmentRequest> | null);
 }
+export const BasicApplicationResponseKeys = ["id","name","icon","description","type","cover_image","primary_sku_id","bot"] as const satisfies ReadonlyArray<keyof BasicApplicationResponse>;
+Object.freeze(BasicApplicationResponseKeys);
 export interface BasicApplicationResponse {
     id: Snowflake;
     name: string;
@@ -1351,6 +1441,8 @@ export interface BasicApplicationResponse {
     primary_sku_id?: (Snowflake | null);
     bot?: (null | UserResponse);
 }
+export const BasicMessageResponseKeys = ["id","type","content","channel_id","author","attachments","embeds","mentions","mention_roles","pinned","mention_everyone","tts","timestamp","edited_timestamp","flags","components","activity","application","application_id","interaction","nonce","webhook_id","message_reference","thread","mention_channels","stickers","sticker_items","role_subscription_data","position"] as const satisfies ReadonlyArray<keyof BasicMessageResponse>;
+Object.freeze(BasicMessageResponseKeys);
 export interface BasicMessageResponse {
     id: Snowflake;
     type: MessageType;
@@ -1393,23 +1485,33 @@ export interface BasicMessageResponse {
      */
     position?: (Int32 | null);
 }
+export const BlockMessageActionKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof BlockMessageAction>;
+Object.freeze(BlockMessageActionKeys);
 export interface BlockMessageAction {
     type: typeof AutomodActionType["BLOCK_MESSAGE"];
     metadata?: (null | BlockMessageActionMetadata);
 }
+export const BlockMessageActionMetadataKeys = ["custom_message"] as const satisfies ReadonlyArray<keyof BlockMessageActionMetadata>;
+Object.freeze(BlockMessageActionMetadataKeys);
 export interface BlockMessageActionMetadata {
     /**
      * @maxLength 150
      */
     custom_message?: (string | null);
 }
+export const BlockMessageActionMetadataResponseKeys = ["custom_message"] as const satisfies ReadonlyArray<keyof BlockMessageActionMetadataResponse>;
+Object.freeze(BlockMessageActionMetadataResponseKeys);
 export interface BlockMessageActionMetadataResponse {
     custom_message?: (string | null);
 }
+export const BlockMessageActionResponseKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof BlockMessageActionResponse>;
+Object.freeze(BlockMessageActionResponseKeys);
 export interface BlockMessageActionResponse {
     type: typeof AutomodActionType["BLOCK_MESSAGE"];
     metadata: BlockMessageActionMetadataResponse;
 }
+export const BotAccountPatchRequestPartialKeys = ["username","avatar"] as const satisfies ReadonlyArray<keyof BotAccountPatchRequestPartial>;
+Object.freeze(BotAccountPatchRequestPartialKeys);
 export interface BotAccountPatchRequestPartial {
     /**
      * @maxLength 32
@@ -1418,6 +1520,8 @@ export interface BotAccountPatchRequestPartial {
     username?: string;
     avatar?: (Base64String | null);
 }
+export const ButtonKeys = ["type","custom_id","style","label","disabled","emoji","url"] as const satisfies ReadonlyArray<keyof Button>;
+Object.freeze(ButtonKeys);
 export interface Button {
     type: typeof MessageComponentType["BUTTON"];
     /**
@@ -1445,10 +1549,14 @@ export const ButtonStyleType = {
     LINK: 5
 } as const;
 Object.freeze(ButtonStyleType);
+export const ChannelFollowerResponseKeys = ["channel_id","webhook_id"] as const satisfies ReadonlyArray<keyof ChannelFollowerResponse>;
+Object.freeze(ChannelFollowerResponseKeys);
 export interface ChannelFollowerResponse {
     channel_id: Snowflake;
     webhook_id: Snowflake;
 }
+export const ChannelFollowerWebhookResponseKeys = ["application_id","avatar","channel_id","guild_id","id","name","type","user","source_guild","source_channel"] as const satisfies ReadonlyArray<keyof ChannelFollowerWebhookResponse>;
+Object.freeze(ChannelFollowerWebhookResponseKeys);
 export interface ChannelFollowerWebhookResponse {
     application_id?: (Snowflake | null);
     avatar?: (string | null);
@@ -1461,12 +1569,16 @@ export interface ChannelFollowerWebhookResponse {
     source_guild?: (null | WebhookSourceGuildResponse);
     source_channel?: (null | WebhookSourceChannelResponse);
 }
+export const ChannelPermissionOverwriteRequestKeys = ["id","type","allow","deny"] as const satisfies ReadonlyArray<keyof ChannelPermissionOverwriteRequest>;
+Object.freeze(ChannelPermissionOverwriteRequestKeys);
 export interface ChannelPermissionOverwriteRequest {
     id: Snowflake;
     type?: (null | ChannelPermissionOverwrite);
     allow?: (number | null);
     deny?: (number | null);
 }
+export const ChannelPermissionOverwriteResponseKeys = ["id","type","allow","deny"] as const satisfies ReadonlyArray<keyof ChannelPermissionOverwriteResponse>;
+Object.freeze(ChannelPermissionOverwriteResponseKeys);
 export interface ChannelPermissionOverwriteResponse {
     id: Snowflake;
     type: ChannelPermissionOverwrite;
@@ -1479,6 +1591,8 @@ export const ChannelPermissionOverwrite = {
     MEMBER: 1
 } as const;
 Object.freeze(ChannelPermissionOverwrite);
+export const ChannelSelectKeys = ["type","custom_id","placeholder","min_values","max_values","disabled","channel_types"] as const satisfies ReadonlyArray<keyof ChannelSelect>;
+Object.freeze(ChannelSelectKeys);
 export interface ChannelSelect {
     type: typeof MessageComponentType["CHANNEL_SELECT"];
     /**
@@ -1557,22 +1671,30 @@ export const ChannelType = {
     GUILD_FORUM: 15
 } as const;
 Object.freeze(ChannelType);
+export const CommandPermissionResponseKeys = ["id","type","permission"] as const satisfies ReadonlyArray<keyof CommandPermissionResponse>;
+Object.freeze(CommandPermissionResponseKeys);
 export interface CommandPermissionResponse {
     id: Snowflake;
     type: ApplicationCommandPermissionType;
     permission: boolean;
 }
+export const CommandPermissionsResponseKeys = ["id","application_id","guild_id","permissions"] as const satisfies ReadonlyArray<keyof CommandPermissionsResponse>;
+Object.freeze(CommandPermissionsResponseKeys);
 export interface CommandPermissionsResponse {
     id: Snowflake;
     application_id: Snowflake;
     guild_id: Snowflake;
     permissions: Array<CommandPermissionResponse>;
 }
+export const ConnectedAccountGuildResponseKeys = ["id","name","icon"] as const satisfies ReadonlyArray<keyof ConnectedAccountGuildResponse>;
+Object.freeze(ConnectedAccountGuildResponseKeys);
 export interface ConnectedAccountGuildResponse {
     id: Snowflake;
     name: string;
     icon?: (string | null);
 }
+export const ConnectedAccountIntegrationResponseKeys = ["id","type","account","guild"] as const satisfies ReadonlyArray<keyof ConnectedAccountIntegrationResponse>;
+Object.freeze(ConnectedAccountIntegrationResponseKeys);
 export interface ConnectedAccountIntegrationResponse {
     id: string;
     type: IntegrationType;
@@ -1602,6 +1724,8 @@ export const ConnectedAccountProvider = {
     YOUTUBE: "youtube"
 } as const;
 Object.freeze(ConnectedAccountProvider);
+export const ConnectedAccountResponseKeys = ["id","name","type","friend_sync","integrations","show_activity","two_way_link","verified","visibility","revoked"] as const satisfies ReadonlyArray<keyof ConnectedAccountResponse>;
+Object.freeze(ConnectedAccountResponseKeys);
 export interface ConnectedAccountResponse {
     id: string;
     name?: (string | null);
@@ -1620,6 +1744,8 @@ export const ConnectedAccountVisibility = {
     EVERYONE: 1
 } as const;
 Object.freeze(ConnectedAccountVisibility);
+export const CreateForumThreadRequestKeys = ["name","auto_archive_duration","rate_limit_per_user","applied_tags","message"] as const satisfies ReadonlyArray<keyof CreateForumThreadRequest>;
+Object.freeze(CreateForumThreadRequestKeys);
 export interface CreateForumThreadRequest {
     /**
      * @maxLength 100
@@ -1638,6 +1764,8 @@ export interface CreateForumThreadRequest {
     applied_tags?: (Array<Snowflake> | null);
     message: BaseCreateMessageCreateRequest;
 }
+export const CreateGroupDMInviteRequestKeys = ["max_age"] as const satisfies ReadonlyArray<keyof CreateGroupDMInviteRequest>;
+Object.freeze(CreateGroupDMInviteRequestKeys);
 export interface CreateGroupDMInviteRequest {
     /**
      * @maximum 604800
@@ -1645,6 +1773,8 @@ export interface CreateGroupDMInviteRequest {
      */
     max_age?: (number | null);
 }
+export const CreateGuildChannelRequestKeys = ["type","name","position","topic","bitrate","user_limit","nsfw","rate_limit_per_user","parent_id","permission_overwrites","rtc_region","video_quality_mode","default_auto_archive_duration","default_reaction_emoji","default_sort_order","default_forum_layout","available_tags"] as const satisfies ReadonlyArray<keyof CreateGuildChannelRequest>;
+Object.freeze(CreateGuildChannelRequestKeys);
 export interface CreateGuildChannelRequest {
     type?: (null | (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"] | typeof ChannelType["GUILD_ANNOUNCEMENT"] | typeof ChannelType["GUILD_STAGE_VOICE"] | typeof ChannelType["GUILD_DIRECTORY"] | typeof ChannelType["GUILD_FORUM"]));
     /**
@@ -1692,6 +1822,8 @@ export interface CreateGuildChannelRequest {
      */
     available_tags?: (Array<(null | CreateOrUpdateThreadTagRequest)> | null);
 }
+export const CreateGuildInviteRequestKeys = ["max_age","temporary","max_uses","unique","target_user_id","target_application_id","target_type"] as const satisfies ReadonlyArray<keyof CreateGuildInviteRequest>;
+Object.freeze(CreateGuildInviteRequestKeys);
 export interface CreateGuildInviteRequest {
     /**
      * @maximum 2592000
@@ -1709,6 +1841,8 @@ export interface CreateGuildInviteRequest {
     target_application_id?: (Snowflake | null);
     target_type?: (null | (typeof InviteTargetType["STREAM"] | typeof InviteTargetType["EMBEDDED_APPLICATION"]));
 }
+export const CreateGuildRequestChannelItemKeys = ["type","name","position","topic","bitrate","user_limit","nsfw","rate_limit_per_user","parent_id","permission_overwrites","rtc_region","video_quality_mode","default_auto_archive_duration","default_reaction_emoji","default_thread_rate_limit_per_user","default_sort_order","default_forum_layout","id","available_tags"] as const satisfies ReadonlyArray<keyof CreateGuildRequestChannelItem>;
+Object.freeze(CreateGuildRequestChannelItemKeys);
 export interface CreateGuildRequestChannelItem {
     type?: (null | (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"]));
     /**
@@ -1762,6 +1896,8 @@ export interface CreateGuildRequestChannelItem {
      */
     available_tags?: (Array<CreateOrUpdateThreadTagRequest> | null);
 }
+export const CreateGuildRequestRoleItemKeys = ["id","name","permissions","color","hoist","mentionable","unicode_emoji"] as const satisfies ReadonlyArray<keyof CreateGuildRequestRoleItem>;
+Object.freeze(CreateGuildRequestRoleItemKeys);
 export interface CreateGuildRequestRoleItem {
     id: number;
     /**
@@ -1781,10 +1917,14 @@ export interface CreateGuildRequestRoleItem {
      */
     unicode_emoji?: (string | null);
 }
+export const CreateMessageInteractionCallbackRequestKeys = ["type","data"] as const satisfies ReadonlyArray<keyof CreateMessageInteractionCallbackRequest>;
+Object.freeze(CreateMessageInteractionCallbackRequestKeys);
 export interface CreateMessageInteractionCallbackRequest {
     type: (typeof InteractionCallbackType["CHANNEL_MESSAGE_WITH_SOURCE"] | typeof InteractionCallbackType["DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE"]);
     data?: (null | IncomingWebhookInteractionRequest);
 }
+export const CreateOrUpdateThreadTagRequestKeys = ["name","emoji_id","emoji_name","moderated"] as const satisfies ReadonlyArray<keyof CreateOrUpdateThreadTagRequest>;
+Object.freeze(CreateOrUpdateThreadTagRequestKeys);
 export interface CreateOrUpdateThreadTagRequest {
     /**
      * @maxLength 20
@@ -1798,6 +1938,8 @@ export interface CreateOrUpdateThreadTagRequest {
     emoji_name?: (string | null);
     moderated?: (boolean | null);
 }
+export const CreatePrivateChannelRequestKeys = ["recipient_id","access_tokens","nicks"] as const satisfies ReadonlyArray<keyof CreatePrivateChannelRequest>;
+Object.freeze(CreatePrivateChannelRequestKeys);
 export interface CreatePrivateChannelRequest {
     recipient_id?: (Snowflake | null);
     /**
@@ -1815,6 +1957,8 @@ export interface CreatePrivateChannelRequest {
         [key: string]: (string | null);
     } | null);
 }
+export const CreateTextThreadWithMessageRequestKeys = ["name","auto_archive_duration","rate_limit_per_user"] as const satisfies ReadonlyArray<keyof CreateTextThreadWithMessageRequest>;
+Object.freeze(CreateTextThreadWithMessageRequestKeys);
 export interface CreateTextThreadWithMessageRequest {
     /**
      * @maxLength 100
@@ -1828,6 +1972,8 @@ export interface CreateTextThreadWithMessageRequest {
      */
     rate_limit_per_user?: (number | null);
 }
+export const CreateTextThreadWithoutMessageRequestKeys = ["name","auto_archive_duration","rate_limit_per_user","type","invitable"] as const satisfies ReadonlyArray<keyof CreateTextThreadWithoutMessageRequest>;
+Object.freeze(CreateTextThreadWithoutMessageRequestKeys);
 export interface CreateTextThreadWithoutMessageRequest {
     /**
      * @maxLength 100
@@ -1843,6 +1989,8 @@ export interface CreateTextThreadWithoutMessageRequest {
     type?: (null | (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]));
     invitable?: (boolean | null);
 }
+export const CreatedThreadResponseKeys = ["id","type","last_message_id","flags","last_pin_timestamp","guild_id","name","parent_id","rate_limit_per_user","bitrate","user_limit","rtc_region","video_quality_mode","permissions","owner_id","thread_metadata","message_count","member_count","total_message_sent","applied_tags","member"] as const satisfies ReadonlyArray<keyof CreatedThreadResponse>;
+Object.freeze(CreatedThreadResponseKeys);
 export interface CreatedThreadResponse {
     id: Snowflake;
     type: (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]);
@@ -1894,6 +2042,8 @@ export interface CreatedThreadResponse {
     applied_tags?: (Array<Snowflake> | null);
     member?: (null | ThreadMemberResponse);
 }
+export const DefaultKeywordListTriggerMetadataKeys = ["allow_list","presets"] as const satisfies ReadonlyArray<keyof DefaultKeywordListTriggerMetadata>;
+Object.freeze(DefaultKeywordListTriggerMetadataKeys);
 export interface DefaultKeywordListTriggerMetadata {
     /**
      * @maxItems 1000
@@ -1904,6 +2054,8 @@ export interface DefaultKeywordListTriggerMetadata {
      */
     presets?: (Array<AutomodKeywordPresetType> | null);
 }
+export const DefaultKeywordListTriggerMetadataResponseKeys = ["allow_list","presets"] as const satisfies ReadonlyArray<keyof DefaultKeywordListTriggerMetadataResponse>;
+Object.freeze(DefaultKeywordListTriggerMetadataResponseKeys);
 export interface DefaultKeywordListTriggerMetadataResponse {
     allow_list: Array<string>;
     /**
@@ -1911,6 +2063,8 @@ export interface DefaultKeywordListTriggerMetadataResponse {
      */
     presets: Array<AutomodKeywordPresetType>;
 }
+export const DefaultKeywordListUpsertRequestKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof DefaultKeywordListUpsertRequest>;
+Object.freeze(DefaultKeywordListUpsertRequestKeys);
 export interface DefaultKeywordListUpsertRequest {
     /**
      * @maxLength 100
@@ -1936,6 +2090,8 @@ export interface DefaultKeywordListUpsertRequest {
     trigger_type: typeof AutomodTriggerType["DEFAULT_KEYWORD_LIST"];
     trigger_metadata: DefaultKeywordListTriggerMetadata;
 }
+export const DefaultKeywordListUpsertRequestPartialKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof DefaultKeywordListUpsertRequestPartial>;
+Object.freeze(DefaultKeywordListUpsertRequestPartialKeys);
 export interface DefaultKeywordListUpsertRequestPartial {
     /**
      * @maxLength 100
@@ -1961,6 +2117,8 @@ export interface DefaultKeywordListUpsertRequestPartial {
     trigger_type?: typeof AutomodTriggerType["DEFAULT_KEYWORD_LIST"];
     trigger_metadata?: DefaultKeywordListTriggerMetadata;
 }
+export const DefaultKeywordRuleResponseKeys = ["id","guild_id","creator_id","name","event_type","actions","trigger_type","enabled","exempt_roles","exempt_channels","trigger_metadata"] as const satisfies ReadonlyArray<keyof DefaultKeywordRuleResponse>;
+Object.freeze(DefaultKeywordRuleResponseKeys);
 export interface DefaultKeywordRuleResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -1980,10 +2138,14 @@ export interface DefaultKeywordRuleResponse {
     exempt_channels?: (Array<Snowflake> | null);
     trigger_metadata: DefaultKeywordListTriggerMetadataResponse;
 }
+export const DefaultReactionEmojiResponseKeys = ["emoji_id","emoji_name"] as const satisfies ReadonlyArray<keyof DefaultReactionEmojiResponse>;
+Object.freeze(DefaultReactionEmojiResponseKeys);
 export interface DefaultReactionEmojiResponse {
     emoji_id?: (Snowflake | null);
     emoji_name?: (string | null);
 }
+export const DiscordIntegrationResponseKeys = ["type","name","account","enabled","id","application","scopes","user"] as const satisfies ReadonlyArray<keyof DiscordIntegrationResponse>;
+Object.freeze(DiscordIntegrationResponseKeys);
 export interface DiscordIntegrationResponse {
     type: typeof IntegrationType["DISCORD"];
     name?: (string | null);
@@ -1997,6 +2159,8 @@ export interface DiscordIntegrationResponse {
     scopes: Array<(typeof OAuth2Scope["APPLICATIONS_COMMANDS"] | typeof OAuth2Scope["BOT"] | typeof OAuth2Scope["WEBHOOK_INCOMING"])>;
     user?: (null | UserResponse);
 }
+export const EmojiKeys = ["id","name","animated"] as const satisfies ReadonlyArray<keyof Emoji>;
+Object.freeze(EmojiKeys);
 export interface Emoji {
     id?: (Snowflake | null);
     /**
@@ -2005,6 +2169,8 @@ export interface Emoji {
     name: string;
     animated?: (boolean | null);
 }
+export const EmojiResponseKeys = ["id","name","user","roles","require_colons","managed","animated","available"] as const satisfies ReadonlyArray<keyof EmojiResponse>;
+Object.freeze(EmojiResponseKeys);
 export interface EmojiResponse {
     id: Snowflake;
     name: string;
@@ -2015,27 +2181,41 @@ export interface EmojiResponse {
     animated: boolean;
     available: boolean;
 }
+export const EntityMetadataExternalKeys = ["location"] as const satisfies ReadonlyArray<keyof EntityMetadataExternal>;
+Object.freeze(EntityMetadataExternalKeys);
 export interface EntityMetadataExternal {
     /**
      * @maxLength 100
      */
     location: string;
 }
+export const EntityMetadataExternalResponseKeys = ["location"] as const satisfies ReadonlyArray<keyof EntityMetadataExternalResponse>;
+Object.freeze(EntityMetadataExternalResponseKeys);
 export interface EntityMetadataExternalResponse {
     location: string;
 }
+export const EntityMetadataStageInstanceKeys = [] as const satisfies ReadonlyArray<keyof EntityMetadataStageInstance>;
+Object.freeze(EntityMetadataStageInstanceKeys);
 export interface EntityMetadataStageInstance {
 
 }
+export const EntityMetadataStageInstanceResponseKeys = [] as const satisfies ReadonlyArray<keyof EntityMetadataStageInstanceResponse>;
+Object.freeze(EntityMetadataStageInstanceResponseKeys);
 export interface EntityMetadataStageInstanceResponse {
 
 }
+export const EntityMetadataVoiceKeys = [] as const satisfies ReadonlyArray<keyof EntityMetadataVoice>;
+Object.freeze(EntityMetadataVoiceKeys);
 export interface EntityMetadataVoice {
 
 }
+export const EntityMetadataVoiceResponseKeys = [] as const satisfies ReadonlyArray<keyof EntityMetadataVoiceResponse>;
+Object.freeze(EntityMetadataVoiceResponseKeys);
 export interface EntityMetadataVoiceResponse {
 
 }
+export const ExternalConnectionIntegrationResponseKeys = ["type","name","account","enabled","id","user","revoked","expire_behavior","expire_grace_period","subscriber_count","synced_at","role_id","syncing","enable_emoticons"] as const satisfies ReadonlyArray<keyof ExternalConnectionIntegrationResponse>;
+Object.freeze(ExternalConnectionIntegrationResponseKeys);
 export interface ExternalConnectionIntegrationResponse {
     type: (typeof IntegrationType["TWITCH"] | typeof IntegrationType["YOUTUBE"]);
     name?: (string | null);
@@ -2056,6 +2236,8 @@ export interface ExternalConnectionIntegrationResponse {
     syncing?: (boolean | null);
     enable_emoticons?: (boolean | null);
 }
+export const ExternalScheduledEventCreateRequestKeys = ["name","description","image","scheduled_start_time","scheduled_end_time","privacy_level","entity_type","channel_id","entity_metadata"] as const satisfies ReadonlyArray<keyof ExternalScheduledEventCreateRequest>;
+Object.freeze(ExternalScheduledEventCreateRequestKeys);
 export interface ExternalScheduledEventCreateRequest {
     /**
      * @maxLength 100
@@ -2073,6 +2255,8 @@ export interface ExternalScheduledEventCreateRequest {
     channel_id?: (Snowflake | null);
     entity_metadata: EntityMetadataExternal;
 }
+export const ExternalScheduledEventPatchRequestPartialKeys = ["status","name","description","image","scheduled_start_time","scheduled_end_time","entity_type","privacy_level","channel_id","entity_metadata"] as const satisfies ReadonlyArray<keyof ExternalScheduledEventPatchRequestPartial>;
+Object.freeze(ExternalScheduledEventPatchRequestPartialKeys);
 export interface ExternalScheduledEventPatchRequestPartial {
     status?: (null | GuildScheduledEventStatus);
     /**
@@ -2091,6 +2275,8 @@ export interface ExternalScheduledEventPatchRequestPartial {
     channel_id?: (Snowflake | null);
     entity_metadata?: EntityMetadataExternal;
 }
+export const ExternalScheduledEventResponseKeys = ["id","guild_id","name","description","channel_id","creator_id","creator","image","scheduled_start_time","scheduled_end_time","status","entity_type","entity_id","user_count","privacy_level","user_rsvp","entity_metadata"] as const satisfies ReadonlyArray<keyof ExternalScheduledEventResponse>;
+Object.freeze(ExternalScheduledEventResponseKeys);
 export interface ExternalScheduledEventResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -2114,16 +2300,24 @@ export interface ExternalScheduledEventResponse {
     user_rsvp?: (null | ScheduledEventUserResponse);
     entity_metadata: EntityMetadataExternalResponse;
 }
+export const FlagToChannelActionKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof FlagToChannelAction>;
+Object.freeze(FlagToChannelActionKeys);
 export interface FlagToChannelAction {
     type: typeof AutomodActionType["FLAG_TO_CHANNEL"];
     metadata: FlagToChannelActionMetadata;
 }
+export const FlagToChannelActionMetadataKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof FlagToChannelActionMetadata>;
+Object.freeze(FlagToChannelActionMetadataKeys);
 export interface FlagToChannelActionMetadata {
     channel_id: Snowflake;
 }
+export const FlagToChannelActionMetadataResponseKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof FlagToChannelActionMetadataResponse>;
+Object.freeze(FlagToChannelActionMetadataResponseKeys);
 export interface FlagToChannelActionMetadataResponse {
     channel_id: Snowflake;
 }
+export const FlagToChannelActionResponseKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof FlagToChannelActionResponse>;
+Object.freeze(FlagToChannelActionResponseKeys);
 export interface FlagToChannelActionResponse {
     type: typeof AutomodActionType["FLAG_TO_CHANNEL"];
     metadata: FlagToChannelActionMetadataResponse;
@@ -2144,6 +2338,8 @@ export const ForumLayout = {
     GRID: 2
 } as const;
 Object.freeze(ForumLayout);
+export const ForumTagResponseKeys = ["id","name","moderated","emoji_id","emoji_name"] as const satisfies ReadonlyArray<keyof ForumTagResponse>;
+Object.freeze(ForumTagResponseKeys);
 export interface ForumTagResponse {
     id: Snowflake;
     name: string;
@@ -2151,6 +2347,8 @@ export interface ForumTagResponse {
     emoji_id?: (Snowflake | null);
     emoji_name?: (string | null);
 }
+export const FriendInviteResponseKeys = ["type","code","inviter","max_age","created_at","expires_at","channel","is_contact","friends_count","uses","max_uses","flags"] as const satisfies ReadonlyArray<keyof FriendInviteResponse>;
+Object.freeze(FriendInviteResponseKeys);
 export interface FriendInviteResponse {
     type?: (null | typeof InviteType["FRIEND"]);
     code: string;
@@ -2185,6 +2383,8 @@ export interface FriendInviteResponse {
      */
     flags?: (Int32 | null);
 }
+export const GatewayBotResponseKeys = ["url","session_start_limit","shards"] as const satisfies ReadonlyArray<keyof GatewayBotResponse>;
+Object.freeze(GatewayBotResponseKeys);
 export interface GatewayBotResponse {
     url: URIString;
     session_start_limit: GatewayBotSessionStartLimitResponse;
@@ -2194,6 +2394,8 @@ export interface GatewayBotResponse {
      */
     shards: Int32;
 }
+export const GatewayBotSessionStartLimitResponseKeys = ["max_concurrency","remaining","reset_after","total"] as const satisfies ReadonlyArray<keyof GatewayBotSessionStartLimitResponse>;
+Object.freeze(GatewayBotSessionStartLimitResponseKeys);
 export interface GatewayBotSessionStartLimitResponse {
     /**
      * @maximum 2147483647
@@ -2216,9 +2418,13 @@ export interface GatewayBotSessionStartLimitResponse {
      */
     total: Int32;
 }
+export const GatewayResponseKeys = ["url"] as const satisfies ReadonlyArray<keyof GatewayResponse>;
+Object.freeze(GatewayResponseKeys);
 export interface GatewayResponse {
     url: URIString;
 }
+export const GithubAuthorKeys = ["username","name"] as const satisfies ReadonlyArray<keyof GithubAuthor>;
+Object.freeze(GithubAuthorKeys);
 export interface GithubAuthor {
     /**
      * @maxLength 152133
@@ -2229,15 +2435,21 @@ export interface GithubAuthor {
      */
     name: string;
 }
+export const GithubCheckAppKeys = ["name"] as const satisfies ReadonlyArray<keyof GithubCheckApp>;
+Object.freeze(GithubCheckAppKeys);
 export interface GithubCheckApp {
     /**
      * @maxLength 152133
      */
     name: string;
 }
+export const GithubCheckPullRequestKeys = ["number"] as const satisfies ReadonlyArray<keyof GithubCheckPullRequest>;
+Object.freeze(GithubCheckPullRequestKeys);
 export interface GithubCheckPullRequest {
     number: number;
 }
+export const GithubCheckRunKeys = ["conclusion","name","html_url","check_suite","details_url","output","pull_requests"] as const satisfies ReadonlyArray<keyof GithubCheckRun>;
+Object.freeze(GithubCheckRunKeys);
 export interface GithubCheckRun {
     /**
      * @maxLength 152133
@@ -2262,6 +2474,8 @@ export interface GithubCheckRun {
      */
     pull_requests?: (Array<GithubCheckPullRequest> | null);
 }
+export const GithubCheckRunOutputKeys = ["title","summary"] as const satisfies ReadonlyArray<keyof GithubCheckRunOutput>;
+Object.freeze(GithubCheckRunOutputKeys);
 export interface GithubCheckRunOutput {
     /**
      * @maxLength 152133
@@ -2272,6 +2486,8 @@ export interface GithubCheckRunOutput {
      */
     summary?: (string | null);
 }
+export const GithubCheckSuiteKeys = ["conclusion","head_branch","head_sha","pull_requests","app"] as const satisfies ReadonlyArray<keyof GithubCheckSuite>;
+Object.freeze(GithubCheckSuiteKeys);
 export interface GithubCheckSuite {
     /**
      * @maxLength 152133
@@ -2291,6 +2507,8 @@ export interface GithubCheckSuite {
     pull_requests?: (Array<GithubCheckPullRequest> | null);
     app: GithubCheckApp;
 }
+export const GithubCommentKeys = ["id","html_url","user","commit_id","body"] as const satisfies ReadonlyArray<keyof GithubComment>;
+Object.freeze(GithubCommentKeys);
 export interface GithubComment {
     id: number;
     /**
@@ -2307,6 +2525,8 @@ export interface GithubComment {
      */
     body: string;
 }
+export const GithubCommitKeys = ["id","url","message","author"] as const satisfies ReadonlyArray<keyof GithubCommit>;
+Object.freeze(GithubCommitKeys);
 export interface GithubCommit {
     /**
      * @maxLength 152133
@@ -2322,6 +2542,8 @@ export interface GithubCommit {
     message: string;
     author: GithubAuthor;
 }
+export const GithubDiscussionKeys = ["title","number","html_url","answer_html_url","body","user"] as const satisfies ReadonlyArray<keyof GithubDiscussion>;
+Object.freeze(GithubDiscussionKeys);
 export interface GithubDiscussion {
     /**
      * @maxLength 152133
@@ -2342,6 +2564,8 @@ export interface GithubDiscussion {
     body?: (string | null);
     user: GithubUser;
 }
+export const GithubIssueKeys = ["id","number","html_url","user","title","body","pull_request"] as const satisfies ReadonlyArray<keyof GithubIssue>;
+Object.freeze(GithubIssueKeys);
 export interface GithubIssue {
     id: number;
     number: number;
@@ -2360,6 +2584,8 @@ export interface GithubIssue {
     body?: (string | null);
     pull_request?: unknown;
 }
+export const GithubReleaseKeys = ["id","tag_name","html_url","author"] as const satisfies ReadonlyArray<keyof GithubRelease>;
+Object.freeze(GithubReleaseKeys);
 export interface GithubRelease {
     id: number;
     /**
@@ -2372,6 +2598,8 @@ export interface GithubRelease {
     html_url: URIString;
     author: GithubUser;
 }
+export const GithubRepositoryKeys = ["id","html_url","name","full_name"] as const satisfies ReadonlyArray<keyof GithubRepository>;
+Object.freeze(GithubRepositoryKeys);
 export interface GithubRepository {
     id: number;
     /**
@@ -2387,6 +2615,8 @@ export interface GithubRepository {
      */
     full_name: string;
 }
+export const GithubReviewKeys = ["user","body","html_url","state"] as const satisfies ReadonlyArray<keyof GithubReview>;
+Object.freeze(GithubReviewKeys);
 export interface GithubReview {
     user: GithubUser;
     /**
@@ -2402,6 +2632,8 @@ export interface GithubReview {
      */
     state: string;
 }
+export const GithubUserKeys = ["id","login","html_url","avatar_url"] as const satisfies ReadonlyArray<keyof GithubUser>;
+Object.freeze(GithubUserKeys);
 export interface GithubUser {
     id: number;
     /**
@@ -2417,6 +2649,8 @@ export interface GithubUser {
      */
     avatar_url: URIString;
 }
+export const GithubWebhookKeys = ["action","ref","ref_type","comment","issue","pull_request","repository","forkee","sender","member","release","head_commit","commits","forced","compare","review","check_run","check_suite","discussion","answer"] as const satisfies ReadonlyArray<keyof GithubWebhook>;
+Object.freeze(GithubWebhookKeys);
 export interface GithubWebhook {
     /**
      * @maxLength 152133
@@ -2454,6 +2688,8 @@ export interface GithubWebhook {
     discussion?: (null | GithubDiscussion);
     answer?: (null | GithubComment);
 }
+export const GroupDMInviteResponseKeys = ["type","code","inviter","max_age","created_at","expires_at","channel","approximate_member_count"] as const satisfies ReadonlyArray<keyof GroupDMInviteResponse>;
+Object.freeze(GroupDMInviteResponseKeys);
 export interface GroupDMInviteResponse {
     type?: (null | typeof InviteType["GROUP_DM"]);
     code: string;
@@ -2472,6 +2708,8 @@ export interface GroupDMInviteResponse {
      */
     approximate_member_count?: (Int32 | null);
 }
+export const GuildAuditLogResponseKeys = ["audit_log_entries","users","integrations","webhooks","guild_scheduled_events","threads","application_commands","auto_moderation_rules"] as const satisfies ReadonlyArray<keyof GuildAuditLogResponse>;
+Object.freeze(GuildAuditLogResponseKeys);
 export interface GuildAuditLogResponse {
     audit_log_entries: Array<AuditLogEntryResponse>;
     users: Array<UserResponse>;
@@ -2482,10 +2720,14 @@ export interface GuildAuditLogResponse {
     application_commands: Array<ApplicationCommandResponse>;
     auto_moderation_rules: Array<(DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse | null)>;
 }
+export const GuildBanResponseKeys = ["user","reason"] as const satisfies ReadonlyArray<keyof GuildBanResponse>;
+Object.freeze(GuildBanResponseKeys);
 export interface GuildBanResponse {
     user: UserResponse;
     reason?: (string | null);
 }
+export const GuildChannelResponseKeys = ["id","type","last_message_id","flags","last_pin_timestamp","guild_id","name","parent_id","rate_limit_per_user","bitrate","user_limit","rtc_region","video_quality_mode","permissions","topic","default_auto_archive_duration","default_thread_rate_limit_per_user","position","permission_overwrites","nsfw","available_tags","default_reaction_emoji","default_sort_order","default_forum_layout"] as const satisfies ReadonlyArray<keyof GuildChannelResponse>;
+Object.freeze(GuildChannelResponseKeys);
 export interface GuildChannelResponse {
     id: Snowflake;
     type: (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"] | typeof ChannelType["GUILD_ANNOUNCEMENT"] | typeof ChannelType["GUILD_STAGE_VOICE"] | typeof ChannelType["GUILD_DIRECTORY"] | typeof ChannelType["GUILD_FORUM"]);
@@ -2536,6 +2778,8 @@ export interface GuildChannelResponse {
     default_sort_order?: (null | ThreadSortOrder);
     default_forum_layout?: (null | ForumLayout);
 }
+export const GuildCreateRequestKeys = ["name","description","region","icon","verification_level","default_message_notifications","explicit_content_filter","preferred_locale","afk_timeout","roles","channels","afk_channel_id","system_channel_id","system_channel_flags"] as const satisfies ReadonlyArray<keyof GuildCreateRequest>;
+Object.freeze(GuildCreateRequestKeys);
 export interface GuildCreateRequest {
     /**
      * @maxLength 100
@@ -2694,6 +2938,8 @@ export const GuildFeature = {
     WELCOME_SCREEN_ENABLED: "WELCOME_SCREEN_ENABLED"
 } as const;
 Object.freeze(GuildFeature);
+export const GuildHomeSettingsResponseKeys = ["guild_id","enabled","welcome_message","new_member_actions","resource_channels"] as const satisfies ReadonlyArray<keyof GuildHomeSettingsResponse>;
+Object.freeze(GuildHomeSettingsResponseKeys);
 export interface GuildHomeSettingsResponse {
     guild_id: Snowflake;
     enabled: boolean;
@@ -2701,6 +2947,8 @@ export interface GuildHomeSettingsResponse {
     new_member_actions?: (Array<(null | NewMemberActionResponse)> | null);
     resource_channels?: (Array<(null | ResourceChannelResponse)> | null);
 }
+export const GuildIncomingWebhookResponseKeys = ["application_id","avatar","channel_id","guild_id","id","name","type","user","token","url"] as const satisfies ReadonlyArray<keyof GuildIncomingWebhookResponse>;
+Object.freeze(GuildIncomingWebhookResponseKeys);
 export interface GuildIncomingWebhookResponse {
     application_id?: (Snowflake | null);
     avatar?: (string | null);
@@ -2713,6 +2961,8 @@ export interface GuildIncomingWebhookResponse {
     token?: (string | null);
     url?: (URIString | null);
 }
+export const GuildInviteResponseKeys = ["type","code","inviter","max_age","created_at","expires_at","is_contact","flags","guild","guild_id","channel","stage_instance","target_type","target_user","target_application","guild_scheduled_event","uses","max_uses","temporary","approximate_member_count","approximate_presence_count"] as const satisfies ReadonlyArray<keyof GuildInviteResponse>;
+Object.freeze(GuildInviteResponseKeys);
 export interface GuildInviteResponse {
     type?: (null | typeof InviteType["GUILD"]);
     code: string;
@@ -2772,9 +3022,13 @@ export const GuildMFALevel = {
     ELEVATED: 1
 } as const;
 Object.freeze(GuildMFALevel);
+export const GuildMFALevelResponseKeys = ["level"] as const satisfies ReadonlyArray<keyof GuildMFALevelResponse>;
+Object.freeze(GuildMFALevelResponseKeys);
 export interface GuildMFALevelResponse {
     level: GuildMFALevel;
 }
+export const GuildMemberResponseKeys = ["avatar","communication_disabled_until","flags","joined_at","nick","pending","premium_since","roles","user","mute","deaf"] as const satisfies ReadonlyArray<keyof GuildMemberResponse>;
+Object.freeze(GuildMemberResponseKeys);
 export interface GuildMemberResponse {
     avatar?: (string | null);
     communication_disabled_until?: (ISO8601DateTime | null);
@@ -2815,6 +3069,8 @@ export const GuildOnboardingMode = {
     ONBOARDING_ADVANCED: 1
 } as const;
 Object.freeze(GuildOnboardingMode);
+export const GuildOnboardingResponseKeys = ["guild_id","prompts","default_channel_ids","enabled"] as const satisfies ReadonlyArray<keyof GuildOnboardingResponse>;
+Object.freeze(GuildOnboardingResponseKeys);
 export interface GuildOnboardingResponse {
     guild_id: Snowflake;
     prompts: Array<OnboardingPromptResponse>;
@@ -2824,6 +3080,8 @@ export interface GuildOnboardingResponse {
     default_channel_ids: Array<Snowflake>;
     enabled: boolean;
 }
+export const GuildPatchRequestPartialKeys = ["name","description","region","icon","verification_level","default_message_notifications","explicit_content_filter","preferred_locale","afk_timeout","afk_channel_id","system_channel_id","owner_id","splash","banner","system_channel_flags","features","discovery_splash","home_header","rules_channel_id","safety_alerts_channel_id","public_updates_channel_id","premium_progress_bar_enabled"] as const satisfies ReadonlyArray<keyof GuildPatchRequestPartial>;
+Object.freeze(GuildPatchRequestPartialKeys);
 export interface GuildPatchRequestPartial {
     /**
      * @maxLength 100
@@ -2860,6 +3118,8 @@ export interface GuildPatchRequestPartial {
     public_updates_channel_id?: (Snowflake | null);
     premium_progress_bar_enabled?: (boolean | null);
 }
+export const GuildPreviewResponseKeys = ["id","name","icon","description","home_header","splash","discovery_splash","features","approximate_member_count","approximate_presence_count","emojis","stickers"] as const satisfies ReadonlyArray<keyof GuildPreviewResponse>;
+Object.freeze(GuildPreviewResponseKeys);
 export interface GuildPreviewResponse {
     id: Snowflake;
     name: string;
@@ -2885,6 +3145,8 @@ export interface GuildPreviewResponse {
     emojis: Array<EmojiResponse>;
     stickers: Array<GuildStickerResponse>;
 }
+export const GuildPruneResponseKeys = ["pruned"] as const satisfies ReadonlyArray<keyof GuildPruneResponse>;
+Object.freeze(GuildPruneResponseKeys);
 export interface GuildPruneResponse {
     /**
      * @maximum 2147483647
@@ -2892,6 +3154,8 @@ export interface GuildPruneResponse {
      */
     pruned?: (Int32 | null);
 }
+export const GuildResponseKeys = ["id","name","icon","description","home_header","splash","discovery_splash","features","banner","owner_id","application_id","region","afk_channel_id","afk_timeout","system_channel_id","system_channel_flags","widget_enabled","widget_channel_id","verification_level","roles","default_message_notifications","mfa_level","explicit_content_filter","max_presences","max_members","max_stage_video_channel_users","max_video_channel_users","vanity_url_code","premium_tier","premium_subscription_count","preferred_locale","rules_channel_id","safety_alerts_channel_id","public_updates_channel_id","premium_progress_bar_enabled","nsfw","nsfw_level","emojis","stickers"] as const satisfies ReadonlyArray<keyof GuildResponse>;
+Object.freeze(GuildResponseKeys);
 export interface GuildResponse {
     id: Snowflake;
     name: string;
@@ -2960,6 +3224,8 @@ export interface GuildResponse {
     emojis: Array<EmojiResponse>;
     stickers: Array<GuildStickerResponse>;
 }
+export const GuildRoleResponseKeys = ["id","name","description","permissions","position","color","hoist","managed","mentionable","icon","unicode_emoji","tags"] as const satisfies ReadonlyArray<keyof GuildRoleResponse>;
+Object.freeze(GuildRoleResponseKeys);
 export interface GuildRoleResponse {
     id: Snowflake;
     name: string;
@@ -2982,6 +3248,8 @@ export interface GuildRoleResponse {
     unicode_emoji?: (string | null);
     tags?: (null | GuildRoleTagsResponse);
 }
+export const GuildRoleTagsResponseKeys = ["premium_subscriber","bot_id","integration_id","subscription_listing_id","available_for_purchase","guild_connections"] as const satisfies ReadonlyArray<keyof GuildRoleTagsResponse>;
+Object.freeze(GuildRoleTagsResponseKeys);
 export interface GuildRoleTagsResponse {
     premium_subscriber?: null;
     bot_id?: (Snowflake | null);
@@ -3014,6 +3282,8 @@ export const GuildScheduledEventStatus = {
     CANCELED: 4
 } as const;
 Object.freeze(GuildScheduledEventStatus);
+export const GuildStickerResponseKeys = ["id","name","tags","type","format_type","description","available","guild_id","user"] as const satisfies ReadonlyArray<keyof GuildStickerResponse>;
+Object.freeze(GuildStickerResponseKeys);
 export interface GuildStickerResponse {
     id: Snowflake;
     name: string;
@@ -3025,6 +3295,8 @@ export interface GuildStickerResponse {
     guild_id: Snowflake;
     user?: (null | UserResponse);
 }
+export const GuildSubscriptionIntegrationResponseKeys = ["type","name","account","enabled","id"] as const satisfies ReadonlyArray<keyof GuildSubscriptionIntegrationResponse>;
+Object.freeze(GuildSubscriptionIntegrationResponseKeys);
 export interface GuildSubscriptionIntegrationResponse {
     type: typeof IntegrationType["GUILD_SUBSCRIPTION"];
     name?: (string | null);
@@ -3032,6 +3304,8 @@ export interface GuildSubscriptionIntegrationResponse {
     enabled?: (boolean | null);
     id: Snowflake;
 }
+export const GuildTemplateChannelResponseKeys = ["id","type","name","position","topic","bitrate","user_limit","nsfw","rate_limit_per_user","parent_id","default_auto_archive_duration","permission_overwrites","available_tags","template","default_reaction_emoji","default_thread_rate_limit_per_user","default_sort_order","default_forum_layout","icon_emoji","theme_color"] as const satisfies ReadonlyArray<keyof GuildTemplateChannelResponse>;
+Object.freeze(GuildTemplateChannelResponseKeys);
 export interface GuildTemplateChannelResponse {
     /**
      * @maximum 2147483647
@@ -3082,12 +3356,16 @@ export interface GuildTemplateChannelResponse {
      */
     theme_color?: (Int32 | null);
 }
+export const GuildTemplateChannelTagsKeys = ["name","emoji_id","emoji_name","moderated"] as const satisfies ReadonlyArray<keyof GuildTemplateChannelTags>;
+Object.freeze(GuildTemplateChannelTagsKeys);
 export interface GuildTemplateChannelTags {
     name: string;
     emoji_id?: (Snowflake | null);
     emoji_name?: (string | null);
     moderated?: (boolean | null);
 }
+export const GuildTemplateResponseKeys = ["code","name","description","usage_count","creator_id","creator","created_at","updated_at","source_guild_id","serialized_source_guild","is_dirty"] as const satisfies ReadonlyArray<keyof GuildTemplateResponse>;
+Object.freeze(GuildTemplateResponseKeys);
 export interface GuildTemplateResponse {
     code: string;
     name: string;
@@ -3105,6 +3383,8 @@ export interface GuildTemplateResponse {
     serialized_source_guild: GuildTemplateSnapshotResponse;
     is_dirty?: (boolean | null);
 }
+export const GuildTemplateRoleResponseKeys = ["id","name","permissions","color","hoist","mentionable","icon","unicode_emoji"] as const satisfies ReadonlyArray<keyof GuildTemplateRoleResponse>;
+Object.freeze(GuildTemplateRoleResponseKeys);
 export interface GuildTemplateRoleResponse {
     /**
      * @maximum 2147483647
@@ -3123,6 +3403,8 @@ export interface GuildTemplateRoleResponse {
     icon?: (string | null);
     unicode_emoji?: (string | null);
 }
+export const GuildTemplateSnapshotResponseKeys = ["name","description","region","verification_level","default_message_notifications","explicit_content_filter","preferred_locale","afk_channel_id","afk_timeout","system_channel_id","system_channel_flags","roles","channels"] as const satisfies ReadonlyArray<keyof GuildTemplateSnapshotResponse>;
+Object.freeze(GuildTemplateSnapshotResponseKeys);
 export interface GuildTemplateSnapshotResponse {
     name: string;
     description?: (string | null);
@@ -3142,6 +3424,8 @@ export interface GuildTemplateSnapshotResponse {
     roles: Array<GuildTemplateRoleResponse>;
     channels: Array<GuildTemplateChannelResponse>;
 }
+export const GuildWelcomeChannelKeys = ["channel_id","description","emoji_id","emoji_name"] as const satisfies ReadonlyArray<keyof GuildWelcomeChannel>;
+Object.freeze(GuildWelcomeChannelKeys);
 export interface GuildWelcomeChannel {
     channel_id: Snowflake;
     /**
@@ -3155,16 +3439,22 @@ export interface GuildWelcomeChannel {
      */
     emoji_name?: (string | null);
 }
+export const GuildWelcomeScreenChannelResponseKeys = ["channel_id","description","emoji_id","emoji_name"] as const satisfies ReadonlyArray<keyof GuildWelcomeScreenChannelResponse>;
+Object.freeze(GuildWelcomeScreenChannelResponseKeys);
 export interface GuildWelcomeScreenChannelResponse {
     channel_id: Snowflake;
     description: string;
     emoji_id?: (Snowflake | null);
     emoji_name?: (string | null);
 }
+export const GuildWelcomeScreenResponseKeys = ["description","welcome_channels"] as const satisfies ReadonlyArray<keyof GuildWelcomeScreenResponse>;
+Object.freeze(GuildWelcomeScreenResponseKeys);
 export interface GuildWelcomeScreenResponse {
     description?: (string | null);
     welcome_channels: Array<GuildWelcomeScreenChannelResponse>;
 }
+export const GuildWithCountsResponseKeys = ["id","name","icon","description","home_header","splash","discovery_splash","features","banner","owner_id","application_id","region","afk_channel_id","afk_timeout","system_channel_id","system_channel_flags","widget_enabled","widget_channel_id","verification_level","roles","default_message_notifications","mfa_level","explicit_content_filter","max_presences","max_members","max_stage_video_channel_users","max_video_channel_users","vanity_url_code","premium_tier","premium_subscription_count","preferred_locale","rules_channel_id","safety_alerts_channel_id","public_updates_channel_id","premium_progress_bar_enabled","nsfw","nsfw_level","emojis","stickers","approximate_member_count","approximate_presence_count"] as const satisfies ReadonlyArray<keyof GuildWithCountsResponse>;
+Object.freeze(GuildWithCountsResponseKeys);
 export interface GuildWithCountsResponse {
     id: Snowflake;
     name: string;
@@ -3243,9 +3533,13 @@ export interface GuildWithCountsResponse {
      */
     approximate_presence_count?: (Int32 | null);
 }
+export const IconEmojiResponseKeys = [] as const satisfies ReadonlyArray<keyof IconEmojiResponse>;
+Object.freeze(IconEmojiResponseKeys);
 export interface IconEmojiResponse {
 
 }
+export const IncomingWebhookInteractionRequestKeys = ["content","embeds","allowed_mentions","components","attachments","tts","flags"] as const satisfies ReadonlyArray<keyof IncomingWebhookInteractionRequest>;
+Object.freeze(IncomingWebhookInteractionRequestKeys);
 export interface IncomingWebhookInteractionRequest {
     /**
      * @maxLength 2000
@@ -3267,6 +3561,8 @@ export interface IncomingWebhookInteractionRequest {
     tts?: (boolean | null);
     flags?: (number | null);
 }
+export const IncomingWebhookRequestPartialKeys = ["content","embeds","allowed_mentions","components","attachments","tts","flags","username","avatar_url","thread_name","applied_tags"] as const satisfies ReadonlyArray<keyof IncomingWebhookRequestPartial>;
+Object.freeze(IncomingWebhookRequestPartialKeys);
 export interface IncomingWebhookRequestPartial {
     /**
      * @maxLength 2000
@@ -3306,6 +3602,8 @@ export interface IncomingWebhookRequestPartial {
      */
     applied_tags?: (Array<Snowflake> | null);
 }
+export const IncomingWebhookUpdateForInteractionCallbackRequestPartialKeys = ["content","embeds","allowed_mentions","components","attachments","flags"] as const satisfies ReadonlyArray<keyof IncomingWebhookUpdateForInteractionCallbackRequestPartial>;
+Object.freeze(IncomingWebhookUpdateForInteractionCallbackRequestPartialKeys);
 export interface IncomingWebhookUpdateForInteractionCallbackRequestPartial {
     /**
      * @maxLength 2000
@@ -3326,6 +3624,8 @@ export interface IncomingWebhookUpdateForInteractionCallbackRequestPartial {
     attachments?: (Array<MessageAttachmentRequest> | null);
     flags?: (number | null);
 }
+export const IncomingWebhookUpdateRequestPartialKeys = ["content","embeds","allowed_mentions","components","attachments","flags"] as const satisfies ReadonlyArray<keyof IncomingWebhookUpdateRequestPartial>;
+Object.freeze(IncomingWebhookUpdateRequestPartialKeys);
 export interface IncomingWebhookUpdateRequestPartial {
     /**
      * @maxLength 2000
@@ -3346,6 +3646,8 @@ export interface IncomingWebhookUpdateRequestPartial {
     attachments?: (Array<MessageAttachmentRequest> | null);
     flags?: (number | null);
 }
+export const InputTextKeys = ["type","custom_id","style","label","value","placeholder","required","min_length","max_length"] as const satisfies ReadonlyArray<keyof InputText>;
+Object.freeze(InputTextKeys);
 export interface InputText {
     type: typeof MessageComponentType["INPUT_TEXT"];
     /**
@@ -3377,6 +3679,8 @@ export interface InputText {
      */
     max_length?: (number | null);
 }
+export const IntegrationApplicationResponseKeys = ["id","name","icon","description","type","cover_image","primary_sku_id","bot"] as const satisfies ReadonlyArray<keyof IntegrationApplicationResponse>;
+Object.freeze(IntegrationApplicationResponseKeys);
 export interface IntegrationApplicationResponse {
     id: Snowflake;
     name: string;
@@ -3431,18 +3735,24 @@ export const IntegrationType = {
     GUILD_SUBSCRIPTION: "guild_subscription"
 } as const;
 Object.freeze(IntegrationType);
+export const InteractionApplicationCommandAutocompleteCallbackIntegerDataKeys = ["choices"] as const satisfies ReadonlyArray<keyof InteractionApplicationCommandAutocompleteCallbackIntegerData>;
+Object.freeze(InteractionApplicationCommandAutocompleteCallbackIntegerDataKeys);
 export interface InteractionApplicationCommandAutocompleteCallbackIntegerData {
     /**
      * @maxItems 25
      */
     choices?: (Array<(null | ApplicationCommandOptionIntegerChoice)> | null);
 }
+export const InteractionApplicationCommandAutocompleteCallbackNumberDataKeys = ["choices"] as const satisfies ReadonlyArray<keyof InteractionApplicationCommandAutocompleteCallbackNumberData>;
+Object.freeze(InteractionApplicationCommandAutocompleteCallbackNumberDataKeys);
 export interface InteractionApplicationCommandAutocompleteCallbackNumberData {
     /**
      * @maxItems 25
      */
     choices?: (Array<(null | ApplicationCommandOptionNumberChoice)> | null);
 }
+export const InteractionApplicationCommandAutocompleteCallbackStringDataKeys = ["choices"] as const satisfies ReadonlyArray<keyof InteractionApplicationCommandAutocompleteCallbackStringData>;
+Object.freeze(InteractionApplicationCommandAutocompleteCallbackStringDataKeys);
 export interface InteractionApplicationCommandAutocompleteCallbackStringData {
     /**
      * @maxItems 25
@@ -3484,6 +3794,8 @@ export const InteractionType = {
     MODAL_SUBMIT: 5
 } as const;
 Object.freeze(InteractionType);
+export const InviteApplicationResponseKeys = ["id","name","icon","description","type","cover_image","primary_sku_id","bot","slug","guild_id","rpc_origins","bot_public","bot_require_code_grant","terms_of_service_url","privacy_policy_url","custom_install_url","install_params","verify_key","flags","max_participants","tags"] as const satisfies ReadonlyArray<keyof InviteApplicationResponse>;
+Object.freeze(InviteApplicationResponseKeys);
 export interface InviteApplicationResponse {
     id: Snowflake;
     name: string;
@@ -3518,9 +3830,13 @@ export interface InviteApplicationResponse {
      */
     tags?: (Array<string> | null);
 }
+export const InviteChannelRecipientResponseKeys = ["username"] as const satisfies ReadonlyArray<keyof InviteChannelRecipientResponse>;
+Object.freeze(InviteChannelRecipientResponseKeys);
 export interface InviteChannelRecipientResponse {
     username: string;
 }
+export const InviteChannelResponseKeys = ["id","type","name","icon","recipients"] as const satisfies ReadonlyArray<keyof InviteChannelResponse>;
+Object.freeze(InviteChannelResponseKeys);
 export interface InviteChannelResponse {
     id: Snowflake;
     type: ChannelType;
@@ -3528,6 +3844,8 @@ export interface InviteChannelResponse {
     icon?: (string | null);
     recipients?: (Array<InviteChannelRecipientResponse> | null);
 }
+export const InviteGuildResponseKeys = ["id","name","splash","banner","description","icon","features","verification_level","vanity_url_code","nsfw_level","nsfw","premium_subscription_count"] as const satisfies ReadonlyArray<keyof InviteGuildResponse>;
+Object.freeze(InviteGuildResponseKeys);
 export interface InviteGuildResponse {
     id: Snowflake;
     name: string;
@@ -3549,6 +3867,8 @@ export interface InviteGuildResponse {
      */
     premium_subscription_count?: (Int32 | null);
 }
+export const InviteStageInstanceResponseKeys = ["topic","participant_count","speaker_count","members"] as const satisfies ReadonlyArray<keyof InviteStageInstanceResponse>;
+Object.freeze(InviteStageInstanceResponseKeys);
 export interface InviteStageInstanceResponse {
     topic: string;
     /**
@@ -3577,6 +3897,8 @@ export const InviteType = {
     FRIEND: 2
 } as const;
 Object.freeze(InviteType);
+export const KeywordRuleResponseKeys = ["id","guild_id","creator_id","name","event_type","actions","trigger_type","enabled","exempt_roles","exempt_channels","trigger_metadata"] as const satisfies ReadonlyArray<keyof KeywordRuleResponse>;
+Object.freeze(KeywordRuleResponseKeys);
 export interface KeywordRuleResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -3596,6 +3918,8 @@ export interface KeywordRuleResponse {
     exempt_channels?: (Array<Snowflake> | null);
     trigger_metadata: KeywordTriggerMetadataResponse;
 }
+export const KeywordTriggerMetadataKeys = ["keyword_filter","regex_patterns","allow_list"] as const satisfies ReadonlyArray<keyof KeywordTriggerMetadata>;
+Object.freeze(KeywordTriggerMetadataKeys);
 export interface KeywordTriggerMetadata {
     /**
      * @maxItems 1000
@@ -3610,11 +3934,15 @@ export interface KeywordTriggerMetadata {
      */
     allow_list?: (Array<string> | null);
 }
+export const KeywordTriggerMetadataResponseKeys = ["keyword_filter","regex_patterns","allow_list"] as const satisfies ReadonlyArray<keyof KeywordTriggerMetadataResponse>;
+Object.freeze(KeywordTriggerMetadataResponseKeys);
 export interface KeywordTriggerMetadataResponse {
     keyword_filter: Array<string>;
     regex_patterns: Array<string>;
     allow_list: Array<string>;
 }
+export const KeywordUpsertRequestKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof KeywordUpsertRequest>;
+Object.freeze(KeywordUpsertRequestKeys);
 export interface KeywordUpsertRequest {
     /**
      * @maxLength 100
@@ -3640,6 +3968,8 @@ export interface KeywordUpsertRequest {
     trigger_type: typeof AutomodTriggerType["KEYWORD"];
     trigger_metadata?: (null | KeywordTriggerMetadata);
 }
+export const KeywordUpsertRequestPartialKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof KeywordUpsertRequestPartial>;
+Object.freeze(KeywordUpsertRequestPartialKeys);
 export interface KeywordUpsertRequestPartial {
     /**
      * @maxLength 100
@@ -3665,6 +3995,8 @@ export interface KeywordUpsertRequestPartial {
     trigger_type?: typeof AutomodTriggerType["KEYWORD"];
     trigger_metadata?: (null | KeywordTriggerMetadata);
 }
+export const MLSpamRuleResponseKeys = ["id","guild_id","creator_id","name","event_type","actions","trigger_type","enabled","exempt_roles","exempt_channels","trigger_metadata"] as const satisfies ReadonlyArray<keyof MLSpamRuleResponse>;
+Object.freeze(MLSpamRuleResponseKeys);
 export interface MLSpamRuleResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -3684,12 +4016,18 @@ export interface MLSpamRuleResponse {
     exempt_channels?: (Array<Snowflake> | null);
     trigger_metadata: MLSpamTriggerMetadataResponse;
 }
+export const MLSpamTriggerMetadataKeys = [] as const satisfies ReadonlyArray<keyof MLSpamTriggerMetadata>;
+Object.freeze(MLSpamTriggerMetadataKeys);
 export interface MLSpamTriggerMetadata {
 
 }
+export const MLSpamTriggerMetadataResponseKeys = [] as const satisfies ReadonlyArray<keyof MLSpamTriggerMetadataResponse>;
+Object.freeze(MLSpamTriggerMetadataResponseKeys);
 export interface MLSpamTriggerMetadataResponse {
 
 }
+export const MLSpamUpsertRequestKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof MLSpamUpsertRequest>;
+Object.freeze(MLSpamUpsertRequestKeys);
 export interface MLSpamUpsertRequest {
     /**
      * @maxLength 100
@@ -3715,6 +4053,8 @@ export interface MLSpamUpsertRequest {
     trigger_type: typeof AutomodTriggerType["ML_SPAM"];
     trigger_metadata?: (null | MLSpamTriggerMetadata);
 }
+export const MLSpamUpsertRequestPartialKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof MLSpamUpsertRequestPartial>;
+Object.freeze(MLSpamUpsertRequestPartialKeys);
 export interface MLSpamUpsertRequestPartial {
     /**
      * @maxLength 100
@@ -3740,6 +4080,8 @@ export interface MLSpamUpsertRequestPartial {
     trigger_type?: typeof AutomodTriggerType["ML_SPAM"];
     trigger_metadata?: (null | MLSpamTriggerMetadata);
 }
+export const MentionSpamRuleResponseKeys = ["id","guild_id","creator_id","name","event_type","actions","trigger_type","enabled","exempt_roles","exempt_channels","trigger_metadata"] as const satisfies ReadonlyArray<keyof MentionSpamRuleResponse>;
+Object.freeze(MentionSpamRuleResponseKeys);
 export interface MentionSpamRuleResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -3759,6 +4101,8 @@ export interface MentionSpamRuleResponse {
     exempt_channels?: (Array<Snowflake> | null);
     trigger_metadata: MentionSpamTriggerMetadataResponse;
 }
+export const MentionSpamTriggerMetadataKeys = ["mention_total_limit","mention_raid_protection_enabled"] as const satisfies ReadonlyArray<keyof MentionSpamTriggerMetadata>;
+Object.freeze(MentionSpamTriggerMetadataKeys);
 export interface MentionSpamTriggerMetadata {
     /**
      * @maximum 50
@@ -3767,6 +4111,8 @@ export interface MentionSpamTriggerMetadata {
     mention_total_limit: number;
     mention_raid_protection_enabled?: (boolean | null);
 }
+export const MentionSpamTriggerMetadataResponseKeys = ["mention_total_limit"] as const satisfies ReadonlyArray<keyof MentionSpamTriggerMetadataResponse>;
+Object.freeze(MentionSpamTriggerMetadataResponseKeys);
 export interface MentionSpamTriggerMetadataResponse {
     /**
      * @maximum 2147483647
@@ -3774,6 +4120,8 @@ export interface MentionSpamTriggerMetadataResponse {
      */
     mention_total_limit: Int32;
 }
+export const MentionSpamUpsertRequestKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof MentionSpamUpsertRequest>;
+Object.freeze(MentionSpamUpsertRequestKeys);
 export interface MentionSpamUpsertRequest {
     /**
      * @maxLength 100
@@ -3799,6 +4147,8 @@ export interface MentionSpamUpsertRequest {
     trigger_type: typeof AutomodTriggerType["MENTION_SPAM"];
     trigger_metadata?: (null | MentionSpamTriggerMetadata);
 }
+export const MentionSpamUpsertRequestPartialKeys = ["name","event_type","actions","enabled","exempt_roles","exempt_channels","trigger_type","trigger_metadata"] as const satisfies ReadonlyArray<keyof MentionSpamUpsertRequestPartial>;
+Object.freeze(MentionSpamUpsertRequestPartialKeys);
 export interface MentionSpamUpsertRequestPartial {
     /**
      * @maxLength 100
@@ -3824,6 +4174,8 @@ export interface MentionSpamUpsertRequestPartial {
     trigger_type?: typeof AutomodTriggerType["MENTION_SPAM"];
     trigger_metadata?: (null | MentionSpamTriggerMetadata);
 }
+export const MentionableSelectKeys = ["type","custom_id","placeholder","min_values","max_values","disabled"] as const satisfies ReadonlyArray<keyof MentionableSelect>;
+Object.freeze(MentionableSelectKeys);
 export interface MentionableSelect {
     type: typeof MessageComponentType["MENTIONABLE_SELECT"];
     /**
@@ -3846,9 +4198,13 @@ export interface MentionableSelect {
     max_values?: (number | null);
     disabled?: (boolean | null);
 }
+export const MessageActivityResponseKeys = [] as const satisfies ReadonlyArray<keyof MessageActivityResponse>;
+Object.freeze(MessageActivityResponseKeys);
 export interface MessageActivityResponse {
 
 }
+export const MessageAllowedMentionsRequestKeys = ["parse","users","roles","replied_user"] as const satisfies ReadonlyArray<keyof MessageAllowedMentionsRequest>;
+Object.freeze(MessageAllowedMentionsRequestKeys);
 export interface MessageAllowedMentionsRequest {
     /**
      * @maxItems 1521
@@ -3867,6 +4223,8 @@ export interface MessageAllowedMentionsRequest {
     roles?: (Array<(Snowflake | null)> | null);
     replied_user?: (boolean | null);
 }
+export const MessageAttachmentRequestKeys = ["id","filename","description"] as const satisfies ReadonlyArray<keyof MessageAttachmentRequest>;
+Object.freeze(MessageAttachmentRequestKeys);
 export interface MessageAttachmentRequest {
     id: Snowflake;
     /**
@@ -3878,6 +4236,8 @@ export interface MessageAttachmentRequest {
      */
     description?: (string | null);
 }
+export const MessageAttachmentResponseKeys = ["id","filename","size","url","proxy_url","width","height","duration_secs","waveform","description","content_type","ephemeral"] as const satisfies ReadonlyArray<keyof MessageAttachmentResponse>;
+Object.freeze(MessageAttachmentResponseKeys);
 export interface MessageAttachmentResponse {
     id: Snowflake;
     filename: string;
@@ -3904,10 +4264,14 @@ export interface MessageAttachmentResponse {
     content_type?: (string | null);
     ephemeral?: (boolean | null);
 }
+export const MessageComponentActionRowResponseKeys = ["type","components"] as const satisfies ReadonlyArray<keyof MessageComponentActionRowResponse>;
+Object.freeze(MessageComponentActionRowResponseKeys);
 export interface MessageComponentActionRowResponse {
     type: typeof MessageComponentType["ACTION_ROW"];
     components?: (Array<(MessageComponentButtonResponse | MessageComponentChannelSelectResponse | MessageComponentInputTextResponse | MessageComponentMentionableSelectResponse | MessageComponentRoleSelectResponse | MessageComponentStringSelectResponse | MessageComponentUserSelectResponse)> | null);
 }
+export const MessageComponentButtonResponseKeys = ["type","custom_id","style","label","disabled","emoji","url"] as const satisfies ReadonlyArray<keyof MessageComponentButtonResponse>;
+Object.freeze(MessageComponentButtonResponseKeys);
 export interface MessageComponentButtonResponse {
     type: typeof MessageComponentType["BUTTON"];
     custom_id?: (string | null);
@@ -3920,6 +4284,8 @@ export interface MessageComponentButtonResponse {
      */
     url?: (URIString | null);
 }
+export const MessageComponentChannelSelectResponseKeys = ["type","custom_id","placeholder","min_values","max_values","disabled","channel_types"] as const satisfies ReadonlyArray<keyof MessageComponentChannelSelectResponse>;
+Object.freeze(MessageComponentChannelSelectResponseKeys);
 export interface MessageComponentChannelSelectResponse {
     type: typeof MessageComponentType["CHANNEL_SELECT"];
     custom_id: string;
@@ -3940,11 +4306,15 @@ export interface MessageComponentChannelSelectResponse {
      */
     channel_types?: (Array<ChannelType> | null);
 }
+export const MessageComponentEmojiResponseKeys = ["id","name","animated"] as const satisfies ReadonlyArray<keyof MessageComponentEmojiResponse>;
+Object.freeze(MessageComponentEmojiResponseKeys);
 export interface MessageComponentEmojiResponse {
     id?: (Snowflake | null);
     name: string;
     animated?: (boolean | null);
 }
+export const MessageComponentInputTextResponseKeys = ["type","custom_id","style","label","value","placeholder","required","min_length","max_length"] as const satisfies ReadonlyArray<keyof MessageComponentInputTextResponse>;
+Object.freeze(MessageComponentInputTextResponseKeys);
 export interface MessageComponentInputTextResponse {
     type: typeof MessageComponentType["INPUT_TEXT"];
     custom_id: string;
@@ -3964,6 +4334,8 @@ export interface MessageComponentInputTextResponse {
      */
     max_length?: (Int32 | null);
 }
+export const MessageComponentMentionableSelectResponseKeys = ["type","custom_id","placeholder","min_values","max_values","disabled"] as const satisfies ReadonlyArray<keyof MessageComponentMentionableSelectResponse>;
+Object.freeze(MessageComponentMentionableSelectResponseKeys);
 export interface MessageComponentMentionableSelectResponse {
     type: typeof MessageComponentType["MENTIONABLE_SELECT"];
     custom_id: string;
@@ -3980,6 +4352,8 @@ export interface MessageComponentMentionableSelectResponse {
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
 }
+export const MessageComponentRoleSelectResponseKeys = ["type","custom_id","placeholder","min_values","max_values","disabled"] as const satisfies ReadonlyArray<keyof MessageComponentRoleSelectResponse>;
+Object.freeze(MessageComponentRoleSelectResponseKeys);
 export interface MessageComponentRoleSelectResponse {
     type: typeof MessageComponentType["ROLE_SELECT"];
     custom_id: string;
@@ -3996,6 +4370,8 @@ export interface MessageComponentRoleSelectResponse {
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
 }
+export const MessageComponentStringSelectResponseKeys = ["type","custom_id","placeholder","min_values","max_values","disabled","options"] as const satisfies ReadonlyArray<keyof MessageComponentStringSelectResponse>;
+Object.freeze(MessageComponentStringSelectResponseKeys);
 export interface MessageComponentStringSelectResponse {
     type: typeof MessageComponentType["STRING_SELECT"];
     custom_id: string;
@@ -4049,6 +4425,8 @@ export const MessageComponentType = {
     CHANNEL_SELECT: 8
 } as const;
 Object.freeze(MessageComponentType);
+export const MessageComponentUserSelectResponseKeys = ["type","custom_id","placeholder","min_values","max_values","disabled"] as const satisfies ReadonlyArray<keyof MessageComponentUserSelectResponse>;
+Object.freeze(MessageComponentUserSelectResponseKeys);
 export interface MessageComponentUserSelectResponse {
     type: typeof MessageComponentType["USER_SELECT"];
     custom_id: string;
@@ -4065,6 +4443,8 @@ export interface MessageComponentUserSelectResponse {
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
 }
+export const MessageCreateRequestKeys = ["content","embeds","allowed_mentions","sticker_ids","components","flags","attachments","message_reference","nonce","tts"] as const satisfies ReadonlyArray<keyof MessageCreateRequest>;
+Object.freeze(MessageCreateRequestKeys);
 export interface MessageCreateRequest {
     /**
      * @maxLength 4000
@@ -4092,6 +4472,8 @@ export interface MessageCreateRequest {
     nonce?: (Int64 | string | null);
     tts?: (boolean | null);
 }
+export const MessageEditRequestPartialKeys = ["content","embeds","flags","allowed_mentions","sticker_ids","components","attachments"] as const satisfies ReadonlyArray<keyof MessageEditRequestPartial>;
+Object.freeze(MessageEditRequestPartialKeys);
 export interface MessageEditRequestPartial {
     /**
      * @maxLength 4000
@@ -4116,22 +4498,30 @@ export interface MessageEditRequestPartial {
      */
     attachments?: (Array<MessageAttachmentRequest> | null);
 }
+export const MessageEmbedAuthorResponseKeys = ["name","url","icon_url","proxy_icon_url"] as const satisfies ReadonlyArray<keyof MessageEmbedAuthorResponse>;
+Object.freeze(MessageEmbedAuthorResponseKeys);
 export interface MessageEmbedAuthorResponse {
     name: string;
     url?: (string | null);
     icon_url?: (URIString | null);
     proxy_icon_url?: (URIString | null);
 }
+export const MessageEmbedFieldResponseKeys = ["name","value","inline"] as const satisfies ReadonlyArray<keyof MessageEmbedFieldResponse>;
+Object.freeze(MessageEmbedFieldResponseKeys);
 export interface MessageEmbedFieldResponse {
     name: string;
     value: string;
     inline: boolean;
 }
+export const MessageEmbedFooterResponseKeys = ["text","icon_url","proxy_icon_url"] as const satisfies ReadonlyArray<keyof MessageEmbedFooterResponse>;
+Object.freeze(MessageEmbedFooterResponseKeys);
 export interface MessageEmbedFooterResponse {
     text: string;
     icon_url?: (URIString | null);
     proxy_icon_url?: (URIString | null);
 }
+export const MessageEmbedImageResponseKeys = ["url","proxy_url","width","height"] as const satisfies ReadonlyArray<keyof MessageEmbedImageResponse>;
+Object.freeze(MessageEmbedImageResponseKeys);
 export interface MessageEmbedImageResponse {
     url?: (URIString | null);
     proxy_url?: (URIString | null);
@@ -4146,10 +4536,14 @@ export interface MessageEmbedImageResponse {
      */
     height?: (Int32 | null);
 }
+export const MessageEmbedProviderResponseKeys = ["name","url"] as const satisfies ReadonlyArray<keyof MessageEmbedProviderResponse>;
+Object.freeze(MessageEmbedProviderResponseKeys);
 export interface MessageEmbedProviderResponse {
     name: string;
     url?: (URIString | null);
 }
+export const MessageEmbedResponseKeys = ["type","url","title","description","color","timestamp","fields","author","provider","image","thumbnail","video","footer"] as const satisfies ReadonlyArray<keyof MessageEmbedResponse>;
+Object.freeze(MessageEmbedResponseKeys);
 export interface MessageEmbedResponse {
     type: string;
     url?: (URIString | null);
@@ -4169,6 +4563,8 @@ export interface MessageEmbedResponse {
     video?: (null | MessageEmbedVideoResponse);
     footer?: (null | MessageEmbedFooterResponse);
 }
+export const MessageEmbedVideoResponseKeys = ["url","proxy_url","width","height"] as const satisfies ReadonlyArray<keyof MessageEmbedVideoResponse>;
+Object.freeze(MessageEmbedVideoResponseKeys);
 export interface MessageEmbedVideoResponse {
     url?: (URIString | null);
     proxy_url?: (URIString | null);
@@ -4183,6 +4579,8 @@ export interface MessageEmbedVideoResponse {
      */
     height?: (Int32 | null);
 }
+export const MessageInteractionResponseKeys = ["id","type","name","user","name_localized"] as const satisfies ReadonlyArray<keyof MessageInteractionResponse>;
+Object.freeze(MessageInteractionResponseKeys);
 export interface MessageInteractionResponse {
     id: Snowflake;
     type: InteractionType;
@@ -4190,12 +4588,16 @@ export interface MessageInteractionResponse {
     user?: (null | UserResponse);
     name_localized?: (string | null);
 }
+export const MessageMentionChannelResponseKeys = ["id","name","type","guild_id"] as const satisfies ReadonlyArray<keyof MessageMentionChannelResponse>;
+Object.freeze(MessageMentionChannelResponseKeys);
 export interface MessageMentionChannelResponse {
     id: Snowflake;
     name: string;
     type: ChannelType;
     guild_id: Snowflake;
 }
+export const MessageReactionCountDetailsResponseKeys = ["burst","normal"] as const satisfies ReadonlyArray<keyof MessageReactionCountDetailsResponse>;
+Object.freeze(MessageReactionCountDetailsResponseKeys);
 export interface MessageReactionCountDetailsResponse {
     /**
      * @maximum 2147483647
@@ -4208,11 +4610,15 @@ export interface MessageReactionCountDetailsResponse {
      */
     normal: Int32;
 }
+export const MessageReactionEmojiResponseKeys = ["id","name","animated"] as const satisfies ReadonlyArray<keyof MessageReactionEmojiResponse>;
+Object.freeze(MessageReactionEmojiResponseKeys);
 export interface MessageReactionEmojiResponse {
     id?: (Snowflake | null);
     name?: (string | null);
     animated?: (boolean | null);
 }
+export const MessageReactionResponseKeys = ["emoji","count","count_details","burst_colors","me_burst","me"] as const satisfies ReadonlyArray<keyof MessageReactionResponse>;
+Object.freeze(MessageReactionResponseKeys);
 export interface MessageReactionResponse {
     emoji: MessageReactionEmojiResponse;
     /**
@@ -4225,11 +4631,15 @@ export interface MessageReactionResponse {
     me_burst: boolean;
     me: boolean;
 }
+export const MessageReferenceResponseKeys = ["channel_id","message_id","guild_id"] as const satisfies ReadonlyArray<keyof MessageReferenceResponse>;
+Object.freeze(MessageReferenceResponseKeys);
 export interface MessageReferenceResponse {
     channel_id: Snowflake;
     message_id?: (Snowflake | null);
     guild_id?: (Snowflake | null);
 }
+export const MessageResponseKeys = ["id","type","content","channel_id","author","attachments","embeds","mentions","mention_roles","pinned","mention_everyone","tts","timestamp","edited_timestamp","flags","components","activity","application","application_id","interaction","nonce","webhook_id","message_reference","thread","mention_channels","stickers","sticker_items","role_subscription_data","position","reactions","referenced_message"] as const satisfies ReadonlyArray<keyof MessageResponse>;
+Object.freeze(MessageResponseKeys);
 export interface MessageResponse {
     id: Snowflake;
     type: MessageType;
@@ -4274,6 +4684,8 @@ export interface MessageResponse {
     reactions?: (Array<MessageReactionResponse> | null);
     referenced_message?: (null | BasicMessageResponse);
 }
+export const MessageRoleSubscriptionDataResponseKeys = ["role_subscription_listing_id","tier_name","total_months_subscribed","is_renewal"] as const satisfies ReadonlyArray<keyof MessageRoleSubscriptionDataResponse>;
+Object.freeze(MessageRoleSubscriptionDataResponseKeys);
 export interface MessageRoleSubscriptionDataResponse {
     role_subscription_listing_id: Snowflake;
     tier_name: string;
@@ -4284,6 +4696,8 @@ export interface MessageRoleSubscriptionDataResponse {
     total_months_subscribed: Int32;
     is_renewal: boolean;
 }
+export const MessageStickerItemResponseKeys = ["id","name","format_type"] as const satisfies ReadonlyArray<keyof MessageStickerItemResponse>;
+Object.freeze(MessageStickerItemResponseKeys);
 export interface MessageStickerItemResponse {
     id: Snowflake;
     name: string;
@@ -4360,6 +4774,8 @@ export const MetadataItemType = {
     BOOLEAN_NOT_EQUAL: 8
 } as const;
 Object.freeze(MetadataItemType);
+export const ModalInteractionCallbackDataKeys = ["custom_id","title","components"] as const satisfies ReadonlyArray<keyof ModalInteractionCallbackData>;
+Object.freeze(ModalInteractionCallbackDataKeys);
 export interface ModalInteractionCallbackData {
     /**
      * @maxLength 100
@@ -4375,10 +4791,14 @@ export interface ModalInteractionCallbackData {
      */
     components: Array<(ActionRow | InputText)>;
 }
+export const ModalInteractionCallbackRequestKeys = ["type","data"] as const satisfies ReadonlyArray<keyof ModalInteractionCallbackRequest>;
+Object.freeze(ModalInteractionCallbackRequestKeys);
 export interface ModalInteractionCallbackRequest {
     type: typeof InteractionCallbackType["MODAL"];
     data: ModalInteractionCallbackData;
 }
+export const MyGuildResponseKeys = ["id","name","icon","owner","permissions","features","approximate_member_count","approximate_presence_count"] as const satisfies ReadonlyArray<keyof MyGuildResponse>;
+Object.freeze(MyGuildResponseKeys);
 export interface MyGuildResponse {
     id: Snowflake;
     name: string;
@@ -4400,6 +4820,8 @@ export interface MyGuildResponse {
      */
     approximate_presence_count?: (Int32 | null);
 }
+export const NewMemberActionResponseKeys = ["channel_id","action_type","title","description","emoji","icon"] as const satisfies ReadonlyArray<keyof NewMemberActionResponse>;
+Object.freeze(NewMemberActionResponseKeys);
 export interface NewMemberActionResponse {
     channel_id: Snowflake;
     action_type: NewMemberActionType;
@@ -4414,6 +4836,8 @@ export const NewMemberActionType = {
     TALK: 1
 } as const;
 Object.freeze(NewMemberActionType);
+export const OAuth2GetAuthorizationResponseKeys = ["application","expires","scopes","user"] as const satisfies ReadonlyArray<keyof OAuth2GetAuthorizationResponse>;
+Object.freeze(OAuth2GetAuthorizationResponseKeys);
 export interface OAuth2GetAuthorizationResponse {
     application: ApplicationResponse;
     expires: ISO8601DateTime;
@@ -4555,6 +4979,8 @@ export const OAuth2Scope = {
     ROLE_CONNECTIONS_WRITE: "role_connections.write"
 } as const;
 Object.freeze(OAuth2Scope);
+export const OnboardingPromptOptionRequestKeys = ["id","title","description","emoji_id","emoji_name","emoji_animated","role_ids","channel_ids"] as const satisfies ReadonlyArray<keyof OnboardingPromptOptionRequest>;
+Object.freeze(OnboardingPromptOptionRequestKeys);
 export interface OnboardingPromptOptionRequest {
     id?: (Snowflake | null);
     /**
@@ -4583,6 +5009,8 @@ export interface OnboardingPromptOptionRequest {
      */
     channel_ids?: (Array<Snowflake> | null);
 }
+export const OnboardingPromptOptionResponseKeys = ["id","title","description","emoji","role_ids","channel_ids"] as const satisfies ReadonlyArray<keyof OnboardingPromptOptionResponse>;
+Object.freeze(OnboardingPromptOptionResponseKeys);
 export interface OnboardingPromptOptionResponse {
     id: Snowflake;
     title: string;
@@ -4597,6 +5025,8 @@ export interface OnboardingPromptOptionResponse {
      */
     channel_ids: Array<Snowflake>;
 }
+export const OnboardingPromptResponseKeys = ["id","title","options","single_select","required","in_onboarding","type"] as const satisfies ReadonlyArray<keyof OnboardingPromptResponse>;
+Object.freeze(OnboardingPromptResponseKeys);
 export interface OnboardingPromptResponse {
     id: Snowflake;
     title: string;
@@ -4618,6 +5048,8 @@ export const OnboardingPromptType = {
     DROPDOWN: 1
 } as const;
 Object.freeze(OnboardingPromptType);
+export const PartialDiscordIntegrationResponseKeys = ["id","type","name","account","application_id"] as const satisfies ReadonlyArray<keyof PartialDiscordIntegrationResponse>;
+Object.freeze(PartialDiscordIntegrationResponseKeys);
 export interface PartialDiscordIntegrationResponse {
     id: Snowflake;
     type: typeof IntegrationType["DISCORD"];
@@ -4625,18 +5057,24 @@ export interface PartialDiscordIntegrationResponse {
     account?: (null | AccountResponse);
     application_id: Snowflake;
 }
+export const PartialExternalConnectionIntegrationResponseKeys = ["id","type","name","account"] as const satisfies ReadonlyArray<keyof PartialExternalConnectionIntegrationResponse>;
+Object.freeze(PartialExternalConnectionIntegrationResponseKeys);
 export interface PartialExternalConnectionIntegrationResponse {
     id: Snowflake;
     type: (typeof IntegrationType["TWITCH"] | typeof IntegrationType["YOUTUBE"]);
     name?: (string | null);
     account?: (null | AccountResponse);
 }
+export const PartialGuildSubscriptionIntegrationResponseKeys = ["id","type","name","account"] as const satisfies ReadonlyArray<keyof PartialGuildSubscriptionIntegrationResponse>;
+Object.freeze(PartialGuildSubscriptionIntegrationResponseKeys);
 export interface PartialGuildSubscriptionIntegrationResponse {
     id: Snowflake;
     type: typeof IntegrationType["GUILD_SUBSCRIPTION"];
     name?: (string | null);
     account?: (null | AccountResponse);
 }
+export const PongInteractionCallbackRequestKeys = ["type"] as const satisfies ReadonlyArray<keyof PongInteractionCallbackRequest>;
+Object.freeze(PongInteractionCallbackRequestKeys);
 export interface PongInteractionCallbackRequest {
     type: typeof InteractionCallbackType["PONG"];
 }
@@ -4680,6 +5118,8 @@ export const PremiumType = {
     TIER_0: 3
 } as const;
 Object.freeze(PremiumType);
+export const PrivateApplicationResponseKeys = ["id","name","icon","description","type","cover_image","primary_sku_id","bot","slug","guild_id","rpc_origins","bot_public","bot_require_code_grant","terms_of_service_url","privacy_policy_url","custom_install_url","install_params","verify_key","flags","max_participants","tags","redirect_uris","interactions_endpoint_url","role_connections_verification_url","owner","approximate_guild_count","team"] as const satisfies ReadonlyArray<keyof PrivateApplicationResponse>;
+Object.freeze(PrivateApplicationResponseKeys);
 export interface PrivateApplicationResponse {
     id: Snowflake;
     name: string;
@@ -4724,6 +5164,8 @@ export interface PrivateApplicationResponse {
     approximate_guild_count?: (Int32 | null);
     team?: (null | TeamResponse);
 }
+export const PrivateChannelRequestPartialKeys = ["name","icon"] as const satisfies ReadonlyArray<keyof PrivateChannelRequestPartial>;
+Object.freeze(PrivateChannelRequestPartialKeys);
 export interface PrivateChannelRequestPartial {
     /**
      * @maxLength 100
@@ -4732,6 +5174,8 @@ export interface PrivateChannelRequestPartial {
     name?: (string | null);
     icon?: (Base64String | null);
 }
+export const PrivateChannelResponseKeys = ["id","type","last_message_id","flags","last_pin_timestamp","recipients"] as const satisfies ReadonlyArray<keyof PrivateChannelResponse>;
+Object.freeze(PrivateChannelResponseKeys);
 export interface PrivateChannelResponse {
     id: Snowflake;
     type: typeof ChannelType["DM"];
@@ -4744,6 +5188,8 @@ export interface PrivateChannelResponse {
     last_pin_timestamp?: (ISO8601DateTime | null);
     recipients: Array<UserResponse>;
 }
+export const PrivateGroupChannelResponseKeys = ["id","type","last_message_id","flags","last_pin_timestamp","recipients","name","icon","owner_id","managed","application_id"] as const satisfies ReadonlyArray<keyof PrivateGroupChannelResponse>;
+Object.freeze(PrivateGroupChannelResponseKeys);
 export interface PrivateGroupChannelResponse {
     id: Snowflake;
     type: typeof ChannelType["GROUP_DM"];
@@ -4761,6 +5207,8 @@ export interface PrivateGroupChannelResponse {
     managed?: (boolean | null);
     application_id?: (Snowflake | null);
 }
+export const PrivateGuildMemberResponseKeys = ["avatar","communication_disabled_until","flags","joined_at","nick","pending","premium_since","roles","user","mute","deaf","banner"] as const satisfies ReadonlyArray<keyof PrivateGuildMemberResponse>;
+Object.freeze(PrivateGuildMemberResponseKeys);
 export interface PrivateGuildMemberResponse {
     avatar?: (string | null);
     communication_disabled_until?: (ISO8601DateTime | null);
@@ -4782,26 +5230,38 @@ export interface PrivateGuildMemberResponse {
     deaf: boolean;
     banner?: (string | null);
 }
+export const QuarantineUserActionKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof QuarantineUserAction>;
+Object.freeze(QuarantineUserActionKeys);
 export interface QuarantineUserAction {
     type: typeof AutomodActionType["QUARANTINE_USER"];
     metadata?: (null | QuarantineUserActionMetadata);
 }
+export const QuarantineUserActionMetadataKeys = [] as const satisfies ReadonlyArray<keyof QuarantineUserActionMetadata>;
+Object.freeze(QuarantineUserActionMetadataKeys);
 export interface QuarantineUserActionMetadata {
 
 }
+export const QuarantineUserActionMetadataResponseKeys = [] as const satisfies ReadonlyArray<keyof QuarantineUserActionMetadataResponse>;
+Object.freeze(QuarantineUserActionMetadataResponseKeys);
 export interface QuarantineUserActionMetadataResponse {
 
 }
+export const QuarantineUserActionResponseKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof QuarantineUserActionResponse>;
+Object.freeze(QuarantineUserActionResponseKeys);
 export interface QuarantineUserActionResponse {
     type: typeof AutomodActionType["QUARANTINE_USER"];
     metadata: QuarantineUserActionMetadataResponse;
 }
+export const ReplyMessageReferenceRequestKeys = ["guild_id","channel_id","message_id","fail_if_not_exists"] as const satisfies ReadonlyArray<keyof ReplyMessageReferenceRequest>;
+Object.freeze(ReplyMessageReferenceRequestKeys);
 export interface ReplyMessageReferenceRequest {
     guild_id?: (Snowflake | null);
     channel_id?: (Snowflake | null);
     message_id: Snowflake;
     fail_if_not_exists?: (boolean | null);
 }
+export const ResourceChannelResponseKeys = ["channel_id","title","emoji","icon","description"] as const satisfies ReadonlyArray<keyof ResourceChannelResponse>;
+Object.freeze(ResourceChannelResponseKeys);
 export interface ResourceChannelResponse {
     channel_id: Snowflake;
     title: string;
@@ -4809,6 +5269,8 @@ export interface ResourceChannelResponse {
     icon?: (string | null);
     description: string;
 }
+export const RichEmbedKeys = ["type","url","title","color","timestamp","description","author","image","thumbnail","footer","fields","provider","video"] as const satisfies ReadonlyArray<keyof RichEmbed>;
+Object.freeze(RichEmbedKeys);
 export interface RichEmbed {
     /**
      * @maxLength 152133
@@ -4843,6 +5305,8 @@ export interface RichEmbed {
     provider?: (null | RichEmbedProvider);
     video?: (null | RichEmbedVideo);
 }
+export const RichEmbedAuthorKeys = ["name","url","icon_url"] as const satisfies ReadonlyArray<keyof RichEmbedAuthor>;
+Object.freeze(RichEmbedAuthorKeys);
 export interface RichEmbedAuthor {
     /**
      * @maxLength 256
@@ -4857,6 +5321,8 @@ export interface RichEmbedAuthor {
      */
     icon_url?: (URIString | null);
 }
+export const RichEmbedFieldKeys = ["name","value","inline"] as const satisfies ReadonlyArray<keyof RichEmbedField>;
+Object.freeze(RichEmbedFieldKeys);
 export interface RichEmbedField {
     /**
      * @maxLength 256
@@ -4868,6 +5334,8 @@ export interface RichEmbedField {
     value: string;
     inline?: (boolean | null);
 }
+export const RichEmbedFooterKeys = ["text","icon_url"] as const satisfies ReadonlyArray<keyof RichEmbedFooter>;
+Object.freeze(RichEmbedFooterKeys);
 export interface RichEmbedFooter {
     /**
      * @maxLength 2048
@@ -4878,6 +5346,8 @@ export interface RichEmbedFooter {
      */
     icon_url?: (URIString | null);
 }
+export const RichEmbedImageKeys = ["url","width","height"] as const satisfies ReadonlyArray<keyof RichEmbedImage>;
+Object.freeze(RichEmbedImageKeys);
 export interface RichEmbedImage {
     /**
      * @maxLength 2048
@@ -4886,6 +5356,8 @@ export interface RichEmbedImage {
     width?: (number | null);
     height?: (number | null);
 }
+export const RichEmbedProviderKeys = ["name","url"] as const satisfies ReadonlyArray<keyof RichEmbedProvider>;
+Object.freeze(RichEmbedProviderKeys);
 export interface RichEmbedProvider {
     /**
      * @maxLength 256
@@ -4896,6 +5368,8 @@ export interface RichEmbedProvider {
      */
     url?: (URIString | null);
 }
+export const RichEmbedThumbnailKeys = ["url","width","height"] as const satisfies ReadonlyArray<keyof RichEmbedThumbnail>;
+Object.freeze(RichEmbedThumbnailKeys);
 export interface RichEmbedThumbnail {
     /**
      * @maxLength 2048
@@ -4904,6 +5378,8 @@ export interface RichEmbedThumbnail {
     width?: (number | null);
     height?: (number | null);
 }
+export const RichEmbedVideoKeys = ["url","width","height"] as const satisfies ReadonlyArray<keyof RichEmbedVideo>;
+Object.freeze(RichEmbedVideoKeys);
 export interface RichEmbedVideo {
     /**
      * @maxLength 2048
@@ -4912,6 +5388,8 @@ export interface RichEmbedVideo {
     width?: (number | null);
     height?: (number | null);
 }
+export const RoleSelectKeys = ["type","custom_id","placeholder","min_values","max_values","disabled"] as const satisfies ReadonlyArray<keyof RoleSelect>;
+Object.freeze(RoleSelectKeys);
 export interface RoleSelect {
     type: typeof MessageComponentType["ROLE_SELECT"];
     /**
@@ -4934,6 +5412,8 @@ export interface RoleSelect {
     max_values?: (number | null);
     disabled?: (boolean | null);
 }
+export const ScheduledEventResponseKeys = ["id","guild_id","name","description","channel_id","creator_id","creator","image","scheduled_start_time","scheduled_end_time","status","entity_type","entity_id","user_count","privacy_level","user_rsvp"] as const satisfies ReadonlyArray<keyof ScheduledEventResponse>;
+Object.freeze(ScheduledEventResponseKeys);
 export interface ScheduledEventResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -4956,12 +5436,16 @@ export interface ScheduledEventResponse {
     privacy_level: GuildScheduledEventPrivacyLevel;
     user_rsvp?: (null | ScheduledEventUserResponse);
 }
+export const ScheduledEventUserResponseKeys = ["guild_scheduled_event_id","user_id","user","member"] as const satisfies ReadonlyArray<keyof ScheduledEventUserResponse>;
+Object.freeze(ScheduledEventUserResponseKeys);
 export interface ScheduledEventUserResponse {
     guild_scheduled_event_id: Snowflake;
     user_id: Snowflake;
     user?: (null | UserResponse);
     member?: (null | GuildMemberResponse);
 }
+export const SelectOptionKeys = ["label","value","description","emoji","default"] as const satisfies ReadonlyArray<keyof SelectOption>;
+Object.freeze(SelectOptionKeys);
 export interface SelectOption {
     /**
      * @maxLength 100
@@ -4978,6 +5462,8 @@ export interface SelectOption {
     emoji?: (null | Emoji);
     default?: (boolean | null);
 }
+export const SelectOptionResponseKeys = ["label","value","description","emoji","default"] as const satisfies ReadonlyArray<keyof SelectOptionResponse>;
+Object.freeze(SelectOptionResponseKeys);
 export interface SelectOptionResponse {
     label: string;
     value: string;
@@ -4985,11 +5471,15 @@ export interface SelectOptionResponse {
     emoji?: (null | MessageComponentEmojiResponse);
     default?: (boolean | null);
 }
+export const SettingsEmojiResponseKeys = ["id","name","animated"] as const satisfies ReadonlyArray<keyof SettingsEmojiResponse>;
+Object.freeze(SettingsEmojiResponseKeys);
 export interface SettingsEmojiResponse {
     id?: (Snowflake | null);
     name?: (string | null);
     animated?: (boolean | null);
 }
+export const SlackWebhookKeys = ["text","username","icon_url","attachments"] as const satisfies ReadonlyArray<keyof SlackWebhook>;
+Object.freeze(SlackWebhookKeys);
 export interface SlackWebhook {
     /**
      * @maxLength 2000
@@ -5008,6 +5498,8 @@ export interface SlackWebhook {
      */
     attachments?: (Array<WebhookSlackEmbed> | null);
 }
+export const SpamLinkRuleResponseKeys = ["id","guild_id","creator_id","name","event_type","actions","trigger_type","enabled","exempt_roles","exempt_channels","trigger_metadata"] as const satisfies ReadonlyArray<keyof SpamLinkRuleResponse>;
+Object.freeze(SpamLinkRuleResponseKeys);
 export interface SpamLinkRuleResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -5027,9 +5519,13 @@ export interface SpamLinkRuleResponse {
     exempt_channels?: (Array<Snowflake> | null);
     trigger_metadata: SpamLinkTriggerMetadataResponse;
 }
+export const SpamLinkTriggerMetadataResponseKeys = [] as const satisfies ReadonlyArray<keyof SpamLinkTriggerMetadataResponse>;
+Object.freeze(SpamLinkTriggerMetadataResponseKeys);
 export interface SpamLinkTriggerMetadataResponse {
 
 }
+export const StageInstanceResponseKeys = ["guild_id","channel_id","topic","privacy_level","id","discoverable_disabled","guild_scheduled_event_id"] as const satisfies ReadonlyArray<keyof StageInstanceResponse>;
+Object.freeze(StageInstanceResponseKeys);
 export interface StageInstanceResponse {
     guild_id: Snowflake;
     channel_id: Snowflake;
@@ -5051,6 +5547,8 @@ export const StageInstancesPrivacyLevel = {
     GUILD_ONLY: 2
 } as const;
 Object.freeze(StageInstancesPrivacyLevel);
+export const StageScheduledEventCreateRequestKeys = ["name","description","image","scheduled_start_time","scheduled_end_time","privacy_level","entity_type","channel_id","entity_metadata"] as const satisfies ReadonlyArray<keyof StageScheduledEventCreateRequest>;
+Object.freeze(StageScheduledEventCreateRequestKeys);
 export interface StageScheduledEventCreateRequest {
     /**
      * @maxLength 100
@@ -5068,6 +5566,8 @@ export interface StageScheduledEventCreateRequest {
     channel_id?: (Snowflake | null);
     entity_metadata?: (null | EntityMetadataStageInstance);
 }
+export const StageScheduledEventPatchRequestPartialKeys = ["status","name","description","image","scheduled_start_time","scheduled_end_time","entity_type","privacy_level","channel_id","entity_metadata"] as const satisfies ReadonlyArray<keyof StageScheduledEventPatchRequestPartial>;
+Object.freeze(StageScheduledEventPatchRequestPartialKeys);
 export interface StageScheduledEventPatchRequestPartial {
     status?: (null | GuildScheduledEventStatus);
     /**
@@ -5086,6 +5586,8 @@ export interface StageScheduledEventPatchRequestPartial {
     channel_id?: (Snowflake | null);
     entity_metadata?: (null | EntityMetadataStageInstance);
 }
+export const StageScheduledEventResponseKeys = ["id","guild_id","name","description","channel_id","creator_id","creator","image","scheduled_start_time","scheduled_end_time","status","entity_type","entity_id","user_count","privacy_level","user_rsvp","entity_metadata"] as const satisfies ReadonlyArray<keyof StageScheduledEventResponse>;
+Object.freeze(StageScheduledEventResponseKeys);
 export interface StageScheduledEventResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -5109,6 +5611,8 @@ export interface StageScheduledEventResponse {
     user_rsvp?: (null | ScheduledEventUserResponse);
     entity_metadata?: (null | EntityMetadataStageInstanceResponse);
 }
+export const StandardStickerResponseKeys = ["id","name","tags","type","format_type","description","pack_id","sort_value"] as const satisfies ReadonlyArray<keyof StandardStickerResponse>;
+Object.freeze(StandardStickerResponseKeys);
 export interface StandardStickerResponse {
     id: Snowflake;
     name: string;
@@ -5131,9 +5635,13 @@ export const StickerFormatType = {
     GIF: 4
 } as const;
 Object.freeze(StickerFormatType);
+export const StickerPackCollectionResponseKeys = ["sticker_packs"] as const satisfies ReadonlyArray<keyof StickerPackCollectionResponse>;
+Object.freeze(StickerPackCollectionResponseKeys);
 export interface StickerPackCollectionResponse {
     sticker_packs: Array<StickerPackResponse>;
 }
+export const StickerPackResponseKeys = ["id","sku_id","name","description","stickers","cover_sticker_id","banner_asset_id"] as const satisfies ReadonlyArray<keyof StickerPackResponse>;
+Object.freeze(StickerPackResponseKeys);
 export interface StickerPackResponse {
     id: Snowflake;
     sku_id: Snowflake;
@@ -5155,6 +5663,8 @@ export const StickerType = {
     GUILD: 2
 } as const;
 Object.freeze(StickerType);
+export const StringSelectKeys = ["type","custom_id","placeholder","min_values","max_values","disabled","options"] as const satisfies ReadonlyArray<keyof StringSelect>;
+Object.freeze(StringSelectKeys);
 export interface StringSelect {
     type: typeof MessageComponentType["STRING_SELECT"];
     /**
@@ -5182,6 +5692,8 @@ export interface StringSelect {
      */
     options: Array<SelectOption>;
 }
+export const TeamMemberResponseKeys = ["user","team_id","membership_state","permissions"] as const satisfies ReadonlyArray<keyof TeamMemberResponse>;
+Object.freeze(TeamMemberResponseKeys);
 export interface TeamMemberResponse {
     user: UserResponse;
     team_id: Snowflake;
@@ -5200,6 +5712,8 @@ export const TeamMembershipState = {
     ACCEPTED: 2
 } as const;
 Object.freeze(TeamMembershipState);
+export const TeamResponseKeys = ["id","icon","name","owner_user_id","members"] as const satisfies ReadonlyArray<keyof TeamResponse>;
+Object.freeze(TeamResponseKeys);
 export interface TeamResponse {
     id: Snowflake;
     icon?: (string | null);
@@ -5239,6 +5753,8 @@ export const ThreadAutoArchiveDuration = {
     SEVEN_DAY: 10080
 } as const;
 Object.freeze(ThreadAutoArchiveDuration);
+export const ThreadMemberResponseKeys = ["id","user_id","join_timestamp","flags","member"] as const satisfies ReadonlyArray<keyof ThreadMemberResponse>;
+Object.freeze(ThreadMemberResponseKeys);
 export interface ThreadMemberResponse {
     id: Snowflake;
     user_id: Snowflake;
@@ -5250,6 +5766,8 @@ export interface ThreadMemberResponse {
     flags: Int32;
     member?: (null | GuildMemberResponse);
 }
+export const ThreadMetadataResponseKeys = ["archived","archive_timestamp","auto_archive_duration","locked","create_timestamp","invitable"] as const satisfies ReadonlyArray<keyof ThreadMetadataResponse>;
+Object.freeze(ThreadMetadataResponseKeys);
 export interface ThreadMetadataResponse {
     archived: boolean;
     archive_timestamp?: (ISO8601DateTime | null);
@@ -5258,6 +5776,8 @@ export interface ThreadMetadataResponse {
     create_timestamp?: (ISO8601DateTime | null);
     invitable?: (boolean | null);
 }
+export const ThreadResponseKeys = ["id","type","last_message_id","flags","last_pin_timestamp","guild_id","name","parent_id","rate_limit_per_user","bitrate","user_limit","rtc_region","video_quality_mode","permissions","owner_id","thread_metadata","message_count","member_count","total_message_sent","applied_tags","member"] as const satisfies ReadonlyArray<keyof ThreadResponse>;
+Object.freeze(ThreadResponseKeys);
 export interface ThreadResponse {
     id: Snowflake;
     type: (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]);
@@ -5321,14 +5841,20 @@ export const ThreadSortOrder = {
     CREATION_DATE: 1
 } as const;
 Object.freeze(ThreadSortOrder);
+export const ThreadsResponseKeys = ["threads","members","has_more"] as const satisfies ReadonlyArray<keyof ThreadsResponse>;
+Object.freeze(ThreadsResponseKeys);
 export interface ThreadsResponse {
     threads: Array<ThreadResponse>;
     members: Array<ThreadMemberResponse>;
     has_more?: (boolean | null);
 }
+export const TypingIndicatorResponseKeys = [] as const satisfies ReadonlyArray<keyof TypingIndicatorResponse>;
+Object.freeze(TypingIndicatorResponseKeys);
 export interface TypingIndicatorResponse {
 
 }
+export const UpdateDefaultReactionEmojiRequestKeys = ["emoji_id","emoji_name"] as const satisfies ReadonlyArray<keyof UpdateDefaultReactionEmojiRequest>;
+Object.freeze(UpdateDefaultReactionEmojiRequestKeys);
 export interface UpdateDefaultReactionEmojiRequest {
     emoji_id?: (Snowflake | null);
     /**
@@ -5336,6 +5862,8 @@ export interface UpdateDefaultReactionEmojiRequest {
      */
     emoji_name?: (string | null);
 }
+export const UpdateGuildChannelRequestPartialKeys = ["type","name","position","topic","bitrate","user_limit","nsfw","rate_limit_per_user","parent_id","permission_overwrites","rtc_region","video_quality_mode","default_auto_archive_duration","default_reaction_emoji","default_thread_rate_limit_per_user","default_sort_order","default_forum_layout","flags","available_tags"] as const satisfies ReadonlyArray<keyof UpdateGuildChannelRequestPartial>;
+Object.freeze(UpdateGuildChannelRequestPartialKeys);
 export interface UpdateGuildChannelRequestPartial {
     type?: (null | (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"] | typeof ChannelType["GUILD_ANNOUNCEMENT"] | typeof ChannelType["GUILD_STAGE_VOICE"] | typeof ChannelType["GUILD_DIRECTORY"] | typeof ChannelType["GUILD_FORUM"]));
     /**
@@ -5389,6 +5917,8 @@ export interface UpdateGuildChannelRequestPartial {
      */
     available_tags?: (Array<(null | UpdateThreadTagRequest)> | null);
 }
+export const UpdateGuildOnboardingRequestKeys = ["prompts","enabled","default_channel_ids","mode"] as const satisfies ReadonlyArray<keyof UpdateGuildOnboardingRequest>;
+Object.freeze(UpdateGuildOnboardingRequestKeys);
 export interface UpdateGuildOnboardingRequest {
     /**
      * @maxItems 15
@@ -5402,10 +5932,14 @@ export interface UpdateGuildOnboardingRequest {
     default_channel_ids?: (Array<Snowflake> | null);
     mode?: (null | GuildOnboardingMode);
 }
+export const UpdateMessageInteractionCallbackRequestKeys = ["type","data"] as const satisfies ReadonlyArray<keyof UpdateMessageInteractionCallbackRequest>;
+Object.freeze(UpdateMessageInteractionCallbackRequestKeys);
 export interface UpdateMessageInteractionCallbackRequest {
     type: (typeof InteractionCallbackType["DEFERRED_UPDATE_MESSAGE"] | typeof InteractionCallbackType["UPDATE_MESSAGE"]);
     data?: (null | IncomingWebhookUpdateForInteractionCallbackRequestPartial);
 }
+export const UpdateOnboardingPromptRequestKeys = ["title","options","single_select","required","in_onboarding","type","id"] as const satisfies ReadonlyArray<keyof UpdateOnboardingPromptRequest>;
+Object.freeze(UpdateOnboardingPromptRequestKeys);
 export interface UpdateOnboardingPromptRequest {
     /**
      * @maxLength 100
@@ -5423,6 +5957,8 @@ export interface UpdateOnboardingPromptRequest {
     type?: (null | OnboardingPromptType);
     id: Snowflake;
 }
+export const UpdateThreadRequestPartialKeys = ["name","archived","locked","invitable","auto_archive_duration","rate_limit_per_user","flags","applied_tags","bitrate","user_limit","rtc_region","video_quality_mode"] as const satisfies ReadonlyArray<keyof UpdateThreadRequestPartial>;
+Object.freeze(UpdateThreadRequestPartialKeys);
 export interface UpdateThreadRequestPartial {
     /**
      * @maxLength 100
@@ -5455,6 +5991,8 @@ export interface UpdateThreadRequestPartial {
     rtc_region?: (string | null);
     video_quality_mode?: (null | VideoQualityMode);
 }
+export const UpdateThreadTagRequestKeys = ["name","emoji_id","emoji_name","moderated","id"] as const satisfies ReadonlyArray<keyof UpdateThreadTagRequest>;
+Object.freeze(UpdateThreadTagRequestKeys);
 export interface UpdateThreadTagRequest {
     /**
      * @maxLength 20
@@ -5469,10 +6007,14 @@ export interface UpdateThreadTagRequest {
     moderated?: (boolean | null);
     id?: (Snowflake | null);
 }
+export const UserCommunicationDisabledActionKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof UserCommunicationDisabledAction>;
+Object.freeze(UserCommunicationDisabledActionKeys);
 export interface UserCommunicationDisabledAction {
     type: typeof AutomodActionType["USER_COMMUNICATION_DISABLED"];
     metadata: UserCommunicationDisabledActionMetadata;
 }
+export const UserCommunicationDisabledActionMetadataKeys = ["duration_seconds"] as const satisfies ReadonlyArray<keyof UserCommunicationDisabledActionMetadata>;
+Object.freeze(UserCommunicationDisabledActionMetadataKeys);
 export interface UserCommunicationDisabledActionMetadata {
     /**
      * @maximum 2419200
@@ -5480,6 +6022,8 @@ export interface UserCommunicationDisabledActionMetadata {
      */
     duration_seconds: number;
 }
+export const UserCommunicationDisabledActionMetadataResponseKeys = ["duration_seconds"] as const satisfies ReadonlyArray<keyof UserCommunicationDisabledActionMetadataResponse>;
+Object.freeze(UserCommunicationDisabledActionMetadataResponseKeys);
 export interface UserCommunicationDisabledActionMetadataResponse {
     /**
      * @maximum 2147483647
@@ -5487,10 +6031,14 @@ export interface UserCommunicationDisabledActionMetadataResponse {
      */
     duration_seconds: Int32;
 }
+export const UserCommunicationDisabledActionResponseKeys = ["type","metadata"] as const satisfies ReadonlyArray<keyof UserCommunicationDisabledActionResponse>;
+Object.freeze(UserCommunicationDisabledActionResponseKeys);
 export interface UserCommunicationDisabledActionResponse {
     type: typeof AutomodActionType["USER_COMMUNICATION_DISABLED"];
     metadata: UserCommunicationDisabledActionMetadataResponse;
 }
+export const UserGuildOnboardingResponseKeys = ["guild_id","prompts","default_channel_ids","enabled"] as const satisfies ReadonlyArray<keyof UserGuildOnboardingResponse>;
+Object.freeze(UserGuildOnboardingResponseKeys);
 export interface UserGuildOnboardingResponse {
     guild_id: Snowflake;
     prompts: Array<OnboardingPromptResponse>;
@@ -5512,6 +6060,8 @@ export const UserNotificationSetting = {
     ONLY_MENTIONS: 1
 } as const;
 Object.freeze(UserNotificationSetting);
+export const UserPIIResponseKeys = ["id","username","avatar","discriminator","public_flags","flags","bot","system","banner","accent_color","mfa_enabled","locale","premium_type","email","verified"] as const satisfies ReadonlyArray<keyof UserPIIResponse>;
+Object.freeze(UserPIIResponseKeys);
 export interface UserPIIResponse {
     id: Snowflake;
     username: string;
@@ -5541,6 +6091,8 @@ export interface UserPIIResponse {
     email?: (string | null);
     verified?: (boolean | null);
 }
+export const UserResponseKeys = ["id","username","avatar","discriminator","public_flags","flags","bot","system","banner","accent_color"] as const satisfies ReadonlyArray<keyof UserResponse>;
+Object.freeze(UserResponseKeys);
 export interface UserResponse {
     id: Snowflake;
     username: string;
@@ -5565,6 +6117,8 @@ export interface UserResponse {
      */
     accent_color?: (Int32 | null);
 }
+export const UserSelectKeys = ["type","custom_id","placeholder","min_values","max_values","disabled"] as const satisfies ReadonlyArray<keyof UserSelect>;
+Object.freeze(UserSelectKeys);
 export interface UserSelect {
     type: typeof MessageComponentType["USER_SELECT"];
     /**
@@ -5587,6 +6141,8 @@ export interface UserSelect {
     max_values?: (number | null);
     disabled?: (boolean | null);
 }
+export const VanityURLErrorResponseKeys = ["message","code"] as const satisfies ReadonlyArray<keyof VanityURLErrorResponse>;
+Object.freeze(VanityURLErrorResponseKeys);
 export interface VanityURLErrorResponse {
     message: string;
     /**
@@ -5595,6 +6151,8 @@ export interface VanityURLErrorResponse {
      */
     code: Int32;
 }
+export const VanityURLResponseKeys = ["code","uses","error"] as const satisfies ReadonlyArray<keyof VanityURLResponse>;
+Object.freeze(VanityURLResponseKeys);
 export interface VanityURLResponse {
     code?: (string | null);
     /**
@@ -5640,6 +6198,8 @@ export const VideoQualityMode = {
     FULL: 2
 } as const;
 Object.freeze(VideoQualityMode);
+export const VoiceRegionResponseKeys = ["id","name","custom","deprecated","optimal"] as const satisfies ReadonlyArray<keyof VoiceRegionResponse>;
+Object.freeze(VoiceRegionResponseKeys);
 export interface VoiceRegionResponse {
     id: string;
     name: string;
@@ -5647,6 +6207,8 @@ export interface VoiceRegionResponse {
     deprecated: boolean;
     optimal: boolean;
 }
+export const VoiceScheduledEventCreateRequestKeys = ["name","description","image","scheduled_start_time","scheduled_end_time","privacy_level","entity_type","channel_id","entity_metadata"] as const satisfies ReadonlyArray<keyof VoiceScheduledEventCreateRequest>;
+Object.freeze(VoiceScheduledEventCreateRequestKeys);
 export interface VoiceScheduledEventCreateRequest {
     /**
      * @maxLength 100
@@ -5664,6 +6226,8 @@ export interface VoiceScheduledEventCreateRequest {
     channel_id?: (Snowflake | null);
     entity_metadata?: (null | EntityMetadataVoice);
 }
+export const VoiceScheduledEventPatchRequestPartialKeys = ["status","name","description","image","scheduled_start_time","scheduled_end_time","entity_type","privacy_level","channel_id","entity_metadata"] as const satisfies ReadonlyArray<keyof VoiceScheduledEventPatchRequestPartial>;
+Object.freeze(VoiceScheduledEventPatchRequestPartialKeys);
 export interface VoiceScheduledEventPatchRequestPartial {
     status?: (null | GuildScheduledEventStatus);
     /**
@@ -5682,6 +6246,8 @@ export interface VoiceScheduledEventPatchRequestPartial {
     channel_id?: (Snowflake | null);
     entity_metadata?: (null | EntityMetadataVoice);
 }
+export const VoiceScheduledEventResponseKeys = ["id","guild_id","name","description","channel_id","creator_id","creator","image","scheduled_start_time","scheduled_end_time","status","entity_type","entity_id","user_count","privacy_level","user_rsvp","entity_metadata"] as const satisfies ReadonlyArray<keyof VoiceScheduledEventResponse>;
+Object.freeze(VoiceScheduledEventResponseKeys);
 export interface VoiceScheduledEventResponse {
     id: Snowflake;
     guild_id: Snowflake;
@@ -5705,6 +6271,8 @@ export interface VoiceScheduledEventResponse {
     user_rsvp?: (null | ScheduledEventUserResponse);
     entity_metadata?: (null | EntityMetadataVoiceResponse);
 }
+export const WebhookSlackEmbedKeys = ["title","title_link","text","color","ts","pretext","footer","footer_icon","author_name","author_link","author_icon","image_url","thumb_url","fields"] as const satisfies ReadonlyArray<keyof WebhookSlackEmbed>;
+Object.freeze(WebhookSlackEmbedKeys);
 export interface WebhookSlackEmbed {
     /**
      * @maxLength 152133
@@ -5761,6 +6329,8 @@ export interface WebhookSlackEmbed {
      */
     fields?: (Array<WebhookSlackEmbedField> | null);
 }
+export const WebhookSlackEmbedFieldKeys = ["name","value","inline"] as const satisfies ReadonlyArray<keyof WebhookSlackEmbedField>;
+Object.freeze(WebhookSlackEmbedFieldKeys);
 export interface WebhookSlackEmbedField {
     /**
      * @maxLength 152133
@@ -5772,10 +6342,14 @@ export interface WebhookSlackEmbedField {
     value?: (string | null);
     inline?: (boolean | null);
 }
+export const WebhookSourceChannelResponseKeys = ["id","name"] as const satisfies ReadonlyArray<keyof WebhookSourceChannelResponse>;
+Object.freeze(WebhookSourceChannelResponseKeys);
 export interface WebhookSourceChannelResponse {
     id: Snowflake;
     name: string;
 }
+export const WebhookSourceGuildResponseKeys = ["id","icon","name"] as const satisfies ReadonlyArray<keyof WebhookSourceGuildResponse>;
+Object.freeze(WebhookSourceGuildResponseKeys);
 export interface WebhookSourceGuildResponse {
     id: Snowflake;
     icon?: (string | null);
@@ -5797,10 +6371,14 @@ export const WebhookType = {
     APPLICATION_INCOMING: 3
 } as const;
 Object.freeze(WebhookType);
+export const WelcomeMessageResponseKeys = ["author_ids","message"] as const satisfies ReadonlyArray<keyof WelcomeMessageResponse>;
+Object.freeze(WelcomeMessageResponseKeys);
 export interface WelcomeMessageResponse {
     author_ids: Array<Snowflake>;
     message: string;
 }
+export const WelcomeScreenPatchRequestPartialKeys = ["description","welcome_channels","enabled"] as const satisfies ReadonlyArray<keyof WelcomeScreenPatchRequestPartial>;
+Object.freeze(WelcomeScreenPatchRequestPartialKeys);
 export interface WelcomeScreenPatchRequestPartial {
     /**
      * @maxLength 140
@@ -5812,9 +6390,13 @@ export interface WelcomeScreenPatchRequestPartial {
     welcome_channels?: (Array<GuildWelcomeChannel> | null);
     enabled?: (boolean | null);
 }
+export const WidgetActivityKeys = ["name"] as const satisfies ReadonlyArray<keyof WidgetActivity>;
+Object.freeze(WidgetActivityKeys);
 export interface WidgetActivity {
     name: string;
 }
+export const WidgetChannelKeys = ["id","name","position"] as const satisfies ReadonlyArray<keyof WidgetChannel>;
+Object.freeze(WidgetChannelKeys);
 export interface WidgetChannel {
     id: Snowflake;
     name: string;
@@ -5848,6 +6430,8 @@ export const WidgetImageStyle = {
     BANNER4: "banner4"
 } as const;
 Object.freeze(WidgetImageStyle);
+export const WidgetMemberKeys = ["id","username","discriminator","avatar","status","avatar_url","activity","deaf","mute","self_deaf","self_mute","suppress","channel_id"] as const satisfies ReadonlyArray<keyof WidgetMember>;
+Object.freeze(WidgetMemberKeys);
 export interface WidgetMember {
     id: string;
     username: string;
@@ -5863,6 +6447,8 @@ export interface WidgetMember {
     suppress?: (boolean | null);
     channel_id?: (Snowflake | null);
 }
+export const WidgetResponseKeys = ["id","name","instant_invite","channels","members","presence_count"] as const satisfies ReadonlyArray<keyof WidgetResponse>;
+Object.freeze(WidgetResponseKeys);
 export interface WidgetResponse {
     id: Snowflake;
     name: string;
@@ -5875,6 +6461,8 @@ export interface WidgetResponse {
      */
     presence_count: Int32;
 }
+export const WidgetSettingsResponseKeys = ["enabled","channel_id"] as const satisfies ReadonlyArray<keyof WidgetSettingsResponse>;
+Object.freeze(WidgetSettingsResponseKeys);
 export interface WidgetSettingsResponse {
     enabled: boolean;
     channel_id?: (Snowflake | null);
@@ -5887,6 +6475,8 @@ Object.freeze(WidgetUserDiscriminator);
 /**
  * A single error, either for an API response or a specific field.
  */
+export const DiscordErrorKeys = ["code","message"] as const satisfies ReadonlyArray<keyof DiscordError>;
+Object.freeze(DiscordErrorKeys);
 export interface DiscordError {
     /**
      * Discord internal error code. See error code reference
@@ -5897,6 +6487,8 @@ export interface DiscordError {
      */
     message: string;
 }
+export const InnerErrorsKeys = ["_errors"] as const satisfies ReadonlyArray<keyof InnerErrors>;
+Object.freeze(InnerErrorsKeys);
 export interface InnerErrors {
     /**
      * The list of errors for this field
@@ -5912,8 +6504,1077 @@ export type ErrorDetails = {
 export type ErrorResponse = DiscordError & {
     errors?: ErrorDetails;
 };
-export type PATCHUpdateMyUserRequestJSON = BotAccountPatchRequestPartial;
-export interface POSTCreateStageInstanceRequestJSON {
+export const ListMyGuildsRequestQueryKeys = ["before","after","limit","with_counts"] as const satisfies ReadonlyArray<keyof ListMyGuildsRequestQuery>;
+Object.freeze(ListMyGuildsRequestQueryKeys);
+export interface ListMyGuildsRequestQuery {
+    before?: (Snowflake | null);
+    after?: (Snowflake | null);
+    limit?: (number | null);
+    with_counts?: (boolean | null);
+}
+export const ListMyPrivateArchivedThreadsRequestQueryKeys = ["before","limit"] as const satisfies ReadonlyArray<keyof ListMyPrivateArchivedThreadsRequestQuery>;
+Object.freeze(ListMyPrivateArchivedThreadsRequestQueryKeys);
+export interface ListMyPrivateArchivedThreadsRequestQuery {
+    before?: (Snowflake | null);
+    limit?: (number | null);
+}
+export const ListMyPrivateArchivedThreadsRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListMyPrivateArchivedThreadsRequestPath>;
+Object.freeze(ListMyPrivateArchivedThreadsRequestPathKeys);
+export interface ListMyPrivateArchivedThreadsRequestPath {
+    channel_id: Snowflake;
+}
+export const ListGuildApplicationCommandPermissionsRequestPathKeys = ["application_id","guild_id"] as const satisfies ReadonlyArray<keyof ListGuildApplicationCommandPermissionsRequestPath>;
+Object.freeze(ListGuildApplicationCommandPermissionsRequestPathKeys);
+export interface ListGuildApplicationCommandPermissionsRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+}
+export const GetGuildApplicationCommandPermissionsRequestPathKeys = ["application_id","guild_id","command_id"] as const satisfies ReadonlyArray<keyof GetGuildApplicationCommandPermissionsRequestPath>;
+Object.freeze(GetGuildApplicationCommandPermissionsRequestPathKeys);
+export interface GetGuildApplicationCommandPermissionsRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+    command_id: Snowflake;
+}
+export const SetGuildApplicationCommandPermissionsRequestPathKeys = ["application_id","guild_id","command_id"] as const satisfies ReadonlyArray<keyof SetGuildApplicationCommandPermissionsRequestPath>;
+Object.freeze(SetGuildApplicationCommandPermissionsRequestPathKeys);
+export interface SetGuildApplicationCommandPermissionsRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+    command_id: Snowflake;
+}
+export const AddMyMessageReactionRequestPathKeys = ["channel_id","message_id","emoji_name"] as const satisfies ReadonlyArray<keyof AddMyMessageReactionRequestPath>;
+Object.freeze(AddMyMessageReactionRequestPathKeys);
+export interface AddMyMessageReactionRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+    emoji_name: string;
+}
+export const DeleteMyMessageReactionRequestPathKeys = ["channel_id","message_id","emoji_name"] as const satisfies ReadonlyArray<keyof DeleteMyMessageReactionRequestPath>;
+Object.freeze(DeleteMyMessageReactionRequestPathKeys);
+export interface DeleteMyMessageReactionRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+    emoji_name: string;
+}
+export const ListPrivateArchivedThreadsRequestQueryKeys = ["before","limit"] as const satisfies ReadonlyArray<keyof ListPrivateArchivedThreadsRequestQuery>;
+Object.freeze(ListPrivateArchivedThreadsRequestQueryKeys);
+export interface ListPrivateArchivedThreadsRequestQuery {
+    before?: (ISO8601DateTime | null);
+    limit?: (number | null);
+}
+export const ListPrivateArchivedThreadsRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListPrivateArchivedThreadsRequestPath>;
+Object.freeze(ListPrivateArchivedThreadsRequestPathKeys);
+export interface ListPrivateArchivedThreadsRequestPath {
+    channel_id: Snowflake;
+}
+export const ListPublicArchivedThreadsRequestQueryKeys = ["before","limit"] as const satisfies ReadonlyArray<keyof ListPublicArchivedThreadsRequestQuery>;
+Object.freeze(ListPublicArchivedThreadsRequestQueryKeys);
+export interface ListPublicArchivedThreadsRequestQuery {
+    before?: (ISO8601DateTime | null);
+    limit?: (number | null);
+}
+export const ListPublicArchivedThreadsRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListPublicArchivedThreadsRequestPath>;
+Object.freeze(ListPublicArchivedThreadsRequestPathKeys);
+export interface ListPublicArchivedThreadsRequestPath {
+    channel_id: Snowflake;
+}
+export const GetApplicationUserRoleConnectionRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof GetApplicationUserRoleConnectionRequestPath>;
+Object.freeze(GetApplicationUserRoleConnectionRequestPathKeys);
+export interface GetApplicationUserRoleConnectionRequestPath {
+    application_id: Snowflake;
+}
+export const UpdateApplicationUserRoleConnectionRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof UpdateApplicationUserRoleConnectionRequestPath>;
+Object.freeze(UpdateApplicationUserRoleConnectionRequestPathKeys);
+export interface UpdateApplicationUserRoleConnectionRequestPath {
+    application_id: Snowflake;
+}
+export const GetMyGuildMemberRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetMyGuildMemberRequestPath>;
+Object.freeze(GetMyGuildMemberRequestPathKeys);
+export interface GetMyGuildMemberRequestPath {
+    guild_id: Snowflake;
+}
+export const GetApplicationRoleConnectionsMetadataRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof GetApplicationRoleConnectionsMetadataRequestPath>;
+Object.freeze(GetApplicationRoleConnectionsMetadataRequestPathKeys);
+export interface GetApplicationRoleConnectionsMetadataRequestPath {
+    application_id: Snowflake;
+}
+export const UpdateApplicationRoleConnectionsMetadataRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof UpdateApplicationRoleConnectionsMetadataRequestPath>;
+Object.freeze(UpdateApplicationRoleConnectionsMetadataRequestPathKeys);
+export interface UpdateApplicationRoleConnectionsMetadataRequestPath {
+    application_id: Snowflake;
+}
+export const GetGuildApplicationCommandRequestPathKeys = ["application_id","guild_id","command_id"] as const satisfies ReadonlyArray<keyof GetGuildApplicationCommandRequestPath>;
+Object.freeze(GetGuildApplicationCommandRequestPathKeys);
+export interface GetGuildApplicationCommandRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+    command_id: Snowflake;
+}
+export const DeleteGuildApplicationCommandRequestPathKeys = ["application_id","guild_id","command_id"] as const satisfies ReadonlyArray<keyof DeleteGuildApplicationCommandRequestPath>;
+Object.freeze(DeleteGuildApplicationCommandRequestPathKeys);
+export interface DeleteGuildApplicationCommandRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+    command_id: Snowflake;
+}
+export const UpdateGuildApplicationCommandRequestPathKeys = ["application_id","guild_id","command_id"] as const satisfies ReadonlyArray<keyof UpdateGuildApplicationCommandRequestPath>;
+Object.freeze(UpdateGuildApplicationCommandRequestPathKeys);
+export interface UpdateGuildApplicationCommandRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+    command_id: Snowflake;
+}
+export const ListGuildApplicationCommandsRequestQueryKeys = ["with_localizations"] as const satisfies ReadonlyArray<keyof ListGuildApplicationCommandsRequestQuery>;
+Object.freeze(ListGuildApplicationCommandsRequestQueryKeys);
+export interface ListGuildApplicationCommandsRequestQuery {
+    with_localizations?: (boolean | null);
+}
+export const ListGuildApplicationCommandsRequestPathKeys = ["application_id","guild_id"] as const satisfies ReadonlyArray<keyof ListGuildApplicationCommandsRequestPath>;
+Object.freeze(ListGuildApplicationCommandsRequestPathKeys);
+export interface ListGuildApplicationCommandsRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+}
+export const BulkSetGuildApplicationCommandsRequestPathKeys = ["application_id","guild_id"] as const satisfies ReadonlyArray<keyof BulkSetGuildApplicationCommandsRequestPath>;
+Object.freeze(BulkSetGuildApplicationCommandsRequestPathKeys);
+export interface BulkSetGuildApplicationCommandsRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+}
+export const CreateGuildApplicationCommandRequestPathKeys = ["application_id","guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildApplicationCommandRequestPath>;
+Object.freeze(CreateGuildApplicationCommandRequestPathKeys);
+export interface CreateGuildApplicationCommandRequestPath {
+    application_id: Snowflake;
+    guild_id: Snowflake;
+}
+export const JoinThreadRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof JoinThreadRequestPath>;
+Object.freeze(JoinThreadRequestPathKeys);
+export interface JoinThreadRequestPath {
+    channel_id: Snowflake;
+}
+export const LeaveThreadRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof LeaveThreadRequestPath>;
+Object.freeze(LeaveThreadRequestPathKeys);
+export interface LeaveThreadRequestPath {
+    channel_id: Snowflake;
+}
+export const BulkDeleteMessagesRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof BulkDeleteMessagesRequestPath>;
+Object.freeze(BulkDeleteMessagesRequestPathKeys);
+export interface BulkDeleteMessagesRequestPath {
+    channel_id: Snowflake;
+}
+export const DeleteUserMessageReactionRequestPathKeys = ["channel_id","message_id","emoji_name","user_id"] as const satisfies ReadonlyArray<keyof DeleteUserMessageReactionRequestPath>;
+Object.freeze(DeleteUserMessageReactionRequestPathKeys);
+export interface DeleteUserMessageReactionRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+    emoji_name: string;
+    user_id: Snowflake;
+}
+export const ListMessageReactionsByEmojiRequestQueryKeys = ["after","limit"] as const satisfies ReadonlyArray<keyof ListMessageReactionsByEmojiRequestQuery>;
+Object.freeze(ListMessageReactionsByEmojiRequestQueryKeys);
+export interface ListMessageReactionsByEmojiRequestQuery {
+    after?: (Snowflake | null);
+    limit?: (number | null);
+}
+export const ListMessageReactionsByEmojiRequestPathKeys = ["channel_id","message_id","emoji_name"] as const satisfies ReadonlyArray<keyof ListMessageReactionsByEmojiRequestPath>;
+Object.freeze(ListMessageReactionsByEmojiRequestPathKeys);
+export interface ListMessageReactionsByEmojiRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+    emoji_name: string;
+}
+export const DeleteAllMessageReactionsByEmojiRequestPathKeys = ["channel_id","message_id","emoji_name"] as const satisfies ReadonlyArray<keyof DeleteAllMessageReactionsByEmojiRequestPath>;
+Object.freeze(DeleteAllMessageReactionsByEmojiRequestPathKeys);
+export interface DeleteAllMessageReactionsByEmojiRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+    emoji_name: string;
+}
+export const DeleteAllMessageReactionsRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof DeleteAllMessageReactionsRequestPath>;
+Object.freeze(DeleteAllMessageReactionsRequestPathKeys);
+export interface DeleteAllMessageReactionsRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const CrosspostMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof CrosspostMessageRequestPath>;
+Object.freeze(CrosspostMessageRequestPathKeys);
+export interface CrosspostMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const CreateThreadFromMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof CreateThreadFromMessageRequestPath>;
+Object.freeze(CreateThreadFromMessageRequestPathKeys);
+export interface CreateThreadFromMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const GetOriginalWebhookMessageRequestQueryKeys = ["thread_id"] as const satisfies ReadonlyArray<keyof GetOriginalWebhookMessageRequestQuery>;
+Object.freeze(GetOriginalWebhookMessageRequestQueryKeys);
+export interface GetOriginalWebhookMessageRequestQuery {
+    thread_id?: (Snowflake | null);
+}
+export const GetOriginalWebhookMessageRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof GetOriginalWebhookMessageRequestPath>;
+Object.freeze(GetOriginalWebhookMessageRequestPathKeys);
+export interface GetOriginalWebhookMessageRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const DeleteOriginalWebhookMessageRequestQueryKeys = ["thread_id"] as const satisfies ReadonlyArray<keyof DeleteOriginalWebhookMessageRequestQuery>;
+Object.freeze(DeleteOriginalWebhookMessageRequestQueryKeys);
+export interface DeleteOriginalWebhookMessageRequestQuery {
+    thread_id?: (Snowflake | null);
+}
+export const DeleteOriginalWebhookMessageRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof DeleteOriginalWebhookMessageRequestPath>;
+Object.freeze(DeleteOriginalWebhookMessageRequestPathKeys);
+export interface DeleteOriginalWebhookMessageRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const UpdateOriginalWebhookMessageRequestQueryKeys = ["thread_id"] as const satisfies ReadonlyArray<keyof UpdateOriginalWebhookMessageRequestQuery>;
+Object.freeze(UpdateOriginalWebhookMessageRequestQueryKeys);
+export interface UpdateOriginalWebhookMessageRequestQuery {
+    thread_id?: (Snowflake | null);
+}
+export const UpdateOriginalWebhookMessageRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof UpdateOriginalWebhookMessageRequestPath>;
+Object.freeze(UpdateOriginalWebhookMessageRequestPathKeys);
+export interface UpdateOriginalWebhookMessageRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const ListGuildScheduledEventUsersRequestQueryKeys = ["with_member","limit","before","after"] as const satisfies ReadonlyArray<keyof ListGuildScheduledEventUsersRequestQuery>;
+Object.freeze(ListGuildScheduledEventUsersRequestQueryKeys);
+export interface ListGuildScheduledEventUsersRequestQuery {
+    with_member?: (boolean | null);
+    limit?: (number | null);
+    before?: (Snowflake | null);
+    after?: (Snowflake | null);
+}
+export const ListGuildScheduledEventUsersRequestPathKeys = ["guild_id","guild_scheduled_event_id"] as const satisfies ReadonlyArray<keyof ListGuildScheduledEventUsersRequestPath>;
+Object.freeze(ListGuildScheduledEventUsersRequestPathKeys);
+export interface ListGuildScheduledEventUsersRequestPath {
+    guild_id: Snowflake;
+    guild_scheduled_event_id: Snowflake;
+}
+export const GetAutoModerationRuleRequestPathKeys = ["guild_id","rule_id"] as const satisfies ReadonlyArray<keyof GetAutoModerationRuleRequestPath>;
+Object.freeze(GetAutoModerationRuleRequestPathKeys);
+export interface GetAutoModerationRuleRequestPath {
+    guild_id: Snowflake;
+    rule_id: Snowflake;
+}
+export const DeleteAutoModerationRuleRequestPathKeys = ["guild_id","rule_id"] as const satisfies ReadonlyArray<keyof DeleteAutoModerationRuleRequestPath>;
+Object.freeze(DeleteAutoModerationRuleRequestPathKeys);
+export interface DeleteAutoModerationRuleRequestPath {
+    guild_id: Snowflake;
+    rule_id: Snowflake;
+}
+export const UpdateAutoModerationRuleRequestPathKeys = ["guild_id","rule_id"] as const satisfies ReadonlyArray<keyof UpdateAutoModerationRuleRequestPath>;
+Object.freeze(UpdateAutoModerationRuleRequestPathKeys);
+export interface UpdateAutoModerationRuleRequestPath {
+    guild_id: Snowflake;
+    rule_id: Snowflake;
+}
+export const ListAutoModerationRulesRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListAutoModerationRulesRequestPath>;
+Object.freeze(ListAutoModerationRulesRequestPathKeys);
+export interface ListAutoModerationRulesRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateAutoModerationRuleRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateAutoModerationRuleRequestPath>;
+Object.freeze(CreateAutoModerationRuleRequestPathKeys);
+export interface CreateAutoModerationRuleRequestPath {
+    guild_id: Snowflake;
+}
+export const UpdateSelfVoiceStateRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof UpdateSelfVoiceStateRequestPath>;
+Object.freeze(UpdateSelfVoiceStateRequestPathKeys);
+export interface UpdateSelfVoiceStateRequestPath {
+    guild_id: Snowflake;
+}
+export const SearchGuildMembersRequestQueryKeys = ["limit","query"] as const satisfies ReadonlyArray<keyof SearchGuildMembersRequestQuery>;
+Object.freeze(SearchGuildMembersRequestQueryKeys);
+export interface SearchGuildMembersRequestQuery {
+    limit: number;
+    query: string;
+}
+export const SearchGuildMembersRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof SearchGuildMembersRequestPath>;
+Object.freeze(SearchGuildMembersRequestPathKeys);
+export interface SearchGuildMembersRequestPath {
+    guild_id: Snowflake;
+}
+export const GetActiveGuildThreadsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetActiveGuildThreadsRequestPath>;
+Object.freeze(GetActiveGuildThreadsRequestPathKeys);
+export interface GetActiveGuildThreadsRequestPath {
+    guild_id: Snowflake;
+}
+export const UpdateMyGuildMemberRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof UpdateMyGuildMemberRequestPath>;
+Object.freeze(UpdateMyGuildMemberRequestPathKeys);
+export interface UpdateMyGuildMemberRequestPath {
+    guild_id: Snowflake;
+}
+export const AddGuildMemberRoleRequestPathKeys = ["guild_id","user_id","role_id"] as const satisfies ReadonlyArray<keyof AddGuildMemberRoleRequestPath>;
+Object.freeze(AddGuildMemberRoleRequestPathKeys);
+export interface AddGuildMemberRoleRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+    role_id: Snowflake;
+}
+export const DeleteGuildMemberRoleRequestPathKeys = ["guild_id","user_id","role_id"] as const satisfies ReadonlyArray<keyof DeleteGuildMemberRoleRequestPath>;
+Object.freeze(DeleteGuildMemberRoleRequestPathKeys);
+export interface DeleteGuildMemberRoleRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+    role_id: Snowflake;
+}
+export const LeaveGuildRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof LeaveGuildRequestPath>;
+Object.freeze(LeaveGuildRequestPathKeys);
+export interface LeaveGuildRequestPath {
+    guild_id: Snowflake;
+}
+export const GetApplicationCommandRequestPathKeys = ["application_id","command_id"] as const satisfies ReadonlyArray<keyof GetApplicationCommandRequestPath>;
+Object.freeze(GetApplicationCommandRequestPathKeys);
+export interface GetApplicationCommandRequestPath {
+    application_id: Snowflake;
+    command_id: Snowflake;
+}
+export const DeleteApplicationCommandRequestPathKeys = ["application_id","command_id"] as const satisfies ReadonlyArray<keyof DeleteApplicationCommandRequestPath>;
+Object.freeze(DeleteApplicationCommandRequestPathKeys);
+export interface DeleteApplicationCommandRequestPath {
+    application_id: Snowflake;
+    command_id: Snowflake;
+}
+export const UpdateApplicationCommandRequestPathKeys = ["application_id","command_id"] as const satisfies ReadonlyArray<keyof UpdateApplicationCommandRequestPath>;
+Object.freeze(UpdateApplicationCommandRequestPathKeys);
+export interface UpdateApplicationCommandRequestPath {
+    application_id: Snowflake;
+    command_id: Snowflake;
+}
+export const ListApplicationCommandsRequestQueryKeys = ["with_localizations"] as const satisfies ReadonlyArray<keyof ListApplicationCommandsRequestQuery>;
+Object.freeze(ListApplicationCommandsRequestQueryKeys);
+export interface ListApplicationCommandsRequestQuery {
+    with_localizations?: (boolean | null);
+}
+export const ListApplicationCommandsRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof ListApplicationCommandsRequestPath>;
+Object.freeze(ListApplicationCommandsRequestPathKeys);
+export interface ListApplicationCommandsRequestPath {
+    application_id: Snowflake;
+}
+export const BulkSetApplicationCommandsRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof BulkSetApplicationCommandsRequestPath>;
+Object.freeze(BulkSetApplicationCommandsRequestPathKeys);
+export interface BulkSetApplicationCommandsRequestPath {
+    application_id: Snowflake;
+}
+export const CreateApplicationCommandRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof CreateApplicationCommandRequestPath>;
+Object.freeze(CreateApplicationCommandRequestPathKeys);
+export interface CreateApplicationCommandRequestPath {
+    application_id: Snowflake;
+}
+export const CreateInteractionResponseRequestPathKeys = ["interaction_id","interaction_token"] as const satisfies ReadonlyArray<keyof CreateInteractionResponseRequestPath>;
+Object.freeze(CreateInteractionResponseRequestPathKeys);
+export interface CreateInteractionResponseRequestPath {
+    interaction_id: Snowflake;
+    interaction_token: string;
+}
+export const GetThreadMemberRequestQueryKeys = ["with_member"] as const satisfies ReadonlyArray<keyof GetThreadMemberRequestQuery>;
+Object.freeze(GetThreadMemberRequestQueryKeys);
+export interface GetThreadMemberRequestQuery {
+    with_member?: (boolean | null);
+}
+export const GetThreadMemberRequestPathKeys = ["channel_id","user_id"] as const satisfies ReadonlyArray<keyof GetThreadMemberRequestPath>;
+Object.freeze(GetThreadMemberRequestPathKeys);
+export interface GetThreadMemberRequestPath {
+    channel_id: Snowflake;
+    user_id: Snowflake;
+}
+export const AddThreadMemberRequestPathKeys = ["channel_id","user_id"] as const satisfies ReadonlyArray<keyof AddThreadMemberRequestPath>;
+Object.freeze(AddThreadMemberRequestPathKeys);
+export interface AddThreadMemberRequestPath {
+    channel_id: Snowflake;
+    user_id: Snowflake;
+}
+export const DeleteThreadMemberRequestPathKeys = ["channel_id","user_id"] as const satisfies ReadonlyArray<keyof DeleteThreadMemberRequestPath>;
+Object.freeze(DeleteThreadMemberRequestPathKeys);
+export interface DeleteThreadMemberRequestPath {
+    channel_id: Snowflake;
+    user_id: Snowflake;
+}
+export const ListThreadMembersRequestQueryKeys = ["with_member","limit","after"] as const satisfies ReadonlyArray<keyof ListThreadMembersRequestQuery>;
+Object.freeze(ListThreadMembersRequestQueryKeys);
+export interface ListThreadMembersRequestQuery {
+    with_member?: (boolean | null);
+    limit?: (number | null);
+    after?: (Snowflake | null);
+}
+export const ListThreadMembersRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListThreadMembersRequestPath>;
+Object.freeze(ListThreadMembersRequestPathKeys);
+export interface ListThreadMembersRequestPath {
+    channel_id: Snowflake;
+}
+export const SetChannelPermissionOverwriteRequestPathKeys = ["channel_id","overwrite_id"] as const satisfies ReadonlyArray<keyof SetChannelPermissionOverwriteRequestPath>;
+Object.freeze(SetChannelPermissionOverwriteRequestPathKeys);
+export interface SetChannelPermissionOverwriteRequestPath {
+    channel_id: Snowflake;
+    overwrite_id: Snowflake;
+}
+export const DeleteChannelPermissionOverwriteRequestPathKeys = ["channel_id","overwrite_id"] as const satisfies ReadonlyArray<keyof DeleteChannelPermissionOverwriteRequestPath>;
+Object.freeze(DeleteChannelPermissionOverwriteRequestPathKeys);
+export interface DeleteChannelPermissionOverwriteRequestPath {
+    channel_id: Snowflake;
+    overwrite_id: Snowflake;
+}
+export const AddGroupDmUserRequestPathKeys = ["channel_id","user_id"] as const satisfies ReadonlyArray<keyof AddGroupDmUserRequestPath>;
+Object.freeze(AddGroupDmUserRequestPathKeys);
+export interface AddGroupDmUserRequestPath {
+    channel_id: Snowflake;
+    user_id: Snowflake;
+}
+export const DeleteGroupDmUserRequestPathKeys = ["channel_id","user_id"] as const satisfies ReadonlyArray<keyof DeleteGroupDmUserRequestPath>;
+Object.freeze(DeleteGroupDmUserRequestPathKeys);
+export interface DeleteGroupDmUserRequestPath {
+    channel_id: Snowflake;
+    user_id: Snowflake;
+}
+export const FollowChannelRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof FollowChannelRequestPath>;
+Object.freeze(FollowChannelRequestPathKeys);
+export interface FollowChannelRequestPath {
+    channel_id: Snowflake;
+}
+export const GetMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof GetMessageRequestPath>;
+Object.freeze(GetMessageRequestPathKeys);
+export interface GetMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const DeleteMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof DeleteMessageRequestPath>;
+Object.freeze(DeleteMessageRequestPathKeys);
+export interface DeleteMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const UpdateMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof UpdateMessageRequestPath>;
+Object.freeze(UpdateMessageRequestPathKeys);
+export interface UpdateMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const ListMessagesRequestQueryKeys = ["around","before","after","limit"] as const satisfies ReadonlyArray<keyof ListMessagesRequestQuery>;
+Object.freeze(ListMessagesRequestQueryKeys);
+export interface ListMessagesRequestQuery {
+    around?: (Snowflake | null);
+    before?: (Snowflake | null);
+    after?: (Snowflake | null);
+    limit?: (number | null);
+}
+export const ListMessagesRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListMessagesRequestPath>;
+Object.freeze(ListMessagesRequestPathKeys);
+export interface ListMessagesRequestPath {
+    channel_id: Snowflake;
+}
+export const CreateMessageRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof CreateMessageRequestPath>;
+Object.freeze(CreateMessageRequestPathKeys);
+export interface CreateMessageRequestPath {
+    channel_id: Snowflake;
+}
+export const ListChannelWebhooksRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListChannelWebhooksRequestPath>;
+Object.freeze(ListChannelWebhooksRequestPathKeys);
+export interface ListChannelWebhooksRequestPath {
+    channel_id: Snowflake;
+}
+export const CreateWebhookRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof CreateWebhookRequestPath>;
+Object.freeze(CreateWebhookRequestPathKeys);
+export interface CreateWebhookRequestPath {
+    channel_id: Snowflake;
+}
+export const ListChannelInvitesRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListChannelInvitesRequestPath>;
+Object.freeze(ListChannelInvitesRequestPathKeys);
+export interface ListChannelInvitesRequestPath {
+    channel_id: Snowflake;
+}
+export const CreateChannelInviteRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof CreateChannelInviteRequestPath>;
+Object.freeze(CreateChannelInviteRequestPathKeys);
+export interface CreateChannelInviteRequestPath {
+    channel_id: Snowflake;
+}
+export const CreateThreadRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof CreateThreadRequestPath>;
+Object.freeze(CreateThreadRequestPathKeys);
+export interface CreateThreadRequestPath {
+    channel_id: Snowflake;
+}
+export const TriggerTypingIndicatorRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof TriggerTypingIndicatorRequestPath>;
+Object.freeze(TriggerTypingIndicatorRequestPathKeys);
+export interface TriggerTypingIndicatorRequestPath {
+    channel_id: Snowflake;
+}
+export const PinMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof PinMessageRequestPath>;
+Object.freeze(PinMessageRequestPathKeys);
+export interface PinMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const UnpinMessageRequestPathKeys = ["channel_id","message_id"] as const satisfies ReadonlyArray<keyof UnpinMessageRequestPath>;
+Object.freeze(UnpinMessageRequestPathKeys);
+export interface UnpinMessageRequestPath {
+    channel_id: Snowflake;
+    message_id: Snowflake;
+}
+export const ListPinnedMessagesRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof ListPinnedMessagesRequestPath>;
+Object.freeze(ListPinnedMessagesRequestPathKeys);
+export interface ListPinnedMessagesRequestPath {
+    channel_id: Snowflake;
+}
+export const GetWebhookMessageRequestQueryKeys = ["thread_id"] as const satisfies ReadonlyArray<keyof GetWebhookMessageRequestQuery>;
+Object.freeze(GetWebhookMessageRequestQueryKeys);
+export interface GetWebhookMessageRequestQuery {
+    thread_id?: (Snowflake | null);
+}
+export const GetWebhookMessageRequestPathKeys = ["webhook_id","webhook_token","message_id"] as const satisfies ReadonlyArray<keyof GetWebhookMessageRequestPath>;
+Object.freeze(GetWebhookMessageRequestPathKeys);
+export interface GetWebhookMessageRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+    message_id: Snowflake;
+}
+export const DeleteWebhookMessageRequestQueryKeys = ["thread_id"] as const satisfies ReadonlyArray<keyof DeleteWebhookMessageRequestQuery>;
+Object.freeze(DeleteWebhookMessageRequestQueryKeys);
+export interface DeleteWebhookMessageRequestQuery {
+    thread_id?: (Snowflake | null);
+}
+export const DeleteWebhookMessageRequestPathKeys = ["webhook_id","webhook_token","message_id"] as const satisfies ReadonlyArray<keyof DeleteWebhookMessageRequestPath>;
+Object.freeze(DeleteWebhookMessageRequestPathKeys);
+export interface DeleteWebhookMessageRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+    message_id: Snowflake;
+}
+export const UpdateWebhookMessageRequestQueryKeys = ["thread_id"] as const satisfies ReadonlyArray<keyof UpdateWebhookMessageRequestQuery>;
+Object.freeze(UpdateWebhookMessageRequestQueryKeys);
+export interface UpdateWebhookMessageRequestQuery {
+    thread_id?: (Snowflake | null);
+}
+export const UpdateWebhookMessageRequestPathKeys = ["webhook_id","webhook_token","message_id"] as const satisfies ReadonlyArray<keyof UpdateWebhookMessageRequestPath>;
+Object.freeze(UpdateWebhookMessageRequestPathKeys);
+export interface UpdateWebhookMessageRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+    message_id: Snowflake;
+}
+export const ExecuteGithubCompatibleWebhookRequestQueryKeys = ["wait","thread_id"] as const satisfies ReadonlyArray<keyof ExecuteGithubCompatibleWebhookRequestQuery>;
+Object.freeze(ExecuteGithubCompatibleWebhookRequestQueryKeys);
+export interface ExecuteGithubCompatibleWebhookRequestQuery {
+    wait?: (boolean | null);
+    thread_id?: (Snowflake | null);
+}
+export const ExecuteGithubCompatibleWebhookRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof ExecuteGithubCompatibleWebhookRequestPath>;
+Object.freeze(ExecuteGithubCompatibleWebhookRequestPathKeys);
+export interface ExecuteGithubCompatibleWebhookRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const ExecuteSlackCompatibleWebhookRequestQueryKeys = ["wait","thread_id"] as const satisfies ReadonlyArray<keyof ExecuteSlackCompatibleWebhookRequestQuery>;
+Object.freeze(ExecuteSlackCompatibleWebhookRequestQueryKeys);
+export interface ExecuteSlackCompatibleWebhookRequestQuery {
+    wait?: (boolean | null);
+    thread_id?: (Snowflake | null);
+}
+export const ExecuteSlackCompatibleWebhookRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof ExecuteSlackCompatibleWebhookRequestPath>;
+Object.freeze(ExecuteSlackCompatibleWebhookRequestPathKeys);
+export interface ExecuteSlackCompatibleWebhookRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const GetGuildTemplateRequestPathKeys = ["code"] as const satisfies ReadonlyArray<keyof GetGuildTemplateRequestPath>;
+Object.freeze(GetGuildTemplateRequestPathKeys);
+export interface GetGuildTemplateRequestPath {
+    code: string;
+}
+export const CreateGuildFromTemplateRequestPathKeys = ["code"] as const satisfies ReadonlyArray<keyof CreateGuildFromTemplateRequestPath>;
+Object.freeze(CreateGuildFromTemplateRequestPathKeys);
+export interface CreateGuildFromTemplateRequestPath {
+    code: string;
+}
+export const GetGuildNewMemberWelcomeRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildNewMemberWelcomeRequestPath>;
+Object.freeze(GetGuildNewMemberWelcomeRequestPathKeys);
+export interface GetGuildNewMemberWelcomeRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildScheduledEventRequestQueryKeys = ["with_user_count"] as const satisfies ReadonlyArray<keyof GetGuildScheduledEventRequestQuery>;
+Object.freeze(GetGuildScheduledEventRequestQueryKeys);
+export interface GetGuildScheduledEventRequestQuery {
+    with_user_count?: (boolean | null);
+}
+export const GetGuildScheduledEventRequestPathKeys = ["guild_id","guild_scheduled_event_id"] as const satisfies ReadonlyArray<keyof GetGuildScheduledEventRequestPath>;
+Object.freeze(GetGuildScheduledEventRequestPathKeys);
+export interface GetGuildScheduledEventRequestPath {
+    guild_id: Snowflake;
+    guild_scheduled_event_id: Snowflake;
+}
+export const DeleteGuildScheduledEventRequestPathKeys = ["guild_id","guild_scheduled_event_id"] as const satisfies ReadonlyArray<keyof DeleteGuildScheduledEventRequestPath>;
+Object.freeze(DeleteGuildScheduledEventRequestPathKeys);
+export interface DeleteGuildScheduledEventRequestPath {
+    guild_id: Snowflake;
+    guild_scheduled_event_id: Snowflake;
+}
+export const UpdateGuildScheduledEventRequestPathKeys = ["guild_id","guild_scheduled_event_id"] as const satisfies ReadonlyArray<keyof UpdateGuildScheduledEventRequestPath>;
+Object.freeze(UpdateGuildScheduledEventRequestPathKeys);
+export interface UpdateGuildScheduledEventRequestPath {
+    guild_id: Snowflake;
+    guild_scheduled_event_id: Snowflake;
+}
+export const ListGuildScheduledEventsRequestQueryKeys = ["with_user_count"] as const satisfies ReadonlyArray<keyof ListGuildScheduledEventsRequestQuery>;
+Object.freeze(ListGuildScheduledEventsRequestQueryKeys);
+export interface ListGuildScheduledEventsRequestQuery {
+    with_user_count?: (boolean | null);
+}
+export const ListGuildScheduledEventsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildScheduledEventsRequestPath>;
+Object.freeze(ListGuildScheduledEventsRequestPathKeys);
+export interface ListGuildScheduledEventsRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateGuildScheduledEventRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildScheduledEventRequestPath>;
+Object.freeze(CreateGuildScheduledEventRequestPathKeys);
+export interface CreateGuildScheduledEventRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildWelcomeScreenRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildWelcomeScreenRequestPath>;
+Object.freeze(GetGuildWelcomeScreenRequestPathKeys);
+export interface GetGuildWelcomeScreenRequestPath {
+    guild_id: Snowflake;
+}
+export const UpdateGuildWelcomeScreenRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof UpdateGuildWelcomeScreenRequestPath>;
+Object.freeze(UpdateGuildWelcomeScreenRequestPathKeys);
+export interface UpdateGuildWelcomeScreenRequestPath {
+    guild_id: Snowflake;
+}
+export const UpdateVoiceStateRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof UpdateVoiceStateRequestPath>;
+Object.freeze(UpdateVoiceStateRequestPathKeys);
+export interface UpdateVoiceStateRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const DeleteGuildIntegrationRequestPathKeys = ["guild_id","integration_id"] as const satisfies ReadonlyArray<keyof DeleteGuildIntegrationRequestPath>;
+Object.freeze(DeleteGuildIntegrationRequestPathKeys);
+export interface DeleteGuildIntegrationRequestPath {
+    guild_id: Snowflake;
+    integration_id: Snowflake;
+}
+export const ListGuildIntegrationsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildIntegrationsRequestPath>;
+Object.freeze(ListGuildIntegrationsRequestPathKeys);
+export interface ListGuildIntegrationsRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildWidgetRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildWidgetRequestPath>;
+Object.freeze(GetGuildWidgetRequestPathKeys);
+export interface GetGuildWidgetRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildsOnboardingRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildsOnboardingRequestPath>;
+Object.freeze(GetGuildsOnboardingRequestPathKeys);
+export interface GetGuildsOnboardingRequestPath {
+    guild_id: Snowflake;
+}
+export const PutGuildsOnboardingRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof PutGuildsOnboardingRequestPath>;
+Object.freeze(PutGuildsOnboardingRequestPathKeys);
+export interface PutGuildsOnboardingRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildVanityUrlRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildVanityUrlRequestPath>;
+Object.freeze(GetGuildVanityUrlRequestPathKeys);
+export interface GetGuildVanityUrlRequestPath {
+    guild_id: Snowflake;
+}
+export const ListGuildAuditLogEntriesRequestQueryKeys = ["user_id","action_type","before","after","limit"] as const satisfies ReadonlyArray<keyof ListGuildAuditLogEntriesRequestQuery>;
+Object.freeze(ListGuildAuditLogEntriesRequestQueryKeys);
+export interface ListGuildAuditLogEntriesRequestQuery {
+    user_id?: (Snowflake | null);
+    action_type?: (number | null);
+    before?: (Snowflake | null);
+    after?: (Snowflake | null);
+    limit?: (number | null);
+}
+export const ListGuildAuditLogEntriesRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildAuditLogEntriesRequestPath>;
+Object.freeze(ListGuildAuditLogEntriesRequestPathKeys);
+export interface ListGuildAuditLogEntriesRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildWidgetPngRequestQueryKeys = ["style"] as const satisfies ReadonlyArray<keyof GetGuildWidgetPngRequestQuery>;
+Object.freeze(GetGuildWidgetPngRequestQueryKeys);
+export interface GetGuildWidgetPngRequestQuery {
+    style?: (null | WidgetImageStyle);
+}
+export const GetGuildWidgetPngRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildWidgetPngRequestPath>;
+Object.freeze(GetGuildWidgetPngRequestPathKeys);
+export interface GetGuildWidgetPngRequestPath {
+    guild_id: Snowflake;
+}
+export const SyncGuildTemplateRequestPathKeys = ["guild_id","code"] as const satisfies ReadonlyArray<keyof SyncGuildTemplateRequestPath>;
+Object.freeze(SyncGuildTemplateRequestPathKeys);
+export interface SyncGuildTemplateRequestPath {
+    guild_id: Snowflake;
+    code: string;
+}
+export const DeleteGuildTemplateRequestPathKeys = ["guild_id","code"] as const satisfies ReadonlyArray<keyof DeleteGuildTemplateRequestPath>;
+Object.freeze(DeleteGuildTemplateRequestPathKeys);
+export interface DeleteGuildTemplateRequestPath {
+    guild_id: Snowflake;
+    code: string;
+}
+export const UpdateGuildTemplateRequestPathKeys = ["guild_id","code"] as const satisfies ReadonlyArray<keyof UpdateGuildTemplateRequestPath>;
+Object.freeze(UpdateGuildTemplateRequestPathKeys);
+export interface UpdateGuildTemplateRequestPath {
+    guild_id: Snowflake;
+    code: string;
+}
+export const ListGuildTemplatesRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildTemplatesRequestPath>;
+Object.freeze(ListGuildTemplatesRequestPathKeys);
+export interface ListGuildTemplatesRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateGuildTemplateRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildTemplateRequestPath>;
+Object.freeze(CreateGuildTemplateRequestPathKeys);
+export interface CreateGuildTemplateRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildStickerRequestPathKeys = ["guild_id","sticker_id"] as const satisfies ReadonlyArray<keyof GetGuildStickerRequestPath>;
+Object.freeze(GetGuildStickerRequestPathKeys);
+export interface GetGuildStickerRequestPath {
+    guild_id: Snowflake;
+    sticker_id: Snowflake;
+}
+export const DeleteGuildStickerRequestPathKeys = ["guild_id","sticker_id"] as const satisfies ReadonlyArray<keyof DeleteGuildStickerRequestPath>;
+Object.freeze(DeleteGuildStickerRequestPathKeys);
+export interface DeleteGuildStickerRequestPath {
+    guild_id: Snowflake;
+    sticker_id: Snowflake;
+}
+export const UpdateGuildStickerRequestPathKeys = ["guild_id","sticker_id"] as const satisfies ReadonlyArray<keyof UpdateGuildStickerRequestPath>;
+Object.freeze(UpdateGuildStickerRequestPathKeys);
+export interface UpdateGuildStickerRequestPath {
+    guild_id: Snowflake;
+    sticker_id: Snowflake;
+}
+export const ListGuildChannelsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildChannelsRequestPath>;
+Object.freeze(ListGuildChannelsRequestPathKeys);
+export interface ListGuildChannelsRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateGuildChannelRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildChannelRequestPath>;
+Object.freeze(CreateGuildChannelRequestPathKeys);
+export interface CreateGuildChannelRequestPath {
+    guild_id: Snowflake;
+}
+export const BulkUpdateGuildChannelsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof BulkUpdateGuildChannelsRequestPath>;
+Object.freeze(BulkUpdateGuildChannelsRequestPathKeys);
+export interface BulkUpdateGuildChannelsRequestPath {
+    guild_id: Snowflake;
+}
+export const ListGuildStickersRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildStickersRequestPath>;
+Object.freeze(ListGuildStickersRequestPathKeys);
+export interface ListGuildStickersRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateGuildStickerRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildStickerRequestPath>;
+Object.freeze(CreateGuildStickerRequestPathKeys);
+export interface CreateGuildStickerRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildWebhooksRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildWebhooksRequestPath>;
+Object.freeze(GetGuildWebhooksRequestPathKeys);
+export interface GetGuildWebhooksRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildMemberRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof GetGuildMemberRequestPath>;
+Object.freeze(GetGuildMemberRequestPathKeys);
+export interface GetGuildMemberRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const AddGuildMemberRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof AddGuildMemberRequestPath>;
+Object.freeze(AddGuildMemberRequestPathKeys);
+export interface AddGuildMemberRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const DeleteGuildMemberRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof DeleteGuildMemberRequestPath>;
+Object.freeze(DeleteGuildMemberRequestPathKeys);
+export interface DeleteGuildMemberRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const UpdateGuildMemberRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof UpdateGuildMemberRequestPath>;
+Object.freeze(UpdateGuildMemberRequestPathKeys);
+export interface UpdateGuildMemberRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const ListGuildMembersRequestQueryKeys = ["limit","after"] as const satisfies ReadonlyArray<keyof ListGuildMembersRequestQuery>;
+Object.freeze(ListGuildMembersRequestQueryKeys);
+export interface ListGuildMembersRequestQuery {
+    limit?: (number | null);
+    after?: (number | null);
+}
+export const ListGuildMembersRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildMembersRequestPath>;
+Object.freeze(ListGuildMembersRequestPathKeys);
+export interface ListGuildMembersRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildPreviewRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildPreviewRequestPath>;
+Object.freeze(GetGuildPreviewRequestPathKeys);
+export interface GetGuildPreviewRequestPath {
+    guild_id: Snowflake;
+}
+export const ListGuildInvitesRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildInvitesRequestPath>;
+Object.freeze(ListGuildInvitesRequestPathKeys);
+export interface ListGuildInvitesRequestPath {
+    guild_id: Snowflake;
+}
+export const ListGuildVoiceRegionsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildVoiceRegionsRequestPath>;
+Object.freeze(ListGuildVoiceRegionsRequestPathKeys);
+export interface ListGuildVoiceRegionsRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildEmojiRequestPathKeys = ["guild_id","emoji_id"] as const satisfies ReadonlyArray<keyof GetGuildEmojiRequestPath>;
+Object.freeze(GetGuildEmojiRequestPathKeys);
+export interface GetGuildEmojiRequestPath {
+    guild_id: Snowflake;
+    emoji_id: Snowflake;
+}
+export const DeleteGuildEmojiRequestPathKeys = ["guild_id","emoji_id"] as const satisfies ReadonlyArray<keyof DeleteGuildEmojiRequestPath>;
+Object.freeze(DeleteGuildEmojiRequestPathKeys);
+export interface DeleteGuildEmojiRequestPath {
+    guild_id: Snowflake;
+    emoji_id: Snowflake;
+}
+export const UpdateGuildEmojiRequestPathKeys = ["guild_id","emoji_id"] as const satisfies ReadonlyArray<keyof UpdateGuildEmojiRequestPath>;
+Object.freeze(UpdateGuildEmojiRequestPathKeys);
+export interface UpdateGuildEmojiRequestPath {
+    guild_id: Snowflake;
+    emoji_id: Snowflake;
+}
+export const ListGuildEmojisRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildEmojisRequestPath>;
+Object.freeze(ListGuildEmojisRequestPathKeys);
+export interface ListGuildEmojisRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateGuildEmojiRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildEmojiRequestPath>;
+Object.freeze(CreateGuildEmojiRequestPathKeys);
+export interface CreateGuildEmojiRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildWidgetSettingsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildWidgetSettingsRequestPath>;
+Object.freeze(GetGuildWidgetSettingsRequestPathKeys);
+export interface GetGuildWidgetSettingsRequestPath {
+    guild_id: Snowflake;
+}
+export const UpdateGuildWidgetSettingsRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof UpdateGuildWidgetSettingsRequestPath>;
+Object.freeze(UpdateGuildWidgetSettingsRequestPathKeys);
+export interface UpdateGuildWidgetSettingsRequestPath {
+    guild_id: Snowflake;
+}
+export const DeleteGuildRoleRequestPathKeys = ["guild_id","role_id"] as const satisfies ReadonlyArray<keyof DeleteGuildRoleRequestPath>;
+Object.freeze(DeleteGuildRoleRequestPathKeys);
+export interface DeleteGuildRoleRequestPath {
+    guild_id: Snowflake;
+    role_id: Snowflake;
+}
+export const UpdateGuildRoleRequestPathKeys = ["guild_id","role_id"] as const satisfies ReadonlyArray<keyof UpdateGuildRoleRequestPath>;
+Object.freeze(UpdateGuildRoleRequestPathKeys);
+export interface UpdateGuildRoleRequestPath {
+    guild_id: Snowflake;
+    role_id: Snowflake;
+}
+export const ListGuildRolesRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildRolesRequestPath>;
+Object.freeze(ListGuildRolesRequestPathKeys);
+export interface ListGuildRolesRequestPath {
+    guild_id: Snowflake;
+}
+export const CreateGuildRoleRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof CreateGuildRoleRequestPath>;
+Object.freeze(CreateGuildRoleRequestPathKeys);
+export interface CreateGuildRoleRequestPath {
+    guild_id: Snowflake;
+}
+export const BulkUpdateGuildRolesRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof BulkUpdateGuildRolesRequestPath>;
+Object.freeze(BulkUpdateGuildRolesRequestPathKeys);
+export interface BulkUpdateGuildRolesRequestPath {
+    guild_id: Snowflake;
+}
+export const PreviewPruneGuildRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof PreviewPruneGuildRequestPath>;
+Object.freeze(PreviewPruneGuildRequestPathKeys);
+export interface PreviewPruneGuildRequestPath {
+    guild_id: Snowflake;
+}
+export const PruneGuildRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof PruneGuildRequestPath>;
+Object.freeze(PruneGuildRequestPathKeys);
+export interface PruneGuildRequestPath {
+    guild_id: Snowflake;
+}
+export const GetGuildBanRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof GetGuildBanRequestPath>;
+Object.freeze(GetGuildBanRequestPathKeys);
+export interface GetGuildBanRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const BanUserFromGuildRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof BanUserFromGuildRequestPath>;
+Object.freeze(BanUserFromGuildRequestPathKeys);
+export interface BanUserFromGuildRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const UnbanUserFromGuildRequestPathKeys = ["guild_id","user_id"] as const satisfies ReadonlyArray<keyof UnbanUserFromGuildRequestPath>;
+Object.freeze(UnbanUserFromGuildRequestPathKeys);
+export interface UnbanUserFromGuildRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+}
+export const ListGuildBansRequestQueryKeys = ["limit","before","after"] as const satisfies ReadonlyArray<keyof ListGuildBansRequestQuery>;
+Object.freeze(ListGuildBansRequestQueryKeys);
+export interface ListGuildBansRequestQuery {
+    limit?: (number | null);
+    before?: (Snowflake | null);
+    after?: (Snowflake | null);
+}
+export const ListGuildBansRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof ListGuildBansRequestPath>;
+Object.freeze(ListGuildBansRequestPathKeys);
+export interface ListGuildBansRequestPath {
+    guild_id: Snowflake;
+}
+export const SetGuildMfaLevelRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof SetGuildMfaLevelRequestPath>;
+Object.freeze(SetGuildMfaLevelRequestPathKeys);
+export interface SetGuildMfaLevelRequestPath {
+    guild_id: Snowflake;
+}
+export const GetStageInstanceRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof GetStageInstanceRequestPath>;
+Object.freeze(GetStageInstanceRequestPathKeys);
+export interface GetStageInstanceRequestPath {
+    channel_id: Snowflake;
+}
+export const DeleteStageInstanceRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof DeleteStageInstanceRequestPath>;
+Object.freeze(DeleteStageInstanceRequestPathKeys);
+export interface DeleteStageInstanceRequestPath {
+    channel_id: Snowflake;
+}
+export const UpdateStageInstanceRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof UpdateStageInstanceRequestPath>;
+Object.freeze(UpdateStageInstanceRequestPathKeys);
+export interface UpdateStageInstanceRequestPath {
+    channel_id: Snowflake;
+}
+export const GetApplicationRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof GetApplicationRequestPath>;
+Object.freeze(GetApplicationRequestPathKeys);
+export interface GetApplicationRequestPath {
+    application_id: Snowflake;
+}
+export const UpdateApplicationRequestPathKeys = ["application_id"] as const satisfies ReadonlyArray<keyof UpdateApplicationRequestPath>;
+Object.freeze(UpdateApplicationRequestPathKeys);
+export interface UpdateApplicationRequestPath {
+    application_id: Snowflake;
+}
+export const GetWebhookByTokenRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof GetWebhookByTokenRequestPath>;
+Object.freeze(GetWebhookByTokenRequestPathKeys);
+export interface GetWebhookByTokenRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const ExecuteWebhookRequestQueryKeys = ["wait","thread_id"] as const satisfies ReadonlyArray<keyof ExecuteWebhookRequestQuery>;
+Object.freeze(ExecuteWebhookRequestQueryKeys);
+export interface ExecuteWebhookRequestQuery {
+    wait?: (boolean | null);
+    thread_id?: (Snowflake | null);
+}
+export const ExecuteWebhookRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof ExecuteWebhookRequestPath>;
+Object.freeze(ExecuteWebhookRequestPathKeys);
+export interface ExecuteWebhookRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const DeleteWebhookByTokenRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof DeleteWebhookByTokenRequestPath>;
+Object.freeze(DeleteWebhookByTokenRequestPathKeys);
+export interface DeleteWebhookByTokenRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const UpdateWebhookByTokenRequestPathKeys = ["webhook_id","webhook_token"] as const satisfies ReadonlyArray<keyof UpdateWebhookByTokenRequestPath>;
+Object.freeze(UpdateWebhookByTokenRequestPathKeys);
+export interface UpdateWebhookByTokenRequestPath {
+    webhook_id: Snowflake;
+    webhook_token: string;
+}
+export const GetChannelRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof GetChannelRequestPath>;
+Object.freeze(GetChannelRequestPathKeys);
+export interface GetChannelRequestPath {
+    channel_id: Snowflake;
+}
+export const DeleteChannelRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof DeleteChannelRequestPath>;
+Object.freeze(DeleteChannelRequestPathKeys);
+export interface DeleteChannelRequestPath {
+    channel_id: Snowflake;
+}
+export const UpdateChannelRequestPathKeys = ["channel_id"] as const satisfies ReadonlyArray<keyof UpdateChannelRequestPath>;
+Object.freeze(UpdateChannelRequestPathKeys);
+export interface UpdateChannelRequestPath {
+    channel_id: Snowflake;
+}
+export const GetStickerRequestPathKeys = ["sticker_id"] as const satisfies ReadonlyArray<keyof GetStickerRequestPath>;
+Object.freeze(GetStickerRequestPathKeys);
+export interface GetStickerRequestPath {
+    sticker_id: Snowflake;
+}
+export const GetWebhookRequestPathKeys = ["webhook_id"] as const satisfies ReadonlyArray<keyof GetWebhookRequestPath>;
+Object.freeze(GetWebhookRequestPathKeys);
+export interface GetWebhookRequestPath {
+    webhook_id: Snowflake;
+}
+export const DeleteWebhookRequestPathKeys = ["webhook_id"] as const satisfies ReadonlyArray<keyof DeleteWebhookRequestPath>;
+Object.freeze(DeleteWebhookRequestPathKeys);
+export interface DeleteWebhookRequestPath {
+    webhook_id: Snowflake;
+}
+export const UpdateWebhookRequestPathKeys = ["webhook_id"] as const satisfies ReadonlyArray<keyof UpdateWebhookRequestPath>;
+Object.freeze(UpdateWebhookRequestPathKeys);
+export interface UpdateWebhookRequestPath {
+    webhook_id: Snowflake;
+}
+export const InviteResolveRequestQueryKeys = ["with_counts","guild_scheduled_event_id"] as const satisfies ReadonlyArray<keyof InviteResolveRequestQuery>;
+Object.freeze(InviteResolveRequestQueryKeys);
+export interface InviteResolveRequestQuery {
+    with_counts?: (boolean | null);
+    guild_scheduled_event_id?: (Snowflake | null);
+}
+export const InviteResolveRequestPathKeys = ["code"] as const satisfies ReadonlyArray<keyof InviteResolveRequestPath>;
+Object.freeze(InviteResolveRequestPathKeys);
+export interface InviteResolveRequestPath {
+    code: string;
+}
+export const InviteRevokeRequestPathKeys = ["code"] as const satisfies ReadonlyArray<keyof InviteRevokeRequestPath>;
+Object.freeze(InviteRevokeRequestPathKeys);
+export interface InviteRevokeRequestPath {
+    code: string;
+}
+export const GetGuildRequestQueryKeys = ["with_counts"] as const satisfies ReadonlyArray<keyof GetGuildRequestQuery>;
+Object.freeze(GetGuildRequestQueryKeys);
+export interface GetGuildRequestQuery {
+    with_counts?: (boolean | null);
+}
+export const GetGuildRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof GetGuildRequestPath>;
+Object.freeze(GetGuildRequestPathKeys);
+export interface GetGuildRequestPath {
+    guild_id: Snowflake;
+}
+export const DeleteGuildRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof DeleteGuildRequestPath>;
+Object.freeze(DeleteGuildRequestPathKeys);
+export interface DeleteGuildRequestPath {
+    guild_id: Snowflake;
+}
+export const UpdateGuildRequestPathKeys = ["guild_id"] as const satisfies ReadonlyArray<keyof UpdateGuildRequestPath>;
+Object.freeze(UpdateGuildRequestPathKeys);
+export interface UpdateGuildRequestPath {
+    guild_id: Snowflake;
+}
+export const GetUserRequestPathKeys = ["user_id"] as const satisfies ReadonlyArray<keyof GetUserRequestPath>;
+Object.freeze(GetUserRequestPathKeys);
+export interface GetUserRequestPath {
+    user_id: Snowflake;
+}
+export type UpdateMyUserRequestJSON = BotAccountPatchRequestPartial;
+export const CreateStageInstanceRequestJSONKeys = ["topic","channel_id","privacy_level","guild_scheduled_event_id","send_start_notification"] as const satisfies ReadonlyArray<keyof CreateStageInstanceRequestJSON>;
+Object.freeze(CreateStageInstanceRequestJSONKeys);
+export interface CreateStageInstanceRequestJSON {
     /**
      * @maxLength 120
      * @minLength 1
@@ -5924,13 +7585,17 @@ export interface POSTCreateStageInstanceRequestJSON {
     guild_scheduled_event_id?: (Snowflake | null);
     send_start_notification?: (boolean | null);
 }
-export interface PUTSetGuildApplicationCommandPermissionsRequestJSON {
+export const SetGuildApplicationCommandPermissionsRequestJSONKeys = ["permissions"] as const satisfies ReadonlyArray<keyof SetGuildApplicationCommandPermissionsRequestJSON>;
+Object.freeze(SetGuildApplicationCommandPermissionsRequestJSONKeys);
+export interface SetGuildApplicationCommandPermissionsRequestJSON {
     /**
      * @maxItems 100
      */
     permissions?: (Array<ApplicationCommandPermission> | null);
 }
-export interface PUTUpdateApplicationUserRoleConnectionRequestJSON {
+export const UpdateApplicationUserRoleConnectionRequestJSONKeys = ["platform_name","platform_username","metadata"] as const satisfies ReadonlyArray<keyof UpdateApplicationUserRoleConnectionRequestJSON>;
+Object.freeze(UpdateApplicationUserRoleConnectionRequestJSONKeys);
+export interface UpdateApplicationUserRoleConnectionRequestJSON {
     /**
      * @maxLength 50
      */
@@ -5953,8 +7618,10 @@ export interface PUTUpdateApplicationUserRoleConnectionRequestJSON {
 /**
  * @maxItems 5
  */
-export type PUTUpdateApplicationRoleConnectionsMetadataRequestJSON = Array<ApplicationRoleConnectionsMetadataItemRequest> | null;
-export interface PATCHUpdateGuildApplicationCommandRequestJSON {
+export type UpdateApplicationRoleConnectionsMetadataRequestJSON = Array<ApplicationRoleConnectionsMetadataItemRequest> | null;
+export const UpdateGuildApplicationCommandRequestJSONKeys = ["name","name_localizations","description","description_localizations","options","default_member_permissions","dm_permission"] as const satisfies ReadonlyArray<keyof UpdateGuildApplicationCommandRequestJSON>;
+Object.freeze(UpdateGuildApplicationCommandRequestJSONKeys);
+export interface UpdateGuildApplicationCommandRequestJSON {
     /**
      * @maxLength 32
      * @minLength 1
@@ -5995,7 +7662,7 @@ export interface PATCHUpdateGuildApplicationCommandRequestJSON {
     default_member_permissions?: (number | null);
     dm_permission?: (boolean | null);
 }
-export type PUTBulkSetGuildApplicationCommandsRequestJSON = Array<{
+export type BulkSetGuildApplicationCommandsRequestJSON = Array<{
     id?: (Snowflake | null);
     /**
      * @maxLength 32
@@ -6038,7 +7705,9 @@ export type PUTBulkSetGuildApplicationCommandsRequestJSON = Array<{
     dm_permission?: (boolean | null);
     type: ApplicationCommandType;
 }>;
-export interface POSTCreateGuildApplicationCommandRequestJSON {
+export const CreateGuildApplicationCommandRequestJSONKeys = ["name","name_localizations","description","description_localizations","options","default_member_permissions","dm_permission","type"] as const satisfies ReadonlyArray<keyof CreateGuildApplicationCommandRequestJSON>;
+Object.freeze(CreateGuildApplicationCommandRequestJSONKeys);
+export interface CreateGuildApplicationCommandRequestJSON {
     /**
      * @maxLength 32
      * @minLength 1
@@ -6080,14 +7749,16 @@ export interface POSTCreateGuildApplicationCommandRequestJSON {
     dm_permission?: (boolean | null);
     type: ApplicationCommandType;
 }
-export interface POSTBulkDeleteMessagesRequestJSON {
+export const BulkDeleteMessagesRequestJSONKeys = ["messages"] as const satisfies ReadonlyArray<keyof BulkDeleteMessagesRequestJSON>;
+Object.freeze(BulkDeleteMessagesRequestJSONKeys);
+export interface BulkDeleteMessagesRequestJSON {
     /**
      * @maxItems 1521
      * @distinct 
      */
     messages?: (Array<Snowflake> | null);
 }
-export type PATCHUpdateOriginalWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPartial & {
+export type UpdateOriginalWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPartial & {
     "files[0]"?: BinaryData;
     "files[1]"?: BinaryData;
     "files[2]"?: BinaryData;
@@ -6099,20 +7770,26 @@ export type PATCHUpdateOriginalWebhookMessageRequestFormData = IncomingWebhookUp
     "files[8]"?: BinaryData;
     "files[9]"?: BinaryData;
 };
-export type PATCHUpdateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequestPartial | KeywordUpsertRequestPartial | MLSpamUpsertRequestPartial | MentionSpamUpsertRequestPartial;
-export type POSTCreateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequest | KeywordUpsertRequest | MLSpamUpsertRequest | MentionSpamUpsertRequest;
-export interface PATCHUpdateSelfVoiceStateRequestJSON {
+export type UpdateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequestPartial | KeywordUpsertRequestPartial | MLSpamUpsertRequestPartial | MentionSpamUpsertRequestPartial;
+export type CreateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequest | KeywordUpsertRequest | MLSpamUpsertRequest | MentionSpamUpsertRequest;
+export const UpdateSelfVoiceStateRequestJSONKeys = ["request_to_speak_timestamp","suppress","channel_id"] as const satisfies ReadonlyArray<keyof UpdateSelfVoiceStateRequestJSON>;
+Object.freeze(UpdateSelfVoiceStateRequestJSONKeys);
+export interface UpdateSelfVoiceStateRequestJSON {
     request_to_speak_timestamp?: (ISO8601DateTime | null);
     suppress?: (boolean | null);
     channel_id?: (Snowflake | null);
 }
-export interface PATCHUpdateMyGuildMemberRequestJSON {
+export const UpdateMyGuildMemberRequestJSONKeys = ["nick"] as const satisfies ReadonlyArray<keyof UpdateMyGuildMemberRequestJSON>;
+Object.freeze(UpdateMyGuildMemberRequestJSONKeys);
+export interface UpdateMyGuildMemberRequestJSON {
     /**
      * @maxLength 32
      */
     nick?: (string | null);
 }
-export interface PATCHUpdateApplicationCommandRequestJSON {
+export const UpdateApplicationCommandRequestJSONKeys = ["name","name_localizations","description","description_localizations","options","default_member_permissions","dm_permission"] as const satisfies ReadonlyArray<keyof UpdateApplicationCommandRequestJSON>;
+Object.freeze(UpdateApplicationCommandRequestJSONKeys);
+export interface UpdateApplicationCommandRequestJSON {
     /**
      * @maxLength 32
      * @minLength 1
@@ -6153,7 +7830,7 @@ export interface PATCHUpdateApplicationCommandRequestJSON {
     default_member_permissions?: (number | null);
     dm_permission?: (boolean | null);
 }
-export type PUTBulkSetApplicationCommandsRequestJSON = Array<{
+export type BulkSetApplicationCommandsRequestJSON = Array<{
     id?: (Snowflake | null);
     /**
      * @maxLength 32
@@ -6196,7 +7873,9 @@ export type PUTBulkSetApplicationCommandsRequestJSON = Array<{
     dm_permission?: (boolean | null);
     type: ApplicationCommandType;
 }>;
-export interface POSTCreateApplicationCommandRequestJSON {
+export const CreateApplicationCommandRequestJSONKeys = ["name","name_localizations","description","description_localizations","options","default_member_permissions","dm_permission","type"] as const satisfies ReadonlyArray<keyof CreateApplicationCommandRequestJSON>;
+Object.freeze(CreateApplicationCommandRequestJSONKeys);
+export interface CreateApplicationCommandRequestJSON {
     /**
      * @maxLength 32
      * @minLength 1
@@ -6238,18 +7917,22 @@ export interface POSTCreateApplicationCommandRequestJSON {
     dm_permission?: (boolean | null);
     type: ApplicationCommandType;
 }
-export type POSTCreateInteractionResponseRequestJSON = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
-export type POSTCreateInteractionResponseRequestURLEncoded = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
-export type POSTCreateInteractionResponseRequestFormData = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
-export interface PUTSetChannelPermissionOverwriteRequestJSON {
+export type CreateInteractionResponseRequestJSON = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
+export type CreateInteractionResponseRequestURLEncoded = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
+export type CreateInteractionResponseRequestFormData = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
+export const SetChannelPermissionOverwriteRequestJSONKeys = ["type","allow","deny"] as const satisfies ReadonlyArray<keyof SetChannelPermissionOverwriteRequestJSON>;
+Object.freeze(SetChannelPermissionOverwriteRequestJSONKeys);
+export interface SetChannelPermissionOverwriteRequestJSON {
     type?: (null | ChannelPermissionOverwrite);
     allow?: (number | null);
     deny?: (number | null);
 }
-export interface POSTFollowChannelRequestJSON {
+export const FollowChannelRequestJSONKeys = ["webhook_channel_id"] as const satisfies ReadonlyArray<keyof FollowChannelRequestJSON>;
+Object.freeze(FollowChannelRequestJSONKeys);
+export interface FollowChannelRequestJSON {
     webhook_channel_id: Snowflake;
 }
-export type PATCHUpdateMessageRequestFormData = MessageEditRequestPartial & {
+export type UpdateMessageRequestFormData = MessageEditRequestPartial & {
     "files[0]"?: BinaryData;
     "files[1]"?: BinaryData;
     "files[2]"?: BinaryData;
@@ -6261,7 +7944,7 @@ export type PATCHUpdateMessageRequestFormData = MessageEditRequestPartial & {
     "files[8]"?: BinaryData;
     "files[9]"?: BinaryData;
 };
-export type POSTCreateMessageRequestFormData = MessageCreateRequest & {
+export type CreateMessageRequestFormData = MessageCreateRequest & {
     "files[0]"?: BinaryData;
     "files[1]"?: BinaryData;
     "files[2]"?: BinaryData;
@@ -6273,7 +7956,9 @@ export type POSTCreateMessageRequestFormData = MessageCreateRequest & {
     "files[8]"?: BinaryData;
     "files[9]"?: BinaryData;
 };
-export interface POSTCreateWebhookRequestJSON {
+export const CreateWebhookRequestJSONKeys = ["name","avatar"] as const satisfies ReadonlyArray<keyof CreateWebhookRequestJSON>;
+Object.freeze(CreateWebhookRequestJSONKeys);
+export interface CreateWebhookRequestJSON {
     /**
      * @maxLength 80
      * @minLength 1
@@ -6281,11 +7966,11 @@ export interface POSTCreateWebhookRequestJSON {
     name: string;
     avatar?: (Base64String | null);
 }
-export type POSTCreateChannelInviteRequestJSON = CreateGroupDMInviteRequest | CreateGuildInviteRequest;
-export type POSTCreateThreadRequestJSON = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
-export type POSTCreateThreadRequestURLEncoded = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
-export type POSTCreateThreadRequestFormData = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
-export type PATCHUpdateWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPartial & {
+export type CreateChannelInviteRequestJSON = CreateGroupDMInviteRequest | CreateGuildInviteRequest;
+export type CreateThreadRequestJSON = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
+export type CreateThreadRequestURLEncoded = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
+export type CreateThreadRequestFormData = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
+export type UpdateWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPartial & {
     "files[0]"?: BinaryData;
     "files[1]"?: BinaryData;
     "files[2]"?: BinaryData;
@@ -6297,7 +7982,9 @@ export type PATCHUpdateWebhookMessageRequestFormData = IncomingWebhookUpdateRequ
     "files[8]"?: BinaryData;
     "files[9]"?: BinaryData;
 };
-export interface POSTCreateGuildFromTemplateRequestJSON {
+export const CreateGuildFromTemplateRequestJSONKeys = ["name","icon"] as const satisfies ReadonlyArray<keyof CreateGuildFromTemplateRequestJSON>;
+Object.freeze(CreateGuildFromTemplateRequestJSONKeys);
+export interface CreateGuildFromTemplateRequestJSON {
     /**
      * @maxLength 100
      * @minLength 2
@@ -6305,13 +7992,17 @@ export interface POSTCreateGuildFromTemplateRequestJSON {
     name: string;
     icon?: (Base64String | null);
 }
-export type PATCHUpdateGuildScheduledEventRequestJSON = ExternalScheduledEventPatchRequestPartial | StageScheduledEventPatchRequestPartial | VoiceScheduledEventPatchRequestPartial;
-export type POSTCreateGuildScheduledEventRequestJSON = ExternalScheduledEventCreateRequest | StageScheduledEventCreateRequest | VoiceScheduledEventCreateRequest;
-export interface PATCHUpdateVoiceStateRequestJSON {
+export type UpdateGuildScheduledEventRequestJSON = ExternalScheduledEventPatchRequestPartial | StageScheduledEventPatchRequestPartial | VoiceScheduledEventPatchRequestPartial;
+export type CreateGuildScheduledEventRequestJSON = ExternalScheduledEventCreateRequest | StageScheduledEventCreateRequest | VoiceScheduledEventCreateRequest;
+export const UpdateVoiceStateRequestJSONKeys = ["suppress","channel_id"] as const satisfies ReadonlyArray<keyof UpdateVoiceStateRequestJSON>;
+Object.freeze(UpdateVoiceStateRequestJSONKeys);
+export interface UpdateVoiceStateRequestJSON {
     suppress?: (boolean | null);
     channel_id?: (Snowflake | null);
 }
-export interface PATCHUpdateGuildTemplateRequestJSON {
+export const UpdateGuildTemplateRequestJSONKeys = ["name","description"] as const satisfies ReadonlyArray<keyof UpdateGuildTemplateRequestJSON>;
+Object.freeze(UpdateGuildTemplateRequestJSONKeys);
+export interface UpdateGuildTemplateRequestJSON {
     /**
      * @maxLength 100
      * @minLength 1
@@ -6322,7 +8013,9 @@ export interface PATCHUpdateGuildTemplateRequestJSON {
      */
     description?: (string | null);
 }
-export interface POSTCreateGuildTemplateRequestJSON {
+export const CreateGuildTemplateRequestJSONKeys = ["name","description"] as const satisfies ReadonlyArray<keyof CreateGuildTemplateRequestJSON>;
+Object.freeze(CreateGuildTemplateRequestJSONKeys);
+export interface CreateGuildTemplateRequestJSON {
     /**
      * @maxLength 100
      * @minLength 1
@@ -6333,7 +8026,9 @@ export interface POSTCreateGuildTemplateRequestJSON {
      */
     description?: (string | null);
 }
-export interface PATCHUpdateGuildStickerRequestJSON {
+export const UpdateGuildStickerRequestJSONKeys = ["name","tags","description"] as const satisfies ReadonlyArray<keyof UpdateGuildStickerRequestJSON>;
+Object.freeze(UpdateGuildStickerRequestJSONKeys);
+export interface UpdateGuildStickerRequestJSON {
     /**
      * @maxLength 30
      * @minLength 2
@@ -6349,7 +8044,7 @@ export interface PATCHUpdateGuildStickerRequestJSON {
      */
     description?: (string | null);
 }
-export type PATCHBulkUpdateGuildChannelsRequestJSON = Array<{
+export type BulkUpdateGuildChannelsRequestJSON = Array<{
     id?: Snowflake;
     /**
      * @maximum 2147483647
@@ -6359,7 +8054,9 @@ export type PATCHBulkUpdateGuildChannelsRequestJSON = Array<{
     parent_id?: (Snowflake | null);
     lock_permissions?: (boolean | null);
 }>;
-export interface POSTCreateGuildStickerRequestFormData {
+export const CreateGuildStickerRequestFormDataKeys = ["name","tags","description","file"] as const satisfies ReadonlyArray<keyof CreateGuildStickerRequestFormData>;
+Object.freeze(CreateGuildStickerRequestFormDataKeys);
+export interface CreateGuildStickerRequestFormData {
     /**
      * @maxLength 30
      * @minLength 2
@@ -6376,7 +8073,9 @@ export interface POSTCreateGuildStickerRequestFormData {
     description?: (string | null);
     file: BinaryData;
 }
-export interface PUTAddGuildMemberRequestJSON {
+export const AddGuildMemberRequestJSONKeys = ["nick","roles","mute","deaf","access_token","flags"] as const satisfies ReadonlyArray<keyof AddGuildMemberRequestJSON>;
+Object.freeze(AddGuildMemberRequestJSONKeys);
+export interface AddGuildMemberRequestJSON {
     /**
      * @maxLength 32
      */
@@ -6394,7 +8093,9 @@ export interface PUTAddGuildMemberRequestJSON {
     access_token: string;
     flags?: (number | null);
 }
-export interface PATCHUpdateGuildMemberRequestJSON {
+export const UpdateGuildMemberRequestJSONKeys = ["nick","roles","mute","deaf","channel_id","communication_disabled_until","flags"] as const satisfies ReadonlyArray<keyof UpdateGuildMemberRequestJSON>;
+Object.freeze(UpdateGuildMemberRequestJSONKeys);
+export interface UpdateGuildMemberRequestJSON {
     /**
      * @maxLength 32
      */
@@ -6410,7 +8111,9 @@ export interface PATCHUpdateGuildMemberRequestJSON {
     communication_disabled_until?: (ISO8601DateTime | null);
     flags?: (number | null);
 }
-export interface PATCHUpdateGuildEmojiRequestJSON {
+export const UpdateGuildEmojiRequestJSONKeys = ["name","roles"] as const satisfies ReadonlyArray<keyof UpdateGuildEmojiRequestJSON>;
+Object.freeze(UpdateGuildEmojiRequestJSONKeys);
+export interface UpdateGuildEmojiRequestJSON {
     /**
      * @maxLength 32
      * @minLength 2
@@ -6422,7 +8125,9 @@ export interface PATCHUpdateGuildEmojiRequestJSON {
      */
     roles?: (Array<(Snowflake | null)> | null);
 }
-export interface POSTCreateGuildEmojiRequestJSON {
+export const CreateGuildEmojiRequestJSONKeys = ["name","image","roles"] as const satisfies ReadonlyArray<keyof CreateGuildEmojiRequestJSON>;
+Object.freeze(CreateGuildEmojiRequestJSONKeys);
+export interface CreateGuildEmojiRequestJSON {
     /**
      * @maxLength 32
      * @minLength 2
@@ -6435,11 +8140,15 @@ export interface POSTCreateGuildEmojiRequestJSON {
      */
     roles?: (Array<(Snowflake | null)> | null);
 }
-export interface PATCHUpdateGuildWidgetSettingsRequestJSON {
+export const UpdateGuildWidgetSettingsRequestJSONKeys = ["channel_id","enabled"] as const satisfies ReadonlyArray<keyof UpdateGuildWidgetSettingsRequestJSON>;
+Object.freeze(UpdateGuildWidgetSettingsRequestJSONKeys);
+export interface UpdateGuildWidgetSettingsRequestJSON {
     channel_id?: (Snowflake | null);
     enabled?: (boolean | null);
 }
-export interface PATCHUpdateGuildRoleRequestJSON {
+export const UpdateGuildRoleRequestJSONKeys = ["name","permissions","color","hoist","mentionable","icon","unicode_emoji"] as const satisfies ReadonlyArray<keyof UpdateGuildRoleRequestJSON>;
+Object.freeze(UpdateGuildRoleRequestJSONKeys);
+export interface UpdateGuildRoleRequestJSON {
     /**
      * @maxLength 100
      */
@@ -6458,7 +8167,7 @@ export interface PATCHUpdateGuildRoleRequestJSON {
      */
     unicode_emoji?: (string | null);
 }
-export type PATCHBulkUpdateGuildRolesRequestJSON = Array<{
+export type BulkUpdateGuildRolesRequestJSON = Array<{
     id?: (Snowflake | null);
     /**
      * @maximum 2147483647
@@ -6466,10 +8175,14 @@ export type PATCHBulkUpdateGuildRolesRequestJSON = Array<{
      */
     position?: (Int32 | null);
 }>;
-export interface POSTSetGuildMfaLevelRequestJSON {
+export const SetGuildMfaLevelRequestJSONKeys = ["level"] as const satisfies ReadonlyArray<keyof SetGuildMfaLevelRequestJSON>;
+Object.freeze(SetGuildMfaLevelRequestJSONKeys);
+export interface SetGuildMfaLevelRequestJSON {
     level: GuildMFALevel;
 }
-export interface PATCHUpdateStageInstanceRequestJSON {
+export const UpdateStageInstanceRequestJSONKeys = ["topic","privacy_level"] as const satisfies ReadonlyArray<keyof UpdateStageInstanceRequestJSON>;
+Object.freeze(UpdateStageInstanceRequestJSONKeys);
+export interface UpdateStageInstanceRequestJSON {
     /**
      * @maxLength 120
      * @minLength 1
@@ -6477,10 +8190,12 @@ export interface PATCHUpdateStageInstanceRequestJSON {
     topic?: string;
     privacy_level?: StageInstancesPrivacyLevel;
 }
-export type POSTExecuteWebhookRequestJSON = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
-export type POSTExecuteWebhookRequestURLEncoded = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
-export type POSTExecuteWebhookRequestFormData = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
-export interface PATCHUpdateWebhookByTokenRequestJSON {
+export type ExecuteWebhookRequestJSON = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
+export type ExecuteWebhookRequestURLEncoded = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
+export type ExecuteWebhookRequestFormData = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
+export const UpdateWebhookByTokenRequestJSONKeys = ["name","avatar"] as const satisfies ReadonlyArray<keyof UpdateWebhookByTokenRequestJSON>;
+Object.freeze(UpdateWebhookByTokenRequestJSONKeys);
+export interface UpdateWebhookByTokenRequestJSON {
     /**
      * @maxLength 80
      * @minLength 1
@@ -6488,8 +8203,10 @@ export interface PATCHUpdateWebhookByTokenRequestJSON {
     name?: string;
     avatar?: (Base64String | null);
 }
-export type PATCHUpdateChannelRequestJSON = PrivateChannelRequestPartial | UpdateGuildChannelRequestPartial | UpdateThreadRequestPartial;
-export interface PATCHUpdateWebhookRequestJSON {
+export type UpdateChannelRequestJSON = PrivateChannelRequestPartial | UpdateGuildChannelRequestPartial | UpdateThreadRequestPartial;
+export const UpdateWebhookRequestJSONKeys = ["name","avatar","channel_id"] as const satisfies ReadonlyArray<keyof UpdateWebhookRequestJSON>;
+Object.freeze(UpdateWebhookRequestJSONKeys);
+export interface UpdateWebhookRequestJSON {
     /**
      * @maxLength 80
      * @minLength 1
@@ -6498,59 +8215,59 @@ export interface PATCHUpdateWebhookRequestJSON {
     avatar?: (Base64String | null);
     channel_id?: (Snowflake | null);
 }
-export type GETListMyConnectionsResponseJSON = Array<ConnectedAccountResponse> | null;
-export type POSTCreateDmResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export type GETListMyGuildsResponseJSON = Array<MyGuildResponse> | null;
-export type GETListVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
-export type GETListGuildApplicationCommandPermissionsResponseJSON = Array<CommandPermissionsResponse>;
-export type GETGetApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
-export type PUTUpdateApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
-export type GETListGuildApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
-export type PUTBulkSetGuildApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
-export type GETListMessageReactionsByEmojiResponseJSON = Array<UserResponse>;
-export type GETListGuildScheduledEventUsersResponseJSON = Array<ScheduledEventUserResponse> | null;
-export type GETGetAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
-export type PATCHUpdateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
-export type GETListAutoModerationRulesResponseJSON = Array<(DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse | null)> | null;
-export type POSTCreateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
-export type GETSearchGuildMembersResponseJSON = Array<GuildMemberResponse>;
-export type GETListApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
-export type PUTBulkSetApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
-export type GETListThreadMembersResponseJSON = Array<ThreadMemberResponse>;
-export type PUTAddGroupDmUserResponseJSON = PrivateChannelResponse | PrivateGroupChannelResponse;
-export type GETListMessagesResponseJSON = Array<MessageResponse> | null;
-export type GETListChannelWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
-export type GETListChannelInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
-export type POSTCreateChannelInviteResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
-export type GETListPinnedMessagesResponseJSON = Array<MessageResponse> | null;
-export type POSTExecuteSlackCompatibleWebhookResponseJSON = string | null;
-export type GETGetGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
-export type PATCHUpdateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
-export type GETListGuildScheduledEventsResponseJSON = Array<(ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse)> | null;
-export type POSTCreateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
-export type GETListGuildIntegrationsResponseJSON = Array<(DiscordIntegrationResponse | ExternalConnectionIntegrationResponse | GuildSubscriptionIntegrationResponse)> | null;
+export type ListMyConnectionsResponseJSON = Array<ConnectedAccountResponse> | null;
+export type CreateDmResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export type ListMyGuildsResponseJSON = Array<MyGuildResponse> | null;
+export type ListVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
+export type ListGuildApplicationCommandPermissionsResponseJSON = Array<CommandPermissionsResponse>;
+export type GetApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
+export type UpdateApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
+export type ListGuildApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
+export type BulkSetGuildApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
+export type ListMessageReactionsByEmojiResponseJSON = Array<UserResponse>;
+export type ListGuildScheduledEventUsersResponseJSON = Array<ScheduledEventUserResponse> | null;
+export type GetAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
+export type UpdateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
+export type ListAutoModerationRulesResponseJSON = Array<(DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse | null)> | null;
+export type CreateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
+export type SearchGuildMembersResponseJSON = Array<GuildMemberResponse>;
+export type ListApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
+export type BulkSetApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
+export type ListThreadMembersResponseJSON = Array<ThreadMemberResponse>;
+export type AddGroupDmUserResponseJSON = PrivateChannelResponse | PrivateGroupChannelResponse;
+export type ListMessagesResponseJSON = Array<MessageResponse> | null;
+export type ListChannelWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
+export type ListChannelInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
+export type CreateChannelInviteResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
+export type ListPinnedMessagesResponseJSON = Array<MessageResponse> | null;
+export type ExecuteSlackCompatibleWebhookResponseJSON = string | null;
+export type GetGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
+export type UpdateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
+export type ListGuildScheduledEventsResponseJSON = Array<(ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse)> | null;
+export type CreateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
+export type ListGuildIntegrationsResponseJSON = Array<(DiscordIntegrationResponse | ExternalConnectionIntegrationResponse | GuildSubscriptionIntegrationResponse)> | null;
 export type BinaryData = ArrayBufferView;
-export type GETListGuildTemplatesResponseJSON = Array<GuildTemplateResponse> | null;
-export type GETListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse | null)> | null;
-export type GETListGuildStickersResponseJSON = Array<GuildStickerResponse>;
-export type GETGetGuildWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
-export type GETListGuildMembersResponseJSON = Array<GuildMemberResponse>;
-export type GETListGuildInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
-export type GETListGuildVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
-export type GETListGuildEmojisResponseJSON = Array<EmojiResponse> | null;
-export type GETListGuildRolesResponseJSON = Array<GuildRoleResponse>;
-export type PATCHBulkUpdateGuildRolesResponseJSON = Array<GuildRoleResponse>;
-export type GETListGuildBansResponseJSON = Array<GuildBanResponse> | null;
-export type GETGetWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
-export type PATCHUpdateWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
-export type GETGetChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export type DELETEDeleteChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export type PATCHUpdateChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export type GETGetStickerResponseJSON = GuildStickerResponse | StandardStickerResponse;
-export type GETGetWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
-export type PATCHUpdateWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
-export type GETInviteResolveResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
-export type DELETEInviteRevokeResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
+export type ListGuildTemplatesResponseJSON = Array<GuildTemplateResponse> | null;
+export type ListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse | null)> | null;
+export type ListGuildStickersResponseJSON = Array<GuildStickerResponse>;
+export type GetGuildWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
+export type ListGuildMembersResponseJSON = Array<GuildMemberResponse>;
+export type ListGuildInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
+export type ListGuildVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
+export type ListGuildEmojisResponseJSON = Array<EmojiResponse> | null;
+export type ListGuildRolesResponseJSON = Array<GuildRoleResponse>;
+export type BulkUpdateGuildRolesResponseJSON = Array<GuildRoleResponse>;
+export type ListGuildBansResponseJSON = Array<GuildBanResponse> | null;
+export type GetWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
+export type UpdateWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
+export type GetChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export type DeleteChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export type UpdateChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export type GetStickerResponseJSON = GuildStickerResponse | StandardStickerResponse;
+export type GetWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
+export type UpdateWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
+export type InviteResolveResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
+export type InviteRevokeResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export type Int32 = number;
 export type Base64String = string;
 export type Int64 = number;

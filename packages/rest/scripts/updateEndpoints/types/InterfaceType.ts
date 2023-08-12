@@ -25,15 +25,25 @@ export class InterfaceType extends Type {
         ));
     }
 
-    define(expose: Expose): Source {
+    *define(expose: Expose): Source {
+        yield* expose(this.#keys());
+        yield `Object.freeze(${this.name}Keys);`;
+        yield* expose(this.#type());
+    }
+
+    *#keys(): Source {
+        yield `const ${this.name}Keys = ${JSON.stringify(this.properties.map(p => p.name))} as const satisfies ReadonlyArray<keyof ${this.name}>;`
+    }
+
+    #type(): Source {
         if (this.base.length === 0)
-            return expose(this.#value(this.name!, [`interface ${this.name} `]));
-        return expose(this.#value(this.name!, this.joinParagraphs(
+            return this.#value(this.name!, [`interface ${this.name} `]);
+        return this.#value(this.name!, this.joinParagraphs(
             this.base.map((t, i) => t.dereference().inline(`${this.name}Option${i}`)),
             [`interface ${this.name} extends `],
             [', '],
             [' ']
-        )))
+        ))
     }
 
     #value(context: string, prefix: Iterable<string>): Source {
