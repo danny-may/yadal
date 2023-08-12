@@ -1,7 +1,9 @@
-import { locateComponentSchemas, locateRequestSchemas, locateResponseSchemas, parser, snakeCaseToPascalCase, TypeBuilder, getSchema, writeTypes, preventShadowGlobal } from './updateEndpoints/index.js';
+import { locateComponentSchemas, locateRequestSchemas, locateResponseSchemas, parser, snakeCaseToPascalCase, TypeBuilder, getSchema, writeTypes, preventShadowGlobal, augmentations } from './updateEndpoints/index.js';
 
 const schema = await getSchema();
 const types = new TypeBuilder(parser);
+for (const tag of augmentations)
+    types.register(tag);
 for (const { name, definition } of locateComponentSchemas(schema))
     types.parse(definition, preventShadowGlobal(name, 'Discord'));
 const noBody = new Set<string>(['get', 'head', 'delete', 'connect', 'trace']);

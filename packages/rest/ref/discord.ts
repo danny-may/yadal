@@ -1,3 +1,20 @@
+/**
+ * @docs https://discord.com/developers/docs/reference#snowflakes
+ */
+export type Snowflake = `${bigint}`;
+/**
+ * @docs https://discord.com/developers/docs/reference#iso8601-datetime
+ * @format yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+ */
+export type ISO8601DateTime = string;
+export type URIString = `${'http'|'ws'}${'s'|''}://${string}`;
+export type UserMessageTag = `<@${'!'|''}${bigint}>`;
+export type ChannelMessageTag = `<#${bigint}>`;
+export type RoleMessageTag = `<@&${bigint}>`;
+export type SlashCommandMessageTag = `</${string}:${bigint}>`;
+export type CustomEmojiMessageTag = `<${'a'|''}:${string}:${bigint}>`;
+export type TimestampMessageTag = `<t:${bigint}${''|`:${'t'|'T'|'d'|'D'|'f'|'F'|'R'}`}>`;
+export type MessageTag = UserMessageTag | ChannelMessageTag | RoleMessageTag | SlashCommandMessageTag | CustomEmojiMessageTag | TimestampMessageTag;
 export interface AccountResponse {
     id: string;
     name?: (string | null);
@@ -6534,12 +6551,6 @@ export type GETGetWebhookResponseJSON = ApplicationIncomingWebhookResponse | Cha
 export type PATCHUpdateWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export type GETInviteResolveResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export type DELETEInviteRevokeResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
-export type Snowflake = `${bigint}`;
 export type Int32 = number;
 export type Base64String = string;
-export type URIString = `${'http'|'ws'}${'s'|''}://${string}`;
-/**
- * @format yyyy-MM-dd'T'HH:mm:ss.SSSXXX
- */
-export type ISO8601DateTime = string;
 export type Int64 = number;

@@ -1,3 +1,4 @@
+import { snowflake, isoDateTime, uriString } from "../augmentations/index.js";
 import { SchemaObject, StringSchemaObject } from "../types.js";
 import { EnumType, EnumValue, LiteralType } from "../types/index.js";
 import { documentation } from "../util/index.js";
@@ -5,9 +6,9 @@ import { ParserContext } from "./TypeBuilder.js";
 import { parsePluckedEnum } from "./parsePluckedEnum.js";
 
 const wellKnownFormats = {
-    snowflake: new LiteralType({ name: 'Snowflake', value: '`${bigint}`' }),
-    'date-time': new LiteralType({ name: 'ISO8601DateTime', value: 'string', documentation: [{ tag: 'format', value: 'yyyy-MM-dd\'T\'HH:mm:ss.SSSXXX' }] }),
-    uri: new LiteralType({ name: 'URIString', value: '`${\'http\'|\'ws\'}${\'s\'|\'\'}://${string}`' }),
+    snowflake: snowflake,
+    'date-time': isoDateTime,
+    uri: uriString,
     nonce: new LiteralType({ value: 'string' }),
 }
 const wellKnownEncodings = {

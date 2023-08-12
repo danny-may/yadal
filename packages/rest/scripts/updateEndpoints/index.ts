@@ -4,3 +4,4 @@ export * from './parser/index.js';
 export * from './types/index.js';
 export * from './locateSchemas.js';
 export * from './util/index.js';
+export * from './augmentations/index.js';
