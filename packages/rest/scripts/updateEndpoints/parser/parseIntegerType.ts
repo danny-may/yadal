@@ -1,4 +1,5 @@
-import { IntegerSchemaObject, SchemaObject } from "../types.js";
+import { SchemaObject } from "openapi-typescript";
+import { IntegerSchemaObject } from "../types.js";
 import { EnumType, EnumValue, LiteralType } from "../types/index.js";
 import { documentation } from "../util/index.js";
 import { ParserContext } from "./TypeBuilder.js";
@@ -33,7 +34,7 @@ export function parseIntegerType(name: string | undefined, definition: IntegerSc
             const type = wellKnownFormats[definition.format as keyof typeof wellKnownFormats];
             if (type.name !== undefined)
                 context.register(type);
-            return new LiteralType({ value: type.name ?? type.value, documentation: documentation(definition) });
+            return new LiteralType({ name, value: type.name ?? type.value, documentation: documentation(definition) });
         }
         throw new Error(`Unknown format ${definition.format}`);
     }

@@ -19,6 +19,7 @@ export const route: { readonly [P in HttpMethod]: RouteFactory } = {
     POST: (template, ...args) => buildRoute('POST', template, args),
     PUT: (template, ...args) => buildRoute('PUT', template, args),
     TRACE: (template, ...args) => buildRoute('TRACE', template, args),
+    OPTIONS: (template, ...args) => buildRoute('OPTIONS', template, args),
 };
 Object.freeze(route);
 

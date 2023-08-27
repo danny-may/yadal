@@ -79,15 +79,19 @@ export abstract class Type extends TypeReference {
 
     *#joinLines<T>(source: Iterable<T>, separator: T): Source<T> {
         const iter = source[Symbol.iterator]();
-        let next = iter.next();
-        if (next.done)
-            return;
-        yield next.value;
-        next = iter.next();
-        while (!next.done) {
-            yield separator;
+        try {
+            let next = iter.next();
+            if (next.done)
+                return;
             yield next.value;
             next = iter.next();
+            while (!next.done) {
+                yield separator;
+                yield next.value;
+                next = iter.next();
+            }
+        } finally {
+            iter.return?.();
         }
     }
 

@@ -1,6 +1,7 @@
+import { SchemaObject } from "openapi-typescript";
 import { snowflake, isoDateTime, uriString } from "../augmentations/index.js";
-import { SchemaObject, StringSchemaObject } from "../types.js";
-import { EnumType, EnumValue, LiteralType } from "../types/index.js";
+import { StringSchemaObject } from "../types.js";
+import { EnumType, EnumValue, InterfaceProperty, InterfaceType, LiteralType } from "../types/index.js";
 import { documentation } from "../util/index.js";
 import { ParserContext } from "./TypeBuilder.js";
 import { parsePluckedEnum } from "./parsePluckedEnum.js";
@@ -11,8 +12,26 @@ const wellKnownFormats = {
     uri: uriString,
     nonce: new LiteralType({ value: 'string' }),
 }
-const wellKnownEncodings = {
-    binary: new LiteralType({ name: 'BinaryData', value: 'ArrayBufferView' }),
+export const wellKnownEncodings = {
+    binary: new InterfaceType({
+        name: 'File',
+        properties: [
+            new InterfaceProperty({
+                name: 'content',
+                type: new LiteralType({ value: 'ArrayBufferView' })
+            }),
+            new InterfaceProperty({
+                name: 'name',
+                optional: true,
+                type: new LiteralType({ value: 'string' })
+            }),
+            new InterfaceProperty({
+                name: 'contentType',
+                optional: true,
+                type: new LiteralType({ value: 'string' })
+            })
+        ]
+    }),
     base64: new LiteralType({ name: 'Base64String', value: 'string' }),
 }
 
@@ -40,7 +59,7 @@ export function parseStringType(name: string | undefined, definition: StringSche
             const type = wellKnownFormats[definition.format as keyof typeof wellKnownFormats];
             if (type.name !== undefined)
                 context.register(type);
-            return new LiteralType({ value: type.name ?? type.value, documentation: documentation(definition) });
+            return new LiteralType({ name, value: type.name ?? type.value, documentation: documentation(definition) });
         }
         throw new Error(`Unknown format ${definition.format}`);
     }
@@ -49,7 +68,7 @@ export function parseStringType(name: string | undefined, definition: StringSche
             const type = wellKnownEncodings[definition.contentEncoding as keyof typeof wellKnownEncodings];
             if (type.name !== undefined)
                 context.register(type);
-            return new LiteralType({ value: type.name ?? type.value, documentation: documentation(definition) });
+            return new LiteralType({ name, value: type.name!, documentation: documentation(definition) });
         }
         throw new Error(`Unknown encoding ${definition.contentEncoding}`);
     }

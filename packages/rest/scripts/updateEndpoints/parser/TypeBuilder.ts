@@ -1,5 +1,5 @@
 import { SchemaObject } from "openapi-typescript";
-import { TypeReference } from "../types/index.js";
+import { Type, TypeReference } from "../types/index.js";
 
 const defaultScheme = Symbol('default');
 
@@ -64,19 +64,33 @@ export class TypeBuilder {
                 result[key] = Lazy(() => factory(context));
             }
         }
-        for (const result of cache.values())
-            for (const ref of Reflect.ownKeys(result).map(k => result[k as symbol]!))
-                types.add(ref.dereference());
+
+        const values = new Set<Type>();
+        const result = new Map<object, Record<symbol, Type>>();
+        for (const [key, references] of cache) {
+            const types = {} as Record<symbol, Type>;
+            result.set(key, types);
+            for (const k of Reflect.ownKeys(references)) {
+                const type = references[k as symbol]!.dereference();
+                values.add(type);
+                types[k as symbol] = type;
+            }
+        }
+        for (const ref of types) {
+            const type = ref.dereference();
+            values.add(type);
+        }
+
         return {
-            get: (definition, scheme = defaultScheme) => cache.get(definition)?.[scheme],
-            values: types.values.bind(types)
+            get: (definition, scheme = defaultScheme) => result.get(definition)?.[scheme],
+            values: values.values.bind(values),
         }
     }
 }
 
 export interface TypeBuilderResult {
-    get(definition: SchemaObject, scheme?: symbol): TypeReference | undefined;
-    values(): Iterable<TypeReference>;
+    get(definition: SchemaObject, scheme?: symbol): Type | undefined;
+    values(): Iterable<Type>;
 }
 
 export interface TypeParser {

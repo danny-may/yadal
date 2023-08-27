@@ -1,4 +1,4 @@
-export * from './generateSource.js';
+export * from './typesToSource.js';
 export * from './ArrayType.js';
 export * from './ClosedGenericType.js';
 export * from './EnumType.js';

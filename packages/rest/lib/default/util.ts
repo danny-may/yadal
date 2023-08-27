@@ -70,8 +70,8 @@ export function str<Key extends PropertyKey>(key: Key): RouteParameter<Key, stri
     return {
         key,
         pattern: /^.*$/,
-        parse: String,
-        stringify: String
+        parse: decodeURIComponent,
+        stringify: encodeURIComponent
     }
 }
 export function pick<Key extends PropertyKey, const Choices extends readonly string[]>(key: Key, ...choices: Choices): RouteParameter<Key, Choices[number]> {

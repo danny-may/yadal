@@ -1,20 +1,46 @@
-import { OpenAPI3, ParameterObject } from 'openapi-typescript';
-import { locateComponentSchemas, locateRequestSchemas, locateResponseSchemas, parser, snakeCaseToPascalCase, TypeBuilder, getSchema, writeTypes, preventShadowGlobal, augmentations, locateRequestParameters, InterfaceType, InterfaceProperty, LiteralType } from './updateEndpoints/index.js';
+import { OpenAPI3, OperationObject, ParameterObject, PathItemObject } from 'openapi-typescript';
+import { locateComponentSchemas, parser, snakeCaseToPascalCase, TypeBuilder, getSchema, preventShadowGlobal, augmentations, InterfaceType, InterfaceProperty, LiteralType, locateOperations, typesToSource, writeFile, exposeViaExport, noRef, locateRequests, locateResponses, deleteFsItem, defineEndpoint, defineHelpers, ExportFromDetails } from './updateEndpoints/index.js';
+import p from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const schema = await getSchema();
-const types = new TypeBuilder(parser);
-loadAugmentations(types);
-loadComponentTypes(types, schema);
-loadOperationParameters(types, schema, {
-    cookie: Symbol('Cookies'),
+const builder = new TypeBuilder(parser);
+const schemes = {
     header: Symbol('Headers'),
     path: Symbol('Path'),
     query: Symbol('Query')
-});
-loadOperationRequests(types, schema);
-loadOperationResponses(types, schema);
+}
+loadAugmentations(builder);
+loadComponentTypes(builder, schema);
+loadOperations(builder, schema, schemes)
+const types = builder.build();
+const typesFile = new URL('../ref/discord.ts', import.meta.url);
+const helperFile = new URL('../ref/helpers.ts', import.meta.url);
+await deleteFsItem(new URL('../ref', import.meta.url));
+await writeFile({
+    contents: typesToSource(types.values(), exposeViaExport)
+}, typesFile);
 
-await writeTypes(types.build().values(), new URL('../ref/discord.ts', import.meta.url));
+await writeFile(defineHelpers(typesFile), helperFile);
+
+const endpointFiles: Array<ExportFromDetails> = [];
+for (const { id, method, operation, path, url } of locateOperations(schema)) {
+    for (const { imports, contents, name } of defineEndpoint(id, method, operation, url, path, types, typesFile, helperFile, schemes)) {
+        const endpointFile = new URL(`../ref/${name}`, import.meta.url);
+        endpointFiles.push({ file: endpointFile, name: p.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
+        await writeFile({ imports, contents }, new URL(`../ref/${name}`, import.meta.url));
+    }
+}
+
+const endpointsIndex = new URL('../ref/endpoints/index.ts', import.meta.url)
+await writeFile({ exports: endpointFiles }, endpointsIndex);
+await writeFile({
+    exports: [
+        { file: typesFile, isType: false },
+        { file: helperFile, isType: false },
+        { file: endpointsIndex, isType: false, name: 'endpoints' }
+    ]
+}, new URL('../ref/index.ts', import.meta.url));
 
 function loadAugmentations(types: TypeBuilder) {
     for (const type of augmentations)
@@ -26,64 +52,82 @@ function loadComponentTypes(types: TypeBuilder, schema: OpenAPI3) {
         types.parse(definition, preventShadowGlobal(name, 'Discord'));
 }
 
-function loadOperationRequests(types: TypeBuilder, schema: OpenAPI3) {
+function loadOperations(types: TypeBuilder, schema: OpenAPI3, schemes: SchemeSymbols) {
+    for (const { id, operation, method, path } of locateOperations(schema)) {
+        loadOperationRequests(types, id, operation, method);
+        loadOperationResponses(types, id, operation);
+        loadOperationParameters(types, schemes, id, operation, path)
+    }
+}
+
+function loadOperationRequests(types: TypeBuilder, id: string, operation: OperationObject, method: string) {
     const noBody = new Set<string>(['get', 'head', 'delete', 'connect', 'trace']);
-    for (const { definition, id, mediaType, method } of locateRequestSchemas(schema)) {
-        if (noBody.has(method))
+    for (const { mediaType, content } of locateRequests(operation)) {
+        const schema = noRef(content.schema);
+        if (noBody.has(method) || schema === undefined)
             continue;
         switch (mediaType.toLowerCase()) {
             case 'application/json':
-                types.parse(definition, `${snakeCaseToPascalCase(id)}RequestJSON`);
+                types.parse(schema, `${snakeCaseToPascalCase(id)}RequestJSON`);
                 break;
             case 'application/x-www-form-urlencoded':
-                types.parse(definition, `${snakeCaseToPascalCase(id)}RequestURLEncoded`);
+                types.parse(schema, `${snakeCaseToPascalCase(id)}RequestURLEncoded`);
                 break;
             case 'multipart/form-data':
-                types.parse(definition, `${snakeCaseToPascalCase(id)}RequestFormData`);
+                types.parse(schema, `${snakeCaseToPascalCase(id)}RequestFormData`);
                 break;
             default: throw new Error(`Unsupported request media type ${mediaType}`)
         }
     }
 }
 
-function loadOperationResponses(types: TypeBuilder, schema: OpenAPI3) {
-    for (const { definition, id, mediaType } of locateResponseSchemas(schema)) {
+function loadOperationResponses(types: TypeBuilder, id: string, operation: OperationObject) {
+    for (const { mediaType, content } of locateResponses(operation)) {
+        const schema = noRef(content.schema);
+        if (schema === undefined)
+            continue;
         switch (mediaType.toLowerCase()) {
             case 'application/json':
-                types.parse(definition, `${snakeCaseToPascalCase(id)}ResponseJSON`);
+                types.parse(schema, `${snakeCaseToPascalCase(id)}ResponseJSON`);
                 break;
             case 'image/png':
-                types.parse(definition, `${snakeCaseToPascalCase(id)}ResponsePNG`);
+                types.parse(schema, `${snakeCaseToPascalCase(id)}ResponsePNG`);
                 break;
             default: throw new Error(`Unsupported response media type ${mediaType}`)
         }
     }
 }
 
-function loadOperationParameters(types: TypeBuilder, schema: OpenAPI3, schemes: Record<ParameterObject['in'], symbol>) {
-    for (const { operation, id, parameters } of locateRequestParameters(schema)) {
-        const byLocation = parameters.reduce<Record<ParameterObject['in'], Array<ParameterObject>>>(
-            (p, c) => (p[c.in].push(c), p),
-            { header: [], cookie: [], path: [], query: [] }
-        )
-        for (const [key, postfix] of [
-            ['query', 'Query'],
-            ['path', 'Path'],
-            ['header', 'Headers'],
-            ['cookie', 'Cookies']
-        ] as const) {
-            if (byLocation[key].length === 0)
-                continue;
-            types.define(operation, ctx => {
-                return new InterfaceType({
-                    name: `${snakeCaseToPascalCase(id)}Request${postfix}`,
-                    properties: byLocation[key].map(p => new InterfaceProperty({
-                        name: p.name,
-                        optional: p.required !== true,
-                        type: p.schema === undefined ? new LiteralType({ value: 'string' }) : ctx.parse(p.schema)
-                    }))
-                })
-            }, schemes[key])
-        }
+type SchemeSymbols = Partial<Record<ParameterObject['in'], symbol>>;
+function loadOperationParameters(types: TypeBuilder, schemes: SchemeSymbols, id: string, operation: OperationObject, path: PathItemObject) {
+    const byLocation = [
+        ...operation.parameters?.map(noRef) ?? [],
+        ...path.parameters?.map(noRef) ?? []
+    ].reduce<Record<ParameterObject['in'], Array<ParameterObject>>>(
+        (p, c) => (p[c.in].push(c), p),
+        { header: [], cookie: [], path: [], query: [] }
+    )
+    for (const [key, postfix] of [
+        ['query', 'Query'],
+        ['path', 'Path'],
+        ['header', 'Headers'],
+        ['cookie', 'Cookies']
+    ] as const) {
+        if (byLocation[key].length === 0)
+            continue;
+        const scheme = schemes[key];
+        if (scheme === undefined)
+            continue;
+
+        types.define(operation, ctx => {
+            return new InterfaceType({
+                name: `${snakeCaseToPascalCase(id)}Request${postfix}`,
+                properties: byLocation[key].map(p => new InterfaceProperty({
+                    name: p.name,
+                    optional: p.required !== true,
+                    type: p.schema === undefined ? new LiteralType({ value: 'string' }) : ctx.parse(p.schema)
+                }))
+            })
+        }, scheme)
     }
 }

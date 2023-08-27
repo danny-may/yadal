@@ -1,7 +1,7 @@
-import { documentation } from "../index.js";
-import { SchemaObject } from "../types.js";
+import { SchemaObject } from "openapi-typescript";
 import { EnumType, LiteralType, Type, TypeReference, UnionType } from "../types/index.js";
 import { ParserContext } from "./TypeBuilder.js";
+import { documentation } from "../util/index.js";
 
 export function parsePluckedEnum(name: string | undefined, definition: SchemaObject, context: ParserContext) {
     if (!Array.isArray(definition.enum))

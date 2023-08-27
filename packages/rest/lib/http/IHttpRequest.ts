@@ -19,4 +19,5 @@ export const HttpMethod = {
     PATCH: 'PATCH',
     TRACE: 'TRACE',
     CONNECT: 'CONNECT',
+    OPTIONS: 'OPTIONS',
 } as const

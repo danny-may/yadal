@@ -12,16 +12,20 @@ export const fuseLines = (() => {
         const builder: string[] = [];
         for (const lines of sources) {
             const iter = lines[Symbol.iterator]();
-            let next = iter.next();
-            if (next.done)
-                continue;
-            builder.push(next.value);
-            next = iter.next();
-            while (!next.done) {
-                yield* yieldJoined(builder);
-                builder.length = 0;
+            try {
+                let next = iter.next();
+                if (next.done)
+                    continue;
                 builder.push(next.value);
                 next = iter.next();
+                while (!next.done) {
+                    yield* yieldJoined(builder);
+                    builder.length = 0;
+                    builder.push(next.value);
+                    next = iter.next();
+                }
+            } finally {
+                iter.return?.();
             }
         }
         yield* yieldJoined(builder);

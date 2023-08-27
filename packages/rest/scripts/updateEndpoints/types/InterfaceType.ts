@@ -26,14 +26,14 @@ export class InterfaceType extends Type {
     }
 
     *define(expose: Expose): Source {
-        yield* expose(this.#keys());
-        yield `Object.freeze(${this.name}Keys);`;
+        // yield* expose(this.#keys());
+        // yield `Object.freeze(${this.name}Keys);`;
         yield* expose(this.#type());
     }
 
-    *#keys(): Source {
-        yield `const ${this.name}Keys = ${JSON.stringify(this.properties.map(p => p.name))} as const satisfies ReadonlyArray<keyof ${this.name}>;`
-    }
+    // *#keys(): Source {
+    //     yield `const ${this.name}Keys = ${JSON.stringify(this.properties.map(p => p.name))} as const satisfies ReadonlyArray<keyof ${this.name}>;`
+    // }
 
     #type(): Source {
         if (this.base.length === 0)

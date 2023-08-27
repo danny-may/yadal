@@ -12,17 +12,21 @@ export function* jsDoc(source: Documentation | undefined): Source {
         return;
 
     const iter = source[Symbol.iterator]();
-    let next = iter.next();
-    if (next.done)
-        return;
+    try {
+        let next = iter.next();
+        if (next.done)
+            return;
 
-    yield '/**';
-    while (!next.done) {
-        const { tag, value: content } = next.value;
-        yield tag.length === 0
-            ? ` * ${content.replaceAll('@', '\\@')}`
-            : ` * @${tag} ${content.replaceAll('@', '\\@')}`
-        next = iter.next();
+        yield '/**';
+        while (!next.done) {
+            const { tag, value: content } = next.value;
+            yield tag.length === 0
+                ? ` * ${content.replaceAll('@', '\\@')}`
+                : ` * @${tag} ${content.replaceAll('@', '\\@')}`
+            next = iter.next();
+        }
+        yield ' */'
+    } finally {
+        iter.return?.();
     }
-    yield ' */'
 }
