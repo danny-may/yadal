@@ -103,26 +103,6 @@ function* defineRequest(bodyTypes: { contentType: string; type: Type | undefined
     yield ['}', ''];
     for (const value of Object.values(extern))
         yield value;
-
-    // imports.push({ file: helperUrl, exported: 'serialize', isType: false });
-    // imports.push({ file: helperUrl, exported: 'RequestBody', isType: false });
-
-    // yield* [['export const body = {', '']];
-    // for (const { contentType, type } of bodyTypes) {
-    //     if (type !== undefined) {
-    //         if (type instanceof ArrayType)
-    //             console.log(type.name, '[]', type.item.dereference().constructor);
-    //         if (type instanceof UnionType)
-    //             console.log(type.name, type.types.map(t => t.dereference().constructor));
-    //     }
-    //     if (type?.name !== undefined)
-    //         imports.push({ file: typesUrl, exported: type.name, isType: true });
-    //     const property = JSON.stringify(mediaTypeToName(contentType));
-    //     yield* [[`    [${property}](model: `], (type ?? empty).inline('~'), ['): RequestBody {', '']];
-    //     yield* [[`        return serialize(${JSON.stringify(contentType)}, model);`, '']];
-    //     yield* [['    },', '']];
-    // }
-    // yield* [['} as const;', '']];
 }
 
 function isNonObjectType(type: Type): boolean {
@@ -140,7 +120,6 @@ const encoder = new TextEncoder();
 function defineInlineBody(contentType: string, props: Iterable<{ name: string; optional: boolean; type: Type; }>, extern: Record<string, Iterable<string>>) {
     switch (contentType) {
         case 'application/json': return defineJsonInlineRequest(props, extern);
-        case 'application/x-www-form-urlencoded': break;
         case 'multipart/form-data': return defineFormDataRequest(props, 'model', extern);
     }
     throw new Error(`Unsupported content type ${contentType}`);
@@ -149,8 +128,6 @@ function defineInlineBody(contentType: string, props: Iterable<{ name: string; o
 function defineNestedBody(contentType: string, prop: string, extern: Record<string, Iterable<string>>) {
     switch (contentType) {
         case 'application/json': return defineJsonNestedRequest(prop, extern);
-        case 'application/x-www-form-urlencoded': break;
-        case 'multipart/form-data': break;
     }
     throw new Error(`Unsupported content type ${contentType}`);
 }
