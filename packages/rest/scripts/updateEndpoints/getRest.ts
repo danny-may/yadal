@@ -62,7 +62,7 @@ export async function getRest() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const { id, method, operation, url } of locateOperations(schema)) {
-                for (const { imports, contents, name } of defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes)) {
+                for (const { imports, contents, name } of defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes, true)) {
                     const endpointFile = new URL(`./${name}`, outDir);
                     files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
                     await writeFile({ imports, contents }, endpointFile);

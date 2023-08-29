@@ -40,7 +40,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: true,
+    global: false,
     bucket(model: { ["interaction_id"]: RouteModel["interaction_id"] | string; ["interaction_token"]: RouteModel["interaction_token"] | string; }) {
         return `post /interactions/${model.interaction_id}/${model.interaction_token}/callback` as const;
     }

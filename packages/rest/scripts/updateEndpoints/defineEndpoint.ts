@@ -18,6 +18,7 @@ export function* defineEndpoint(
     typesUrl: URL,
     helperUrl: URL,
     schemes: Partial<Record<ParameterObject['in'], symbol>>,
+    ratelimited: boolean
 ) {
     const name = snakeCaseToCamelCase(id);
 
@@ -42,7 +43,7 @@ export function* defineEndpoint(
         yield {
             imports,
             contents: source`export const name = ${JSON.stringify(fullName)};
-${defineRoute(method, pathType, imports, typesUrl, fullName, url, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
+${defineRoute(method, pathType, imports, typesUrl, fullName, url, ratelimited, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
 ${defineQuery(queryType, imports, typesUrl, fullName)}
 ${defineHeader(headerType, imports, typesUrl, fullName)}
 ${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl)}
@@ -305,7 +306,7 @@ export async function readResponse<R>(statusCode: number, contentType: string | 
 }`;
 }
 
-function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string, security: Record<string, string[]>) {
+function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string, ratelimited: boolean, security: Record<string, string[]>) {
     if (pathType.name !== undefined)
         imports.push({ file: typesUrl, exported: pathType.name, isType: true });
     const regexSource = [];
@@ -360,7 +361,7 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
-${defineRateLimit(method, url)}`;
+${ratelimited ? defineRateLimit(method, url) : ''}`;
 }
 
 function defineRateLimit(method: Lowercase<HttpMethod>, url: string) {
@@ -380,7 +381,7 @@ Object.freeze(rateLimit);`
 }
 
 function hasGlobalRateLimit(keys: string[]) {
-    return keys.includes('interaction_id');
+    return !keys.includes('interaction_id');
 }
 
 function getRateLimitTemplateArg(paramName: string, url: string, method: string, rateLimitKeys: string[]) {

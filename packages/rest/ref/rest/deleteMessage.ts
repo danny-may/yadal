@@ -40,7 +40,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(model: { ["channel_id"]: RouteModel["channel_id"] | string; ["message_id"]: RouteModel["message_id"] | string; }) {
         return `delete /channels/${model.channel_id}/messages/${((message_id: string) => {
      const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);

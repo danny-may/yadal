@@ -44,7 +44,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(_?: {  }) {
         return `get /users/@me/guilds` as const;
     }

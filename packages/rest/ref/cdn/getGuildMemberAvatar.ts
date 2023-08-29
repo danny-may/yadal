@@ -39,13 +39,7 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
-export const rateLimit = {
-    global: false,
-    bucket(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
-        return `get /guilds/${model.guild_id}/users/<any>/avatars/<any>.<any>` as const;
-    }
-} as const;
-Object.freeze(rateLimit);
+
 export type QueryModel = {
 
 };

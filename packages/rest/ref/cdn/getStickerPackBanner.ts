@@ -37,13 +37,7 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
-export const rateLimit = {
-    global: false,
-    bucket(_?: {  }) {
-        return `get /app-assets/710982414301790216/store/<any>.<any>` as const;
-    }
-} as const;
-Object.freeze(rateLimit);
+
 export type QueryModel = {
 
 };

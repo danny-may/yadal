@@ -41,7 +41,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(_?: {  }) {
         return `put /users/@me/applications/<any>/role-connection` as const;
     }

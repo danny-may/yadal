@@ -39,7 +39,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; }) {
         return `delete /webhooks/${model.webhook_id}` as const;
     }

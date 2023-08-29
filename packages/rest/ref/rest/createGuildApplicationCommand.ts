@@ -43,7 +43,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
         return `post /applications/<any>/guilds/${model.guild_id}/commands` as const;
     }

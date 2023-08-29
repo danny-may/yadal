@@ -39,7 +39,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
         return `delete /guilds/${model.guild_id}` as const;
     }

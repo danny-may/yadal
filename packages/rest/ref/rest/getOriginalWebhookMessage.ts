@@ -40,7 +40,7 @@ export const route = {
 } as const;
 Object.freeze(route);
 export const rateLimit = {
-    global: false,
+    global: true,
     bucket(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; ["webhook_token"]: RouteModel["webhook_token"] | string; }) {
         return `get /webhooks/${model.webhook_id}/${model.webhook_token}/messages/@original` as const;
     }

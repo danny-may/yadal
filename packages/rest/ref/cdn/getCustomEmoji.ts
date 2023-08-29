@@ -37,13 +37,7 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
-export const rateLimit = {
-    global: false,
-    bucket(_?: {  }) {
-        return `get /emojis/<any>.<any>` as const;
-    }
-} as const;
-Object.freeze(rateLimit);
+
 export type QueryModel = {
 
 };
