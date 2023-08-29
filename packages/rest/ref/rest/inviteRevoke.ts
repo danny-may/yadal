@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type InviteRevokeRequestPath, type InviteRevokeRequestHeaders, type RateLimitError, type InviteRevokeResponseJSON, type ErrorResponse } from '../discord.js';
+import { type InviteRevokeRequestPath, type InviteRevokeRequestHeaders, type InviteRevokeResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "inviteRevoke";
 export type RouteModel = InviteRevokeRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateGuildStickerRequestPath, type CreateGuildStickerRequestHeaders, type RateLimitError, type GuildStickerResponse, type ErrorResponse, type CreateGuildStickerRequestFormData } from '../discord.js';
+import { type CreateGuildStickerRequestPath, type CreateGuildStickerRequestHeaders, type GuildStickerResponse, type RateLimitError, type ErrorResponse, type CreateGuildStickerRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createGuildSticker";
 export type RouteModel = CreateGuildStickerRequestPath;

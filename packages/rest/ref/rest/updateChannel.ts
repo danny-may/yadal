@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateChannelRequestPath, type UpdateChannelRequestHeaders, type RateLimitError, type UpdateChannelResponseJSON, type ErrorResponse, type UpdateChannelRequestJSON } from '../discord.js';
+import { type UpdateChannelRequestPath, type UpdateChannelRequestHeaders, type UpdateChannelResponseJSON, type RateLimitError, type ErrorResponse, type UpdateChannelRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateChannel";
 export type RouteModel = UpdateChannelRequestPath;

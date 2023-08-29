@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateWebhookRequestPath, type CreateWebhookRequestHeaders, type RateLimitError, type GuildIncomingWebhookResponse, type ErrorResponse, type CreateWebhookRequestJSON } from '../discord.js';
+import { type CreateWebhookRequestPath, type CreateWebhookRequestHeaders, type GuildIncomingWebhookResponse, type RateLimitError, type ErrorResponse, type CreateWebhookRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createWebhook";
 export type RouteModel = CreateWebhookRequestPath;

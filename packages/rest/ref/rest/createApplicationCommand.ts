@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateApplicationCommandRequestPath, type CreateApplicationCommandRequestHeaders, type RateLimitError, type ApplicationCommandResponse, type ErrorResponse, type CreateApplicationCommandRequestJSON } from '../discord.js';
+import { type CreateApplicationCommandRequestPath, type CreateApplicationCommandRequestHeaders, type ApplicationCommandResponse, type RateLimitError, type ErrorResponse, type CreateApplicationCommandRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createApplicationCommand";
 export type RouteModel = CreateApplicationCommandRequestPath;

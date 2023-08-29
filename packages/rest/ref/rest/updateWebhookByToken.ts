@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateWebhookByTokenRequestPath, type UpdateWebhookByTokenRequestHeaders, type RateLimitError, type UpdateWebhookByTokenResponseJSON, type ErrorResponse, type UpdateWebhookByTokenRequestJSON } from '../discord.js';
+import { type UpdateWebhookByTokenRequestPath, type UpdateWebhookByTokenRequestHeaders, type UpdateWebhookByTokenResponseJSON, type RateLimitError, type ErrorResponse, type UpdateWebhookByTokenRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateWebhookByToken";
 export type RouteModel = UpdateWebhookByTokenRequestPath;

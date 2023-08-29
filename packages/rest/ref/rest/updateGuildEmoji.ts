@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateGuildEmojiRequestPath, type UpdateGuildEmojiRequestHeaders, type RateLimitError, type EmojiResponse, type ErrorResponse, type UpdateGuildEmojiRequestJSON } from '../discord.js';
+import { type UpdateGuildEmojiRequestPath, type UpdateGuildEmojiRequestHeaders, type EmojiResponse, type RateLimitError, type ErrorResponse, type UpdateGuildEmojiRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateGuildEmoji";
 export type RouteModel = UpdateGuildEmojiRequestPath;

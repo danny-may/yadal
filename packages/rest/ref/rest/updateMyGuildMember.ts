@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateMyGuildMemberRequestPath, type UpdateMyGuildMemberRequestHeaders, type RateLimitError, type PrivateGuildMemberResponse, type ErrorResponse, type UpdateMyGuildMemberRequestJSON } from '../discord.js';
+import { type UpdateMyGuildMemberRequestPath, type UpdateMyGuildMemberRequestHeaders, type PrivateGuildMemberResponse, type RateLimitError, type ErrorResponse, type UpdateMyGuildMemberRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateMyGuildMember";
 export type RouteModel = UpdateMyGuildMemberRequestPath;

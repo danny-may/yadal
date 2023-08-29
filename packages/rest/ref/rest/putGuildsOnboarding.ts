@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type PutGuildsOnboardingRequestPath, type PutGuildsOnboardingRequestHeaders, type RateLimitError, type GuildOnboardingResponse, type ErrorResponse, type UpdateGuildOnboardingRequest } from '../discord.js';
+import { type PutGuildsOnboardingRequestPath, type PutGuildsOnboardingRequestHeaders, type GuildOnboardingResponse, type RateLimitError, type ErrorResponse, type UpdateGuildOnboardingRequest } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "putGuildsOnboarding";
 export type RouteModel = PutGuildsOnboardingRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListMessagesRequestPath, type ListMessagesRequestQuery, type ListMessagesRequestHeaders, type RateLimitError, type ListMessagesResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListMessagesRequestPath, type ListMessagesRequestQuery, type ListMessagesRequestHeaders, type ListMessagesResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listMessages";
 export type RouteModel = ListMessagesRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetGuildPreviewRequestPath, type GetGuildPreviewRequestHeaders, type RateLimitError, type GuildPreviewResponse, type ErrorResponse } from '../discord.js';
+import { type GetGuildPreviewRequestPath, type GetGuildPreviewRequestHeaders, type GuildPreviewResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getGuildPreview";
 export type RouteModel = GetGuildPreviewRequestPath;

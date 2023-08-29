@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type AddGroupDmUserRequestPath, type AddGroupDmUserRequestHeaders, type RateLimitError, type AddGroupDmUserResponseJSON, type ErrorResponse } from '../discord.js';
+import { type AddGroupDmUserRequestPath, type AddGroupDmUserRequestHeaders, type AddGroupDmUserResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "addGroupDmUser";
 export type RouteModel = AddGroupDmUserRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetBotGatewayRequestHeaders, type RateLimitError, type GatewayBotResponse, type ErrorResponse } from '../discord.js';
+import { type GetBotGatewayRequestHeaders, type GatewayBotResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getBotGateway";
 export type RouteModel = {

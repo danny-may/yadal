@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateApplicationUserRoleConnectionRequestPath, type UpdateApplicationUserRoleConnectionRequestHeaders, type RateLimitError, type ApplicationUserRoleConnectionResponse, type ErrorResponse, type UpdateApplicationUserRoleConnectionRequestJSON } from '../discord.js';
+import { type UpdateApplicationUserRoleConnectionRequestPath, type UpdateApplicationUserRoleConnectionRequestHeaders, type ApplicationUserRoleConnectionResponse, type RateLimitError, type ErrorResponse, type UpdateApplicationUserRoleConnectionRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateApplicationUserRoleConnection";
 export type RouteModel = UpdateApplicationUserRoleConnectionRequestPath;

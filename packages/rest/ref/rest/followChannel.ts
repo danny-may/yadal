@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type FollowChannelRequestPath, type FollowChannelRequestHeaders, type RateLimitError, type ChannelFollowerResponse, type ErrorResponse, type FollowChannelRequestJSON } from '../discord.js';
+import { type FollowChannelRequestPath, type FollowChannelRequestHeaders, type ChannelFollowerResponse, type RateLimitError, type ErrorResponse, type FollowChannelRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "followChannel";
 export type RouteModel = FollowChannelRequestPath;

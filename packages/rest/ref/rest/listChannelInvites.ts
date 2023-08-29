@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListChannelInvitesRequestPath, type ListChannelInvitesRequestHeaders, type RateLimitError, type ListChannelInvitesResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListChannelInvitesRequestPath, type ListChannelInvitesRequestHeaders, type ListChannelInvitesResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listChannelInvites";
 export type RouteModel = ListChannelInvitesRequestPath;

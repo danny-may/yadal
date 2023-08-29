@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type SearchGuildMembersRequestPath, type SearchGuildMembersRequestQuery, type SearchGuildMembersRequestHeaders, type RateLimitError, type SearchGuildMembersResponseJSON, type ErrorResponse } from '../discord.js';
+import { type SearchGuildMembersRequestPath, type SearchGuildMembersRequestQuery, type SearchGuildMembersRequestHeaders, type SearchGuildMembersResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "searchGuildMembers";
 export type RouteModel = SearchGuildMembersRequestPath;

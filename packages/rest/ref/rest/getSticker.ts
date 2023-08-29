@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetStickerRequestPath, type GetStickerRequestHeaders, type RateLimitError, type GetStickerResponseJSON, type ErrorResponse } from '../discord.js';
+import { type GetStickerRequestPath, type GetStickerRequestHeaders, type GetStickerResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getSticker";
 export type RouteModel = GetStickerRequestPath;

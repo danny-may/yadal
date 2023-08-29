@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateStageInstanceRequestHeaders, type RateLimitError, type StageInstanceResponse, type ErrorResponse, type CreateStageInstanceRequestJSON } from '../discord.js';
+import { type CreateStageInstanceRequestHeaders, type StageInstanceResponse, type RateLimitError, type ErrorResponse, type CreateStageInstanceRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createStageInstance";
 export type RouteModel = {

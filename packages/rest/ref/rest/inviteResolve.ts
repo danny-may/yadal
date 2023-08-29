@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type InviteResolveRequestPath, type InviteResolveRequestQuery, type InviteResolveRequestHeaders, type RateLimitError, type InviteResolveResponseJSON, type ErrorResponse } from '../discord.js';
+import { type InviteResolveRequestPath, type InviteResolveRequestQuery, type InviteResolveRequestHeaders, type InviteResolveResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "inviteResolve";
 export type RouteModel = InviteResolveRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type SetGuildApplicationCommandPermissionsRequestPath, type SetGuildApplicationCommandPermissionsRequestHeaders, type RateLimitError, type CommandPermissionsResponse, type ErrorResponse, type SetGuildApplicationCommandPermissionsRequestJSON } from '../discord.js';
+import { type SetGuildApplicationCommandPermissionsRequestPath, type SetGuildApplicationCommandPermissionsRequestHeaders, type CommandPermissionsResponse, type RateLimitError, type ErrorResponse, type SetGuildApplicationCommandPermissionsRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "setGuildApplicationCommandPermissions";
 export type RouteModel = SetGuildApplicationCommandPermissionsRequestPath;

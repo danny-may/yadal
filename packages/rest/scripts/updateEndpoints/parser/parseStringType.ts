@@ -32,7 +32,7 @@ export const wellKnownEncodings = {
             })
         ]
     }),
-    base64: new LiteralType({ name: 'Base64String', value: 'string' }),
+    base64: new LiteralType({ name: 'Base64String', value: '`data:image/${"jpeg"|"png"|"gif"};base64,${string}`' }),
 }
 
 export function parseStringType(name: string | undefined, definition: StringSchemaObject, context: ParserContext) {

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ExecuteSlackCompatibleWebhookRequestPath, type ExecuteSlackCompatibleWebhookRequestQuery, type ExecuteSlackCompatibleWebhookRequestHeaders, type RateLimitError, type ExecuteSlackCompatibleWebhookResponseJSON, type ErrorResponse, type SlackWebhook } from '../discord.js';
+import { type ExecuteSlackCompatibleWebhookRequestPath, type ExecuteSlackCompatibleWebhookRequestQuery, type ExecuteSlackCompatibleWebhookRequestHeaders, type ExecuteSlackCompatibleWebhookResponseJSON, type RateLimitError, type ErrorResponse, type SlackWebhook } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "executeSlackCompatibleWebhook";
 export type RouteModel = ExecuteSlackCompatibleWebhookRequestPath;

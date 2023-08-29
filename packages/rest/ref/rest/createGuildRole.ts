@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateGuildRoleRequestPath, type CreateGuildRoleRequestHeaders, type RateLimitError, type GuildRoleResponse, type ErrorResponse } from '../discord.js';
+import { type CreateGuildRoleRequestPath, type CreateGuildRoleRequestHeaders, type GuildRoleResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createGuildRole";
 export type RouteModel = CreateGuildRoleRequestPath;

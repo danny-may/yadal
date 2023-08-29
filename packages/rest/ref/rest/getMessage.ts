@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetMessageRequestPath, type GetMessageRequestHeaders, type RateLimitError, type MessageResponse, type ErrorResponse } from '../discord.js';
+import { type GetMessageRequestPath, type GetMessageRequestHeaders, type MessageResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getMessage";
 export type RouteModel = GetMessageRequestPath;

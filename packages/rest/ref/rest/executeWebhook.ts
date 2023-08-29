@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ExecuteWebhookRequestPath, type ExecuteWebhookRequestQuery, type ExecuteWebhookRequestHeaders, type RateLimitError, type MessageResponse, type ErrorResponse, type ExecuteWebhookRequestJSON, type ExecuteWebhookRequestURLEncoded, type ExecuteWebhookRequestFormData } from '../discord.js';
+import { type ExecuteWebhookRequestPath, type ExecuteWebhookRequestQuery, type ExecuteWebhookRequestHeaders, type MessageResponse, type RateLimitError, type ErrorResponse, type ExecuteWebhookRequestJSON, type ExecuteWebhookRequestURLEncoded, type ExecuteWebhookRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "executeWebhook";
 export type RouteModel = ExecuteWebhookRequestPath;

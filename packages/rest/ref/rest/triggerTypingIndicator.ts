@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type TriggerTypingIndicatorRequestPath, type TriggerTypingIndicatorRequestHeaders, type RateLimitError, type TypingIndicatorResponse, type ErrorResponse } from '../discord.js';
+import { type TriggerTypingIndicatorRequestPath, type TriggerTypingIndicatorRequestHeaders, type TypingIndicatorResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "triggerTypingIndicator";
 export type RouteModel = TriggerTypingIndicatorRequestPath;

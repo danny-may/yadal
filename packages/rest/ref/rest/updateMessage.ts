@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateMessageRequestPath, type UpdateMessageRequestHeaders, type RateLimitError, type MessageResponse, type ErrorResponse, type MessageEditRequestPartial, type UpdateMessageRequestFormData } from '../discord.js';
+import { type UpdateMessageRequestPath, type UpdateMessageRequestHeaders, type MessageResponse, type RateLimitError, type ErrorResponse, type MessageEditRequestPartial, type UpdateMessageRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateMessage";
 export type RouteModel = UpdateMessageRequestPath;

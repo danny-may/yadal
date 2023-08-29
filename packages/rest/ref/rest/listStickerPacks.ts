@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListStickerPacksRequestHeaders, type RateLimitError, type StickerPackCollectionResponse, type ErrorResponse } from '../discord.js';
+import { type ListStickerPacksRequestHeaders, type StickerPackCollectionResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listStickerPacks";
 export type RouteModel = {

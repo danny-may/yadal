@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateGuildWelcomeScreenRequestPath, type UpdateGuildWelcomeScreenRequestHeaders, type RateLimitError, type GuildWelcomeScreenResponse, type ErrorResponse, type WelcomeScreenPatchRequestPartial } from '../discord.js';
+import { type UpdateGuildWelcomeScreenRequestPath, type UpdateGuildWelcomeScreenRequestHeaders, type GuildWelcomeScreenResponse, type RateLimitError, type ErrorResponse, type WelcomeScreenPatchRequestPartial } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateGuildWelcomeScreen";
 export type RouteModel = UpdateGuildWelcomeScreenRequestPath;

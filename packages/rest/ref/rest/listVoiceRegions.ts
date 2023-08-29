@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListVoiceRegionsRequestHeaders, type RateLimitError, type ListVoiceRegionsResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListVoiceRegionsRequestHeaders, type ListVoiceRegionsResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listVoiceRegions";
 export type RouteModel = {

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateGuildWidgetSettingsRequestPath, type UpdateGuildWidgetSettingsRequestHeaders, type RateLimitError, type WidgetSettingsResponse, type ErrorResponse, type UpdateGuildWidgetSettingsRequestJSON } from '../discord.js';
+import { type UpdateGuildWidgetSettingsRequestPath, type UpdateGuildWidgetSettingsRequestHeaders, type WidgetSettingsResponse, type RateLimitError, type ErrorResponse, type UpdateGuildWidgetSettingsRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateGuildWidgetSettings";
 export type RouteModel = UpdateGuildWidgetSettingsRequestPath;

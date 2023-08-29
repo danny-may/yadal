@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateGuildScheduledEventRequestPath, type CreateGuildScheduledEventRequestHeaders, type RateLimitError, type CreateGuildScheduledEventResponseJSON, type ErrorResponse, type CreateGuildScheduledEventRequestJSON } from '../discord.js';
+import { type CreateGuildScheduledEventRequestPath, type CreateGuildScheduledEventRequestHeaders, type CreateGuildScheduledEventResponseJSON, type RateLimitError, type ErrorResponse, type CreateGuildScheduledEventRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createGuildScheduledEvent";
 export type RouteModel = CreateGuildScheduledEventRequestPath;

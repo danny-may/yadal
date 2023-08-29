@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type DeleteChannelRequestPath, type DeleteChannelRequestHeaders, type RateLimitError, type DeleteChannelResponseJSON, type ErrorResponse } from '../discord.js';
+import { type DeleteChannelRequestPath, type DeleteChannelRequestHeaders, type DeleteChannelResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "deleteChannel";
 export type RouteModel = DeleteChannelRequestPath;

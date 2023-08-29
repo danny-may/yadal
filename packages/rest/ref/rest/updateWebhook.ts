@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateWebhookRequestPath, type UpdateWebhookRequestHeaders, type RateLimitError, type UpdateWebhookResponseJSON, type ErrorResponse, type UpdateWebhookRequestJSON } from '../discord.js';
+import { type UpdateWebhookRequestPath, type UpdateWebhookRequestHeaders, type UpdateWebhookResponseJSON, type RateLimitError, type ErrorResponse, type UpdateWebhookRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateWebhook";
 export type RouteModel = UpdateWebhookRequestPath;

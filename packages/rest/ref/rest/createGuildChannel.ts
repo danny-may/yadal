@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateGuildChannelRequestPath, type CreateGuildChannelRequestHeaders, type RateLimitError, type GuildChannelResponse, type ErrorResponse, type CreateGuildChannelRequest } from '../discord.js';
+import { type CreateGuildChannelRequestPath, type CreateGuildChannelRequestHeaders, type GuildChannelResponse, type RateLimitError, type ErrorResponse, type CreateGuildChannelRequest } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createGuildChannel";
 export type RouteModel = CreateGuildChannelRequestPath;

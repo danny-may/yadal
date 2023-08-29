@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetGuildWidgetSettingsRequestPath, type GetGuildWidgetSettingsRequestHeaders, type RateLimitError, type WidgetSettingsResponse, type ErrorResponse } from '../discord.js';
+import { type GetGuildWidgetSettingsRequestPath, type GetGuildWidgetSettingsRequestHeaders, type WidgetSettingsResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getGuildWidgetSettings";
 export type RouteModel = GetGuildWidgetSettingsRequestPath;

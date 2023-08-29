@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetStageInstanceRequestPath, type GetStageInstanceRequestHeaders, type RateLimitError, type StageInstanceResponse, type ErrorResponse } from '../discord.js';
+import { type GetStageInstanceRequestPath, type GetStageInstanceRequestHeaders, type StageInstanceResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getStageInstance";
 export type RouteModel = GetStageInstanceRequestPath;

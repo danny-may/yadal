@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type SyncGuildTemplateRequestPath, type SyncGuildTemplateRequestHeaders, type RateLimitError, type GuildTemplateResponse, type ErrorResponse } from '../discord.js';
+import { type SyncGuildTemplateRequestPath, type SyncGuildTemplateRequestHeaders, type GuildTemplateResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "syncGuildTemplate";
 export type RouteModel = SyncGuildTemplateRequestPath;

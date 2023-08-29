@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetActiveGuildThreadsRequestPath, type GetActiveGuildThreadsRequestHeaders, type RateLimitError, type ThreadsResponse, type ErrorResponse } from '../discord.js';
+import { type GetActiveGuildThreadsRequestPath, type GetActiveGuildThreadsRequestHeaders, type ThreadsResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getActiveGuildThreads";
 export type RouteModel = GetActiveGuildThreadsRequestPath;

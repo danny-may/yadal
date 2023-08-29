@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetMyOauth2AuthorizationRequestHeaders, type RateLimitError, type OAuth2GetAuthorizationResponse, type ErrorResponse } from '../discord.js';
+import { type GetMyOauth2AuthorizationRequestHeaders, type OAuth2GetAuthorizationResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getMyOauth2Authorization";
 export type RouteModel = {

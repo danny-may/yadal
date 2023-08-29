@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetApplicationRoleConnectionsMetadataRequestPath, type GetApplicationRoleConnectionsMetadataRequestHeaders, type RateLimitError, type GetApplicationRoleConnectionsMetadataResponseJSON, type ErrorResponse } from '../discord.js';
+import { type GetApplicationRoleConnectionsMetadataRequestPath, type GetApplicationRoleConnectionsMetadataRequestHeaders, type GetApplicationRoleConnectionsMetadataResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getApplicationRoleConnectionsMetadata";
 export type RouteModel = GetApplicationRoleConnectionsMetadataRequestPath;

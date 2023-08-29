@@ -11,9 +11,7 @@ export class URLResolverMiddleware implements IEndpointClientMiddleware {
     }
 
     handle<TModel extends object, TResult>(request: IEndpointRequest<TModel, TResult>, next: (signal?: AbortSignal) => PromiseLike<IEndpointResponse<TModel, TResult>>) {
-        const url = request.http.url;
-        if (url.protocol === 'rel:')
-            request.http.url = this.#resolver.resolve(url);
+        request.http.url = this.#resolver.resolve(request.http.url);
         return next();
     }
 }

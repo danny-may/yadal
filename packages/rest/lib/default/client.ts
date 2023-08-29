@@ -4,12 +4,12 @@ import { HttpClient } from "../http/index.js";
 import { IRateLimitService, RateLimitManager, RateLimitService } from "../rateLimit/index.js";
 import { ProtocolURLResolver, URlResolver, createUrlMerger } from "@yadal/core";
 import { defineEndpointClient } from "../defineEndpointClient.js";
-import { rest } from "./endpoints.js";
+import { cdn, rest } from "./endpoints.js";
 import { rateLimits } from './rateLimits.js';
 
 const defaultUserAgent = `${pkg.name} (${pkg.repository.url}, ${pkg.version})`;
 
-export class DiscordRestClient extends defineEndpointClient(rest) {
+export class DiscordRestClient extends defineEndpointClient({ ...rest, ...cdn }) {
     readonly ratelimit: IRateLimitService;
     readonly http: HttpClient;
 
@@ -45,9 +45,9 @@ function makeUrlResolver(options: DiscordRestClientOptions['urlResolver']) {
     if (typeof options === 'object' && 'resolve' in options)
         return options;
 
-    const { api, cdn } = options ?? {};
+    const { rest, cdn } = options ?? {};
     return new ProtocolURLResolver({
-        ['api:']: typeof api === 'function' ? api : createUrlMerger(api ?? new URL('https://discord.com/api/v10')),
+        ['rest:']: typeof rest === 'function' ? rest : createUrlMerger(rest ?? new URL('https://discord.com/api/v10')),
         ['cdn:']: typeof cdn === 'function' ? cdn : createUrlMerger(cdn ?? new URL('https://cdn.discordapp.com/'))
     });
 }
@@ -56,7 +56,7 @@ export interface DiscordRestClientOptions {
     readonly authHeader?: string;
     readonly http?: HttpClient;
     readonly urlResolver?: URlResolver | {
-        readonly api?: URL | ((url: URL) => URL);
+        readonly rest?: URL | ((url: URL) => URL);
         readonly cdn?: URL | ((url: URL) => URL);
     };
     readonly middleware?: Iterable<IEndpointClientMiddleware>;

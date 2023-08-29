@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CrosspostMessageRequestPath, type CrosspostMessageRequestHeaders, type RateLimitError, type MessageResponse, type ErrorResponse } from '../discord.js';
+import { type CrosspostMessageRequestPath, type CrosspostMessageRequestHeaders, type MessageResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "crosspostMessage";
 export type RouteModel = CrosspostMessageRequestPath;

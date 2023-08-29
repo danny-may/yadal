@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type SetGuildMfaLevelRequestPath, type SetGuildMfaLevelRequestHeaders, type RateLimitError, type GuildMFALevelResponse, type ErrorResponse, type SetGuildMfaLevelRequestJSON } from '../discord.js';
+import { type SetGuildMfaLevelRequestPath, type SetGuildMfaLevelRequestHeaders, type GuildMFALevelResponse, type RateLimitError, type ErrorResponse, type SetGuildMfaLevelRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "setGuildMfaLevel";
 export type RouteModel = SetGuildMfaLevelRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListPrivateArchivedThreadsRequestPath, type ListPrivateArchivedThreadsRequestQuery, type ListPrivateArchivedThreadsRequestHeaders, type RateLimitError, type ThreadsResponse, type ErrorResponse } from '../discord.js';
+import { type ListPrivateArchivedThreadsRequestPath, type ListPrivateArchivedThreadsRequestQuery, type ListPrivateArchivedThreadsRequestHeaders, type ThreadsResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listPrivateArchivedThreads";
 export type RouteModel = ListPrivateArchivedThreadsRequestPath;

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateThreadRequestPath, type CreateThreadRequestHeaders, type RateLimitError, type CreatedThreadResponse, type ErrorResponse, type CreateThreadRequestJSON, type CreateThreadRequestURLEncoded, type CreateThreadRequestFormData } from '../discord.js';
+import { type CreateThreadRequestPath, type CreateThreadRequestHeaders, type CreatedThreadResponse, type RateLimitError, type ErrorResponse, type CreateThreadRequestJSON, type CreateThreadRequestURLEncoded, type CreateThreadRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createThread";
 export type RouteModel = CreateThreadRequestPath;

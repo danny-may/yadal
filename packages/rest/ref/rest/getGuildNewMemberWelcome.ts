@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetGuildNewMemberWelcomeRequestPath, type GetGuildNewMemberWelcomeRequestHeaders, type RateLimitError, type GuildHomeSettingsResponse, type ErrorResponse } from '../discord.js';
+import { type GetGuildNewMemberWelcomeRequestPath, type GetGuildNewMemberWelcomeRequestHeaders, type GuildHomeSettingsResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getGuildNewMemberWelcome";
 export type RouteModel = GetGuildNewMemberWelcomeRequestPath;

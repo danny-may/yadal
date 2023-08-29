@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateMyApplicationRequestHeaders, type RateLimitError, type PrivateApplicationResponse, type ErrorResponse, type ApplicationFormPartial } from '../discord.js';
+import { type UpdateMyApplicationRequestHeaders, type PrivateApplicationResponse, type RateLimitError, type ErrorResponse, type ApplicationFormPartial } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateMyApplication";
 export type RouteModel = {

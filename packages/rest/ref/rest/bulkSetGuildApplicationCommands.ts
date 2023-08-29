@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type BulkSetGuildApplicationCommandsRequestPath, type BulkSetGuildApplicationCommandsRequestHeaders, type RateLimitError, type BulkSetGuildApplicationCommandsResponseJSON, type ErrorResponse, type BulkSetGuildApplicationCommandsRequestJSON } from '../discord.js';
+import { type BulkSetGuildApplicationCommandsRequestPath, type BulkSetGuildApplicationCommandsRequestHeaders, type BulkSetGuildApplicationCommandsResponseJSON, type RateLimitError, type ErrorResponse, type BulkSetGuildApplicationCommandsRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "bulkSetGuildApplicationCommands";
 export type RouteModel = BulkSetGuildApplicationCommandsRequestPath;

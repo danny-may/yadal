@@ -1,7 +1,6 @@
 import { OperationObject, ParameterObject } from "openapi-typescript";
 import { HttpMethod } from "../../lib/http/index.js";
 import { wellKnownEncodings } from "./parser/parseStringType.js";
-import { rateLimitError } from './augmentations/index.js';
 import { escapeRegex } from "@yadal/core";
 import { noRef, snakeCaseToCamelCase, source } from "./util/index.js";
 import { ImportFromDetails } from "./output.js";
@@ -276,16 +275,7 @@ return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encod
 
 function defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseType: LiteralType | UnionType, fullName: string, responseTypes: { statusPattern: string; contentType: string | undefined; type: Type | undefined; }[], typesUrl: URL) {
     imports.push({ file: helperUrl, exported: 'DiscordRestError', isType: false });
-    imports.push({ file: helperUrl, exported: 'DiscordRateLimitError', isType: false });
-    imports.push({ file: typesUrl, exported: 'RateLimitError', isType: true });
-    const conditions: Record<string, { precision: number; contentTypes: Record<string, { kind: 'ratelimit' | 'error' | 'data' | 'default'; type: Type | undefined; }>; }> = {
-        'statusCode === 429': {
-            precision: 2,
-            contentTypes: {
-                'contentType === "application/json"': { kind: 'ratelimit', type: rateLimitError }
-            }
-        }
-    };
+    const conditions: Record<string, { precision: number; contentTypes: Record<string, { kind: ResponseKind; type: Type | undefined; }>; }> = {};
     for (const { statusPattern, contentType, type } of responseTypes) {
         if (type?.name !== undefined)
             imports.push({ file: typesUrl, exported: type.name, isType: true });
@@ -305,12 +295,12 @@ export async function readResponse<R>(statusCode: number, contentType: string | 
     ${source([], ...(function* () {
         for (const [condition, { contentTypes }] of Object.entries(statuses).sort((a, b) => a[1].precision - b[1].precision)) {
             yield source`if (${condition}) {
-    ${generateReadResponseStatusCodeHandler(contentTypes)}
+    ${generateReadResponseStatusCodeHandler(contentTypes, imports, helperUrl)}
 }
 `
         }
     })())}${statusElse !== undefined
-        ? generateReadResponseStatusCodeHandler(statusElse)
+        ? generateReadResponseStatusCodeHandler(statusElse, imports, helperUrl)
         : ''}throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);
 }`;
 }
@@ -476,18 +466,23 @@ function statusToCondition(status: string, paramName: string): [condition: strin
     }
     throw new Error(`Unsupported status template: ${status}`);
 }
-function statusToResponseKind(status: string) {
-    return status[0] !== '2' ? 'error' : 'data';
+type ResponseKind = 'data' | 'error' | 'ratelimit' | 'default';
+function statusToResponseKind(status: string): ResponseKind {
+    return status === '429' ? 'ratelimit' : status[0] !== '2' ? 'error' : 'data';
 }
 
-function generateReadResponseContentTypeHandler(type: Type | undefined, kind: 'data' | 'error' | 'ratelimit' | 'default') {
+
+function generateReadResponseContentTypeHandler(type: Type | undefined, kind: ResponseKind, imports: ImportFromDetails[], helperUrl: URL) {
     switch (kind) {
         case 'error':
             return type === undefined
                 ? source`throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`
                 : source`throw new DiscordRestError(await resolve(contentType, content) as ${type.inline('~')});`;
         case 'ratelimit':
-            return source`throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);`
+            if (type === undefined)
+                return source`throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`;
+            imports.push({ file: helperUrl, exported: 'DiscordRateLimitError', isType: false });
+            return source`throw new DiscordRateLimitError(await resolve(contentType, content) as ${type.inline('~')});`
         case 'data':
             return type === undefined
                 ? source`return undefined;`
@@ -503,15 +498,15 @@ function generateReadResponseContentTypeHandler(type: Type | undefined, kind: 'd
     }
 }
 
-function generateReadResponseStatusCodeHandler(config: Record<string, { kind: 'ratelimit' | 'error' | 'data' | 'default'; type: Type | undefined; }>) {
+function generateReadResponseStatusCodeHandler(config: Record<string, { kind: ResponseKind; type: Type | undefined; }>, imports: ImportFromDetails[], helperUrl: URL) {
     const { '': defaultContent, ...contentTypes } = config;
     return source`${Object.entries(contentTypes).flatMap(([condition, { kind, type }]) => [
         ...source`if (${condition}) {
-    ${generateReadResponseContentTypeHandler(type, kind)}
+    ${generateReadResponseContentTypeHandler(type, kind, imports, helperUrl)}
 }
 `
     ])}${defaultContent !== undefined
-        ? generateReadResponseContentTypeHandler(defaultContent.type, defaultContent.kind)
+        ? generateReadResponseContentTypeHandler(defaultContent.type, defaultContent.kind, imports, helperUrl)
         : source`throw new DiscordRestError(null, \`Unexpected content type \${JSON.stringify(contentType)} response with status code \${statusCode}\`);`
         }`;
 }

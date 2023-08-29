@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetUserRequestPath, type GetUserRequestHeaders, type RateLimitError, type UserResponse, type ErrorResponse } from '../discord.js';
+import { type GetUserRequestPath, type GetUserRequestHeaders, type UserResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getUser";
 export type RouteModel = GetUserRequestPath;

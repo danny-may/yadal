@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetGuildWidgetPngRequestPath, type GetGuildWidgetPngRequestQuery, type GetGuildWidgetPngRequestHeaders, type RateLimitError, type GetGuildWidgetPngResponsePNG, type ErrorResponse } from '../discord.js';
+import { type GetGuildWidgetPngRequestPath, type GetGuildWidgetPngRequestQuery, type GetGuildWidgetPngRequestHeaders, type GetGuildWidgetPngResponsePNG, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getGuildWidgetPng";
 export type RouteModel = GetGuildWidgetPngRequestPath;

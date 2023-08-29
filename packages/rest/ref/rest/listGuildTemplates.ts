@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListGuildTemplatesRequestPath, type ListGuildTemplatesRequestHeaders, type RateLimitError, type ListGuildTemplatesResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListGuildTemplatesRequestPath, type ListGuildTemplatesRequestHeaders, type ListGuildTemplatesResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listGuildTemplates";
 export type RouteModel = ListGuildTemplatesRequestPath;

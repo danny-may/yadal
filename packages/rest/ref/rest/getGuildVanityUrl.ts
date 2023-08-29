@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetGuildVanityUrlRequestPath, type GetGuildVanityUrlRequestHeaders, type RateLimitError, type VanityURLResponse, type ErrorResponse } from '../discord.js';
+import { type GetGuildVanityUrlRequestPath, type GetGuildVanityUrlRequestHeaders, type VanityURLResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getGuildVanityUrl";
 export type RouteModel = GetGuildVanityUrlRequestPath;

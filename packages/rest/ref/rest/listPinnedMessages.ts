@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListPinnedMessagesRequestPath, type ListPinnedMessagesRequestHeaders, type RateLimitError, type ListPinnedMessagesResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListPinnedMessagesRequestPath, type ListPinnedMessagesRequestHeaders, type ListPinnedMessagesResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listPinnedMessages";
 export type RouteModel = ListPinnedMessagesRequestPath;

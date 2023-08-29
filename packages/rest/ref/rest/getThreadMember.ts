@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetThreadMemberRequestPath, type GetThreadMemberRequestQuery, type GetThreadMemberRequestHeaders, type RateLimitError, type ThreadMemberResponse, type ErrorResponse } from '../discord.js';
+import { type GetThreadMemberRequestPath, type GetThreadMemberRequestQuery, type GetThreadMemberRequestHeaders, type ThreadMemberResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getThreadMember";
 export type RouteModel = GetThreadMemberRequestPath;

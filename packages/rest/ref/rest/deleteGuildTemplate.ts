@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type DeleteGuildTemplateRequestPath, type DeleteGuildTemplateRequestHeaders, type RateLimitError, type GuildTemplateResponse, type ErrorResponse } from '../discord.js';
+import { type DeleteGuildTemplateRequestPath, type DeleteGuildTemplateRequestHeaders, type GuildTemplateResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "deleteGuildTemplate";
 export type RouteModel = DeleteGuildTemplateRequestPath;

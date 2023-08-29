@@ -5902,6 +5902,12 @@ export type ErrorDetails = {
 export type ErrorResponse = DiscordError & {
     errors?: ErrorDetails;
 };
+export interface RateLimitError {
+    code?: number;
+    global: boolean;
+    message: string;
+    retry_after: number;
+}
 export interface GetMyOauth2ApplicationRequestHeaders {
     "x-audit-log-reason"?: string;
 }
@@ -7756,6 +7762,109 @@ export interface GetUserRequestPath {
 export interface GetUserRequestHeaders {
     "x-audit-log-reason"?: string;
 }
+export interface GetCustomEmojiRequestPath {
+    emoji_id: Snowflake;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
+export interface GetGuildIconRequestPath {
+    guild_id: Snowflake;
+    guild_icon: string;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
+export interface GetGuildSplashRequestPath {
+    guild_id: Snowflake;
+    guild_splash: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetGuildDiscoverySplashRequestPath {
+    guild_id: Snowflake;
+    guild_discovery_splash: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetGuildBannerRequestPath {
+    guild_id: Snowflake;
+    guild_banner: string;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
+export interface GetUserBannerRequestPath {
+    user_id: Snowflake;
+    user_banner: string;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
+export interface GetDefaultUserAvatarRequestPath {
+    index: string;
+    format: "png";
+}
+export interface GetUserAvatarRequestPath {
+    user_id: Snowflake;
+    user_avatar: string;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
+export interface GetGuildMemberAvatarRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+    member_avatar: string;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
+export interface GetUserAvatarDecorationRequestPath {
+    user_id: Snowflake;
+    user_avatar_decoration: string;
+    format: "png";
+}
+export interface GetApplicationIconRequestPath {
+    application_id: Snowflake;
+    icon: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetApplicationCoverRequestPath {
+    application_id: Snowflake;
+    cover_image: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetApplicationAssetRequestPath {
+    application_id: Snowflake;
+    asset_id: Snowflake;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetAchievementIconRequestPath {
+    application_id: Snowflake;
+    achievement_id: Snowflake;
+    icon_hash: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetStorePageAssetRequestPath {
+    application_id: Snowflake;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetStickerPackBannerRequestPath {
+    sticker_pack_banner_asset_id: Snowflake;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetTeamIconRequestPath {
+    team_id: Snowflake;
+    team_icon: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetStickerRequestPath {
+    sticker_id: Snowflake;
+    format: ("png" | "json" | "gif");
+}
+export interface GetRoleIconRequestPath {
+    role_id: Snowflake;
+    role_icon: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetGuildScheduledEventCoverRequestPath {
+    scheduled_event_id: Snowflake;
+    scheduled_event_cover_image: string;
+    format: ("png" | "jpg" | "jpeg" | "webp");
+}
+export interface GetGuildMemberBannerRequestPath {
+    guild_id: Snowflake;
+    user_id: Snowflake;
+    member_banner: string;
+    format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
+}
 /**
  * @docs https://discord.com/developers/docs/reference#snowflakes
  */
@@ -7766,12 +7875,6 @@ export type Snowflake = `${bigint}`;
  */
 export type ISO8601DateTime = string;
 export type URIString = `${'http'|'ws'}${'s'|''}://${string}`;
-export interface RateLimitError {
-    code?: number;
-    global: boolean;
-    message: string;
-    retry_after: number;
-}
 export type UserMessageTag = `<@${'!'|''}${bigint}>`;
 export type ChannelMessageTag = `<#${bigint}>`;
 export type RoleMessageTag = `<@&${bigint}>`;
@@ -7785,5 +7888,5 @@ export interface File {
     contentType?: string;
 }
 export type Int32 = number;
-export type Base64String = string;
+export type Base64String = `data:image/${"jpeg"|"png"|"gif"};base64,${string}`;
 export type Int64 = number;

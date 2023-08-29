@@ -1,4 +1,5 @@
-export * from './getSchema.js';
+export * from './getRest.js';
+export * from './getCdn.js';
 export * from './output.js';
 export * from './parser/index.js';
 export * from './types/index.js';

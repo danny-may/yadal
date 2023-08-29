@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetApplicationRequestPath, type GetApplicationRequestHeaders, type RateLimitError, type PrivateApplicationResponse, type ErrorResponse } from '../discord.js';
+import { type GetApplicationRequestPath, type GetApplicationRequestHeaders, type PrivateApplicationResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getApplication";
 export type RouteModel = GetApplicationRequestPath;

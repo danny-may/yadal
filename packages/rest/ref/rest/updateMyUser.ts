@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateMyUserRequestHeaders, type RateLimitError, type UserPIIResponse, type ErrorResponse, type UpdateMyUserRequestJSON } from '../discord.js';
+import { type UpdateMyUserRequestHeaders, type UserPIIResponse, type RateLimitError, type ErrorResponse, type UpdateMyUserRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateMyUser";
 export type RouteModel = {

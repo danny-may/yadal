@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListThreadMembersRequestPath, type ListThreadMembersRequestQuery, type ListThreadMembersRequestHeaders, type RateLimitError, type ListThreadMembersResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListThreadMembersRequestPath, type ListThreadMembersRequestQuery, type ListThreadMembersRequestHeaders, type ListThreadMembersResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listThreadMembers";
 export type RouteModel = ListThreadMembersRequestPath;

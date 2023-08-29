@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateDmRequestHeaders, type RateLimitError, type CreateDmResponseJSON, type ErrorResponse, type CreatePrivateChannelRequest } from '../discord.js';
+import { type CreateDmRequestHeaders, type CreateDmResponseJSON, type RateLimitError, type ErrorResponse, type CreatePrivateChannelRequest } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createDm";
 export type RouteModel = {

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetChannelRequestPath, type GetChannelRequestHeaders, type RateLimitError, type GetChannelResponseJSON, type ErrorResponse } from '../discord.js';
+import { type GetChannelRequestPath, type GetChannelRequestHeaders, type GetChannelResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getChannel";
 export type RouteModel = GetChannelRequestPath;

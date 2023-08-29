@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListPublicArchivedThreadsRequestPath, type ListPublicArchivedThreadsRequestQuery, type ListPublicArchivedThreadsRequestHeaders, type RateLimitError, type ThreadsResponse, type ErrorResponse } from '../discord.js';
+import { type ListPublicArchivedThreadsRequestPath, type ListPublicArchivedThreadsRequestQuery, type ListPublicArchivedThreadsRequestHeaders, type ThreadsResponse, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listPublicArchivedThreads";
 export type RouteModel = ListPublicArchivedThreadsRequestPath;

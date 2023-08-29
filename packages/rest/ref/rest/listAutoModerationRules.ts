@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListAutoModerationRulesRequestPath, type ListAutoModerationRulesRequestHeaders, type RateLimitError, type ListAutoModerationRulesResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListAutoModerationRulesRequestPath, type ListAutoModerationRulesRequestHeaders, type ListAutoModerationRulesResponseJSON, type RateLimitError, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listAutoModerationRules";
 export type RouteModel = ListAutoModerationRulesRequestPath;

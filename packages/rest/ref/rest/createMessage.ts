@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateMessageRequestPath, type CreateMessageRequestHeaders, type RateLimitError, type MessageResponse, type ErrorResponse, type MessageCreateRequest, type CreateMessageRequestFormData } from '../discord.js';
+import { type CreateMessageRequestPath, type CreateMessageRequestHeaders, type MessageResponse, type RateLimitError, type ErrorResponse, type MessageCreateRequest, type CreateMessageRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createMessage";
 export type RouteModel = CreateMessageRequestPath;
