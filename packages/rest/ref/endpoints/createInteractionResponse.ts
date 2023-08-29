@@ -10,6 +10,9 @@ export const route = {
     method: "POST",
     template: "/interactions/{interaction_id}/{interaction_token}/callback",
     keys: Object.freeze(["interaction_id","interaction_token"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/interactions\/(?<interaction_id>.*?)\/(?<interaction_token>.*?)\/callback$/i;
     },
@@ -19,20 +22,30 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["interaction_id"]: decodeURIComponent(match.groups!["interaction_id"]!),
-            ["interaction_token"]: decodeURIComponent(match.groups!["interaction_token"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["interaction_id"]: decodeURIComponent(match.groups!["interaction_id"]!),
+                ["interaction_token"]: decodeURIComponent(match.groups!["interaction_token"]!)
+            };
     },
-    rateLimitBuckets(model: { ["interaction_id"]: RouteModel["interaction_id"] | string; ["interaction_token"]: RouteModel["interaction_token"] | string; }) {
-        return [`post /interactions/${model.interaction_id}/${model.interaction_token}/callback`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: true,
+    bucket(model: { ["interaction_id"]: RouteModel["interaction_id"] | string; ["interaction_token"]: RouteModel["interaction_token"] | string; }) {
+        return `post /interactions/${model.interaction_id}/${model.interaction_token}/callback` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = {
 
 };

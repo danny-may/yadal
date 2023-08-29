@@ -7221,7 +7221,7 @@ export interface UpdateGuildStickerRequestPath {
 export interface UpdateGuildStickerRequestHeaders {
     "x-audit-log-reason"?: string;
 }
-export type ListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse)> | null;
+export type ListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse | null)> | null;
 export interface ListGuildChannelsRequestPath {
     guild_id: Snowflake;
 }

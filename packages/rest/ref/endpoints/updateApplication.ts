@@ -10,6 +10,9 @@ export const route = {
     method: "PATCH",
     template: "/applications/{application_id}",
     keys: Object.freeze(["application_id"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/applications\/(?<application_id>.*?)$/i;
     },
@@ -19,19 +22,29 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
+            };
     },
-    rateLimitBuckets(_?: {  }) {
-        return ["global", `patch /applications/<any>`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(_?: {  }) {
+        return `patch /applications/<any>` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = {
 
 };

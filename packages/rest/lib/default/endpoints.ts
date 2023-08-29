@@ -1,4 +1,4 @@
 import { buildEndpoints } from '../endpoints/index.js';
-import * as config from './config/index.js';
+import { endpoints as restDef } from '../../ref/index.js';
 
-export const endpoints = buildEndpoints(config);
+export const rest = buildEndpoints(new URL('rest:'), Object.values(restDef));

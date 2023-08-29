@@ -10,6 +10,9 @@ export const route = {
     method: "DELETE",
     template: "/webhooks/{webhook_id}/{webhook_token}/messages/{message_id}",
     keys: Object.freeze(["webhook_id","webhook_token","message_id"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)\/messages\/(?<message_id>.*?)$/i;
     },
@@ -19,21 +22,31 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["webhook_id"]: decodeURIComponent(match.groups!["webhook_id"]!),
-            ["webhook_token"]: decodeURIComponent(match.groups!["webhook_token"]!),
-            ["message_id"]: decodeURIComponent(match.groups!["message_id"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["webhook_id"]: decodeURIComponent(match.groups!["webhook_id"]!),
+                ["webhook_token"]: decodeURIComponent(match.groups!["webhook_token"]!),
+                ["message_id"]: decodeURIComponent(match.groups!["message_id"]!)
+            };
     },
-    rateLimitBuckets(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; ["webhook_token"]: RouteModel["webhook_token"] | string; }) {
-        return ["global", `delete /webhooks/${model.webhook_id}/${model.webhook_token}/messages/<any>`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; ["webhook_token"]: RouteModel["webhook_token"] | string; }) {
+        return `delete /webhooks/${model.webhook_id}/${model.webhook_token}/messages/<any>` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = DeleteWebhookMessageRequestQuery;
 export const query = {
     keys: Object.freeze(["thread_id"] as const),

@@ -1,45 +1,25 @@
-import { Route } from '../routes/index.js';
+import { EndpointDefinition, HttpMethod } from '../index.js';
 import { IRouteRateLimitConfig } from './RateLimitManager.js';
 
-export function buildRateLimit<T extends IRateLimitOptions>(options: T): BuildRateLimit<T>
-export function buildRateLimit(options: IRateLimitOptions): IRouteRateLimitConfig<object> {
-    const { route, rateLimit: { global = true, pick } = {} } = options;
-    const realPick = makePicker(pick);
-    const id = `${route.method} ${route.map(v => typeof v === 'string' ? JSON.stringify(v) : v.pattern.toString()).join('')}`;
+export function buildRateLimit<T extends EndpointDefinition>(options: T): BuildRateLimit<T>
+export function buildRateLimit(options: EndpointDefinition): IRouteRateLimitConfig<object> {
+    const { route, rateLimit } = options;
     return Object.freeze<IRouteRateLimitConfig<object>>({
-        global,
+        global: rateLimit.global,
         route,
         getKey(model) {
-            return JSON.stringify([id, ...realPick(model)]);
+            return rateLimit.bucket(model);
         }
     })
 }
-export function buildRateLimits<T extends Record<PropertyKey, IRateLimitOptions>>(options: T) {
-    return Object.freeze(Object.fromEntries(
-        Reflect.ownKeys(options)
-            .map(k => [k, buildRateLimit(options[k]!)] as const)
-    )) as { readonly [P in keyof T]: BuildRateLimit<T[P]> };
-}
-function makePicker<Model>(pick: Iterable<keyof Model> | ((model: Model) => Iterable<unknown>) | undefined) {
-    switch (typeof pick) {
-        case 'undefined': return () => [];
-        case 'function': return pick;
-        case 'object': return function* (m: Model) {
-            for (const key of pick)
-                yield m[key];
-        }
-    }
+export function buildRateLimits<T extends EndpointDefinition>(options: Iterable<T>) {
+    const result = {} as Record<PropertyKey, BuildRateLimit<T>>;
+    for (const option of options)
+        result[option.name] = buildRateLimit(option);
+    return result as { readonly [P in T as P['name']]: BuildRateLimit<P> };
 }
 
-type BuildRateLimit<T extends IRateLimitOptions> =
-    T extends IRateLimitOptions<infer Model>
+type BuildRateLimit<T extends EndpointDefinition> =
+    T extends EndpointDefinition<HttpMethod, PropertyKey, infer Model, object, object, unknown, object>
     ? IRouteRateLimitConfig<Model>
     : never;
-
-export interface IRateLimitOptions<Model extends object = any> {
-    readonly route: Route<Model>;
-    readonly rateLimit: {
-        readonly global: boolean;
-        readonly pick: ((model: Model) => Iterable<unknown>) | Iterable<keyof Model>;
-    }
-}

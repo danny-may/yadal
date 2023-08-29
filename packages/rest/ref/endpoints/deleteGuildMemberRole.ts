@@ -10,6 +10,9 @@ export const route = {
     method: "DELETE",
     template: "/guilds/{guild_id}/members/{user_id}/roles/{role_id}",
     keys: Object.freeze(["guild_id","user_id","role_id"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)\/members\/(?<user_id>.*?)\/roles\/(?<role_id>.*?)$/i;
     },
@@ -19,21 +22,31 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
-            ["user_id"]: decodeURIComponent(match.groups!["user_id"]!),
-            ["role_id"]: decodeURIComponent(match.groups!["role_id"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+                ["user_id"]: decodeURIComponent(match.groups!["user_id"]!),
+                ["role_id"]: decodeURIComponent(match.groups!["role_id"]!)
+            };
     },
-    rateLimitBuckets(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
-        return ["global", `delete /guilds/${model.guild_id}/members/<any>/roles/<any>`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
+        return `delete /guilds/${model.guild_id}/members/<any>/roles/<any>` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = {
 
 };

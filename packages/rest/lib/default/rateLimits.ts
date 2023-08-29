@@ -1,4 +1,4 @@
-import * as config from "./config/index.js";
 import { buildRateLimits } from "../rateLimit/buildRateLimits.js";
+import { endpoints as config } from "../../ref/index.js";
 
-export const rateLimits = buildRateLimits(config);
+export const rateLimits = buildRateLimits(Object.values(config));

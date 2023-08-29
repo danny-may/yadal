@@ -1,15 +1,16 @@
+import { HttpMethod } from "../index.js";
 import { Route } from "../routes/index.js";
 import { IRateLimitManager, IRateLimiter } from "./IRateLimitManager.js";
 import { IRateLimitService } from "./RateLimitService.js";
 
-export interface IRouteRateLimitConfig<T> {
-    readonly route: Route<T>;
+export interface IRouteRateLimitConfig<T extends object> {
     readonly global: boolean;
-    getKey(model: T): string;
+    readonly route: Route<HttpMethod, T>;
+    getKey(model: { [P in keyof T]: T[P] | string }): string;
 }
 
 export class RateLimitManager implements IRateLimitManager {
-    readonly #config: Map<Route, IRouteRateLimitConfig<any>>;
+    readonly #config: Map<Route<HttpMethod, any>, IRouteRateLimitConfig<any>>;
     readonly #service: IRateLimitService;
 
     constructor(service: IRateLimitService, config: Iterable<IRouteRateLimitConfig<any>>) {
@@ -19,7 +20,7 @@ export class RateLimitManager implements IRateLimitManager {
             this.#config.set(entry.route, entry);
     }
 
-    get<T>(route: Route<T>, model: T): IRateLimiter | undefined {
+    get<T extends object>(route: Route<HttpMethod, T>, model: T): IRateLimiter | undefined {
         const config = this.#config.get(route) as IRouteRateLimitConfig<T> | undefined;
         if (config === undefined)
             return undefined

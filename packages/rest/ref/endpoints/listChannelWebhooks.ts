@@ -10,6 +10,9 @@ export const route = {
     method: "GET",
     template: "/channels/{channel_id}/webhooks",
     keys: Object.freeze(["channel_id"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/channels\/(?<channel_id>.*?)\/webhooks$/i;
     },
@@ -19,19 +22,29 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!)
+            };
     },
-    rateLimitBuckets(model: { ["channel_id"]: RouteModel["channel_id"] | string; }) {
-        return ["global", `get /channels/${model.channel_id}/webhooks`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(model: { ["channel_id"]: RouteModel["channel_id"] | string; }) {
+        return `get /channels/${model.channel_id}/webhooks` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = {
 
 };

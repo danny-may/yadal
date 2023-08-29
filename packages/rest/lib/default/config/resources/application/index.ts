@@ -1,1 +1,0 @@
-export * as getCurrentApplication from './getCurrentApplication.js';

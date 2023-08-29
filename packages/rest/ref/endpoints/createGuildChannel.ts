@@ -10,6 +10,9 @@ export const route = {
     method: "POST",
     template: "/guilds/{guild_id}/channels",
     keys: Object.freeze(["guild_id"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)\/channels$/i;
     },
@@ -19,19 +22,29 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
+            };
     },
-    rateLimitBuckets(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
-        return ["global", `post /guilds/${model.guild_id}/channels`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
+        return `post /guilds/${model.guild_id}/channels` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = {
 
 };

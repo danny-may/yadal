@@ -1,12 +1,13 @@
-export function source(template: readonly string[], ...args: Array<string | Iterable<string> | (() => string | Iterable<string>)>) {
+export type SourceArg = string | boolean | number | Iterable<string | boolean | number>;
+export function source(template: readonly string[], ...args: ReadonlyArray<SourceArg | (() => SourceArg)>) {
     return new SourceIterable(template, args);
 }
 
 class SourceIterable implements Iterable<string> {
     readonly #template: readonly string[];
-    readonly #args: ReadonlyArray<string | Iterable<string> | (() => string | Iterable<string>)>;
+    readonly #args: ReadonlyArray<SourceArg | (() => SourceArg)>;
 
-    constructor(template: readonly string[], args: ReadonlyArray<string | Iterable<string> | (() => string | Iterable<string>)>) {
+    constructor(template: readonly string[], args: ReadonlyArray<SourceArg | (() => SourceArg)>) {
         this.#template = template;
         this.#args = args;
     }
@@ -21,10 +22,7 @@ class SourceIterable implements Iterable<string> {
                     let arg = this.#args[i++]!;
                     if (typeof arg === 'function')
                         arg = arg();
-                    if (typeof arg === 'string')
-                        yield* yieldLines(line, arg, indent);
-                    else
-                        yield* yieldLines(line, arg, indent);
+                    yield* yieldLines(line, arg, indent);
                 } while (i < this.#args.length)
                 break;
             }
@@ -35,10 +33,7 @@ class SourceIterable implements Iterable<string> {
             let arg = this.#args[i]!;
             if (typeof arg === 'function')
                 arg = arg();
-            if (typeof arg === 'string')
-                yield* yieldLines(line, arg, indent);
-            else
-                yield* yieldLines(line, arg, indent);
+            yield* yieldLines(line, arg, indent);
         }
         for (; i < this.#template.length; i++) {
             yield* yieldLines(line, this.#template[i++]!, '');
@@ -47,14 +42,17 @@ class SourceIterable implements Iterable<string> {
             yield line.join('');
     }
 }
-function* yieldLines(buffer: string[], lines: Iterable<string>, indent: string) {
+
+function* yieldLines(buffer: string[], lines: SourceArg, indent: string) {
     if (typeof lines === 'string')
         lines = lines.split('\n');
+    else if (typeof lines !== 'object')
+        lines = [lines];
     const iter = lines[Symbol.iterator]();
     let next = iter.next();
     if (next.done)
         return;
-    buffer.push(next.value);
+    buffer.push(String(next.value));
     next = iter.next();
     while (!next.done) {
         yield buffer.join('');

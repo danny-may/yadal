@@ -4,12 +4,12 @@ import { HttpClient } from "../http/index.js";
 import { IRateLimitService, RateLimitManager, RateLimitService } from "../rateLimit/index.js";
 import { ProtocolURLResolver, URlResolver, createUrlMerger } from "@yadal/core";
 import { defineEndpointClient } from "../defineEndpointClient.js";
-import { endpoints } from "./endpoints.js";
+import { rest } from "./endpoints.js";
 import { rateLimits } from './rateLimits.js';
 
 const defaultUserAgent = `${pkg.name} (${pkg.repository.url}, ${pkg.version})`;
 
-export class DiscordRestClient extends defineEndpointClient(endpoints) {
+export class DiscordRestClient extends defineEndpointClient(rest) {
     readonly ratelimit: IRateLimitService;
     readonly http: HttpClient;
 

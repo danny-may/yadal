@@ -10,6 +10,9 @@ export const route = {
     method: "PATCH",
     template: "/webhooks/{webhook_id}/{webhook_token}/messages/@original",
     keys: Object.freeze(["webhook_id","webhook_token"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)\/messages\/@original$/i;
     },
@@ -19,20 +22,30 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["webhook_id"]: decodeURIComponent(match.groups!["webhook_id"]!),
-            ["webhook_token"]: decodeURIComponent(match.groups!["webhook_token"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["webhook_id"]: decodeURIComponent(match.groups!["webhook_id"]!),
+                ["webhook_token"]: decodeURIComponent(match.groups!["webhook_token"]!)
+            };
     },
-    rateLimitBuckets(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; ["webhook_token"]: RouteModel["webhook_token"] | string; }) {
-        return ["global", `patch /webhooks/${model.webhook_id}/${model.webhook_token}/messages/@original`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; ["webhook_token"]: RouteModel["webhook_token"] | string; }) {
+        return `patch /webhooks/${model.webhook_id}/${model.webhook_token}/messages/@original` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = UpdateOriginalWebhookMessageRequestQuery;
 export const query = {
     keys: Object.freeze(["thread_id"] as const),

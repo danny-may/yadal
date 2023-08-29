@@ -15,7 +15,6 @@ export function* defineEndpoint(
     method: Lowercase<HttpMethod>,
     operation: OperationObject,
     url: string,
-    path: PathItemObject,
     types: TypeBuilderResult,
     typesUrl: URL,
     helperUrl: URL,
@@ -37,7 +36,6 @@ export function* defineEndpoint(
     const successTypes = responseTypes.filter(t => t.statusPattern === 'default' || t.statusPattern.startsWith('2'));
     const responseType = successTypes.length === 0 ? empty : new UnionType({ types: new Set(successTypes.map(t => t.type ?? empty)) });
 
-    path;
     for (const tag of operation.tags?.map(t => `${t}/`) ?? ['']) {
         const fullName = snakeCaseToCamelCase(`${tag.slice(0, -1)}_${id}`);
         const imports: ImportFromDetails[] = [];
@@ -45,7 +43,7 @@ export function* defineEndpoint(
         yield {
             imports,
             contents: source`export const name = ${JSON.stringify(fullName)};
-${defineRoute(method, pathType, imports, typesUrl, fullName, url)}
+${defineRoute(method, pathType, imports, typesUrl, fullName, url, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
 ${defineQuery(queryType, imports, typesUrl, fullName)}
 ${defineHeader(headerType, imports, typesUrl, fullName)}
 ${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl)}
@@ -317,7 +315,7 @@ export async function readResponse<R>(statusCode: number, contentType: string | 
 }`;
 }
 
-function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string) {
+function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string, security: Record<string, string[]>) {
     if (pathType.name !== undefined)
         imports.push({ file: typesUrl, exported: pathType.name, isType: true });
     const regexSource = [];
@@ -337,14 +335,8 @@ function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: Imp
         .slice(1, -1)
         .replace(/`/g, '\\`')
         .replace(/\{(\w+)\}/g, (_, key) => `\${encodeURIComponent(model.${key})}`);
-    const rateLimitKeys = [] as string[];
-    const ratelimitSource = JSON.stringify(url)
-        .slice(1, -1)
-        .replace(/`/g, '\\`')
-        .replace(/\{(\w+)\}/g, (_, key: string) => getRateLimitTemplateArg(key, url, method, rateLimitKeys));
 
     const createArgName = matchKeys.length === 0 ? '_?' : 'model';
-    const ratelimitArgName = rateLimitKeys.length === 0 ? '_?' : `model`;
 
     return source`export type RouteModel = ${pathType.inline(`${fullName}RouteModel`)};
 const routeRegex = /^${regexSource.join('')}$/i;
@@ -352,6 +344,7 @@ export const route = {
     method: ${JSON.stringify(method.toUpperCase())},
     template: ${JSON.stringify(url)},
     keys: Object.freeze([${matchKeys.join(',')}] as const),
+    authentication: Object.freeze(${JSON.stringify(security, null, 4).replace(/\[.*?\]/gs, 'Object.freeze($& as const)').split('\n')} as const),
     get regex(){
         return /^${regexSource.join('')}$/i;
     },
@@ -361,23 +354,43 @@ export const route = {
     test(url: \`/\${string}\`) {
         return routeRegex.test(url);
     },
-    parse(url: \`/\${string}\`) {
+    tryParse(url: \`/\${string}\`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n')}
-        }
+        return match === null
+            ? null
+            : {
+                ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n')}
+            };
     },
-    rateLimitBuckets(${ratelimitArgName}: { ${rateLimitKeys.map(k => `["${k}"]: RouteModel["${k}"] | string;`).join(' ')} }) {
-        return [${hasGlobalRateLimit(matchKeys) ? '' : '"global", '}\`${method} ${ratelimitSource}\`] as const;
+    parse(url: \`/\${string}\`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
-Object.freeze(route);`;
+Object.freeze(route);
+${defineRateLimit(method, url)}`;
+}
+
+function defineRateLimit(method: Lowercase<HttpMethod>, url: string) {
+    const rateLimitKeys = [] as string[];
+    const ratelimitSource = JSON.stringify(url)
+        .slice(1, -1)
+        .replace(/`/g, '\\`')
+        .replace(/\{(\w+)\}/g, (_, key: string) => getRateLimitTemplateArg(key, url, method, rateLimitKeys));
+    const ratelimitArgName = rateLimitKeys.length === 0 ? '_?' : `model`;
+    return source`export const rateLimit = {
+    global: ${hasGlobalRateLimit(rateLimitKeys).toString()},
+    bucket(${ratelimitArgName}: { ${rateLimitKeys.map(k => `["${k}"]: RouteModel["${k}"] | string;`).join(' ')} }) {
+        return \`${method} ${ratelimitSource}\` as const;
+    }
+} as const;
+Object.freeze(rateLimit);`
 }
 
 function hasGlobalRateLimit(keys: string[]) {
-    return keys.includes('"interaction_id"');
+    return keys.includes('interaction_id');
 }
 
 function getRateLimitTemplateArg(paramName: string, url: string, method: string, rateLimitKeys: string[]) {

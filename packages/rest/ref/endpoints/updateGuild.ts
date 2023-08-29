@@ -10,6 +10,9 @@ export const route = {
     method: "PATCH",
     template: "/guilds/{guild_id}",
     keys: Object.freeze(["guild_id"] as const),
+    authentication: Object.freeze({
+        "BotToken": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)$/i;
     },
@@ -19,19 +22,29 @@ export const route = {
     test(url: `/${string}`) {
         return routeRegex.test(url);
     },
-    parse(url: `/${string}`) {
+    tryParse(url: `/${string}`) {
         const match = url.match(routeRegex);
-        if (match === null)
-            throw new Error('Invalid URL');
-        return {
-            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
-        }
+        return match === null
+            ? null
+            : {
+                ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
+            };
     },
-    rateLimitBuckets(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
-        return ["global", `patch /guilds/${model.guild_id}`] as const;
+    parse(url: `/${string}`) {
+        const result = route.tryParse(url);
+        if (result === null)
+            throw new Error('Invalid URL');
+        return result;
     }
 } as const;
 Object.freeze(route);
+export const rateLimit = {
+    global: false,
+    bucket(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
+        return `patch /guilds/${model.guild_id}` as const;
+    }
+} as const;
+Object.freeze(rateLimit);
 export type QueryModel = {
 
 };

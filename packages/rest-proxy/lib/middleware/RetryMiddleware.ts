@@ -1,9 +1,9 @@
-import { HttpHeaders, IHttpRequest, IHttpResponse, Route } from "@yadal/rest";
+import { HttpHeaders, HttpMethod, IHttpRequest, IHttpResponse, Route } from "@yadal/rest";
 import { IDiscordRestProxyMiddleware } from "./IDiscordRestProxyMiddleware.js";
 import { sleep } from "@yadal/core";
 
 export class RetryMiddleware implements IDiscordRestProxyMiddleware {
-    async handle<T extends object>(_route: Route<T>, _params: T, _request: IHttpRequest, next: (signal?: AbortSignal | undefined) => PromiseLike<IHttpResponse>, signal?: AbortSignal | undefined): Promise<IHttpResponse> {
+    async handle<T extends object>(_route: Route<HttpMethod, T>, _params: T, _request: IHttpRequest, next: (signal?: AbortSignal | undefined) => PromiseLike<IHttpResponse>, signal?: AbortSignal | undefined): Promise<IHttpResponse> {
         while (true) {
             const response = await next();
             const retryAfter = this.#getRetryAfter(response.headers);
