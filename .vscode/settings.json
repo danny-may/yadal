@@ -3,11 +3,12 @@
     "explorer.fileNesting.patterns": {
         "*.ts": "${capture}.js, $(capture).cjs, $(capture).mjs, $(capture).d.ts",
         "*.cjs": "$(capture).cjs.map",
-        "*.mjs": "$(capture).mjs.map"
+        "*.mjs": "$(capture).mjs.map",
+        "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml, package-lock.json"
     },
     "files.exclude": {
         "**/.nyc_output": true,
-        "node_modules": true
+        "**/node_modules": false
     },
     "typescript.tsdk": "node_modules/typescript/lib"
 }

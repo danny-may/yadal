@@ -23,12 +23,12 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "dependencies": {
-    "@yadal/rest": "^1.0.0-alpha.5",
-    "discord-api-types": "^0.37.41"
+    "@yadal/rest": "workspace:^",
+    "discord-api-types": "^0.37.55"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
-    "fastify": "^4.18.0"
+    "fastify": "^4.22.0"
   },
   "publishConfig": {
     "access": "public"

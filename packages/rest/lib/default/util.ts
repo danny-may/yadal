@@ -138,7 +138,7 @@ export function requestBody<T extends object>(model: T, arg: { [P in keyof T]-?:
     if (typeof arg === 'object') {
         return createRequestBody(model, k => arg[k]);
     }
-    return createRequestBody(model[arg]);
+    return createRequestBody(model[arg] as object);
 }
 const charBytes = {
     '{': encoder.encode('{'),

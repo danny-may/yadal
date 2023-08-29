@@ -15,16 +15,5 @@ export function body(model: Body) {
         prompts: true
     });
 }
-export interface Result extends Discord.APIGuildOnboarding {
-    readonly mode: APIGuildOnboardingMode;
-}
-export interface Body {
-    readonly prompts: Array<Discord.APIGuildOnboardingPrompt>;
-    readonly default_channel_ids: Discord.Snowflake;
-    readonly enabled: boolean;
-    readonly mode: APIGuildOnboardingMode;
-}
-export const enum APIGuildOnboardingMode {
-    ONBOARDING_DEFAULT = 0,
-    ONBOARDING_ADVANCED = 1
-}
+export type Result = Discord.RESTPutAPIGuildOnboardingResult;
+export type Body = Discord.RESTPutAPIGuildOnboardingJSONBody;
