@@ -1,23 +1,52 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateSelfVoiceStateRequestPath, type ErrorResponse, type UpdateSelfVoiceStateRequestJSON } from '../discord.js';
-import { DiscordRestError } from '../helpers.js';
-export const method = "PATCH";
+import { type UpdateSelfVoiceStateRequestPath, type RateLimitError, type ErrorResponse, type UpdateSelfVoiceStateRequestJSON } from '../discord.js';
+import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateSelfVoiceState";
 export type RouteModel = UpdateSelfVoiceStateRequestPath;
-export const route = "/guilds/{guild_id}/voice-states/@me";
-export const routeKeys = Object.freeze(["guild_id"] as const);
+const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/voice-states\/@me$/i;
+export const route = {
+    method: "PATCH",
+    template: "/guilds/{guild_id}/voice-states/@me",
+    get regex(){
+        return /^\/guilds\/(?<guild_id>.*?)\/voice-states\/@me$/i;
+    },
+    create(model: RouteModel) {
+        return `/guilds/${encodeURIComponent(model.guild_id)}/voice-states/@me` as const satisfies `/${string}`;
+    },
+    test(url: `/${string}`) {
+        return routeRegex.test(url);
+    },
+    parse(url: `/${string}`) {
+        const match = url.match(routeRegex);
+        if (match === null)
+            throw new Error('Invalid URL');
+        return {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
+        }
+    },
+    rateLimitBuckets(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
+        return ["global", `patch /guilds/${model.guild_id}/voice-states/@me`] as const;
+    }
+} as const;
+Object.freeze(route);
 export type Response = undefined;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 204) {
         return undefined;
     }
+    if (statusCode === 429) {
+        if (contentType === "application/json") {
+            throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);
+        }
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
+    }
     if (statusCode >= 400 && statusCode <= 499) {
         if (contentType === "application/json") {
             throw new DiscordRestError(await resolve(contentType, content) as ErrorResponse);
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }

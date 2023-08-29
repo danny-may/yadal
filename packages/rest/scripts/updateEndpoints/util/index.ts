@@ -1,6 +1,5 @@
 export * from './depluralize.js';
-export * from './snakeCaseToCamelCase.js';
-export * from './snakeCaseToPascalCase.js';
+export * from './stringCase.js';
 export * from './noRef.js';
 export * from './documentation.js';
 export * from './preventShadowGlobal.js';

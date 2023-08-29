@@ -4,6 +4,7 @@ import { DiscordRateLimitError, DiscordRestError } from '../errors.js';
 import { HttpHeaders, IHttpContent, IHttpResponse } from '../http/index.js';
 import { route, RouteParameter } from '../routes/index.js';
 import type * as Discord from 'discord-api-types/v10';
+import { ErrorResponse, RateLimitError } from '../../ref/discord.js';
 
 export {
     Discord,
@@ -104,9 +105,9 @@ export async function jsonResponse(response: IHttpResponse): Promise<unknown> {
         return result;
 
     if (typeof result === 'object' && result !== null && 'retry_after' in result)
-        throw new DiscordRateLimitError(result as Discord.RESTRateLimit);
+        throw new DiscordRateLimitError(result as RateLimitError);
 
-    throw new DiscordRestError(result as Discord.RESTError)
+    throw new DiscordRestError(result as ErrorResponse)
 }
 export function* queryParams<T extends object>(model: T, props: { [P in AnyKeyOf<T>]-?: boolean }) {
     for (const [key, allow] of Object.entries(props) as Array<[keyof T, boolean]>) {

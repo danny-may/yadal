@@ -1,26 +1,55 @@
 /*
  * Auto generated file, do not edit
  */
-import { DiscordRestError } from '../helpers.js';
-import { type StageInstanceResponse, type ErrorResponse, type CreateStageInstanceRequestJSON } from '../discord.js';
-export const method = "POST";
+import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
+import { type RateLimitError, type StageInstanceResponse, type ErrorResponse, type CreateStageInstanceRequestJSON } from '../discord.js';
 export const name = "createStageInstance";
 export type RouteModel = {};
-export const route = "/stage-instances";
-export const routeKeys = Object.freeze([] as const);
+const routeRegex = /^\/stage-instances$/i;
+export const route = {
+    method: "POST",
+    template: "/stage-instances",
+    get regex(){
+        return /^\/stage-instances$/i;
+    },
+    create(_: RouteModel) {
+        return `/stage-instances` as const satisfies `/${string}`;
+    },
+    test(url: `/${string}`) {
+        return routeRegex.test(url);
+    },
+    parse(url: `/${string}`) {
+        const match = url.match(routeRegex);
+        if (match === null)
+            throw new Error('Invalid URL');
+        return {
+            
+        }
+    },
+    rateLimitBuckets(_: {}) {
+        return ["global", `post /stage-instances`] as const;
+    }
+} as const;
+Object.freeze(route);
 export type Response = StageInstanceResponse;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {
         if (contentType === "application/json") {
             return await resolve(contentType, content) as StageInstanceResponse;
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
+    }
+    if (statusCode === 429) {
+        if (contentType === "application/json") {
+            throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);
+        }
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     if (statusCode >= 400 && statusCode <= 499) {
         if (contentType === "application/json") {
             throw new DiscordRestError(await resolve(contentType, content) as ErrorResponse);
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }

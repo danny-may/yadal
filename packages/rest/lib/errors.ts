@@ -1,26 +1,24 @@
-import { RESTError, RESTErrorData, RESTJSONErrorCodes, RESTRateLimit } from "discord-api-types/v10";
+import * as Discord from "../ref/discord.js";
 
-export class DiscordRestError extends Error implements RESTError {
+export class DiscordRestError extends Error implements Discord.ErrorResponse {
     readonly code: number;
-    readonly errors?: RESTErrorData | undefined;
+    readonly errors?: Discord.ErrorDetails | undefined;
 
-    constructor(error: RESTError) {
-        const code = RESTJSONErrorCodes[error.code] ?? error.code;
-        super(`[${code}] ${error.message}`)
+    constructor(error: Discord.ErrorResponse) {
+        super(`[${error.code}] ${error.message}`)
 
         this.code = error.code;
         this.errors = error.errors;
     }
 }
 
-export class DiscordRateLimitError extends Error implements RESTRateLimit {
+export class DiscordRateLimitError extends Error implements Discord.RateLimitError {
     readonly code?: number;
     readonly global: boolean;
     readonly retry_after: number;
 
-    constructor(error: RESTRateLimit) {
-        const code = RESTJSONErrorCodes[error.code ?? 0] ?? error.code ?? 'Rate limit';
-        super(`[${code}][global: ${error.global}] ${error.message}`);
+    constructor(error: Discord.RateLimitError) {
+        super(`[${error.code}][global: ${error.global}] ${error.message}`);
 
         this.code = error.code;
         this.global = error.global;

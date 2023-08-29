@@ -7238,6 +7238,12 @@ export type Snowflake = `${bigint}`;
  */
 export type ISO8601DateTime = string;
 export type URIString = `${'http'|'ws'}${'s'|''}://${string}`;
+export interface RateLimitError {
+    code?: number;
+    global: boolean;
+    message: string;
+    retry_after: number;
+}
 export type UserMessageTag = `<@${'!'|''}${bigint}>`;
 export type ChannelMessageTag = `<#${bigint}>`;
 export type RoleMessageTag = `<@&${bigint}>`;

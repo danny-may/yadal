@@ -1,26 +1,55 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateGuildStickerRequestPath, type GuildStickerResponse, type ErrorResponse, type CreateGuildStickerRequestFormData } from '../discord.js';
-import { DiscordRestError } from '../helpers.js';
-export const method = "POST";
+import { type CreateGuildStickerRequestPath, type RateLimitError, type GuildStickerResponse, type ErrorResponse, type CreateGuildStickerRequestFormData } from '../discord.js';
+import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createGuildSticker";
 export type RouteModel = CreateGuildStickerRequestPath;
-export const route = "/guilds/{guild_id}/stickers";
-export const routeKeys = Object.freeze(["guild_id"] as const);
+const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/stickers$/i;
+export const route = {
+    method: "POST",
+    template: "/guilds/{guild_id}/stickers",
+    get regex(){
+        return /^\/guilds\/(?<guild_id>.*?)\/stickers$/i;
+    },
+    create(model: RouteModel) {
+        return `/guilds/${encodeURIComponent(model.guild_id)}/stickers` as const satisfies `/${string}`;
+    },
+    test(url: `/${string}`) {
+        return routeRegex.test(url);
+    },
+    parse(url: `/${string}`) {
+        const match = url.match(routeRegex);
+        if (match === null)
+            throw new Error('Invalid URL');
+        return {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
+        }
+    },
+    rateLimitBuckets(model: { ["guild_id"]: RouteModel["guild_id"] | string; }) {
+        return ["global", `post /guilds/${model.guild_id}/stickers`] as const;
+    }
+} as const;
+Object.freeze(route);
 export type Response = GuildStickerResponse;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 201) {
         if (contentType === "application/json") {
             return await resolve(contentType, content) as GuildStickerResponse;
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
+    }
+    if (statusCode === 429) {
+        if (contentType === "application/json") {
+            throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);
+        }
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     if (statusCode >= 400 && statusCode <= 499) {
         if (contentType === "application/json") {
             throw new DiscordRestError(await resolve(contentType, content) as ErrorResponse);
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }

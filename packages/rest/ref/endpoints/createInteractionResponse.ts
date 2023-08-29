@@ -1,23 +1,53 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateInteractionResponseRequestPath, type ErrorResponse, type CreateInteractionResponseRequestJSON, type CreateInteractionResponseRequestURLEncoded, type CreateInteractionResponseRequestFormData } from '../discord.js';
-import { DiscordRestError } from '../helpers.js';
-export const method = "POST";
+import { type CreateInteractionResponseRequestPath, type RateLimitError, type ErrorResponse, type CreateInteractionResponseRequestJSON, type CreateInteractionResponseRequestURLEncoded, type CreateInteractionResponseRequestFormData } from '../discord.js';
+import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createInteractionResponse";
 export type RouteModel = CreateInteractionResponseRequestPath;
-export const route = "/interactions/{interaction_id}/{interaction_token}/callback";
-export const routeKeys = Object.freeze(["interaction_id", "interaction_token"] as const);
+const routeRegex = /^\/interactions\/(?<interaction_id>.*?)\/(?<interaction_token>.*?)\/callback$/i;
+export const route = {
+    method: "POST",
+    template: "/interactions/{interaction_id}/{interaction_token}/callback",
+    get regex(){
+        return /^\/interactions\/(?<interaction_id>.*?)\/(?<interaction_token>.*?)\/callback$/i;
+    },
+    create(model: RouteModel) {
+        return `/interactions/${encodeURIComponent(model.interaction_id)}/${encodeURIComponent(model.interaction_token)}/callback` as const satisfies `/${string}`;
+    },
+    test(url: `/${string}`) {
+        return routeRegex.test(url);
+    },
+    parse(url: `/${string}`) {
+        const match = url.match(routeRegex);
+        if (match === null)
+            throw new Error('Invalid URL');
+        return {
+            ["interaction_id"]: decodeURIComponent(match.groups!["interaction_id"]!),
+            ["interaction_token"]: decodeURIComponent(match.groups!["interaction_token"]!)
+        }
+    },
+    rateLimitBuckets(model: { ["interaction_id"]: RouteModel["interaction_id"] | string; ["interaction_token"]: RouteModel["interaction_token"] | string; }) {
+        return [`post /interactions/${model.interaction_id}/${model.interaction_token}/callback`] as const;
+    }
+} as const;
+Object.freeze(route);
 export type Response = undefined;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 204) {
         return undefined;
     }
+    if (statusCode === 429) {
+        if (contentType === "application/json") {
+            throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);
+        }
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
+    }
     if (statusCode >= 400 && statusCode <= 499) {
         if (contentType === "application/json") {
             throw new DiscordRestError(await resolve(contentType, content) as ErrorResponse);
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }

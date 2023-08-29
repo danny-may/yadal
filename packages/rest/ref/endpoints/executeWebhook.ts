@@ -1,13 +1,37 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ExecuteWebhookRequestPath, type ExecuteWebhookRequestQuery, type MessageResponse, type ErrorResponse, type ExecuteWebhookRequestJSON, type ExecuteWebhookRequestURLEncoded, type ExecuteWebhookRequestFormData } from '../discord.js';
-import { DiscordRestError } from '../helpers.js';
-export const method = "POST";
+import { type ExecuteWebhookRequestPath, type ExecuteWebhookRequestQuery, type RateLimitError, type MessageResponse, type ErrorResponse, type ExecuteWebhookRequestJSON, type ExecuteWebhookRequestURLEncoded, type ExecuteWebhookRequestFormData } from '../discord.js';
+import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "executeWebhook";
 export type RouteModel = ExecuteWebhookRequestPath;
-export const route = "/webhooks/{webhook_id}/{webhook_token}";
-export const routeKeys = Object.freeze(["webhook_id", "webhook_token"] as const);
+const routeRegex = /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)$/i;
+export const route = {
+    method: "POST",
+    template: "/webhooks/{webhook_id}/{webhook_token}",
+    get regex(){
+        return /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)$/i;
+    },
+    create(model: RouteModel) {
+        return `/webhooks/${encodeURIComponent(model.webhook_id)}/${encodeURIComponent(model.webhook_token)}` as const satisfies `/${string}`;
+    },
+    test(url: `/${string}`) {
+        return routeRegex.test(url);
+    },
+    parse(url: `/${string}`) {
+        const match = url.match(routeRegex);
+        if (match === null)
+            throw new Error('Invalid URL');
+        return {
+            ["webhook_id"]: decodeURIComponent(match.groups!["webhook_id"]!),
+            ["webhook_token"]: decodeURIComponent(match.groups!["webhook_token"]!)
+        }
+    },
+    rateLimitBuckets(model: { ["webhook_id"]: RouteModel["webhook_id"] | string; ["webhook_token"]: RouteModel["webhook_token"] | string; }) {
+        return ["global", `post /webhooks/${model.webhook_id}/${model.webhook_token}`] as const;
+    }
+} as const;
+Object.freeze(route);
 export type QueryModel = ExecuteWebhookRequestQuery;
 export const queryKeys = Object.freeze(["wait", "thread_id"] as const);
 export type Response = (MessageResponse | undefined);
@@ -16,16 +40,22 @@ export async function readResponse<R>(statusCode: number, contentType: string | 
         if (contentType === "application/json") {
             return await resolve(contentType, content) as MessageResponse;
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     if (statusCode === 204) {
         return undefined;
+    }
+    if (statusCode === 429) {
+        if (contentType === "application/json") {
+            throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);
+        }
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     if (statusCode >= 400 && statusCode <= 499) {
         if (contentType === "application/json") {
             throw new DiscordRestError(await resolve(contentType, content) as ErrorResponse);
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }

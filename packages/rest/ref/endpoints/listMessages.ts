@@ -1,13 +1,36 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListMessagesRequestPath, type ListMessagesRequestQuery, type ListMessagesResponseJSON, type ErrorResponse } from '../discord.js';
-import { DiscordRestError } from '../helpers.js';
-export const method = "GET";
+import { type ListMessagesRequestPath, type ListMessagesRequestQuery, type RateLimitError, type ListMessagesResponseJSON, type ErrorResponse } from '../discord.js';
+import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listMessages";
 export type RouteModel = ListMessagesRequestPath;
-export const route = "/channels/{channel_id}/messages";
-export const routeKeys = Object.freeze(["channel_id"] as const);
+const routeRegex = /^\/channels\/(?<channel_id>.*?)\/messages$/i;
+export const route = {
+    method: "GET",
+    template: "/channels/{channel_id}/messages",
+    get regex(){
+        return /^\/channels\/(?<channel_id>.*?)\/messages$/i;
+    },
+    create(model: RouteModel) {
+        return `/channels/${encodeURIComponent(model.channel_id)}/messages` as const satisfies `/${string}`;
+    },
+    test(url: `/${string}`) {
+        return routeRegex.test(url);
+    },
+    parse(url: `/${string}`) {
+        const match = url.match(routeRegex);
+        if (match === null)
+            throw new Error('Invalid URL');
+        return {
+            ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!)
+        }
+    },
+    rateLimitBuckets(model: { ["channel_id"]: RouteModel["channel_id"] | string; }) {
+        return ["global", `get /channels/${model.channel_id}/messages`] as const;
+    }
+} as const;
+Object.freeze(route);
 export type QueryModel = ListMessagesRequestQuery;
 export const queryKeys = Object.freeze(["around", "before", "after", "limit"] as const);
 export type Response = ListMessagesResponseJSON;
@@ -16,13 +39,23 @@ export async function readResponse<R>(statusCode: number, contentType: string | 
         if (contentType === "application/json") {
             return await resolve(contentType, content) as ListMessagesResponseJSON;
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
+    }
+    if (statusCode === 429) {
+        if (contentType === "application/json") {
+            throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);
+        }
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     if (statusCode >= 400 && statusCode <= 499) {
         if (contentType === "application/json") {
             throw new DiscordRestError(await resolve(contentType, content) as ErrorResponse);
         }
-        throw new DiscordRestError(null, `Unexpected content type "${String(contentType)}" response with status code ${statusCode}`);
+        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
+}
+export type Body = {};
+export function createBody(_: Body): undefined {
+    return undefined;
 }

@@ -7,7 +7,7 @@ describeFile(() => {
     describe(escapeRegex.name, () => {
         const testCases = [
             { input: 'this is a test', expected: 'this is a test' },
-            { input: '.*+?^${}()|[]\\', expected: '\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\' }
+            { input: '.*+?^${}()|[]\\/', expected: '\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\|\\[\\]\\\\\\\/' }
         ] as const;
 
         for (const { input, expected } of testCases) {
