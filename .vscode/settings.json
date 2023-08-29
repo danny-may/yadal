@@ -8,7 +8,7 @@
     },
     "files.exclude": {
         "**/.nyc_output": true,
-        "**/node_modules": false
+        "**/node_modules": true
     },
     "typescript.tsdk": "node_modules/typescript/lib"
 }
