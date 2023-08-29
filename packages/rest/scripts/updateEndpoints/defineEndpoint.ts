@@ -1,4 +1,4 @@
-import { OperationObject, ParameterObject, PathItemObject } from "openapi-typescript";
+import { OperationObject, ParameterObject } from "openapi-typescript";
 import { HttpMethod } from "../../lib/http/index.js";
 import { wellKnownEncodings } from "./parser/parseStringType.js";
 import { rateLimitError } from './augmentations/index.js';
@@ -48,7 +48,7 @@ ${defineQuery(queryType, imports, typesUrl, fullName)}
 ${defineHeader(headerType, imports, typesUrl, fullName)}
 ${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl)}
 ${defineRequest(bodyTypes, imports, helperUrl, typesUrl)}`,
-            name: `endpoints/${tag}${name}.ts`
+            name: `${tag}${name}.ts`
         };
     }
 }

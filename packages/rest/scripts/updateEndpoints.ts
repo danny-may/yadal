@@ -26,19 +26,19 @@ await writeFile(defineHelpers(typesFile), helperFile);
 const endpointFiles: Array<ExportFromDetails> = [];
 for (const { id, method, operation, url } of locateOperations(schema)) {
     for (const { imports, contents, name } of defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes)) {
-        const endpointFile = new URL(`../ref/${name}`, import.meta.url);
+        const endpointFile = new URL(`../ref/rest/${name}`, import.meta.url);
         endpointFiles.push({ file: endpointFile, name: p.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
-        await writeFile({ imports, contents }, new URL(`../ref/${name}`, import.meta.url));
+        await writeFile({ imports, contents }, endpointFile);
     }
 }
 
-const endpointsIndex = new URL('../ref/endpoints/index.ts', import.meta.url)
+const endpointsIndex = new URL('../ref/rest/index.ts', import.meta.url)
 await writeFile({ exports: endpointFiles }, endpointsIndex);
 await writeFile({
     exports: [
         { file: typesFile, isType: false },
         { file: helperFile, isType: false },
-        { file: endpointsIndex, isType: false, name: 'endpoints' }
+        { file: endpointsIndex, isType: false, name: 'rest' }
     ]
 }, new URL('../ref/index.ts', import.meta.url));
 
