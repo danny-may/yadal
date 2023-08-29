@@ -19,7 +19,7 @@ export const parser: TypeParser = {
                 types: definition.type.map(r => parseTypedDefinition(r, undefined, definition as SchemaObjectTypeMap[typeof r], context))
             });
         }
-        if ('oneOf' in definition) {
+        if ('oneOf' in definition && definition.oneOf !== undefined) {
             return new UnionType({
                 name,
                 documentation: documentation(definition),

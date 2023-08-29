@@ -32,6 +32,7 @@ export function body(model: Body) {
         topic: true,
         type: true,
         user_limit: true,
-        video_quality_mode: true
+        video_quality_mode: true,
+        flags: true
     });
 }
