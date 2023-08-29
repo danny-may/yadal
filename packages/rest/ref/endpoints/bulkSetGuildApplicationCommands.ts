@@ -85,7 +85,7 @@ export type Body = {
 };
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     return { type: `application/json; charset=${encoder.encoding}`, content: [encoder.encode(JSON.stringify(model["data"]))] };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

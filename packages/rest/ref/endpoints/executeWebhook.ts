@@ -43,7 +43,7 @@ export const query = {
                 yield ["wait", String(value)] as ["wait", string];
             }
         }
-        if ("thread_id" in model) {
+                if ("thread_id" in model) {
             const value = model["thread_id"];
             if (value !== undefined && value !== null) {
                 yield ["thread_id", String(value)] as ["thread_id", string];
@@ -97,99 +97,77 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
     const boundary = encoder.encode(boundaryStr);
     const chunks = [
-
+        
     ];
     if ("content" in model) {
         const value = model["content"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"content\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"content\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("embeds" in model) {
         const value = model["embeds"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"embeds\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"embeds\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("allowed_mentions" in model) {
         const value = model["allowed_mentions"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"allowed_mentions\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"allowed_mentions\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("components" in model) {
         const value = model["components"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"components\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"components\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("attachments" in model) {
         const value = model["attachments"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("tts" in model) {
         const value = model["tts"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"tts\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"tts\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("flags" in model) {
         const value = model["flags"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"flags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"flags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("username" in model) {
         const value = model["username"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"username\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"username\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("avatar_url" in model) {
         const value = model["avatar_url"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"avatar_url\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"avatar_url\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("thread_name" in model) {
         const value = model["thread_name"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"thread_name\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"thread_name\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("applied_tags" in model) {
         const value = model["applied_tags"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"applied_tags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"applied_tags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
     return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

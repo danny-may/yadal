@@ -83,9 +83,9 @@ export type Body = CreateGuildScheduledEventRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     const chunks = [
         jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"])), jsonEncoded[","],
-        jsonEncoded["\"scheduled_start_time\":"], encoder.encode(JSON.stringify(model["scheduled_start_time"])), jsonEncoded[","],
-        jsonEncoded["\"privacy_level\":"], encoder.encode(JSON.stringify(model["privacy_level"])), jsonEncoded[","],
+        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"])),jsonEncoded[","],
+        jsonEncoded["\"scheduled_start_time\":"], encoder.encode(JSON.stringify(model["scheduled_start_time"])),jsonEncoded[","],
+        jsonEncoded["\"privacy_level\":"], encoder.encode(JSON.stringify(model["privacy_level"])),jsonEncoded[","],
         jsonEncoded["\"entity_type\":"], encoder.encode(JSON.stringify(model["entity_type"]))
     ];
     if ("description" in model) {
@@ -120,7 +120,7 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     }
     chunks.push(jsonEncoded["}"]);
     return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

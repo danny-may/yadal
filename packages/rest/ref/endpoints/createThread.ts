@@ -89,54 +89,42 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     if ("auto_archive_duration" in model) {
         const value = model["auto_archive_duration"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"auto_archive_duration\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"auto_archive_duration\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("rate_limit_per_user" in model) {
         const value = model["rate_limit_per_user"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"rate_limit_per_user\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"rate_limit_per_user\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("applied_tags" in model) {
         const value = model["applied_tags"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"applied_tags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"applied_tags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("message" in model) {
         const value = model["message"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"message\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"message\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("type" in model) {
         const value = model["type"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"type\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"type\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("invitable" in model) {
         const value = model["invitable"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"invitable\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"invitable\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
     return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

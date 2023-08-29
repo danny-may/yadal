@@ -42,7 +42,7 @@ export const query = {
                 yield ["before", String(value)] as ["before", string];
             }
         }
-        if ("limit" in model) {
+                if ("limit" in model) {
             const value = model["limit"];
             if (value !== undefined && value !== null) {
                 yield ["limit", String(value)] as ["limit", string];

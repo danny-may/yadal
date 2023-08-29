@@ -1,10 +1,12 @@
 import { OperationObject, ParameterObject, PathItemObject } from "openapi-typescript";
 import { HttpMethod } from "../../lib/http/index.js";
-import { InterfaceType, LiteralType, Type, TypeBuilderResult, UnionType, noRef, snakeCaseToCamelCase, ImportFromDetails, InterfaceProperty, IntersectionType } from "./index.js";
-import { fuseLines } from "./types/fuseLines.js";
 import { wellKnownEncodings } from "./parser/parseStringType.js";
 import { rateLimitError } from './augmentations/index.js';
 import { escapeRegex } from "@yadal/core";
+import { noRef, snakeCaseToCamelCase, source } from "./util/index.js";
+import { ImportFromDetails } from "./output.js";
+import { TypeBuilderResult } from "./parser/index.js";
+import { InterfaceProperty, InterfaceType, IntersectionType, LiteralType, Type, UnionType } from "./types/index.js";
 
 const emptyObj = new InterfaceType({ properties: [] });
 const empty = new LiteralType({ value: 'undefined' });
@@ -42,14 +44,12 @@ export function* defineEndpoint(
 
         yield {
             imports,
-            contents: fuseLines(
-                [`export const name = ${JSON.stringify(fullName)};`, ''],
-                ...defineRoute(method, pathType, imports, typesUrl, fullName, url),
-                ...defineQuery(queryType, imports, typesUrl, fullName),
-                ...defineHeader(headerType, imports, typesUrl, fullName),
-                ...defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl),
-                ...defineRequest(bodyTypes, imports, helperUrl, typesUrl)
-            ),
+            contents: source`export const name = ${JSON.stringify(fullName)};
+${defineRoute(method, pathType, imports, typesUrl, fullName, url)}
+${defineQuery(queryType, imports, typesUrl, fullName)}
+${defineHeader(headerType, imports, typesUrl, fullName)}
+${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl)}
+${defineRequest(bodyTypes, imports, helperUrl, typesUrl)}`,
             name: `endpoints/${tag}${name}.ts`
         };
     }
@@ -57,14 +57,12 @@ export function* defineEndpoint(
 
 
 
-function* defineRequest(bodyTypes: { contentType: string; type: Type | undefined; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL) {
+function defineRequest(bodyTypes: { contentType: string; type: Type | undefined; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL) {
     if (bodyTypes.length === 0) {
-        yield `export type Body = {};
+        return source`export type Body = {};
 export function createBody(_: Body): undefined {
     return undefined;
-}
-`.split('\n');
-        return;
+}`;
     }
     imports.push({ file: helperUrl, exported: 'DiscordRestError', isType: false });
     for (const { type } of bodyTypes)
@@ -93,28 +91,19 @@ export function createBody(_: Body): undefined {
 
     const extern = {} as Record<string, Iterable<string>>;
     const bodyUnion = new UnionType({ types: bodyTypeUnion });
-    yield* [`export type Body = `.split('\n'), bodyUnion.inline('~'), `;
+    const parts = [...differentiateBodyTypes(bodyTypes, (type, contentType) => {
+        if (isNonObjectType(type))
+            return defineNestedBody(contentType, 'data', extern);
+        const props = getAllProperties(type);
+        if (props !== null)
+            return defineInlineBody(contentType, props, extern);
+        return source`throw new DiscordRestError(null, "Unsupported type")`;
+    })];
+    return source`export type Body = ${bodyUnion.inline('~')};
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-`.split('\n')];
-    for (const { begin, contentType, end, type, indent } of differentiateBodyTypes(bodyTypes)) {
-        yield* begin;
-        if (isNonObjectType(type)) {
-            for (const chunk of defineNestedBody(contentType, 'data', extern))
-                yield chunk.map((v, i) => i === 0 ? v : indent + v);
-        } else {
-            const props = getAllProperties(type);
-            if (props !== null) {
-                for (const chunk of defineInlineBody(contentType, props, extern))
-                    yield chunk.map((v, i) => i === 0 ? v : indent + v);
-            } else
-                yield ['    throw new DiscordRestError(null, "Unsupported type")', indent];
-        }
-        yield* end;
-    }
-    yield `}
-`.split('\n');
-    for (const value of Object.values(extern))
-        yield value;
+    ${parts}
+}
+${source([], ...Object.values(extern))}`;
 }
 
 function isNonObjectType(type: Type): boolean {
@@ -125,10 +114,10 @@ function isNonObjectType(type: Type): boolean {
     return true;
 }
 
-const declareEncoder = `declare const TextEncoder: typeof import('node:util').TextEncoder;
+const declareEncoder = source`declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-`.split('\n');
+`;
 function defineInlineBody(contentType: string, props: Iterable<{ name: string; optional: boolean; type: Type; }>, extern: Record<string, Iterable<string>>) {
     switch (contentType) {
         case 'application/json': return defineJsonInlineRequest(props, extern);
@@ -144,148 +133,153 @@ function defineNestedBody(contentType: string, prop: string, extern: Record<stri
     throw new Error(`Unsupported content type ${contentType}`);
 }
 
-function* differentiateBodyTypes(bodyTypes: { contentType: string; type: Type | undefined; }[]) {
+function differentiateBodyTypes(bodyTypes: { contentType: string; type: Type | undefined; }[], selector: (type: Type, contentType: string) => Iterable<string>) {
     if (bodyTypes.length === 1) {
         const { type, contentType } = bodyTypes[0]!;
-        yield { type: type!, contentType, begin: [], end: [['', '']], indent: '' };
+        return source`${selector(type!, contentType)}\n`;
     } else {
         const match = bodyTypes.find(b => b.contentType === 'multipart/form-data')
             ?? bodyTypes.find(b => b.contentType === 'application/json');
         if (match === undefined)
             throw new Error('No supported body type found');
         const { type, contentType } = match;
-        yield { type: type!, contentType, begin: [], end: [['', '']], indent: '' };
+        return source`${selector(type!, contentType)}\n`;
     }
 }
 
-function* defineJsonInlineRequest(props: Iterable<{ name: string, optional: boolean; }>, extern: Record<string, Iterable<string>>) {
+function defineJsonInlineRequest(props: Iterable<{ name: string, optional: boolean; }>, extern: Record<string, Iterable<string>>) {
     const preEncoded = {
         ',': ',',
         '{': '{',
         '}': '}'
     } as Record<string, string>;
-    yield ['    const chunks = [', '        jsonEncoded["{"]'];
-    let i = 0;
-    const optional = [];
+    const optional: string[] = [];
+    const required: string[] = [];
     for (const prop of props) {
         const name = JSON.stringify(prop.name);
-        const key = `${name}:`;
+        preEncoded[`${name}:`] = `${name}:`;
         if (prop.optional)
             optional.push(name);
-        else if (i++ > 0)
-            yield [', jsonEncoded[","],', `        jsonEncoded[${JSON.stringify(key)}], encoder.encode(JSON.stringify(model[${name}]))`];
         else
-            yield [',', `        jsonEncoded[${JSON.stringify(key)}], encoder.encode(JSON.stringify(model[${name}]))`]
-        preEncoded[key] = key;
+            required.push(name);
     }
-    if (optional.length === 0) {
-        yield [',', '        jsonEncoded["}"]', '    ];', ''];
-    } else {
-        yield ['', '    ];', ''];
-        if (i === 0) {
-            for (const name of optional) {
-                yield `    if (${name} in model) {
-        const value = model[${name}];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
-        }
-    }
-`.split('\n')
-            }
-        } else {
-            for (const name of optional) {
-                yield `    if (${name} in model) {
-        const value = model[${name}];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
-        }
-    }
-`.split('\n')
-            }
-        }
-        yield ['    chunks.push(jsonEncoded["}"]);', ''];
-    }
-    yield ['    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };', ''];
-
     const jsonEncodedProps = Object.entries(preEncoded)
         .map(x => `    ${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
         .join(',\n')
     extern.encoder = declareEncoder;
-    extern.jsonEncoded = [`const jsonEncoded = {\n${jsonEncodedProps}\n} as const;`, ''];
+    extern.jsonEncoded = source`const jsonEncoded = {\n${jsonEncodedProps}\n} as const;\n`;
+    return source`const chunks = [
+    jsonEncoded["{"]${source([], ...(function* () {
+        for (let i = 0; i < required.length; i++)
+            yield source`,${i === 0 ? '' : 'jsonEncoded[","],'}\njsonEncoded[${JSON.stringify(`${required[i]!}:`)}], encoder.encode(JSON.stringify(model[${required[i]!}]))`;
+        yield optional.length === 0
+            ? source`,\njsonEncoded["}"]`
+            : source``;
+    })())}
+];
+${source([], ...(function* () {
+        if (required.length === 0) {
+            for (const name of optional) {
+                yield source`if (${name} in model) {
+    const value = model[${name}];
+    if (value !== undefined) {
+        if (chunks.length > 1)
+            chunks.push(jsonEncoded[","]);
+        chunks.push(jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
+    }
+}
+`
+            }
+        } else {
+            for (const name of optional) {
+                yield source`if (${name} in model) {
+    const value = model[${name}];
+    if (value !== undefined) {
+        chunks.push(jsonEncoded[","], jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
+    }
+}
+`
+            }
+        }
+        if (optional.length > 0) {
+            yield source`chunks.push(jsonEncoded["}"]);`;
+        }
+    })())}
+return { type: \`application/json; charset=\${encoder.encoding}\`, content: chunks };`;
 }
 
-function* defineJsonNestedRequest(propName: string, extern: Record<string, Iterable<string>>) {
+function defineJsonNestedRequest(propName: string, extern: Record<string, Iterable<string>>) {
     extern.encoder = declareEncoder;
-    yield [`    return { type: \`application/json; charset=\${encoder.encoding}\`, content: [encoder.encode(JSON.stringify(model[${JSON.stringify(propName)}]))] };`, ''];
+    return source`return { type: \`application/json; charset=\${encoder.encoding}\`, content: [encoder.encode(JSON.stringify(model[${JSON.stringify(propName)}]))] };`;
 }
 
-function* defineFormDataRequest(props: Iterable<{ name: string, optional: boolean; type: Type; }>, model: string, extern: Record<string, Iterable<string>>) {
+function defineFormDataRequest(props: Iterable<{ name: string, optional: boolean; type: Type; }>, model: string, extern: Record<string, Iterable<string>>) {
     const preEncoded = {
         '--': '--',
         'lf': '\n',
     } as Record<string, string>;
-    yield ['    const boundaryStr = \`boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join(\'-\')}\`;', ''];
-    yield [`    const boundary = encoder.encode(boundaryStr);`, ''];
-    yield ['    const chunks = [', ''];
-    const optional = [];
-    let i = 0;
+    const optional: Map<string, Iterable<string>> = new Map();
+    const required: Array<Iterable<string>> = [];
     for (const prop of props) {
-        if (prop.optional) {
-            optional.push({ key: prop.name, type: prop.type });
-        } else {
-            if (i++ > 0)
-                yield [',', ''];
-            yield* propertyChunks('        ', prop.name, `${model}[${JSON.stringify(prop.name)}]`, [], prop.type, preEncoded);
-        }
-    }
-    if (optional.length === 0) {
-        if (i++ > 0)
-            yield [',', ''];
-        yield ['        formEncoded["--"], boundary, formEncoded["--"]', '    ];', ''];
-    } else {
-        yield ['', '    ];', ''];
-        for (const { key, type } of optional) {
-            yield [`    if (${JSON.stringify(key)} in ${model}) {`, '']
-            yield [`        const value = ${model}[${JSON.stringify(key)}];`, '']
-            yield [`        if (value !== undefined) {`, '']
-            yield [`            chunks.push(`, ''];
-            yield* propertyChunks('                ', key, 'value', [''], type, preEncoded);
-            yield ['            )', ''];
-            yield ['        }', ''];
-            yield ['    }', ''];
-        }
-        yield ['    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);', ''];
+        if (prop.optional)
+            optional.set(prop.name, propertyChunks(prop.name, 'value', prop.type, preEncoded));
+        else
+            required.push(propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type, preEncoded))
     }
     const formEncodedProps = Object.entries(preEncoded)
         .map(x => `    ${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
         .join(',\n')
     extern.encoder = declareEncoder;
     extern.formEncoded = [`const formEncoded = {\n${formEncodedProps}\n} as const;`, ''];
-    yield ['    return { type: \`multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}\`, content: chunks };', ''];
+    return source`const boundaryStr = \`boundary-\${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join(\'-\')}\`;
+const boundary = encoder.encode(boundaryStr);
+const chunks = [
+    ${source([], ...(function* () {
+        for (let i = 0; i < required.length; i++) {
+            yield i === 0 ? required[i]! : source`,\n${required[i]!}`;
+        }
+        if (optional.size === 0) {
+            yield source`formEncoded["--"], boundary, formEncoded["--"]`
+        }
+    })())}
+];
+${source([], ...(function* () {
+        if (optional.size === 0)
+            return;
 
-    function* propertyChunks(indent: string, key: string, value: string, postfix: Iterable<string>, type: Type, formEncoded: Record<string, string>) {
+        for (const [key, chunks] of optional) {
+            yield source`if (${JSON.stringify(key)} in ${model}) {
+    const value = ${model}[${JSON.stringify(key)}];
+    if (value !== undefined) {
+        chunks.push(${chunks});
+    }
+}
+`;
+        }
+        yield source`chunks.push(formEncoded["--"], boundary, formEncoded["--"]);`;
+    })())}
+return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encoder.encoding}\`, content: chunks };`;
+
+    function propertyChunks(key: string, value: string, type: Type, formEncoded: Record<string, string>) {
         if (type === wellKnownEncodings.binary || (type instanceof LiteralType && type.value === wellKnownEncodings.binary.name)) {
             const k1 = `${JSON.stringify(key)}.1`;
             const k2 = `${JSON.stringify(key)}.2`;
             formEncoded[k1] = `\nContent-Disposition: form-data; name=${key}; filename=`;
             formEncoded[k2] = `\nContent-Type: `;
 
-            yield [`${indent}...(({ name, content, contentType }) => [formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(name ?? ${JSON.stringify(key)})), formEncoded[${JSON.stringify(k2)}], encoder.encode(contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], content, formEncoded["lf"]])(${value})`, ...postfix];
+            return source`...(({ name, content, contentType }) => [formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(name ?? ${JSON.stringify(key)})), formEncoded[${JSON.stringify(k2)}], encoder.encode(contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], content, formEncoded["lf"]])(${value})`;
         } else {
             const k = `${JSON.stringify(key)}.1`;
             formEncoded[k] = `\nContent-Disposition: form-data; name=${key}\nContent-Type: application/json\n\n`;
-            yield [`${indent}formEncoded["--"], boundary, formEncoded[${JSON.stringify(k)}], encoder.encode(JSON.stringify(${value})), formEncoded["lf"]`, ...postfix];
+            return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k)}], encoder.encode(JSON.stringify(${value})), formEncoded["lf"]`;
         }
     }
 }
 
-function* defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseType: LiteralType | UnionType, fullName: string, responseTypes: { statusPattern: string; contentType: string | undefined; type: Type | undefined; }[], typesUrl: URL) {
+function defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseType: LiteralType | UnionType, fullName: string, responseTypes: { statusPattern: string; contentType: string | undefined; type: Type | undefined; }[], typesUrl: URL) {
     imports.push({ file: helperUrl, exported: 'DiscordRestError', isType: false });
     imports.push({ file: helperUrl, exported: 'DiscordRateLimitError', isType: false });
     imports.push({ file: typesUrl, exported: 'RateLimitError', isType: true });
-    yield* [['export type Response = '], responseType.inline(`${fullName}Response`), [';', '']];
     const conditions: Record<string, { precision: number; contentTypes: Record<string, { kind: 'ratelimit' | 'error' | 'data' | 'default'; type: Type | undefined; }>; }> = {
         'statusCode === 429': {
             precision: 2,
@@ -307,18 +301,20 @@ function* defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseT
             type: type
         };
     }
-    yield* [['export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {', '']];
     const { '': { contentTypes: statusElse } = { contentTypes: undefined }, ...statuses } = conditions;
-    for (const [condition, { contentTypes }] of Object.entries(statuses).sort((a, b) => a[1].precision - b[1].precision)) {
-        yield* [[`    if (${condition}) {`, '']];
-        yield* generateReadResponseStatusCodeHandler('        ', contentTypes);
-        yield* [['    }', '']];
-    }
-    if (statusElse !== undefined) {
-        yield* generateReadResponseStatusCodeHandler('    ', statusElse);
-    }
-    yield* [['    throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);', '']];
-    yield* [['}', '']];
+    return source`export type Response = ${responseType.inline(`${fullName}Response`)};
+export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
+    ${source([], ...(function* () {
+        for (const [condition, { contentTypes }] of Object.entries(statuses).sort((a, b) => a[1].precision - b[1].precision)) {
+            yield source`if (${condition}) {
+    ${generateReadResponseStatusCodeHandler(contentTypes)}
+}
+`
+        }
+    })())}${statusElse !== undefined
+        ? generateReadResponseStatusCodeHandler(statusElse)
+        : ''}throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);
+}`;
 }
 
 function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string) {
@@ -350,7 +346,7 @@ function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: Imp
     const createArgName = matchKeys.length === 0 ? '_?' : 'model';
     const ratelimitArgName = rateLimitKeys.length === 0 ? '_?' : `model`;
 
-    return [`export type RouteModel = `.split('\n'), pathType.inline(`${fullName}RouteModel`), `;
+    return source`export type RouteModel = ${pathType.inline(`${fullName}RouteModel`)};
 const routeRegex = /^${regexSource.join('')}$/i;
 export const route = {
     method: ${JSON.stringify(method.toUpperCase())},
@@ -370,15 +366,14 @@ export const route = {
         if (match === null)
             throw new Error('Invalid URL');
         return {
-            ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n            ')}
+            ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n')}
         }
     },
     rateLimitBuckets(${ratelimitArgName}: { ${rateLimitKeys.map(k => `["${k}"]: RouteModel["${k}"] | string;`).join(' ')} }) {
         return [${hasGlobalRateLimit(matchKeys) ? '' : '"global", '}\`${method} ${ratelimitSource}\`] as const;
     }
 } as const;
-Object.freeze(route);
-`.split('\n')];
+Object.freeze(route);`;
 }
 
 function hasGlobalRateLimit(keys: string[]) {
@@ -394,7 +389,7 @@ function getRateLimitTemplateArg(paramName: string, url: string, method: string,
         rateLimitKeys.push(paramName);
         return `\${${deleteMessageMessageIdFn('model.message_id')}}`;
     }
-    return '<any>';
+    return `<any>`;
 }
 const rateLimitKeyCompatibility: Record<string, Array<string | undefined>> = {
     guild_id: [undefined],
@@ -405,60 +400,58 @@ const rateLimitKeyCompatibility: Record<string, Array<string | undefined>> = {
     interaction_token: ['interaction_id'],
 }
 const deleteMessageMessageIdFn = (value: string) => `((message_id: string) => {
-            const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
-            return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
-        })(${value})`;
+    const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
+    return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
+})(${value})`;
 
-function* defineHeader(headerType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
+function defineHeader(headerType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
     headerType ??= emptyObj;
     if (!(headerType instanceof InterfaceType))
         throw new Error('Header must be an interface');
     if (headerType.name !== undefined)
         imports.push({ file: typesUrl, exported: headerType.name, isType: true });
     const props = headerType.properties.map(p => JSON.stringify(p.name));
-    yield* [['export type HeaderModel = '], headerType.inline(`${fullName}HeaderModel`), [';', '']];
-    yield `export const headers = {
+    return source`export type HeaderModel = ${headerType.inline(`${fullName}HeaderModel`)};
+export const headers = {
     keys: Object.freeze([${props.join(',')}] as const),
     getValues(${props.length === 0 ? `_?` : `model`}: HeaderModel) {
         const result = {} as { [P in keyof HeaderModel]?: string };
         ${props.map(p => {
         return `if (${p} in model) {
-            const value = model[${p}];
-            if (value !== undefined && value !== null) {
-                result[${p}] = String(value);
-            }
-        }`
+    const value = model[${p}];
+    if (value !== undefined && value !== null) {
+        result[${p}] = String(value);
+    }
+}`
     }).join('\n        ')}
         return result;
     }
 } as const;
-Object.freeze(headers);
-`.split('\n');
+Object.freeze(headers);`;
 }
 
-function* defineQuery(queryType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
+function defineQuery(queryType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
     queryType ??= emptyObj;
     if (!(queryType instanceof InterfaceType))
         throw new Error('Query must be an interface');
     if (queryType.name !== undefined)
         imports.push({ file: typesUrl, exported: queryType.name, isType: true });
     const props = queryType.properties.map(p => JSON.stringify(p.name));
-    yield* [['export type QueryModel = '], queryType.inline(`${fullName}QueryModel`), [';', '']];
-    yield `export const query = {
+    return source`export type QueryModel = ${queryType.inline(`${fullName}QueryModel`)};
+export const query = {
     keys: Object.freeze([${props.join(',')}] as const),
     * getValues(${props.length === 0 ? `_?` : `model`}: QueryModel) {
         ${props.map(p => {
         return `if (${p} in model) {
-            const value = model[${p}];
-            if (value !== undefined && value !== null) {
-                yield [${p}, String(value)] as [${p}, string];
-            }
-        }`
+    const value = model[${p}];
+    if (value !== undefined && value !== null) {
+        yield [${p}, String(value)] as [${p}, string];
+    }
+}`
     }).join('\n        ')}
     }
 } as const;
-Object.freeze(query);
-`.split('\n');
+Object.freeze(query);`;
 }
 
 function statusToCondition(status: string, paramName: string): [condition: string, precision: number] {
@@ -474,48 +467,40 @@ function statusToResponseKind(status: string) {
     return status[0] !== '2' ? 'error' : 'data';
 }
 
-function* generateReadResponseContentTypeHandler(indent: string, type: Type | undefined, kind: 'data' | 'error' | 'ratelimit' | 'default') {
+function generateReadResponseContentTypeHandler(type: Type | undefined, kind: 'data' | 'error' | 'ratelimit' | 'default') {
     switch (kind) {
         case 'error':
-            if (type === undefined)
-                yield* [[`${indent}throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`, '']];
-            else
-                yield* [[`${indent}throw new DiscordRestError(await resolve(contentType, content) as `], type.inline('~'), [');', '']];
-            break;
+            return type === undefined
+                ? source`throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`
+                : source`throw new DiscordRestError(await resolve(contentType, content) as ${type.inline('~')});`;
         case 'ratelimit':
-            yield [`${indent}throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);`, ''];
-            break;
+            return source`throw new DiscordRateLimitError(await resolve(contentType, content) as RateLimitError);`
         case 'data':
-            if (type === undefined)
-                yield [`${indent}return undefined;`, ''];
-            else
-                yield* [[`${indent}return await resolve(contentType, content) as `], type.inline('~'), [';', '']];
-            break;
+            return type === undefined
+                ? source`return undefined;`
+                : source`return await resolve(contentType, content) as ${type.inline('~')};`;
         case 'default':
-            if (type === undefined)
-                yield [`${indent}return undefined;`, ''];
-            else {
-                yield* [[`${indent}if (statusCode >= 200 && statusCode < 300) {`, '']];
-                yield* [[`${indent}    return await resolve(contentType, content) as `], type.inline('~'), [';', '']];
-                yield* [[`${indent}} else {`, '']];
-                yield* [[`${indent}    throw new DiscordRestError(await resolve(contentType, content) as `], type.inline('~'), [');', '']];
-                yield* [[`${indent}}`, '']];
-            }
-            break;
+            return type === undefined
+                ? source`return undefined;`
+                : source`if (statusCode >= 200 && statusCode < 300) {
+    return await resolve(contentType, content) as ${type.inline('~')});
+} else {
+    throw new DiscordRestError(await resolve(contentType, content) as ${type.inline('~')});
+}`;
     }
 }
 
-function* generateReadResponseStatusCodeHandler(indent: string, config: Record<string, { kind: 'ratelimit' | 'error' | 'data' | 'default'; type: Type | undefined; }>) {
+function generateReadResponseStatusCodeHandler(config: Record<string, { kind: 'ratelimit' | 'error' | 'data' | 'default'; type: Type | undefined; }>) {
     const { '': defaultContent, ...contentTypes } = config;
-    for (const [condition, { kind, type }] of Object.entries(contentTypes)) {
-        yield* [[`        if (${condition}) {`, '']];
-        yield* generateReadResponseContentTypeHandler(indent + '    ', type, kind);
-        yield* [['        }', '']];
-    }
-    if (defaultContent !== undefined)
-        yield* generateReadResponseContentTypeHandler(indent, defaultContent.type, defaultContent.kind);
-    else
-        yield* [['        throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);', '']];
+    return source`${Object.entries(contentTypes).flatMap(([condition, { kind, type }]) => [
+        ...source`if (${condition}) {
+    ${generateReadResponseContentTypeHandler(type, kind)}
+}
+`
+    ])}${defaultContent !== undefined
+        ? generateReadResponseContentTypeHandler(defaultContent.type, defaultContent.kind)
+        : source`throw new DiscordRestError(null, \`Unexpected content type \${JSON.stringify(contentType)} response with status code \${statusCode}\`);`
+        }`;
 }
 
 function getAllProperties(type: Type): Iterable<{ name: string; optional: boolean; type: Type; }> | null {

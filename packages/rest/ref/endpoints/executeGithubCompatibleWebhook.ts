@@ -43,7 +43,7 @@ export const query = {
                 yield ["wait", String(value)] as ["wait", string];
             }
         }
-        if ("thread_id" in model) {
+                if ("thread_id" in model) {
             const value = model["thread_id"];
             if (value !== undefined && value !== null) {
                 yield ["thread_id", String(value)] as ["thread_id", string];
@@ -208,7 +208,7 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     }
     chunks.push(jsonEncoded["}"]);
     return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

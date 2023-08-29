@@ -83,8 +83,8 @@ export type Body = CreateAutoModerationRuleRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     const chunks = [
         jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"])), jsonEncoded[","],
-        jsonEncoded["\"event_type\":"], encoder.encode(JSON.stringify(model["event_type"])), jsonEncoded[","],
+        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"])),jsonEncoded[","],
+        jsonEncoded["\"event_type\":"], encoder.encode(JSON.stringify(model["event_type"])),jsonEncoded[","],
         jsonEncoded["\"trigger_type\":"], encoder.encode(JSON.stringify(model["trigger_type"]))
     ];
     if ("actions" in model) {
@@ -119,7 +119,7 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     }
     chunks.push(jsonEncoded["}"]);
     return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

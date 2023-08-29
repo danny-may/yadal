@@ -30,9 +30,9 @@ export const route = {
     },
     rateLimitBuckets(model: { ["channel_id"]: RouteModel["channel_id"] | string; ["message_id"]: RouteModel["message_id"] | string; }) {
         return ["global", `delete /channels/${model.channel_id}/messages/${((message_id: string) => {
-            const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
-            return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
-        })(model.message_id)}`] as const;
+     const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
+     return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
+ })(model.message_id)}`] as const;
     }
 } as const;
 Object.freeze(route);

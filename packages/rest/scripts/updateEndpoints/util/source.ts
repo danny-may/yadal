@@ -1,33 +1,50 @@
-export function source(template: TemplateStringsArray, ...args: Array<string | Iterable<string> | (() => string | Iterable<string>)>) {
+export function source(template: readonly string[], ...args: Array<string | Iterable<string> | (() => string | Iterable<string>)>) {
     return new SourceIterable(template, args);
 }
 
 class SourceIterable implements Iterable<string> {
-    readonly #template: TemplateStringsArray;
+    readonly #template: readonly string[];
     readonly #args: ReadonlyArray<string | Iterable<string> | (() => string | Iterable<string>)>;
 
-    constructor(template: TemplateStringsArray, args: ReadonlyArray<string | Iterable<string> | (() => string | Iterable<string>)>) {
+    constructor(template: readonly string[], args: ReadonlyArray<string | Iterable<string> | (() => string | Iterable<string>)>) {
         this.#template = template;
         this.#args = args;
     }
 
     *[Symbol.iterator]() {
+        const line: string[] = [];
+        let indent = '';
         let i = 0;
-        const prev: string[] = []
         for (; i < this.#args.length; i++) {
-            const template = this.#template[i]!
-            yield* yieldLines(prev, template, '');
+            if (i >= this.#template.length) {
+                do {
+                    let arg = this.#args[i++]!;
+                    if (typeof arg === 'function')
+                        arg = arg();
+                    if (typeof arg === 'string')
+                        yield* yieldLines(line, arg, indent);
+                    else
+                        yield* yieldLines(line, arg, indent);
+                } while (i < this.#args.length)
+                break;
+            }
+
+            const template = this.#template[i]!;
+            yield* yieldLines(line, template, '');
+            indent = getIndent(template);
             let arg = this.#args[i]!;
             if (typeof arg === 'function')
                 arg = arg();
             if (typeof arg === 'string')
-                yield* yieldLines(prev, arg, getIndent(template));
+                yield* yieldLines(line, arg, indent);
             else
-                yield* yieldLines(prev, arg, getIndent(template));
+                yield* yieldLines(line, arg, indent);
         }
-        yield* yieldLines(prev, this.#template[i]!, '');
-        if (prev.length > 0)
-            yield prev.join('');
+        for (; i < this.#template.length; i++) {
+            yield* yieldLines(line, this.#template[i++]!, '');
+        }
+        if (line.length > 0)
+            yield line.join('');
     }
 }
 function* yieldLines(buffer: string[], lines: Iterable<string>, indent: string) {

@@ -85,7 +85,7 @@ export type Body = CreateStageInstanceRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     const chunks = [
         jsonEncoded["{"],
-        jsonEncoded["\"topic\":"], encoder.encode(JSON.stringify(model["topic"])), jsonEncoded[","],
+        jsonEncoded["\"topic\":"], encoder.encode(JSON.stringify(model["topic"])),jsonEncoded[","],
         jsonEncoded["\"channel_id\":"], encoder.encode(JSON.stringify(model["channel_id"]))
     ];
     if ("privacy_level" in model) {
@@ -108,7 +108,7 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     }
     chunks.push(jsonEncoded["}"]);
     return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

@@ -87,14 +87,12 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     if ("data" in model) {
         const value = model["data"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"data\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"data\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
     return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

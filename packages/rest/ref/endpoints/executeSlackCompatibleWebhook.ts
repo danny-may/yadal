@@ -43,7 +43,7 @@ export const query = {
                 yield ["wait", String(value)] as ["wait", string];
             }
         }
-        if ("thread_id" in model) {
+                if ("thread_id" in model) {
             const value = model["thread_id"];
             if (value !== undefined && value !== null) {
                 yield ["thread_id", String(value)] as ["thread_id", string];
@@ -94,43 +94,35 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
     const boundary = encoder.encode(boundaryStr);
     const chunks = [
-
+        
     ];
     if ("text" in model) {
         const value = model["text"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"text\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"text\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("username" in model) {
         const value = model["username"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"username\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"username\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("icon_url" in model) {
         const value = model["icon_url"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"icon_url\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"icon_url\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     if ("attachments" in model) {
         const value = model["attachments"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
     return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;

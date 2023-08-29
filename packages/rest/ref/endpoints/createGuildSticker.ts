@@ -91,14 +91,12 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     if ("description" in model) {
         const value = model["description"];
         if (value !== undefined) {
-            chunks.push(
-                formEncoded["--"], boundary, formEncoded["\"description\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]
-            )
+            chunks.push(formEncoded["--"], boundary, formEncoded["\"description\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
         }
     }
     chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
     return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
@@ -108,7 +106,7 @@ const formEncoded = {
     "lf":encoder.encode("\n"),
     "\"name\".1":encoder.encode("\nContent-Disposition: form-data; name=name\nContent-Type: application/json\n\n"),
     "\"tags\".1":encoder.encode("\nContent-Disposition: form-data; name=tags\nContent-Type: application/json\n\n"),
+    "\"description\".1":encoder.encode("\nContent-Disposition: form-data; name=description\nContent-Type: application/json\n\n"),
     "\"file\".1":encoder.encode("\nContent-Disposition: form-data; name=file; filename="),
-    "\"file\".2":encoder.encode("\nContent-Type: "),
-    "\"description\".1":encoder.encode("\nContent-Disposition: form-data; name=description\nContent-Type: application/json\n\n")
+    "\"file\".2":encoder.encode("\nContent-Type: ")
 } as const;

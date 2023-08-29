@@ -42,7 +42,7 @@ export const query = {
                 yield ["with_counts", String(value)] as ["with_counts", string];
             }
         }
-        if ("guild_scheduled_event_id" in model) {
+                if ("guild_scheduled_event_id" in model) {
             const value = model["guild_scheduled_event_id"];
             if (value !== undefined && value !== null) {
                 yield ["guild_scheduled_event_id", String(value)] as ["guild_scheduled_event_id", string];

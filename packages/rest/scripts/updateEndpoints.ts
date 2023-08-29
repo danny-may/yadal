@@ -1,5 +1,5 @@
 import { OpenAPI3, OperationObject, ParameterObject, PathItemObject } from 'openapi-typescript';
-import { locateComponentSchemas, parser, TypeBuilder, getSchema, preventShadowGlobal, augmentations, InterfaceType, InterfaceProperty, LiteralType, locateOperations, typesToSource, writeFile, exposeViaExport, noRef, locateRequests, locateResponses, deleteFsItem, defineEndpoint, defineHelpers, ExportFromDetails, snakeCaseToPascalCase } from './updateEndpoints/index.js';
+import { defineEndpoint, locateComponentSchemas, parser, TypeBuilder, getSchema, preventShadowGlobal, augmentations, InterfaceType, InterfaceProperty, LiteralType, locateOperations, typesToSource, writeFile, exposeViaExport, noRef, locateRequests, locateResponses, deleteFsItem, defineHelpers, ExportFromDetails, snakeCaseToPascalCase } from './updateEndpoints/index.js';
 import p from 'node:path';
 import { fileURLToPath } from 'node:url';
 

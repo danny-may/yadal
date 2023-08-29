@@ -86,8 +86,9 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
         jsonEncoded["\"webhook_channel_id\":"], encoder.encode(JSON.stringify(model["webhook_channel_id"])),
         jsonEncoded["}"]
     ];
+    
     return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
-
+    
 }
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
