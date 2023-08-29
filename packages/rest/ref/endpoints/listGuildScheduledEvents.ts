@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListGuildScheduledEventsRequestPath, type ListGuildScheduledEventsRequestQuery, type RateLimitError, type ListGuildScheduledEventsResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListGuildScheduledEventsRequestPath, type ListGuildScheduledEventsRequestQuery, type ListGuildScheduledEventsRequestHeaders, type RateLimitError, type ListGuildScheduledEventsResponseJSON, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listGuildScheduledEvents";
 export type RouteModel = ListGuildScheduledEventsRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/scheduled-events$/i;
 export const route = {
     method: "GET",
     template: "/guilds/{guild_id}/scheduled-events",
+    keys: Object.freeze(["guild_id"] as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)\/scheduled-events$/i;
     },
@@ -32,7 +33,33 @@ export const route = {
 } as const;
 Object.freeze(route);
 export type QueryModel = ListGuildScheduledEventsRequestQuery;
-export const queryKeys = Object.freeze(["with_user_count"] as const);
+export const query = {
+    keys: Object.freeze(["with_user_count"] as const),
+    * getValues(model: QueryModel) {
+        if ("with_user_count" in model) {
+            const value = model["with_user_count"];
+            if (value !== undefined && value !== null) {
+                yield ["with_user_count", String(value)] as ["with_user_count", string];
+            }
+        }
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = ListGuildScheduledEventsRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = ListGuildScheduledEventsResponseJSON;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

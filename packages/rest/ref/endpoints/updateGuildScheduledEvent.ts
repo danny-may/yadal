@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateGuildScheduledEventRequestPath, type RateLimitError, type UpdateGuildScheduledEventResponseJSON, type ErrorResponse, type UpdateGuildScheduledEventRequestJSON } from '../discord.js';
+import { type UpdateGuildScheduledEventRequestPath, type UpdateGuildScheduledEventRequestHeaders, type RateLimitError, type UpdateGuildScheduledEventResponseJSON, type ErrorResponse, type UpdateGuildScheduledEventRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateGuildScheduledEvent";
 export type RouteModel = UpdateGuildScheduledEventRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/scheduled-events\/(?<guild_sche
 export const route = {
     method: "PATCH",
     template: "/guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}",
+    keys: Object.freeze(["guild_id","guild_scheduled_event_id"] as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)\/scheduled-events\/(?<guild_scheduled_event_id>.*?)$/i;
     },
@@ -32,6 +33,31 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = UpdateGuildScheduledEventRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = UpdateGuildScheduledEventResponseJSON;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

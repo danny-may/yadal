@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListPublicArchivedThreadsRequestPath, type ListPublicArchivedThreadsRequestQuery, type RateLimitError, type ThreadsResponse, type ErrorResponse } from '../discord.js';
+import { type ListPublicArchivedThreadsRequestPath, type ListPublicArchivedThreadsRequestQuery, type ListPublicArchivedThreadsRequestHeaders, type RateLimitError, type ThreadsResponse, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listPublicArchivedThreads";
 export type RouteModel = ListPublicArchivedThreadsRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/channels\/(?<channel_id>.*?)\/threads\/archived\/public$/
 export const route = {
     method: "GET",
     template: "/channels/{channel_id}/threads/archived/public",
+    keys: Object.freeze(["channel_id"] as const),
     get regex(){
         return /^\/channels\/(?<channel_id>.*?)\/threads\/archived\/public$/i;
     },
@@ -32,7 +33,39 @@ export const route = {
 } as const;
 Object.freeze(route);
 export type QueryModel = ListPublicArchivedThreadsRequestQuery;
-export const queryKeys = Object.freeze(["before", "limit"] as const);
+export const query = {
+    keys: Object.freeze(["before","limit"] as const),
+    * getValues(model: QueryModel) {
+        if ("before" in model) {
+            const value = model["before"];
+            if (value !== undefined && value !== null) {
+                yield ["before", String(value)] as ["before", string];
+            }
+        }
+        if ("limit" in model) {
+            const value = model["limit"];
+            if (value !== undefined && value !== null) {
+                yield ["limit", String(value)] as ["limit", string];
+            }
+        }
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = ListPublicArchivedThreadsRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = ThreadsResponse;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

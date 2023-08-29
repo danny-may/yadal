@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ListThreadMembersRequestPath, type ListThreadMembersRequestQuery, type RateLimitError, type ListThreadMembersResponseJSON, type ErrorResponse } from '../discord.js';
+import { type ListThreadMembersRequestPath, type ListThreadMembersRequestQuery, type ListThreadMembersRequestHeaders, type RateLimitError, type ListThreadMembersResponseJSON, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "listThreadMembers";
 export type RouteModel = ListThreadMembersRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/channels\/(?<channel_id>.*?)\/thread-members$/i;
 export const route = {
     method: "GET",
     template: "/channels/{channel_id}/thread-members",
+    keys: Object.freeze(["channel_id"] as const),
     get regex(){
         return /^\/channels\/(?<channel_id>.*?)\/thread-members$/i;
     },
@@ -32,7 +33,45 @@ export const route = {
 } as const;
 Object.freeze(route);
 export type QueryModel = ListThreadMembersRequestQuery;
-export const queryKeys = Object.freeze(["with_member", "limit", "after"] as const);
+export const query = {
+    keys: Object.freeze(["with_member","limit","after"] as const),
+    * getValues(model: QueryModel) {
+        if ("with_member" in model) {
+            const value = model["with_member"];
+            if (value !== undefined && value !== null) {
+                yield ["with_member", String(value)] as ["with_member", string];
+            }
+        }
+        if ("limit" in model) {
+            const value = model["limit"];
+            if (value !== undefined && value !== null) {
+                yield ["limit", String(value)] as ["limit", string];
+            }
+        }
+        if ("after" in model) {
+            const value = model["after"];
+            if (value !== undefined && value !== null) {
+                yield ["after", String(value)] as ["after", string];
+            }
+        }
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = ListThreadMembersRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = ListThreadMembersResponseJSON;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetWebhookByTokenRequestPath, type RateLimitError, type GetWebhookByTokenResponseJSON, type ErrorResponse } from '../discord.js';
+import { type GetWebhookByTokenRequestPath, type GetWebhookByTokenRequestHeaders, type RateLimitError, type GetWebhookByTokenResponseJSON, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getWebhookByToken";
 export type RouteModel = GetWebhookByTokenRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)$/i;
 export const route = {
     method: "GET",
     template: "/webhooks/{webhook_id}/{webhook_token}",
+    keys: Object.freeze(["webhook_id","webhook_token"] as const),
     get regex(){
         return /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)$/i;
     },
@@ -32,6 +33,31 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = GetWebhookByTokenRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = GetWebhookByTokenResponseJSON;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

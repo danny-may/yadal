@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type GetGuildWidgetPngRequestPath, type GetGuildWidgetPngRequestQuery, type RateLimitError, type GetGuildWidgetPngResponsePNG, type ErrorResponse } from '../discord.js';
+import { type GetGuildWidgetPngRequestPath, type GetGuildWidgetPngRequestQuery, type GetGuildWidgetPngRequestHeaders, type RateLimitError, type GetGuildWidgetPngResponsePNG, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "getGuildWidgetPng";
 export type RouteModel = GetGuildWidgetPngRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/widget\.png$/i;
 export const route = {
     method: "GET",
     template: "/guilds/{guild_id}/widget.png",
+    keys: Object.freeze(["guild_id"] as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)\/widget\.png$/i;
     },
@@ -32,7 +33,33 @@ export const route = {
 } as const;
 Object.freeze(route);
 export type QueryModel = GetGuildWidgetPngRequestQuery;
-export const queryKeys = Object.freeze(["style"] as const);
+export const query = {
+    keys: Object.freeze(["style"] as const),
+    * getValues(model: QueryModel) {
+        if ("style" in model) {
+            const value = model["style"];
+            if (value !== undefined && value !== null) {
+                yield ["style", String(value)] as ["style", string];
+            }
+        }
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = GetGuildWidgetPngRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = GetGuildWidgetPngResponsePNG;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

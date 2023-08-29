@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateWebhookRequestPath, type RateLimitError, type GuildIncomingWebhookResponse, type ErrorResponse, type CreateWebhookRequestJSON } from '../discord.js';
+import { type CreateWebhookRequestPath, type CreateWebhookRequestHeaders, type RateLimitError, type GuildIncomingWebhookResponse, type ErrorResponse, type CreateWebhookRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createWebhook";
 export type RouteModel = CreateWebhookRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/channels\/(?<channel_id>.*?)\/webhooks$/i;
 export const route = {
     method: "POST",
     template: "/channels/{channel_id}/webhooks",
+    keys: Object.freeze(["channel_id"] as const),
     get regex(){
         return /^\/channels\/(?<channel_id>.*?)\/webhooks$/i;
     },
@@ -31,6 +32,31 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = CreateWebhookRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = GuildIncomingWebhookResponse;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

@@ -5902,8 +5902,17 @@ export type ErrorDetails = {
 export type ErrorResponse = DiscordError & {
     errors?: ErrorDetails;
 };
+export interface GetMyOauth2ApplicationRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListMyConnectionsResponseJSON = Array<ConnectedAccountResponse> | null;
+export interface ListMyConnectionsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type CreateDmResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export interface CreateDmRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListMyGuildsResponseJSON = Array<MyGuildResponse> | null;
 export interface ListMyGuildsRequestQuery {
     before?: (Snowflake | null);
@@ -5911,8 +5920,32 @@ export interface ListMyGuildsRequestQuery {
     limit?: (number | null);
     with_counts?: (boolean | null);
 }
+export interface ListMyGuildsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface GetMyApplicationRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface UpdateMyApplicationRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface GetBotGatewayRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface GetMyOauth2AuthorizationRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
+export interface ListVoiceRegionsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface GetMyUserRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type UpdateMyUserRequestJSON = BotAccountPatchRequestPartial;
+export interface UpdateMyUserRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface CreateStageInstanceRequestJSON {
     /**
      * @maxLength 120
@@ -5924,6 +5957,18 @@ export interface CreateStageInstanceRequestJSON {
     guild_scheduled_event_id?: (Snowflake | null);
     send_start_notification?: (boolean | null);
 }
+export interface CreateStageInstanceRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface ListStickerPacksRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface GetGatewayRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface CreateGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface ListMyPrivateArchivedThreadsRequestQuery {
     before?: (Snowflake | null);
     limit?: (number | null);
@@ -5931,15 +5976,24 @@ export interface ListMyPrivateArchivedThreadsRequestQuery {
 export interface ListMyPrivateArchivedThreadsRequestPath {
     channel_id: Snowflake;
 }
+export interface ListMyPrivateArchivedThreadsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildApplicationCommandPermissionsResponseJSON = Array<CommandPermissionsResponse>;
 export interface ListGuildApplicationCommandPermissionsRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
 }
+export interface ListGuildApplicationCommandPermissionsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildApplicationCommandPermissionsRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
     command_id: Snowflake;
+}
+export interface GetGuildApplicationCommandPermissionsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface SetGuildApplicationCommandPermissionsRequestJSON {
     /**
@@ -5952,15 +6006,24 @@ export interface SetGuildApplicationCommandPermissionsRequestPath {
     guild_id: Snowflake;
     command_id: Snowflake;
 }
+export interface SetGuildApplicationCommandPermissionsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface AddMyMessageReactionRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
     emoji_name: string;
 }
+export interface AddMyMessageReactionRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteMyMessageReactionRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
     emoji_name: string;
+}
+export interface DeleteMyMessageReactionRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface ListPrivateArchivedThreadsRequestQuery {
     before?: (ISO8601DateTime | null);
@@ -5969,6 +6032,9 @@ export interface ListPrivateArchivedThreadsRequestQuery {
 export interface ListPrivateArchivedThreadsRequestPath {
     channel_id: Snowflake;
 }
+export interface ListPrivateArchivedThreadsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface ListPublicArchivedThreadsRequestQuery {
     before?: (ISO8601DateTime | null);
     limit?: (number | null);
@@ -5976,8 +6042,14 @@ export interface ListPublicArchivedThreadsRequestQuery {
 export interface ListPublicArchivedThreadsRequestPath {
     channel_id: Snowflake;
 }
+export interface ListPublicArchivedThreadsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetApplicationUserRoleConnectionRequestPath {
     application_id: Snowflake;
+}
+export interface GetApplicationUserRoleConnectionRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateApplicationUserRoleConnectionRequestJSON {
     /**
@@ -6002,12 +6074,21 @@ export interface UpdateApplicationUserRoleConnectionRequestJSON {
 export interface UpdateApplicationUserRoleConnectionRequestPath {
     application_id: Snowflake;
 }
+export interface UpdateApplicationUserRoleConnectionRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetMyGuildMemberRequestPath {
     guild_id: Snowflake;
+}
+export interface GetMyGuildMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type GetApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
 export interface GetApplicationRoleConnectionsMetadataRequestPath {
     application_id: Snowflake;
+}
+export interface GetApplicationRoleConnectionsMetadataRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 /**
  * @maxItems 5
@@ -6017,15 +6098,24 @@ export type UpdateApplicationRoleConnectionsMetadataResponseJSON = Array<Applica
 export interface UpdateApplicationRoleConnectionsMetadataRequestPath {
     application_id: Snowflake;
 }
+export interface UpdateApplicationRoleConnectionsMetadataRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildApplicationCommandRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
     command_id: Snowflake;
 }
+export interface GetGuildApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildApplicationCommandRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
     command_id: Snowflake;
+}
+export interface DeleteGuildApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildApplicationCommandRequestJSON {
     /**
@@ -6073,6 +6163,9 @@ export interface UpdateGuildApplicationCommandRequestPath {
     guild_id: Snowflake;
     command_id: Snowflake;
 }
+export interface UpdateGuildApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
 export interface ListGuildApplicationCommandsRequestQuery {
     with_localizations?: (boolean | null);
@@ -6080,6 +6173,9 @@ export interface ListGuildApplicationCommandsRequestQuery {
 export interface ListGuildApplicationCommandsRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
+}
+export interface ListGuildApplicationCommandsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type BulkSetGuildApplicationCommandsRequestJSON = Array<{
     id?: (Snowflake | null);
@@ -6129,6 +6225,9 @@ export interface BulkSetGuildApplicationCommandsRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
 }
+export interface BulkSetGuildApplicationCommandsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface CreateGuildApplicationCommandRequestJSON {
     /**
      * @maxLength 32
@@ -6175,11 +6274,20 @@ export interface CreateGuildApplicationCommandRequestPath {
     application_id: Snowflake;
     guild_id: Snowflake;
 }
+export interface CreateGuildApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface JoinThreadRequestPath {
     channel_id: Snowflake;
 }
+export interface JoinThreadRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface LeaveThreadRequestPath {
     channel_id: Snowflake;
+}
+export interface LeaveThreadRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface BulkDeleteMessagesRequestJSON {
     /**
@@ -6191,11 +6299,17 @@ export interface BulkDeleteMessagesRequestJSON {
 export interface BulkDeleteMessagesRequestPath {
     channel_id: Snowflake;
 }
+export interface BulkDeleteMessagesRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteUserMessageReactionRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
     emoji_name: string;
     user_id: Snowflake;
+}
+export interface DeleteUserMessageReactionRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ListMessageReactionsByEmojiResponseJSON = Array<UserResponse>;
 export interface ListMessageReactionsByEmojiRequestQuery {
@@ -6207,22 +6321,37 @@ export interface ListMessageReactionsByEmojiRequestPath {
     message_id: Snowflake;
     emoji_name: string;
 }
+export interface ListMessageReactionsByEmojiRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteAllMessageReactionsByEmojiRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
     emoji_name: string;
 }
+export interface DeleteAllMessageReactionsByEmojiRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteAllMessageReactionsRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
+}
+export interface DeleteAllMessageReactionsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface CrosspostMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
 }
+export interface CrosspostMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface CreateThreadFromMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
+}
+export interface CreateThreadFromMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetOriginalWebhookMessageRequestQuery {
     thread_id?: (Snowflake | null);
@@ -6231,12 +6360,18 @@ export interface GetOriginalWebhookMessageRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
 }
+export interface GetOriginalWebhookMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteOriginalWebhookMessageRequestQuery {
     thread_id?: (Snowflake | null);
 }
 export interface DeleteOriginalWebhookMessageRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
+}
+export interface DeleteOriginalWebhookMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type UpdateOriginalWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPartial & {
     "files[0]"?: File;
@@ -6257,6 +6392,9 @@ export interface UpdateOriginalWebhookMessageRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
 }
+export interface UpdateOriginalWebhookMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildScheduledEventUsersResponseJSON = Array<ScheduledEventUserResponse> | null;
 export interface ListGuildScheduledEventUsersRequestQuery {
     with_member?: (boolean | null);
@@ -6268,14 +6406,23 @@ export interface ListGuildScheduledEventUsersRequestPath {
     guild_id: Snowflake;
     guild_scheduled_event_id: Snowflake;
 }
+export interface ListGuildScheduledEventUsersRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type GetAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
 export interface GetAutoModerationRuleRequestPath {
     guild_id: Snowflake;
     rule_id: Snowflake;
 }
+export interface GetAutoModerationRuleRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteAutoModerationRuleRequestPath {
     guild_id: Snowflake;
     rule_id: Snowflake;
+}
+export interface DeleteAutoModerationRuleRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type UpdateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequestPartial | KeywordUpsertRequestPartial | MLSpamUpsertRequestPartial | MentionSpamUpsertRequestPartial;
 export type UpdateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
@@ -6283,14 +6430,23 @@ export interface UpdateAutoModerationRuleRequestPath {
     guild_id: Snowflake;
     rule_id: Snowflake;
 }
+export interface UpdateAutoModerationRuleRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListAutoModerationRulesResponseJSON = Array<(DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse | null)> | null;
 export interface ListAutoModerationRulesRequestPath {
     guild_id: Snowflake;
+}
+export interface ListAutoModerationRulesRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type CreateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequest | KeywordUpsertRequest | MLSpamUpsertRequest | MentionSpamUpsertRequest;
 export type CreateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
 export interface CreateAutoModerationRuleRequestPath {
     guild_id: Snowflake;
+}
+export interface CreateAutoModerationRuleRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateSelfVoiceStateRequestJSON {
     request_to_speak_timestamp?: (ISO8601DateTime | null);
@@ -6300,6 +6456,9 @@ export interface UpdateSelfVoiceStateRequestJSON {
 export interface UpdateSelfVoiceStateRequestPath {
     guild_id: Snowflake;
 }
+export interface UpdateSelfVoiceStateRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type SearchGuildMembersResponseJSON = Array<GuildMemberResponse>;
 export interface SearchGuildMembersRequestQuery {
     limit: number;
@@ -6308,8 +6467,14 @@ export interface SearchGuildMembersRequestQuery {
 export interface SearchGuildMembersRequestPath {
     guild_id: Snowflake;
 }
+export interface SearchGuildMembersRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetActiveGuildThreadsRequestPath {
     guild_id: Snowflake;
+}
+export interface GetActiveGuildThreadsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateMyGuildMemberRequestJSON {
     /**
@@ -6320,26 +6485,44 @@ export interface UpdateMyGuildMemberRequestJSON {
 export interface UpdateMyGuildMemberRequestPath {
     guild_id: Snowflake;
 }
+export interface UpdateMyGuildMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface AddGuildMemberRoleRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
     role_id: Snowflake;
+}
+export interface AddGuildMemberRoleRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildMemberRoleRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
     role_id: Snowflake;
 }
+export interface DeleteGuildMemberRoleRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface LeaveGuildRequestPath {
     guild_id: Snowflake;
+}
+export interface LeaveGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetApplicationCommandRequestPath {
     application_id: Snowflake;
     command_id: Snowflake;
 }
+export interface GetApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteApplicationCommandRequestPath {
     application_id: Snowflake;
     command_id: Snowflake;
+}
+export interface DeleteApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateApplicationCommandRequestJSON {
     /**
@@ -6386,12 +6569,18 @@ export interface UpdateApplicationCommandRequestPath {
     application_id: Snowflake;
     command_id: Snowflake;
 }
+export interface UpdateApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
 export interface ListApplicationCommandsRequestQuery {
     with_localizations?: (boolean | null);
 }
 export interface ListApplicationCommandsRequestPath {
     application_id: Snowflake;
+}
+export interface ListApplicationCommandsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type BulkSetApplicationCommandsRequestJSON = Array<{
     id?: (Snowflake | null);
@@ -6440,6 +6629,9 @@ export type BulkSetApplicationCommandsResponseJSON = Array<ApplicationCommandRes
 export interface BulkSetApplicationCommandsRequestPath {
     application_id: Snowflake;
 }
+export interface BulkSetApplicationCommandsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface CreateApplicationCommandRequestJSON {
     /**
      * @maxLength 32
@@ -6485,12 +6677,18 @@ export interface CreateApplicationCommandRequestJSON {
 export interface CreateApplicationCommandRequestPath {
     application_id: Snowflake;
 }
+export interface CreateApplicationCommandRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type CreateInteractionResponseRequestJSON = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
 export type CreateInteractionResponseRequestURLEncoded = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
 export type CreateInteractionResponseRequestFormData = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
 export interface CreateInteractionResponseRequestPath {
     interaction_id: Snowflake;
     interaction_token: string;
+}
+export interface CreateInteractionResponseRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetThreadMemberRequestQuery {
     with_member?: (boolean | null);
@@ -6499,13 +6697,22 @@ export interface GetThreadMemberRequestPath {
     channel_id: Snowflake;
     user_id: Snowflake;
 }
+export interface GetThreadMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface AddThreadMemberRequestPath {
     channel_id: Snowflake;
     user_id: Snowflake;
 }
+export interface AddThreadMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteThreadMemberRequestPath {
     channel_id: Snowflake;
     user_id: Snowflake;
+}
+export interface DeleteThreadMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ListThreadMembersResponseJSON = Array<ThreadMemberResponse>;
 export interface ListThreadMembersRequestQuery {
@@ -6516,6 +6723,9 @@ export interface ListThreadMembersRequestQuery {
 export interface ListThreadMembersRequestPath {
     channel_id: Snowflake;
 }
+export interface ListThreadMembersRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface SetChannelPermissionOverwriteRequestJSON {
     type?: (null | ChannelPermissionOverwrite);
     allow?: (number | null);
@@ -6525,18 +6735,30 @@ export interface SetChannelPermissionOverwriteRequestPath {
     channel_id: Snowflake;
     overwrite_id: Snowflake;
 }
+export interface SetChannelPermissionOverwriteRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteChannelPermissionOverwriteRequestPath {
     channel_id: Snowflake;
     overwrite_id: Snowflake;
+}
+export interface DeleteChannelPermissionOverwriteRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type AddGroupDmUserResponseJSON = PrivateChannelResponse | PrivateGroupChannelResponse;
 export interface AddGroupDmUserRequestPath {
     channel_id: Snowflake;
     user_id: Snowflake;
 }
+export interface AddGroupDmUserRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGroupDmUserRequestPath {
     channel_id: Snowflake;
     user_id: Snowflake;
+}
+export interface DeleteGroupDmUserRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface FollowChannelRequestJSON {
     webhook_channel_id: Snowflake;
@@ -6544,13 +6766,22 @@ export interface FollowChannelRequestJSON {
 export interface FollowChannelRequestPath {
     channel_id: Snowflake;
 }
+export interface FollowChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
 }
+export interface GetMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
+}
+export interface DeleteMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type UpdateMessageRequestFormData = MessageEditRequestPartial & {
     "files[0]"?: File;
@@ -6568,6 +6799,9 @@ export interface UpdateMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
 }
+export interface UpdateMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListMessagesResponseJSON = Array<MessageResponse> | null;
 export interface ListMessagesRequestQuery {
     around?: (Snowflake | null);
@@ -6577,6 +6811,9 @@ export interface ListMessagesRequestQuery {
 }
 export interface ListMessagesRequestPath {
     channel_id: Snowflake;
+}
+export interface ListMessagesRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type CreateMessageRequestFormData = MessageCreateRequest & {
     "files[0]"?: File;
@@ -6593,9 +6830,15 @@ export type CreateMessageRequestFormData = MessageCreateRequest & {
 export interface CreateMessageRequestPath {
     channel_id: Snowflake;
 }
+export interface CreateMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListChannelWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
 export interface ListChannelWebhooksRequestPath {
     channel_id: Snowflake;
+}
+export interface ListChannelWebhooksRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface CreateWebhookRequestJSON {
     /**
@@ -6608,14 +6851,23 @@ export interface CreateWebhookRequestJSON {
 export interface CreateWebhookRequestPath {
     channel_id: Snowflake;
 }
+export interface CreateWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListChannelInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
 export interface ListChannelInvitesRequestPath {
     channel_id: Snowflake;
+}
+export interface ListChannelInvitesRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type CreateChannelInviteRequestJSON = CreateGroupDMInviteRequest | CreateGuildInviteRequest;
 export type CreateChannelInviteResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export interface CreateChannelInviteRequestPath {
     channel_id: Snowflake;
+}
+export interface CreateChannelInviteRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type CreateThreadRequestJSON = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
 export type CreateThreadRequestURLEncoded = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
@@ -6623,20 +6875,35 @@ export type CreateThreadRequestFormData = CreateForumThreadRequest | CreateTextT
 export interface CreateThreadRequestPath {
     channel_id: Snowflake;
 }
+export interface CreateThreadRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface TriggerTypingIndicatorRequestPath {
     channel_id: Snowflake;
+}
+export interface TriggerTypingIndicatorRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface PinMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
 }
+export interface PinMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface UnpinMessageRequestPath {
     channel_id: Snowflake;
     message_id: Snowflake;
 }
+export interface UnpinMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListPinnedMessagesResponseJSON = Array<MessageResponse> | null;
 export interface ListPinnedMessagesRequestPath {
     channel_id: Snowflake;
+}
+export interface ListPinnedMessagesRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetWebhookMessageRequestQuery {
     thread_id?: (Snowflake | null);
@@ -6646,6 +6913,9 @@ export interface GetWebhookMessageRequestPath {
     webhook_token: string;
     message_id: Snowflake;
 }
+export interface GetWebhookMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteWebhookMessageRequestQuery {
     thread_id?: (Snowflake | null);
 }
@@ -6653,6 +6923,9 @@ export interface DeleteWebhookMessageRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
     message_id: Snowflake;
+}
+export interface DeleteWebhookMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type UpdateWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPartial & {
     "files[0]"?: File;
@@ -6674,6 +6947,9 @@ export interface UpdateWebhookMessageRequestPath {
     webhook_token: string;
     message_id: Snowflake;
 }
+export interface UpdateWebhookMessageRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface ExecuteGithubCompatibleWebhookRequestQuery {
     wait?: (boolean | null);
     thread_id?: (Snowflake | null);
@@ -6681,6 +6957,9 @@ export interface ExecuteGithubCompatibleWebhookRequestQuery {
 export interface ExecuteGithubCompatibleWebhookRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
+}
+export interface ExecuteGithubCompatibleWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ExecuteSlackCompatibleWebhookResponseJSON = string | null;
 export interface ExecuteSlackCompatibleWebhookRequestQuery {
@@ -6691,8 +6970,14 @@ export interface ExecuteSlackCompatibleWebhookRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
 }
+export interface ExecuteSlackCompatibleWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildTemplateRequestPath {
     code: string;
+}
+export interface GetGuildTemplateRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface CreateGuildFromTemplateRequestJSON {
     /**
@@ -6705,8 +6990,14 @@ export interface CreateGuildFromTemplateRequestJSON {
 export interface CreateGuildFromTemplateRequestPath {
     code: string;
 }
+export interface CreateGuildFromTemplateRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildNewMemberWelcomeRequestPath {
     guild_id: Snowflake;
+}
+export interface GetGuildNewMemberWelcomeRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type GetGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
 export interface GetGuildScheduledEventRequestQuery {
@@ -6716,15 +7007,24 @@ export interface GetGuildScheduledEventRequestPath {
     guild_id: Snowflake;
     guild_scheduled_event_id: Snowflake;
 }
+export interface GetGuildScheduledEventRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildScheduledEventRequestPath {
     guild_id: Snowflake;
     guild_scheduled_event_id: Snowflake;
+}
+export interface DeleteGuildScheduledEventRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type UpdateGuildScheduledEventRequestJSON = ExternalScheduledEventPatchRequestPartial | StageScheduledEventPatchRequestPartial | VoiceScheduledEventPatchRequestPartial;
 export type UpdateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
 export interface UpdateGuildScheduledEventRequestPath {
     guild_id: Snowflake;
     guild_scheduled_event_id: Snowflake;
+}
+export interface UpdateGuildScheduledEventRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ListGuildScheduledEventsResponseJSON = Array<(ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse)> | null;
 export interface ListGuildScheduledEventsRequestQuery {
@@ -6733,16 +7033,28 @@ export interface ListGuildScheduledEventsRequestQuery {
 export interface ListGuildScheduledEventsRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildScheduledEventsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type CreateGuildScheduledEventRequestJSON = ExternalScheduledEventCreateRequest | StageScheduledEventCreateRequest | VoiceScheduledEventCreateRequest;
 export type CreateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
 export interface CreateGuildScheduledEventRequestPath {
     guild_id: Snowflake;
 }
+export interface CreateGuildScheduledEventRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildWelcomeScreenRequestPath {
     guild_id: Snowflake;
 }
+export interface GetGuildWelcomeScreenRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface UpdateGuildWelcomeScreenRequestPath {
     guild_id: Snowflake;
+}
+export interface UpdateGuildWelcomeScreenRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateVoiceStateRequestJSON {
     suppress?: (boolean | null);
@@ -6752,25 +7064,46 @@ export interface UpdateVoiceStateRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
 }
+export interface UpdateVoiceStateRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildIntegrationRequestPath {
     guild_id: Snowflake;
     integration_id: Snowflake;
+}
+export interface DeleteGuildIntegrationRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ListGuildIntegrationsResponseJSON = Array<(DiscordIntegrationResponse | ExternalConnectionIntegrationResponse | GuildSubscriptionIntegrationResponse)> | null;
 export interface ListGuildIntegrationsRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildIntegrationsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildWidgetRequestPath {
     guild_id: Snowflake;
+}
+export interface GetGuildWidgetRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetGuildsOnboardingRequestPath {
     guild_id: Snowflake;
 }
+export interface GetGuildsOnboardingRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface PutGuildsOnboardingRequestPath {
     guild_id: Snowflake;
 }
+export interface PutGuildsOnboardingRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildVanityUrlRequestPath {
     guild_id: Snowflake;
+}
+export interface GetGuildVanityUrlRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface ListGuildAuditLogEntriesRequestQuery {
     user_id?: (Snowflake | null);
@@ -6782,6 +7115,9 @@ export interface ListGuildAuditLogEntriesRequestQuery {
 export interface ListGuildAuditLogEntriesRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildAuditLogEntriesRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type GetGuildWidgetPngResponsePNG = File;
 export interface GetGuildWidgetPngRequestQuery {
     style?: (null | WidgetImageStyle);
@@ -6789,13 +7125,22 @@ export interface GetGuildWidgetPngRequestQuery {
 export interface GetGuildWidgetPngRequestPath {
     guild_id: Snowflake;
 }
+export interface GetGuildWidgetPngRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface SyncGuildTemplateRequestPath {
     guild_id: Snowflake;
     code: string;
 }
+export interface SyncGuildTemplateRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildTemplateRequestPath {
     guild_id: Snowflake;
     code: string;
+}
+export interface DeleteGuildTemplateRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildTemplateRequestJSON {
     /**
@@ -6812,9 +7157,15 @@ export interface UpdateGuildTemplateRequestPath {
     guild_id: Snowflake;
     code: string;
 }
+export interface UpdateGuildTemplateRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildTemplatesResponseJSON = Array<GuildTemplateResponse> | null;
 export interface ListGuildTemplatesRequestPath {
     guild_id: Snowflake;
+}
+export interface ListGuildTemplatesRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface CreateGuildTemplateRequestJSON {
     /**
@@ -6830,13 +7181,22 @@ export interface CreateGuildTemplateRequestJSON {
 export interface CreateGuildTemplateRequestPath {
     guild_id: Snowflake;
 }
+export interface CreateGuildTemplateRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildStickerRequestPath {
     guild_id: Snowflake;
     sticker_id: Snowflake;
 }
+export interface GetGuildStickerRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildStickerRequestPath {
     guild_id: Snowflake;
     sticker_id: Snowflake;
+}
+export interface DeleteGuildStickerRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildStickerRequestJSON {
     /**
@@ -6858,12 +7218,21 @@ export interface UpdateGuildStickerRequestPath {
     guild_id: Snowflake;
     sticker_id: Snowflake;
 }
+export interface UpdateGuildStickerRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse)> | null;
 export interface ListGuildChannelsRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildChannelsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface CreateGuildChannelRequestPath {
     guild_id: Snowflake;
+}
+export interface CreateGuildChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type BulkUpdateGuildChannelsRequestJSON = Array<{
     id?: Snowflake;
@@ -6878,9 +7247,15 @@ export type BulkUpdateGuildChannelsRequestJSON = Array<{
 export interface BulkUpdateGuildChannelsRequestPath {
     guild_id: Snowflake;
 }
+export interface BulkUpdateGuildChannelsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildStickersResponseJSON = Array<GuildStickerResponse>;
 export interface ListGuildStickersRequestPath {
     guild_id: Snowflake;
+}
+export interface ListGuildStickersRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface CreateGuildStickerRequestFormData {
     /**
@@ -6902,13 +7277,22 @@ export interface CreateGuildStickerRequestFormData {
 export interface CreateGuildStickerRequestPath {
     guild_id: Snowflake;
 }
+export interface CreateGuildStickerRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type GetGuildWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
 export interface GetGuildWebhooksRequestPath {
     guild_id: Snowflake;
 }
+export interface GetGuildWebhooksRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildMemberRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
+}
+export interface GetGuildMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface AddGuildMemberRequestJSON {
     /**
@@ -6932,9 +7316,15 @@ export interface AddGuildMemberRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
 }
+export interface AddGuildMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildMemberRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
+}
+export interface DeleteGuildMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildMemberRequestJSON {
     /**
@@ -6956,6 +7346,9 @@ export interface UpdateGuildMemberRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
 }
+export interface UpdateGuildMemberRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildMembersResponseJSON = Array<GuildMemberResponse>;
 export interface ListGuildMembersRequestQuery {
     limit?: (number | null);
@@ -6964,24 +7357,42 @@ export interface ListGuildMembersRequestQuery {
 export interface ListGuildMembersRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildMembersRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildPreviewRequestPath {
     guild_id: Snowflake;
+}
+export interface GetGuildPreviewRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ListGuildInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
 export interface ListGuildInvitesRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildInvitesRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
 export interface ListGuildVoiceRegionsRequestPath {
     guild_id: Snowflake;
+}
+export interface ListGuildVoiceRegionsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetGuildEmojiRequestPath {
     guild_id: Snowflake;
     emoji_id: Snowflake;
 }
+export interface GetGuildEmojiRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildEmojiRequestPath {
     guild_id: Snowflake;
     emoji_id: Snowflake;
+}
+export interface DeleteGuildEmojiRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildEmojiRequestJSON {
     /**
@@ -6999,9 +7410,15 @@ export interface UpdateGuildEmojiRequestPath {
     guild_id: Snowflake;
     emoji_id: Snowflake;
 }
+export interface UpdateGuildEmojiRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildEmojisResponseJSON = Array<EmojiResponse> | null;
 export interface ListGuildEmojisRequestPath {
     guild_id: Snowflake;
+}
+export interface ListGuildEmojisRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface CreateGuildEmojiRequestJSON {
     /**
@@ -7019,8 +7436,14 @@ export interface CreateGuildEmojiRequestJSON {
 export interface CreateGuildEmojiRequestPath {
     guild_id: Snowflake;
 }
+export interface CreateGuildEmojiRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildWidgetSettingsRequestPath {
     guild_id: Snowflake;
+}
+export interface GetGuildWidgetSettingsRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildWidgetSettingsRequestJSON {
     channel_id?: (Snowflake | null);
@@ -7029,9 +7452,15 @@ export interface UpdateGuildWidgetSettingsRequestJSON {
 export interface UpdateGuildWidgetSettingsRequestPath {
     guild_id: Snowflake;
 }
+export interface UpdateGuildWidgetSettingsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildRoleRequestPath {
     guild_id: Snowflake;
     role_id: Snowflake;
+}
+export interface DeleteGuildRoleRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildRoleRequestJSON {
     /**
@@ -7056,12 +7485,21 @@ export interface UpdateGuildRoleRequestPath {
     guild_id: Snowflake;
     role_id: Snowflake;
 }
+export interface UpdateGuildRoleRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type ListGuildRolesResponseJSON = Array<GuildRoleResponse>;
 export interface ListGuildRolesRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildRolesRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface CreateGuildRoleRequestPath {
     guild_id: Snowflake;
+}
+export interface CreateGuildRoleRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type BulkUpdateGuildRolesRequestJSON = Array<{
     id?: (Snowflake | null);
@@ -7075,23 +7513,41 @@ export type BulkUpdateGuildRolesResponseJSON = Array<GuildRoleResponse>;
 export interface BulkUpdateGuildRolesRequestPath {
     guild_id: Snowflake;
 }
+export interface BulkUpdateGuildRolesRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface PreviewPruneGuildRequestPath {
     guild_id: Snowflake;
 }
+export interface PreviewPruneGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface PruneGuildRequestPath {
     guild_id: Snowflake;
+}
+export interface PruneGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetGuildBanRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
 }
+export interface GetGuildBanRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface BanUserFromGuildRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
 }
+export interface BanUserFromGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface UnbanUserFromGuildRequestPath {
     guild_id: Snowflake;
     user_id: Snowflake;
+}
+export interface UnbanUserFromGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ListGuildBansResponseJSON = Array<GuildBanResponse> | null;
 export interface ListGuildBansRequestQuery {
@@ -7102,17 +7558,29 @@ export interface ListGuildBansRequestQuery {
 export interface ListGuildBansRequestPath {
     guild_id: Snowflake;
 }
+export interface ListGuildBansRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface SetGuildMfaLevelRequestJSON {
     level: GuildMFALevel;
 }
 export interface SetGuildMfaLevelRequestPath {
     guild_id: Snowflake;
 }
+export interface SetGuildMfaLevelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetStageInstanceRequestPath {
     channel_id: Snowflake;
 }
+export interface GetStageInstanceRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteStageInstanceRequestPath {
     channel_id: Snowflake;
+}
+export interface DeleteStageInstanceRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateStageInstanceRequestJSON {
     /**
@@ -7125,16 +7593,28 @@ export interface UpdateStageInstanceRequestJSON {
 export interface UpdateStageInstanceRequestPath {
     channel_id: Snowflake;
 }
+export interface UpdateStageInstanceRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetApplicationRequestPath {
     application_id: Snowflake;
 }
+export interface GetApplicationRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface UpdateApplicationRequestPath {
     application_id: Snowflake;
+}
+export interface UpdateApplicationRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type GetWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export interface GetWebhookByTokenRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
+}
+export interface GetWebhookByTokenRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type ExecuteWebhookRequestJSON = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
 export type ExecuteWebhookRequestURLEncoded = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
@@ -7147,9 +7627,15 @@ export interface ExecuteWebhookRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
 }
+export interface ExecuteWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteWebhookByTokenRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
+}
+export interface DeleteWebhookByTokenRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateWebhookByTokenRequestJSON {
     /**
@@ -7164,29 +7650,50 @@ export interface UpdateWebhookByTokenRequestPath {
     webhook_id: Snowflake;
     webhook_token: string;
 }
+export interface UpdateWebhookByTokenRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type GetChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
 export interface GetChannelRequestPath {
     channel_id: Snowflake;
 }
+export interface GetChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type DeleteChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
 export interface DeleteChannelRequestPath {
     channel_id: Snowflake;
+}
+export interface DeleteChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type UpdateChannelRequestJSON = PrivateChannelRequestPartial | UpdateGuildChannelRequestPartial | UpdateThreadRequestPartial;
 export type UpdateChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
 export interface UpdateChannelRequestPath {
     channel_id: Snowflake;
 }
+export interface UpdateChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type GetStickerResponseJSON = GuildStickerResponse | StandardStickerResponse;
 export interface GetStickerRequestPath {
     sticker_id: Snowflake;
+}
+export interface GetStickerRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export type GetWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export interface GetWebhookRequestPath {
     webhook_id: Snowflake;
 }
+export interface GetWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteWebhookRequestPath {
     webhook_id: Snowflake;
+}
+export interface DeleteWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateWebhookRequestJSON {
     /**
@@ -7201,6 +7708,9 @@ export type UpdateWebhookResponseJSON = ApplicationIncomingWebhookResponse | Cha
 export interface UpdateWebhookRequestPath {
     webhook_id: Snowflake;
 }
+export interface UpdateWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type InviteResolveResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export interface InviteResolveRequestQuery {
     with_counts?: (boolean | null);
@@ -7209,9 +7719,15 @@ export interface InviteResolveRequestQuery {
 export interface InviteResolveRequestPath {
     code: string;
 }
+export interface InviteResolveRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export type InviteRevokeResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export interface InviteRevokeRequestPath {
     code: string;
+}
+export interface InviteRevokeRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface GetGuildRequestQuery {
     with_counts?: (boolean | null);
@@ -7219,14 +7735,26 @@ export interface GetGuildRequestQuery {
 export interface GetGuildRequestPath {
     guild_id: Snowflake;
 }
+export interface GetGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface DeleteGuildRequestPath {
     guild_id: Snowflake;
+}
+export interface DeleteGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildRequestPath {
     guild_id: Snowflake;
 }
+export interface UpdateGuildRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetUserRequestPath {
     user_id: Snowflake;
+}
+export interface GetUserRequestHeaders {
+    "x-audit-log-reason"?: string;
 }
 /**
  * @docs https://discord.com/developers/docs/reference#snowflakes

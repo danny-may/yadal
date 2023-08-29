@@ -6,7 +6,7 @@ import { wellKnownEncodings } from "./parser/parseStringType.js";
 import { rateLimitError } from './augmentations/index.js';
 import { escapeRegex } from "@yadal/core";
 
-const emptyObj = new LiteralType({ value: '{}' });
+const emptyObj = new InterfaceType({ properties: [] });
 const empty = new LiteralType({ value: 'undefined' });
 export function* defineEndpoint(
     id: string,
@@ -321,18 +321,6 @@ function* defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseT
     yield* [['}', '']];
 }
 
-const rateLimitKeyCompatibility: Record<string, Array<string | undefined>> = {
-    guild_id: [undefined],
-    channel_id: [undefined],
-    webhook_id: [undefined],
-    interaction_id: [undefined],
-    webhook_token: ['webhook_id'],
-    interaction_token: ['interaction_id'],
-}
-const deleteMessageMessageIdFn = (value: string) => `((message_id: string) => {
-            const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
-            return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
-        })(${value})`;
 function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string) {
     if (pathType.name !== undefined)
         imports.push({ file: typesUrl, exported: pathType.name, isType: true });
@@ -352,33 +340,22 @@ function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: Imp
     const createSource = JSON.stringify(url)
         .slice(1, -1)
         .replace(/`/g, '\\`')
-        .replace(/\{(\w+)\}/g, (_, key) => {
-            return `\${encodeURIComponent(model.${key})}`
-        });
+        .replace(/\{(\w+)\}/g, (_, key) => `\${encodeURIComponent(model.${key})}`);
     const rateLimitKeys = [] as string[];
     const ratelimitSource = JSON.stringify(url)
         .slice(1, -1)
         .replace(/`/g, '\\`')
-        .replace(/\{(\w+)\}/g, (_, key: string) => {
-            if (rateLimitKeyCompatibility[key]?.some(k => k === undefined ? rateLimitKeys.length === 0 : rateLimitKeys.includes(k))) {
-                rateLimitKeys.push(key);
-                return `\${model.${key}}`;
-            }
-            if (key === 'message_id' && url === '/channels/{channel_id}/messages/{message_id}' && method === 'delete') {
-                rateLimitKeys.push(key);
-                return `\${${deleteMessageMessageIdFn('model.message_id')}}`;
-            }
-            return '<any>';
-        });
+        .replace(/\{(\w+)\}/g, (_, key: string) => getRateLimitTemplateArg(key, url, method, rateLimitKeys));
 
-    const createArgName = matchKeys.length === 0 ? '_' : 'model';
-    const ratelimitArg = rateLimitKeys.length === 0 ? '_: {}' : `model: { ${rateLimitKeys.map(k => `["${k}"]: RouteModel["${k}"] | string;`).join(' ')} }`;
+    const createArgName = matchKeys.length === 0 ? '_?' : 'model';
+    const ratelimitArgName = rateLimitKeys.length === 0 ? '_?' : `model`;
 
     return [`export type RouteModel = `.split('\n'), pathType.inline(`${fullName}RouteModel`), `;
 const routeRegex = /^${regexSource.join('')}$/i;
 export const route = {
     method: ${JSON.stringify(method.toUpperCase())},
     template: ${JSON.stringify(url)},
+    keys: Object.freeze([${matchKeys.join(',')}] as const),
     get regex(){
         return /^${regexSource.join('')}$/i;
     },
@@ -396,44 +373,94 @@ export const route = {
             ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n            ')}
         }
     },
-    rateLimitBuckets(${ratelimitArg}) {
-        return [${matchKeys.includes('"interaction_id"') ? '' : '"global", '}\`${method} ${ratelimitSource}\`] as const;
+    rateLimitBuckets(${ratelimitArgName}: { ${rateLimitKeys.map(k => `["${k}"]: RouteModel["${k}"] | string;`).join(' ')} }) {
+        return [${hasGlobalRateLimit(matchKeys) ? '' : '"global", '}\`${method} ${ratelimitSource}\`] as const;
     }
 } as const;
 Object.freeze(route);
 `.split('\n')];
 }
 
+function hasGlobalRateLimit(keys: string[]) {
+    return keys.includes('"interaction_id"');
+}
+
+function getRateLimitTemplateArg(paramName: string, url: string, method: string, rateLimitKeys: string[]) {
+    if (rateLimitKeyCompatibility[paramName]?.some(k => k === undefined ? rateLimitKeys.length === 0 : rateLimitKeys.includes(k))) {
+        rateLimitKeys.push(paramName);
+        return `\${model.${paramName}}`;
+    }
+    if (paramName === 'message_id' && url === '/channels/{channel_id}/messages/{message_id}' && method === 'delete') {
+        rateLimitKeys.push(paramName);
+        return `\${${deleteMessageMessageIdFn('model.message_id')}}`;
+    }
+    return '<any>';
+}
+const rateLimitKeyCompatibility: Record<string, Array<string | undefined>> = {
+    guild_id: [undefined],
+    channel_id: [undefined],
+    webhook_id: [undefined],
+    interaction_id: [undefined],
+    webhook_token: ['webhook_id'],
+    interaction_token: ['interaction_id'],
+}
+const deleteMessageMessageIdFn = (value: string) => `((message_id: string) => {
+            const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
+            return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
+        })(${value})`;
+
 function* defineHeader(headerType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
-    if (headerType === undefined)
-        return;
-    if (headerType.name !== undefined)
-        imports.push({ file: typesUrl, exported: headerType.name, isType: true });
-    yield* [['export type HeaderModel = '], headerType.inline(`${fullName}HeaderModel`), [';', '']];
+    headerType ??= emptyObj;
     if (!(headerType instanceof InterfaceType))
         throw new Error('Header must be an interface');
-    yield* [[`export const headerKeys = Object.freeze([${headerType.properties.map(p => JSON.stringify(p.name)).join(', ')}] as const);`, '']];
+    if (headerType.name !== undefined)
+        imports.push({ file: typesUrl, exported: headerType.name, isType: true });
+    const props = headerType.properties.map(p => JSON.stringify(p.name));
+    yield* [['export type HeaderModel = '], headerType.inline(`${fullName}HeaderModel`), [';', '']];
+    yield `export const headers = {
+    keys: Object.freeze([${props.join(',')}] as const),
+    getValues(${props.length === 0 ? `_?` : `model`}: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        ${props.map(p => {
+        return `if (${p} in model) {
+            const value = model[${p}];
+            if (value !== undefined && value !== null) {
+                result[${p}] = String(value);
+            }
+        }`
+    }).join('\n        ')}
+        return result;
+    }
+} as const;
+Object.freeze(headers);
+`.split('\n');
 }
 
 function* defineQuery(queryType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
-    if (queryType === undefined)
-        return;
-    if (queryType.name !== undefined)
-        imports.push({ file: typesUrl, exported: queryType.name, isType: true });
-    yield* [['export type QueryModel = '], queryType.inline(`${fullName}QueryModel`), [';', '']];
+    queryType ??= emptyObj;
     if (!(queryType instanceof InterfaceType))
         throw new Error('Query must be an interface');
-    yield* [[`export const queryKeys = Object.freeze([${queryType.properties.map(p => JSON.stringify(p.name)).join(', ')}] as const);`, '']];
+    if (queryType.name !== undefined)
+        imports.push({ file: typesUrl, exported: queryType.name, isType: true });
+    const props = queryType.properties.map(p => JSON.stringify(p.name));
+    yield* [['export type QueryModel = '], queryType.inline(`${fullName}QueryModel`), [';', '']];
+    yield `export const query = {
+    keys: Object.freeze([${props.join(',')}] as const),
+    * getValues(${props.length === 0 ? `_?` : `model`}: QueryModel) {
+        ${props.map(p => {
+        return `if (${p} in model) {
+            const value = model[${p}];
+            if (value !== undefined && value !== null) {
+                yield [${p}, String(value)] as [${p}, string];
+            }
+        }`
+    }).join('\n        ')}
+    }
+} as const;
+Object.freeze(query);
+`.split('\n');
 }
 
-// function mediaTypeToName(mediaType: string): string {
-//     switch (mediaType.toLowerCase()) {
-//         case 'application/json': return 'json';
-//         case 'application/x-www-form-urlencoded': return 'urlEncoded';
-//         case 'multipart/form-data': return 'formData';
-//         default: throw new Error(`Unknown media type ${mediaType}`);
-//     }
-// }
 function statusToCondition(status: string, paramName: string): [condition: string, precision: number] {
     if (/^\dXX$/i.test(status)) {
         return [`${paramName} >= ${status[0]}00 && ${paramName} <= ${status[0]}99`, 100];

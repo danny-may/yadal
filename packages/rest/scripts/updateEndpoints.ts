@@ -102,7 +102,15 @@ type SchemeSymbols = Partial<Record<ParameterObject['in'], symbol>>;
 function loadOperationParameters(types: TypeBuilder, schemes: SchemeSymbols, id: string, operation: OperationObject, path: PathItemObject) {
     const byLocation = [
         ...operation.parameters?.map(noRef) ?? [],
-        ...path.parameters?.map(noRef) ?? []
+        ...path.parameters?.map(noRef) ?? [],
+        {
+            in: 'header',
+            name: 'x-audit-log-reason',
+            schema: {
+                type: 'string'
+            },
+            required: false
+        } as ParameterObject
     ].reduce<Record<ParameterObject['in'], Array<ParameterObject>>>(
         (p, c) => (p[c.in].push(c), p),
         { header: [], cookie: [], path: [], query: [] }

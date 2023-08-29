@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateInteractionResponseRequestPath, type RateLimitError, type ErrorResponse, type CreateInteractionResponseRequestJSON, type CreateInteractionResponseRequestURLEncoded, type CreateInteractionResponseRequestFormData } from '../discord.js';
+import { type CreateInteractionResponseRequestPath, type CreateInteractionResponseRequestHeaders, type RateLimitError, type ErrorResponse, type CreateInteractionResponseRequestJSON, type CreateInteractionResponseRequestURLEncoded, type CreateInteractionResponseRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "createInteractionResponse";
 export type RouteModel = CreateInteractionResponseRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/interactions\/(?<interaction_id>.*?)\/(?<interaction_toke
 export const route = {
     method: "POST",
     template: "/interactions/{interaction_id}/{interaction_token}/callback",
+    keys: Object.freeze(["interaction_id","interaction_token"] as const),
     get regex(){
         return /^\/interactions\/(?<interaction_id>.*?)\/(?<interaction_token>.*?)\/callback$/i;
     },
@@ -32,6 +33,31 @@ export const route = {
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = CreateInteractionResponseRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = undefined;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 204) {

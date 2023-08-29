@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateApplicationRoleConnectionsMetadataRequestPath, type RateLimitError, type UpdateApplicationRoleConnectionsMetadataResponseJSON, type ErrorResponse, type UpdateApplicationRoleConnectionsMetadataRequestJSON } from '../discord.js';
+import { type UpdateApplicationRoleConnectionsMetadataRequestPath, type UpdateApplicationRoleConnectionsMetadataRequestHeaders, type RateLimitError, type UpdateApplicationRoleConnectionsMetadataResponseJSON, type ErrorResponse, type UpdateApplicationRoleConnectionsMetadataRequestJSON } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateApplicationRoleConnectionsMetadata";
 export type RouteModel = UpdateApplicationRoleConnectionsMetadataRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/applications\/(?<application_id>.*?)\/role-connections\/m
 export const route = {
     method: "PUT",
     template: "/applications/{application_id}/role-connections/metadata",
+    keys: Object.freeze(["application_id"] as const),
     get regex(){
         return /^\/applications\/(?<application_id>.*?)\/role-connections\/metadata$/i;
     },
@@ -26,11 +27,36 @@ export const route = {
             ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
         }
     },
-    rateLimitBuckets(_: {}) {
+    rateLimitBuckets(_?: {  }) {
         return ["global", `put /applications/<any>/role-connections/metadata`] as const;
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = UpdateApplicationRoleConnectionsMetadataRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = UpdateApplicationRoleConnectionsMetadataResponseJSON;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

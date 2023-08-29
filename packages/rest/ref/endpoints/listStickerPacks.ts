@@ -1,18 +1,21 @@
 /*
  * Auto generated file, do not edit
  */
+import { type ListStickerPacksRequestHeaders, type RateLimitError, type StickerPackCollectionResponse, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
-import { type RateLimitError, type StickerPackCollectionResponse, type ErrorResponse } from '../discord.js';
 export const name = "listStickerPacks";
-export type RouteModel = {};
+export type RouteModel = {
+
+};
 const routeRegex = /^\/sticker-packs$/i;
 export const route = {
     method: "GET",
     template: "/sticker-packs",
+    keys: Object.freeze([] as const),
     get regex(){
         return /^\/sticker-packs$/i;
     },
-    create(_: RouteModel) {
+    create(_?: RouteModel) {
         return `/sticker-packs` as const satisfies `/${string}`;
     },
     test(url: `/${string}`) {
@@ -26,11 +29,36 @@ export const route = {
             
         }
     },
-    rateLimitBuckets(_: {}) {
+    rateLimitBuckets(_?: {  }) {
         return ["global", `get /sticker-packs`] as const;
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = ListStickerPacksRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = StickerPackCollectionResponse;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

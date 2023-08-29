@@ -1,18 +1,21 @@
 /*
  * Auto generated file, do not edit
  */
+import { type ListMyConnectionsRequestHeaders, type RateLimitError, type ListMyConnectionsResponseJSON, type ErrorResponse } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
-import { type RateLimitError, type ListMyConnectionsResponseJSON, type ErrorResponse } from '../discord.js';
 export const name = "listMyConnections";
-export type RouteModel = {};
+export type RouteModel = {
+
+};
 const routeRegex = /^\/users\/@me\/connections$/i;
 export const route = {
     method: "GET",
     template: "/users/@me/connections",
+    keys: Object.freeze([] as const),
     get regex(){
         return /^\/users\/@me\/connections$/i;
     },
-    create(_: RouteModel) {
+    create(_?: RouteModel) {
         return `/users/@me/connections` as const satisfies `/${string}`;
     },
     test(url: `/${string}`) {
@@ -26,11 +29,36 @@ export const route = {
             
         }
     },
-    rateLimitBuckets(_: {}) {
+    rateLimitBuckets(_?: {  }) {
         return ["global", `get /users/@me/connections`] as const;
     }
 } as const;
 Object.freeze(route);
+export type QueryModel = {
+
+};
+export const query = {
+    keys: Object.freeze([] as const),
+    * getValues(_?: QueryModel) {
+        
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = ListMyConnectionsRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = ListMyConnectionsResponseJSON;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {

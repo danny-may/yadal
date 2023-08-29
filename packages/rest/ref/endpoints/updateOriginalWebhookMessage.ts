@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateOriginalWebhookMessageRequestPath, type UpdateOriginalWebhookMessageRequestQuery, type RateLimitError, type MessageResponse, type ErrorResponse, type IncomingWebhookUpdateRequestPartial, type UpdateOriginalWebhookMessageRequestFormData } from '../discord.js';
+import { type UpdateOriginalWebhookMessageRequestPath, type UpdateOriginalWebhookMessageRequestQuery, type UpdateOriginalWebhookMessageRequestHeaders, type RateLimitError, type MessageResponse, type ErrorResponse, type IncomingWebhookUpdateRequestPartial, type UpdateOriginalWebhookMessageRequestFormData } from '../discord.js';
 import { DiscordRestError, DiscordRateLimitError } from '../helpers.js';
 export const name = "updateOriginalWebhookMessage";
 export type RouteModel = UpdateOriginalWebhookMessageRequestPath;
@@ -9,6 +9,7 @@ const routeRegex = /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)\/mess
 export const route = {
     method: "PATCH",
     template: "/webhooks/{webhook_id}/{webhook_token}/messages/@original",
+    keys: Object.freeze(["webhook_id","webhook_token"] as const),
     get regex(){
         return /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)\/messages\/@original$/i;
     },
@@ -33,7 +34,33 @@ export const route = {
 } as const;
 Object.freeze(route);
 export type QueryModel = UpdateOriginalWebhookMessageRequestQuery;
-export const queryKeys = Object.freeze(["thread_id"] as const);
+export const query = {
+    keys: Object.freeze(["thread_id"] as const),
+    * getValues(model: QueryModel) {
+        if ("thread_id" in model) {
+            const value = model["thread_id"];
+            if (value !== undefined && value !== null) {
+                yield ["thread_id", String(value)] as ["thread_id", string];
+            }
+        }
+    }
+} as const;
+Object.freeze(query);
+export type HeaderModel = UpdateOriginalWebhookMessageRequestHeaders;
+export const headers = {
+    keys: Object.freeze(["x-audit-log-reason"] as const),
+    getValues(model: HeaderModel) {
+        const result = {} as { [P in keyof HeaderModel]?: string };
+        if ("x-audit-log-reason" in model) {
+            const value = model["x-audit-log-reason"];
+            if (value !== undefined && value !== null) {
+                result["x-audit-log-reason"] = String(value);
+            }
+        }
+        return result;
+    }
+} as const;
+Object.freeze(headers);
 export type Response = MessageResponse;
 export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
     if (statusCode === 200) {
