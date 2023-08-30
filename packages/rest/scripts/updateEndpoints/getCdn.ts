@@ -1,11 +1,9 @@
-import path from "path";
 import { snowflake } from "./augmentations/index.js";
 import { defineEndpoint } from "./defineEndpoint.js";
 import { ExportFromDetails, writeFile } from "./output.js";
 import { TypeBuilder, TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, LiteralType, UnionType } from "./types/index.js";
 import { snakeCaseToPascalCase } from "./util/index.js";
-import { fileURLToPath } from "url";
 import { OperationObject, SchemaObject } from "openapi-typescript";
 
 declare function fetch(url: string): Promise<{ text(): Promise<string>; }>;
@@ -78,9 +76,9 @@ export async function getCdn() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const endpoint of endpoints) {
-                const { imports, contents, name } = defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path}.{format}`, types, typesFile, helperFile, schemes)
-                const endpointFile = new URL(`./${name}`, outDir);
-                files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
+                const { imports, contents, name, file } = defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path}.{format}`, types, typesFile, helperFile, schemes)
+                const endpointFile = new URL(`./${file}`, outDir);
+                files.push({ file: endpointFile, name, isType: false });
                 await writeFile({ imports, contents }, endpointFile);
             }
             const index = new URL('./index.ts', outDir)

@@ -10,7 +10,7 @@ rest.loadTypes(builder);
 cdn.loadTypes(builder);
 
 const types = builder.build();
-const typesFile = new URL('../ref/discord.ts', import.meta.url);
+const typesFile = new URL('../ref/types.ts', import.meta.url);
 const helperFile = new URL('../ref/helpers.ts', import.meta.url);
 
 await deleteFsItem(new URL('../ref', import.meta.url));

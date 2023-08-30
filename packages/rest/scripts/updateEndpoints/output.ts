@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,6 +45,8 @@ export async function writeFile({ contents, imports, exports }: SourceFile, url:
 
     const p = fileURLToPath(url);
     await fs.mkdir(path.dirname(p), { recursive: true });
+    if (existsSync(p))
+        throw new Error(`File already exists ${JSON.stringify(p)}`);
     await fs.writeFile(p, [
         `/*`,
         ` * Auto generated file, do not edit`,

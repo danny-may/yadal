@@ -6,8 +6,6 @@ import { noRef, preventShadowGlobal, snakeCaseToPascalCase } from './util/index.
 import { InterfaceProperty, InterfaceType, LiteralType } from './types/index.js';
 import { ExportFromDetails, writeFile } from './output.js';
 import { defineEndpoint } from './defineEndpoint.js';
-import { fileURLToPath } from 'url';
-import path from 'path';
 
 export async function getRest() {
     const schema = await refParser.dereference({
@@ -22,7 +20,7 @@ export async function getRest() {
 
     schema.components ??= {};
     schema.components.schemas ??= {};
-    schema.components.schemas['RateLimitError'] = rateLimitError.content['application/json'].schema;
+    schema.components.schemas['RateLimitError'] ??= rateLimitError.content['application/json'].schema;
 
     for (const { operation, method, url } of locateOperations(schema)) {
         const rateLimitKeys: string[] = [];
@@ -46,9 +44,9 @@ export async function getRest() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const { id, method, operation, url } of locateOperations(schema)) {
-                const { imports, contents, name } = defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes)
-                const endpointFile = new URL(`./${name}`, outDir);
-                files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
+                const { imports, contents, name, file } = defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes)
+                const endpointFile = new URL(`./${file}`, outDir);
+                files.push({ file: endpointFile, name, isType: false });
                 await writeFile({ imports, contents }, endpointFile);
             }
 

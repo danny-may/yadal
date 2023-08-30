@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type ErrorResponse, type RateLimitError } from './discord.js';
+import { type ErrorResponse, type RateLimitError } from './types.js';
 export class DiscordRestError extends Error {
     readonly response: ErrorResponse | null;
 

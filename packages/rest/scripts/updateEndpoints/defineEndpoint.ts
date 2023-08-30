@@ -19,8 +19,6 @@ export function defineEndpoint(
     helperUrl: URL,
     schemes: Partial<Record<ParameterObject['in'], symbol>>
 ) {
-    const name = snakeCaseToCamelCase(id);
-
     const queryType = types.get(operation, schemes.query ?? Symbol());
     const pathType = types.get(operation, schemes.path ?? Symbol()) ?? emptyObj;
     const headerType = types.get(operation, schemes.header ?? Symbol());
@@ -34,22 +32,23 @@ export function defineEndpoint(
                 .map(([contentType, definition]) => ({ statusPattern, contentType, type: types.get(definition.schema ?? {}) })));
     const successTypes = responseTypes.filter(t => t.statusPattern === 'default' || t.statusPattern.startsWith('2'));
     const responseType = successTypes.length === 0 ? empty : new UnionType({ types: new Set(successTypes.map(t => t.type ?? empty)) });
-    const fullName = snakeCaseToCamelCase(id);
+    const name = snakeCaseToCamelCase(id);
     const tag = operation.tags?.map(t => `/${t}`)[0] ?? url;
     const imports: ImportFromDetails[] = [];
     const extern: Record<string, Iterable<string>> = {};
 
     return {
+        name,
         imports,
-        contents: source`export const name = ${JSON.stringify(fullName)};
-${defineRoute(method, pathType, imports, typesUrl, fullName, url, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
+        contents: source`export const name = ${JSON.stringify(name)};
+${defineRoute(method, pathType, imports, typesUrl, name, url, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
 ${defineRateLimit(operation)}
-${defineQuery(queryType, imports, typesUrl, fullName)}
-${defineHeader(headerType, imports, typesUrl, fullName)}
-${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl, extern)}
+${defineQuery(queryType, imports, typesUrl, name)}
+${defineHeader(headerType, imports, typesUrl, name)}
+${defineResponse(imports, helperUrl, responseType, name, responseTypes, typesUrl, extern)}
 ${defineRequest(bodyTypes, imports, helperUrl, typesUrl, extern)}
 ${() => source([], ...Object.values(extern))}`,
-        name: `${tag}/${name}.ts`
+        file: `${tag}/${method}.ts`
     };
 }
 
