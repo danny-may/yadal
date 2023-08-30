@@ -16,7 +16,7 @@
         }
     },
     "scripts": {
-        "build": "node ./scripts/update.js"
+        "build": "node ./scripts/update.js && tsc"
     },
     "repository": {
         "type": "git",

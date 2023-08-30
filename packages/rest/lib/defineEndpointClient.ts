@@ -30,7 +30,7 @@ export function defineEndpointClient<T extends Record<PropertyKey, IEndpoint<any
                 [key](this: BoundEndpointClient, ...args: RestMethodArgs<Model>) {
                     return args[0] instanceof AbortSignal
                         ? this.#client.send(endpoint, {} as Model, args[0])
-                        : this.#client.send(endpoint, args[0]!, args[1]);
+                        : this.#client.send(endpoint, args[0] ?? {} as Model, args[1]);
                 }
             };
             return result[key as keyof typeof result];

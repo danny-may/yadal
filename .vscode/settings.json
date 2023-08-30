@@ -18,5 +18,8 @@
         "**/*.js": true,
         "**/*.js.map": true
     },
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "yaml.schemas": {
+        "https://www.asyncapi.com/schema-store/all.schema-store.json": "file:///workspaces/yadal/packages/discord-spec/schemas/gateway.yaml"
+    }
 }
