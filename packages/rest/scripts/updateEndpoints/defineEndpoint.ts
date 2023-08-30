@@ -416,14 +416,14 @@ export const headers = {
     keys: Object.freeze([${props.join(',')}] as const),
     getValues(${props.length === 0 ? `_?` : `model`}: HeaderModel) {
         const result = {} as { [P in keyof HeaderModel]?: string };
-        ${props.map(p => {
+        ${sourceJoin(props.map(p => {
         return `if (${p} in model) {
     const value = model[${p}];
     if (value !== undefined && value !== null) {
         result[${p}] = String(value);
     }
 }`
-    }).join('\n        ')}
+    }), '\n')}
         return result;
     }
 } as const;
@@ -441,14 +441,14 @@ function defineQuery(queryType: Type | undefined, imports: ImportFromDetails[], 
 export const query = {
     keys: Object.freeze([${props.join(',')}] as const),
     * getValues(${props.length === 0 ? `_?` : `model`}: QueryModel) {
-        ${props.map(p => {
+        ${sourceJoin(props.map(p => {
         return `if (${p} in model) {
     const value = model[${p}];
     if (value !== undefined && value !== null) {
         yield [${p}, String(value)] as [${p}, string];
     }
 }`
-    }).join('\n        ')}
+    }), '\n')}
     }
 } as const;
 Object.freeze(query);`;

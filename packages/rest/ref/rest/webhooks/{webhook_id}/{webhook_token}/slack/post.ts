@@ -56,7 +56,7 @@ export const query = {
                 yield ["wait", String(value)] as ["wait", string];
             }
         }
-                if ("thread_id" in model) {
+        if ("thread_id" in model) {
             const value = model["thread_id"];
             if (value !== undefined && value !== null) {
                 yield ["thread_id", String(value)] as ["thread_id", string];

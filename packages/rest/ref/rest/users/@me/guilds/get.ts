@@ -60,19 +60,19 @@ export const query = {
                 yield ["before", String(value)] as ["before", string];
             }
         }
-                if ("after" in model) {
+        if ("after" in model) {
             const value = model["after"];
             if (value !== undefined && value !== null) {
                 yield ["after", String(value)] as ["after", string];
             }
         }
-                if ("limit" in model) {
+        if ("limit" in model) {
             const value = model["limit"];
             if (value !== undefined && value !== null) {
                 yield ["limit", String(value)] as ["limit", string];
             }
         }
-                if ("with_counts" in model) {
+        if ("with_counts" in model) {
             const value = model["with_counts"];
             if (value !== undefined && value !== null) {
                 yield ["with_counts", String(value)] as ["with_counts", string];

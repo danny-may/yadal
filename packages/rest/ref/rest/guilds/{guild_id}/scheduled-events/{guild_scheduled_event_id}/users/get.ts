@@ -56,19 +56,19 @@ export const query = {
                 yield ["with_member", String(value)] as ["with_member", string];
             }
         }
-                if ("limit" in model) {
+        if ("limit" in model) {
             const value = model["limit"];
             if (value !== undefined && value !== null) {
                 yield ["limit", String(value)] as ["limit", string];
             }
         }
-                if ("before" in model) {
+        if ("before" in model) {
             const value = model["before"];
             if (value !== undefined && value !== null) {
                 yield ["before", String(value)] as ["before", string];
             }
         }
-                if ("after" in model) {
+        if ("after" in model) {
             const value = model["after"];
             if (value !== undefined && value !== null) {
                 yield ["after", String(value)] as ["after", string];

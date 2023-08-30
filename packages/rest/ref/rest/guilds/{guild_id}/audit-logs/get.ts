@@ -55,25 +55,25 @@ export const query = {
                 yield ["user_id", String(value)] as ["user_id", string];
             }
         }
-                if ("action_type" in model) {
+        if ("action_type" in model) {
             const value = model["action_type"];
             if (value !== undefined && value !== null) {
                 yield ["action_type", String(value)] as ["action_type", string];
             }
         }
-                if ("before" in model) {
+        if ("before" in model) {
             const value = model["before"];
             if (value !== undefined && value !== null) {
                 yield ["before", String(value)] as ["before", string];
             }
         }
-                if ("after" in model) {
+        if ("after" in model) {
             const value = model["after"];
             if (value !== undefined && value !== null) {
                 yield ["after", String(value)] as ["after", string];
             }
         }
-                if ("limit" in model) {
+        if ("limit" in model) {
             const value = model["limit"];
             if (value !== undefined && value !== null) {
                 yield ["limit", String(value)] as ["limit", string];
