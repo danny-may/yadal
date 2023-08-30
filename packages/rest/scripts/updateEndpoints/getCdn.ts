@@ -6,7 +6,7 @@ import { TypeBuilder, TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, LiteralType, UnionType } from "./types/index.js";
 import { snakeCaseToPascalCase } from "./util/index.js";
 import { fileURLToPath } from "url";
-import { OperationObject } from "openapi-typescript";
+import { OperationObject, SchemaObject } from "openapi-typescript";
 
 declare function fetch(url: string): Promise<{ text(): Promise<string>; }>;
 export async function getCdn() {
@@ -21,29 +21,29 @@ export async function getCdn() {
         throw new Error('Cannot find the CDN table definition');
 
 
-    const endpoints = markdown.slice(tableStart, tableEnd)
-        .split('\n')
-        .slice(2)
-        .map(row => {
-            const [, name, path, formatStr] = row.split('|');
-            const formats = formatStr!.split(',').map(f => f.trim().toLowerCase());
-            const schemas = formats.reduce((p, c) => Object.assign(p, { [c]: {} }), {}) as Record<string, {}>;
-            return {
-                name: 'get_' + name!.trim().replace(/ /g, '_').toLowerCase(),
-                path: path!.replace(/\[(.*?)\]\(.*?\)/g, '{$1}').trim().replace(/[ \\*]*$/g, ''),
-                formats,
-                schemas,
-                operation: {
-                    parameters: [],
-                    responses: {
-                        '200': {
-                            description: '',
-                            content: formats.reduce((p, c) => Object.assign(p, { [formatToMime(c)]: { schema: schemas[c]! } }), {})
-                        }
+    const endpoints: Array<{ name: string, path: string, formats: string[], schemas: Record<string, SchemaObject>, operation: OperationObject }> = [];
+    for (const match of markdown.slice(tableStart + 1, tableEnd).matchAll(/\| ([\w ]+?) +\| ([^ .]+)(?:\.png)?[ *\\]+\| ([\w, ]+?) \|(?:\n|$)/g)) {
+        const [, name, path, formatStr] = match;
+        const formats = formatStr!.toLowerCase().split(',').map(f => f.trim());
+        const schemas = formats.reduce((p, c) => Object.assign(p, { [c]: {} }), {}) as Record<string, {}>;
+        endpoints.push({
+            name: 'get_' + name!.trim().replace(/ /g, '_').toLowerCase(),
+            path: path!.replace(/\[(.*?)\]\(.*?\)/g, '{$1}').trim().replace(/[ \\*]*$/g, ''),
+            formats,
+            schemas,
+            operation: {
+                parameters: [],
+                responses: {
+                    '200': {
+                        description: '',
+                        content: formats.reduce((p, c) => Object.assign(p, { [formatToMime(c)]: { schema: schemas[c]! } }), {})
                     }
-                } as OperationObject
-            }
-        });
+                }
+            } as OperationObject
+        })
+    }
+    if (endpoints.length !== markdown.slice(tableStart + 1, tableEnd).split('\n').length - 2)
+        throw new Error('Reading table data failed');
 
     const schemes = {
         path: Symbol()
@@ -78,7 +78,7 @@ export async function getCdn() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const endpoint of endpoints) {
-                for (const { imports, contents, name } of defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path.replace(/\.png$/, '.{format}')}`, types, typesFile, helperFile, schemes, false)) {
+                for (const { imports, contents, name } of defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path}.{format}`, types, typesFile, helperFile, schemes, false)) {
                     const endpointFile = new URL(`./${name}`, outDir);
                     files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
                     await writeFile({ imports, contents }, endpointFile);

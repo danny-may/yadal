@@ -5,17 +5,17 @@ import { type GetStorePageAssetRequestPath } from '../discord.js';
 import { DiscordRestError } from '../helpers.js';
 export const name = "getStorePageAsset";
 export type RouteModel = GetStorePageAssetRequestPath;
-const routeRegex = /^\/app-assets\/(?<application_id>.*?)\/store\/asset_id$/i;
+const routeRegex = /^\/app-assets\/(?<application_id>.*?)\/store\/asset_id\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/app-assets/{application_id}/store/asset_id",
-    keys: Object.freeze(["application_id"] as const),
+    template: "/app-assets/{application_id}/store/asset_id.{format}",
+    keys: Object.freeze(["application_id","format"] as const),
     authentication: Object.freeze({} as const),
     get regex(){
-        return /^\/app-assets\/(?<application_id>.*?)\/store\/asset_id$/i;
+        return /^\/app-assets\/(?<application_id>.*?)\/store\/asset_id\.(?<format>.*?)$/i;
     },
     create(model: RouteModel) {
-        return `/app-assets/${encodeURIComponent(model.application_id)}/store/asset_id` as const satisfies `/${string}`;
+        return `/app-assets/${encodeURIComponent(model.application_id)}/store/asset_id.${encodeURIComponent(model.format)}` as const satisfies `/${string}`;
     },
     test(url: `/${string}`) {
         return routeRegex.test(url);
@@ -25,7 +25,8 @@ export const route = {
         return match === null
             ? null
             : {
-                ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
+                ["application_id"]: decodeURIComponent(match.groups!["application_id"]!),
+                ["format"]: decodeURIComponent(match.groups!["format"]!)
             };
     },
     parse(url: `/${string}`) {
