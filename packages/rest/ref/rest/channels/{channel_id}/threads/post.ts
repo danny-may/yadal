@@ -94,49 +94,18 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = (CreateThreadRequestJSON | CreateThreadRequestURLEncoded | CreateThreadRequestFormData);
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
-    const boundary = encoder.encode(boundaryStr);
-    const chunks = [
-        formEncoded["--"], boundary, formEncoded["\"name\".1"], encoder.encode(JSON.stringify(model["name"])), formEncoded["lf"]
-    ];
-    if ("auto_archive_duration" in model) {
-        const value = model["auto_archive_duration"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"auto_archive_duration\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("rate_limit_per_user" in model) {
-        const value = model["rate_limit_per_user"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"rate_limit_per_user\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("applied_tags" in model) {
-        const value = model["applied_tags"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"applied_tags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("message" in model) {
-        const value = model["message"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"message\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("type" in model) {
-        const value = model["type"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"type\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("invitable" in model) {
-        const value = model["invitable"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"invitable\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
-    return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "auto_archive_duration": model["auto_archive_duration" as keyof typeof model],
+            "rate_limit_per_user": model["rate_limit_per_user" as keyof typeof model],
+            "applied_tags": model["applied_tags" as keyof typeof model],
+            "message": model["message" as keyof typeof model],
+            "type": model["type" as keyof typeof model],
+            "invitable": model["invitable" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -151,14 +120,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const formEncoded = {
-    "--":encoder.encode("--"),
-    "lf":encoder.encode("\n"),
-    "\"name\".1":encoder.encode("\nContent-Disposition: form-data; name=name\nContent-Type: application/json\n\n"),
-    "\"auto_archive_duration\".1":encoder.encode("\nContent-Disposition: form-data; name=auto_archive_duration\nContent-Type: application/json\n\n"),
-    "\"rate_limit_per_user\".1":encoder.encode("\nContent-Disposition: form-data; name=rate_limit_per_user\nContent-Type: application/json\n\n"),
-    "\"applied_tags\".1":encoder.encode("\nContent-Disposition: form-data; name=applied_tags\nContent-Type: application/json\n\n"),
-    "\"message\".1":encoder.encode("\nContent-Disposition: form-data; name=message\nContent-Type: application/json\n\n"),
-    "\"type\".1":encoder.encode("\nContent-Disposition: form-data; name=type\nContent-Type: application/json\n\n"),
-    "\"invitable\".1":encoder.encode("\nContent-Disposition: form-data; name=invitable\nContent-Type: application/json\n\n")
-} as const;

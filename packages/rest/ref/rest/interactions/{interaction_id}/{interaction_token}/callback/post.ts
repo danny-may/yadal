@@ -92,19 +92,13 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = (CreateInteractionResponseRequestJSON | CreateInteractionResponseRequestURLEncoded | CreateInteractionResponseRequestFormData);
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
-    const boundary = encoder.encode(boundaryStr);
-    const chunks = [
-        formEncoded["--"], boundary, formEncoded["\"type\".1"], encoder.encode(JSON.stringify(model["type"])), formEncoded["lf"]
-    ];
-    if ("data" in model) {
-        const value = model["data"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"data\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
-    return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "type": model["type" as keyof typeof model],
+            "data": model["data" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -119,9 +113,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const formEncoded = {
-    "--":encoder.encode("--"),
-    "lf":encoder.encode("\n"),
-    "\"type\".1":encoder.encode("\nContent-Disposition: form-data; name=type\nContent-Type: application/json\n\n"),
-    "\"data\".1":encoder.encode("\nContent-Disposition: form-data; name=data\nContent-Type: application/json\n\n")
-} as const;

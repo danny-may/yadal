@@ -96,90 +96,25 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = GuildCreateRequest;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"]))
-    ];
-    if ("description" in model) {
-        const value = model["description"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"description\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("region" in model) {
-        const value = model["region"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"region\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("icon" in model) {
-        const value = model["icon"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"icon\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("verification_level" in model) {
-        const value = model["verification_level"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"verification_level\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_message_notifications" in model) {
-        const value = model["default_message_notifications"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"default_message_notifications\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("explicit_content_filter" in model) {
-        const value = model["explicit_content_filter"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"explicit_content_filter\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("preferred_locale" in model) {
-        const value = model["preferred_locale"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"preferred_locale\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("afk_timeout" in model) {
-        const value = model["afk_timeout"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"afk_timeout\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("roles" in model) {
-        const value = model["roles"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"roles\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("channels" in model) {
-        const value = model["channels"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"channels\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("afk_channel_id" in model) {
-        const value = model["afk_channel_id"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"afk_channel_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("system_channel_id" in model) {
-        const value = model["system_channel_id"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"system_channel_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("system_channel_flags" in model) {
-        const value = model["system_channel_flags"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"system_channel_flags\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "description": model["description" as keyof typeof model],
+            "region": model["region" as keyof typeof model],
+            "icon": model["icon" as keyof typeof model],
+            "verification_level": model["verification_level" as keyof typeof model],
+            "default_message_notifications": model["default_message_notifications" as keyof typeof model],
+            "explicit_content_filter": model["explicit_content_filter" as keyof typeof model],
+            "preferred_locale": model["preferred_locale" as keyof typeof model],
+            "afk_timeout": model["afk_timeout" as keyof typeof model],
+            "roles": model["roles" as keyof typeof model],
+            "channels": model["channels" as keyof typeof model],
+            "afk_channel_id": model["afk_channel_id" as keyof typeof model],
+            "system_channel_id": model["system_channel_id" as keyof typeof model],
+            "system_channel_flags": model["system_channel_flags" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -194,22 +129,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"description\":":encoder.encode("\"description\":"),
-    "\"region\":":encoder.encode("\"region\":"),
-    "\"icon\":":encoder.encode("\"icon\":"),
-    "\"verification_level\":":encoder.encode("\"verification_level\":"),
-    "\"default_message_notifications\":":encoder.encode("\"default_message_notifications\":"),
-    "\"explicit_content_filter\":":encoder.encode("\"explicit_content_filter\":"),
-    "\"preferred_locale\":":encoder.encode("\"preferred_locale\":"),
-    "\"afk_timeout\":":encoder.encode("\"afk_timeout\":"),
-    "\"roles\":":encoder.encode("\"roles\":"),
-    "\"channels\":":encoder.encode("\"channels\":"),
-    "\"afk_channel_id\":":encoder.encode("\"afk_channel_id\":"),
-    "\"system_channel_id\":":encoder.encode("\"system_channel_id\":"),
-    "\"system_channel_flags\":":encoder.encode("\"system_channel_flags\":")
-} as const;

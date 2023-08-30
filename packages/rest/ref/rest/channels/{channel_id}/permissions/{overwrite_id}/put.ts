@@ -92,35 +92,14 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = SetChannelPermissionOverwriteRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("type" in model) {
-        const value = model["type"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"type\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("allow" in model) {
-        const value = model["allow"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"allow\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("deny" in model) {
-        const value = model["deny"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"deny\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "type": model["type" as keyof typeof model],
+            "allow": model["allow" as keyof typeof model],
+            "deny": model["deny" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -135,11 +114,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"type\":":encoder.encode("\"type\":"),
-    "\"allow\":":encoder.encode("\"allow\":"),
-    "\"deny\":":encoder.encode("\"deny\":")
-} as const;

@@ -5,4 +5,3 @@ export * from './http/index.js';
 export * from './routes/index.js';
 export * from './rateLimit/index.js';
 export * from './defineEndpointClient.js';
-export * from './DiscordFile.js';

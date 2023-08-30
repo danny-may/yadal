@@ -94,27 +94,13 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateGuildWidgetSettingsRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("channel_id" in model) {
-        const value = model["channel_id"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"channel_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("enabled" in model) {
-        const value = model["enabled"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"enabled\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "channel_id": model["channel_id" as keyof typeof model],
+            "enabled": model["enabled" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -129,10 +115,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"channel_id\":":encoder.encode("\"channel_id\":"),
-    "\"enabled\":":encoder.encode("\"enabled\":")
-} as const;

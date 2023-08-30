@@ -96,7 +96,12 @@ export type Body = {
     data: BulkUpdateGuildRolesRequestJSON;
 };
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    return { type: `application/json; charset=${encoder.encoding}`, content: [encoder.encode(JSON.stringify(model["data"]))] };
+    return { 
+        type: `application/json; charset=${encoder.encoding}`, 
+        content: [encoder.encode(JSON.stringify(
+            model["data" as keyof typeof model]
+        ))] 
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;

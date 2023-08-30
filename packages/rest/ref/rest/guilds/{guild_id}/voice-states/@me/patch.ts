@@ -91,35 +91,14 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateSelfVoiceStateRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("request_to_speak_timestamp" in model) {
-        const value = model["request_to_speak_timestamp"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"request_to_speak_timestamp\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("suppress" in model) {
-        const value = model["suppress"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"suppress\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("channel_id" in model) {
-        const value = model["channel_id"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"channel_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "request_to_speak_timestamp": model["request_to_speak_timestamp" as keyof typeof model],
+            "suppress": model["suppress" as keyof typeof model],
+            "channel_id": model["channel_id" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -134,11 +113,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"request_to_speak_timestamp\":":encoder.encode("\"request_to_speak_timestamp\":"),
-    "\"suppress\":":encoder.encode("\"suppress\":"),
-    "\"channel_id\":":encoder.encode("\"channel_id\":")
-} as const;

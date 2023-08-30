@@ -103,49 +103,19 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = CreateApplicationCommandRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"])),jsonEncoded[","],
-        jsonEncoded["\"type\":"], encoder.encode(JSON.stringify(model["type"]))
-    ];
-    if ("name_localizations" in model) {
-        const value = model["name_localizations"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"name_localizations\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("description" in model) {
-        const value = model["description"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"description\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("description_localizations" in model) {
-        const value = model["description_localizations"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"description_localizations\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("options" in model) {
-        const value = model["options"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"options\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_member_permissions" in model) {
-        const value = model["default_member_permissions"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"default_member_permissions\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("dm_permission" in model) {
-        const value = model["dm_permission"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"dm_permission\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "name_localizations": model["name_localizations" as keyof typeof model],
+            "description": model["description" as keyof typeof model],
+            "description_localizations": model["description_localizations" as keyof typeof model],
+            "options": model["options" as keyof typeof model],
+            "default_member_permissions": model["default_member_permissions" as keyof typeof model],
+            "dm_permission": model["dm_permission" as keyof typeof model],
+            "type": model["type" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -160,16 +130,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"name_localizations\":":encoder.encode("\"name_localizations\":"),
-    "\"description\":":encoder.encode("\"description\":"),
-    "\"description_localizations\":":encoder.encode("\"description_localizations\":"),
-    "\"options\":":encoder.encode("\"options\":"),
-    "\"default_member_permissions\":":encoder.encode("\"default_member_permissions\":"),
-    "\"dm_permission\":":encoder.encode("\"dm_permission\":"),
-    "\"type\":":encoder.encode("\"type\":")
-} as const;

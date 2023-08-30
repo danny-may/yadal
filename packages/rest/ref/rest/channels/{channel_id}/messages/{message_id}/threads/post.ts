@@ -95,24 +95,14 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = CreateTextThreadWithMessageRequest;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"]))
-    ];
-    if ("auto_archive_duration" in model) {
-        const value = model["auto_archive_duration"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"auto_archive_duration\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("rate_limit_per_user" in model) {
-        const value = model["rate_limit_per_user"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"rate_limit_per_user\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "auto_archive_duration": model["auto_archive_duration" as keyof typeof model],
+            "rate_limit_per_user": model["rate_limit_per_user" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -127,11 +117,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"auto_archive_duration\":":encoder.encode("\"auto_archive_duration\":"),
-    "\"rate_limit_per_user\":":encoder.encode("\"rate_limit_per_user\":")
-} as const;

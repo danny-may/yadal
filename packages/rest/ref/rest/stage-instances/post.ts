@@ -96,31 +96,16 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = CreateStageInstanceRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"topic\":"], encoder.encode(JSON.stringify(model["topic"])),jsonEncoded[","],
-        jsonEncoded["\"channel_id\":"], encoder.encode(JSON.stringify(model["channel_id"]))
-    ];
-    if ("privacy_level" in model) {
-        const value = model["privacy_level"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"privacy_level\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("guild_scheduled_event_id" in model) {
-        const value = model["guild_scheduled_event_id"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"guild_scheduled_event_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("send_start_notification" in model) {
-        const value = model["send_start_notification"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"send_start_notification\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "topic": model["topic" as keyof typeof model],
+            "channel_id": model["channel_id" as keyof typeof model],
+            "privacy_level": model["privacy_level" as keyof typeof model],
+            "guild_scheduled_event_id": model["guild_scheduled_event_id" as keyof typeof model],
+            "send_start_notification": model["send_start_notification" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -135,13 +120,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"topic\":":encoder.encode("\"topic\":"),
-    "\"channel_id\":":encoder.encode("\"channel_id\":"),
-    "\"privacy_level\":":encoder.encode("\"privacy_level\":"),
-    "\"guild_scheduled_event_id\":":encoder.encode("\"guild_scheduled_event_id\":"),
-    "\"send_start_notification\":":encoder.encode("\"send_start_notification\":")
-} as const;

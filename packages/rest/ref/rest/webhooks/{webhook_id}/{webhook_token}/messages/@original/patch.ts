@@ -98,110 +98,146 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = (IncomingWebhookUpdateRequestPartial | UpdateOriginalWebhookMessageRequestFormData);
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
-    const boundary = encoder.encode(boundaryStr);
-    const chunks = [
-        
-    ];
-    if ("content" in model) {
-        const value = model["content"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"content\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
+    if (
+        ("files[0]" in model && model["files[0]"] != null)
+        || ("files[1]" in model && model["files[1]"] != null)
+        || ("files[2]" in model && model["files[2]"] != null)
+        || ("files[3]" in model && model["files[3]"] != null)
+        || ("files[4]" in model && model["files[4]"] != null)
+        || ("files[5]" in model && model["files[5]"] != null)
+        || ("files[6]" in model && model["files[6]"] != null)
+        || ("files[7]" in model && model["files[7]"] != null)
+        || ("files[8]" in model && model["files[8]"] != null)
+        || ("files[9]" in model && model["files[9]"] != null)
+    ) {
+        const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
+        const boundary = encoder.encode(boundaryStr);
+        const chunks: ArrayBufferView[] = [
+            formEncoded["--"], boundary, formEncoded["payload_json"], 
+            encoder.encode(JSON.stringify({
+                "content": model["content" as keyof typeof model],
+                "embeds": model["embeds" as keyof typeof model],
+                "allowed_mentions": model["allowed_mentions" as keyof typeof model],
+                "components": model["components" as keyof typeof model],
+                "attachments": model["attachments" as keyof typeof model],
+                "flags": model["flags" as keyof typeof model]
+            })), formEncoded["lf"]
+        ];
+        if ("files[0]" in model) {
+            const value = model["files[0]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[0]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[0]")), 
+                    formEncoded["\"files[0]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("embeds" in model) {
-        const value = model["embeds"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"embeds\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
+        if ("files[1]" in model) {
+            const value = model["files[1]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[1]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[1]")), 
+                    formEncoded["\"files[1]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("allowed_mentions" in model) {
-        const value = model["allowed_mentions"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"allowed_mentions\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
+        if ("files[2]" in model) {
+            const value = model["files[2]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[2]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[2]")), 
+                    formEncoded["\"files[2]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("components" in model) {
-        const value = model["components"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"components\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
+        if ("files[3]" in model) {
+            const value = model["files[3]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[3]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[3]")), 
+                    formEncoded["\"files[3]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("attachments" in model) {
-        const value = model["attachments"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
+        if ("files[4]" in model) {
+            const value = model["files[4]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[4]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[4]")), 
+                    formEncoded["\"files[4]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("flags" in model) {
-        const value = model["flags"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"flags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
+        if ("files[5]" in model) {
+            const value = model["files[5]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[5]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[5]")), 
+                    formEncoded["\"files[5]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("files[0]" in model) {
-        const value = model["files[0]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[0]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[0]")), formEncoded["\"files[0]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
+        if ("files[6]" in model) {
+            const value = model["files[6]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[6]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[6]")), 
+                    formEncoded["\"files[6]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("files[1]" in model) {
-        const value = model["files[1]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[1]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[1]")), formEncoded["\"files[1]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
+        if ("files[7]" in model) {
+            const value = model["files[7]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[7]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[7]")), 
+                    formEncoded["\"files[7]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("files[2]" in model) {
-        const value = model["files[2]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[2]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[2]")), formEncoded["\"files[2]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
+        if ("files[8]" in model) {
+            const value = model["files[8]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[8]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[8]")), 
+                    formEncoded["\"files[8]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
-    }
-    if ("files[3]" in model) {
-        const value = model["files[3]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[3]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[3]")), formEncoded["\"files[3]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
+        if ("files[9]" in model) {
+            const value = model["files[9]"];
+            if (value !== undefined) {
+                chunks.push(
+                    formEncoded["--"], boundary, formEncoded["\"files[9]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[9]")), 
+                    formEncoded["\"files[9]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    value.content, formEncoded["lf"]
+                );
+            }
         }
+        chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
+        return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+    } else {
+        return {
+            type: `application/json; charset=${encoder.encoding}`,
+            content: [encoder.encode(JSON.stringify({
+                "content": model["content" as keyof typeof model],
+                "embeds": model["embeds" as keyof typeof model],
+                "allowed_mentions": model["allowed_mentions" as keyof typeof model],
+                "components": model["components" as keyof typeof model],
+                "attachments": model["attachments" as keyof typeof model],
+                "flags": model["flags" as keyof typeof model]
+            }))]
+        };
     }
-    if ("files[4]" in model) {
-        const value = model["files[4]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[4]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[4]")), formEncoded["\"files[4]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
-        }
-    }
-    if ("files[5]" in model) {
-        const value = model["files[5]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[5]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[5]")), formEncoded["\"files[5]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
-        }
-    }
-    if ("files[6]" in model) {
-        const value = model["files[6]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[6]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[6]")), formEncoded["\"files[6]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
-        }
-    }
-    if ("files[7]" in model) {
-        const value = model["files[7]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[7]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[7]")), formEncoded["\"files[7]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
-        }
-    }
-    if ("files[8]" in model) {
-        const value = model["files[8]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[8]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[8]")), formEncoded["\"files[8]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
-        }
-    }
-    if ("files[9]" in model) {
-        const value = model["files[9]"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"files[9]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[9]")), formEncoded["\"files[9]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], value.content, formEncoded["lf"]);
-        }
-    }
-    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
-    return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
-    
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
 declare type TextDecoder = import('node:util').TextDecoder;
@@ -218,30 +254,25 @@ const encoder = new TextEncoder();
 const formEncoded = {
     "--":encoder.encode("--"),
     "lf":encoder.encode("\n"),
-    "\"content\".1":encoder.encode("\nContent-Disposition: form-data; name=content\nContent-Type: application/json\n\n"),
-    "\"embeds\".1":encoder.encode("\nContent-Disposition: form-data; name=embeds\nContent-Type: application/json\n\n"),
-    "\"allowed_mentions\".1":encoder.encode("\nContent-Disposition: form-data; name=allowed_mentions\nContent-Type: application/json\n\n"),
-    "\"components\".1":encoder.encode("\nContent-Disposition: form-data; name=components\nContent-Type: application/json\n\n"),
-    "\"attachments\".1":encoder.encode("\nContent-Disposition: form-data; name=attachments\nContent-Type: application/json\n\n"),
-    "\"flags\".1":encoder.encode("\nContent-Disposition: form-data; name=flags\nContent-Type: application/json\n\n"),
-    "\"files[0]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[0]; filename="),
-    "\"files[0]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[1]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[1]; filename="),
-    "\"files[1]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[2]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[2]; filename="),
-    "\"files[2]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[3]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[3]; filename="),
-    "\"files[3]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[4]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[4]; filename="),
-    "\"files[4]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[5]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[5]; filename="),
-    "\"files[5]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[6]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[6]; filename="),
-    "\"files[6]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[7]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[7]; filename="),
-    "\"files[7]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[8]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[8]; filename="),
-    "\"files[8]\".2":encoder.encode("\nContent-Type: "),
-    "\"files[9]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[9]; filename="),
-    "\"files[9]\".2":encoder.encode("\nContent-Type: ")
+    "payload_json":encoder.encode("\nContent-Disposition: form-data; name=\"payload_json\"\nContent-Type: application/json\n\n"),
+    "\"files[0]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[0]; filename=\""),
+    "\"files[0]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[1]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[1]; filename=\""),
+    "\"files[1]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[2]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[2]; filename=\""),
+    "\"files[2]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[3]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[3]; filename=\""),
+    "\"files[3]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[4]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[4]; filename=\""),
+    "\"files[4]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[5]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[5]; filename=\""),
+    "\"files[5]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[6]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[6]; filename=\""),
+    "\"files[6]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[7]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[7]; filename=\""),
+    "\"files[7]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[8]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[8]; filename=\""),
+    "\"files[8]\".2":encoder.encode("\"\nContent-Type: "),
+    "\"files[9]\".1":encoder.encode("\nContent-Disposition: form-data; name=files[9]; filename=\""),
+    "\"files[9]\".2":encoder.encode("\"\nContent-Type: ")
 } as const;

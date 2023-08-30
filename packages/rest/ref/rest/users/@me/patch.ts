@@ -96,27 +96,13 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateMyUserRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("username" in model) {
-        const value = model["username"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"username\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("avatar" in model) {
-        const value = model["avatar"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"avatar\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "username": model["username" as keyof typeof model],
+            "avatar": model["avatar" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -131,10 +117,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"username\":":encoder.encode("\"username\":"),
-    "\"avatar\":":encoder.encode("\"avatar\":")
-} as const;

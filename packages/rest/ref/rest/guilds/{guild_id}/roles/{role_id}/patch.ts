@@ -95,67 +95,18 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateGuildRoleRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("name" in model) {
-        const value = model["name"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("permissions" in model) {
-        const value = model["permissions"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"permissions\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("color" in model) {
-        const value = model["color"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"color\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("hoist" in model) {
-        const value = model["hoist"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"hoist\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("mentionable" in model) {
-        const value = model["mentionable"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"mentionable\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("icon" in model) {
-        const value = model["icon"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"icon\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("unicode_emoji" in model) {
-        const value = model["unicode_emoji"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"unicode_emoji\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "permissions": model["permissions" as keyof typeof model],
+            "color": model["color" as keyof typeof model],
+            "hoist": model["hoist" as keyof typeof model],
+            "mentionable": model["mentionable" as keyof typeof model],
+            "icon": model["icon" as keyof typeof model],
+            "unicode_emoji": model["unicode_emoji" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -170,15 +121,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"permissions\":":encoder.encode("\"permissions\":"),
-    "\"color\":":encoder.encode("\"color\":"),
-    "\"hoist\":":encoder.encode("\"hoist\":"),
-    "\"mentionable\":":encoder.encode("\"mentionable\":"),
-    "\"icon\":":encoder.encode("\"icon\":"),
-    "\"unicode_emoji\":":encoder.encode("\"unicode_emoji\":")
-} as const;

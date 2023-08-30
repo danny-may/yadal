@@ -94,43 +94,15 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateGuildOnboardingRequest;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("prompts" in model) {
-        const value = model["prompts"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"prompts\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("enabled" in model) {
-        const value = model["enabled"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"enabled\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_channel_ids" in model) {
-        const value = model["default_channel_ids"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"default_channel_ids\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("mode" in model) {
-        const value = model["mode"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"mode\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "prompts": model["prompts" as keyof typeof model],
+            "enabled": model["enabled" as keyof typeof model],
+            "default_channel_ids": model["default_channel_ids" as keyof typeof model],
+            "mode": model["mode" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -145,12 +117,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"prompts\":":encoder.encode("\"prompts\":"),
-    "\"enabled\":":encoder.encode("\"enabled\":"),
-    "\"default_channel_ids\":":encoder.encode("\"default_channel_ids\":"),
-    "\"mode\":":encoder.encode("\"mode\":")
-} as const;

@@ -96,35 +96,14 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateApplicationUserRoleConnectionRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("platform_name" in model) {
-        const value = model["platform_name"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"platform_name\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("platform_username" in model) {
-        const value = model["platform_username"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"platform_username\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("metadata" in model) {
-        const value = model["metadata"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"metadata\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "platform_name": model["platform_name" as keyof typeof model],
+            "platform_username": model["platform_username" as keyof typeof model],
+            "metadata": model["metadata" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -139,11 +118,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"platform_name\":":encoder.encode("\"platform_name\":"),
-    "\"platform_username\":":encoder.encode("\"platform_username\":"),
-    "\"metadata\":":encoder.encode("\"metadata\":")
-} as const;

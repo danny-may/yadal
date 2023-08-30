@@ -94,35 +94,14 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = WelcomeScreenPatchRequestPartial;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("description" in model) {
-        const value = model["description"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"description\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("welcome_channels" in model) {
-        const value = model["welcome_channels"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"welcome_channels\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("enabled" in model) {
-        const value = model["enabled"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"enabled\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "description": model["description" as keyof typeof model],
+            "welcome_channels": model["welcome_channels" as keyof typeof model],
+            "enabled": model["enabled" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -137,11 +116,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"description\":":encoder.encode("\"description\":"),
-    "\"welcome_channels\":":encoder.encode("\"welcome_channels\":"),
-    "\"enabled\":":encoder.encode("\"enabled\":")
-} as const;

@@ -101,126 +101,31 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = GithubWebhook;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"sender\":"], encoder.encode(JSON.stringify(model["sender"]))
-    ];
-    if ("action" in model) {
-        const value = model["action"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"action\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("ref" in model) {
-        const value = model["ref"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"ref\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("ref_type" in model) {
-        const value = model["ref_type"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"ref_type\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("comment" in model) {
-        const value = model["comment"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"comment\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("issue" in model) {
-        const value = model["issue"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"issue\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("pull_request" in model) {
-        const value = model["pull_request"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"pull_request\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("repository" in model) {
-        const value = model["repository"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"repository\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("forkee" in model) {
-        const value = model["forkee"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"forkee\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("member" in model) {
-        const value = model["member"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"member\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("release" in model) {
-        const value = model["release"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"release\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("head_commit" in model) {
-        const value = model["head_commit"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"head_commit\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("commits" in model) {
-        const value = model["commits"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"commits\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("forced" in model) {
-        const value = model["forced"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"forced\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("compare" in model) {
-        const value = model["compare"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"compare\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("review" in model) {
-        const value = model["review"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"review\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("check_run" in model) {
-        const value = model["check_run"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"check_run\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("check_suite" in model) {
-        const value = model["check_suite"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"check_suite\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("discussion" in model) {
-        const value = model["discussion"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"discussion\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("answer" in model) {
-        const value = model["answer"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"answer\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "action": model["action" as keyof typeof model],
+            "ref": model["ref" as keyof typeof model],
+            "ref_type": model["ref_type" as keyof typeof model],
+            "comment": model["comment" as keyof typeof model],
+            "issue": model["issue" as keyof typeof model],
+            "pull_request": model["pull_request" as keyof typeof model],
+            "repository": model["repository" as keyof typeof model],
+            "forkee": model["forkee" as keyof typeof model],
+            "sender": model["sender" as keyof typeof model],
+            "member": model["member" as keyof typeof model],
+            "release": model["release" as keyof typeof model],
+            "head_commit": model["head_commit" as keyof typeof model],
+            "commits": model["commits" as keyof typeof model],
+            "forced": model["forced" as keyof typeof model],
+            "compare": model["compare" as keyof typeof model],
+            "review": model["review" as keyof typeof model],
+            "check_run": model["check_run" as keyof typeof model],
+            "check_suite": model["check_suite" as keyof typeof model],
+            "discussion": model["discussion" as keyof typeof model],
+            "answer": model["answer" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -235,28 +140,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"action\":":encoder.encode("\"action\":"),
-    "\"ref\":":encoder.encode("\"ref\":"),
-    "\"ref_type\":":encoder.encode("\"ref_type\":"),
-    "\"comment\":":encoder.encode("\"comment\":"),
-    "\"issue\":":encoder.encode("\"issue\":"),
-    "\"pull_request\":":encoder.encode("\"pull_request\":"),
-    "\"repository\":":encoder.encode("\"repository\":"),
-    "\"forkee\":":encoder.encode("\"forkee\":"),
-    "\"sender\":":encoder.encode("\"sender\":"),
-    "\"member\":":encoder.encode("\"member\":"),
-    "\"release\":":encoder.encode("\"release\":"),
-    "\"head_commit\":":encoder.encode("\"head_commit\":"),
-    "\"commits\":":encoder.encode("\"commits\":"),
-    "\"forced\":":encoder.encode("\"forced\":"),
-    "\"compare\":":encoder.encode("\"compare\":"),
-    "\"review\":":encoder.encode("\"review\":"),
-    "\"check_run\":":encoder.encode("\"check_run\":"),
-    "\"check_suite\":":encoder.encode("\"check_suite\":"),
-    "\"discussion\":":encoder.encode("\"discussion\":"),
-    "\"answer\":":encoder.encode("\"answer\":")
-} as const;

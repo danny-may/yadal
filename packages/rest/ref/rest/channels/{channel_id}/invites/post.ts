@@ -97,67 +97,18 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = CreateChannelInviteRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("max_age" in model) {
-        const value = model["max_age"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"max_age\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("temporary" in model) {
-        const value = model["temporary"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"temporary\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("max_uses" in model) {
-        const value = model["max_uses"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"max_uses\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("unique" in model) {
-        const value = model["unique"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"unique\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("target_user_id" in model) {
-        const value = model["target_user_id"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"target_user_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("target_application_id" in model) {
-        const value = model["target_application_id"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"target_application_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("target_type" in model) {
-        const value = model["target_type"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"target_type\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "max_age": model["max_age" as keyof typeof model],
+            "temporary": model["temporary" as keyof typeof model],
+            "max_uses": model["max_uses" as keyof typeof model],
+            "unique": model["unique" as keyof typeof model],
+            "target_user_id": model["target_user_id" as keyof typeof model],
+            "target_application_id": model["target_application_id" as keyof typeof model],
+            "target_type": model["target_type" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -172,15 +123,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"max_age\":":encoder.encode("\"max_age\":"),
-    "\"temporary\":":encoder.encode("\"temporary\":"),
-    "\"max_uses\":":encoder.encode("\"max_uses\":"),
-    "\"unique\":":encoder.encode("\"unique\":"),
-    "\"target_user_id\":":encoder.encode("\"target_user_id\":"),
-    "\"target_application_id\":":encoder.encode("\"target_application_id\":"),
-    "\"target_type\":":encoder.encode("\"target_type\":")
-} as const;

@@ -107,79 +107,22 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = (ExecuteWebhookRequestJSON | ExecuteWebhookRequestURLEncoded | ExecuteWebhookRequestFormData);
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
-    const boundary = encoder.encode(boundaryStr);
-    const chunks = [
-        
-    ];
-    if ("content" in model) {
-        const value = model["content"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"content\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("embeds" in model) {
-        const value = model["embeds"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"embeds\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("allowed_mentions" in model) {
-        const value = model["allowed_mentions"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"allowed_mentions\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("components" in model) {
-        const value = model["components"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"components\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("attachments" in model) {
-        const value = model["attachments"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("tts" in model) {
-        const value = model["tts"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"tts\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("flags" in model) {
-        const value = model["flags"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"flags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("username" in model) {
-        const value = model["username"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"username\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("avatar_url" in model) {
-        const value = model["avatar_url"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"avatar_url\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("thread_name" in model) {
-        const value = model["thread_name"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"thread_name\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("applied_tags" in model) {
-        const value = model["applied_tags"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"applied_tags\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
-    return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "content": model["content" as keyof typeof model],
+            "embeds": model["embeds" as keyof typeof model],
+            "allowed_mentions": model["allowed_mentions" as keyof typeof model],
+            "components": model["components" as keyof typeof model],
+            "attachments": model["attachments" as keyof typeof model],
+            "tts": model["tts" as keyof typeof model],
+            "flags": model["flags" as keyof typeof model],
+            "username": model["username" as keyof typeof model],
+            "avatar_url": model["avatar_url" as keyof typeof model],
+            "thread_name": model["thread_name" as keyof typeof model],
+            "applied_tags": model["applied_tags" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -194,18 +137,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const formEncoded = {
-    "--":encoder.encode("--"),
-    "lf":encoder.encode("\n"),
-    "\"content\".1":encoder.encode("\nContent-Disposition: form-data; name=content\nContent-Type: application/json\n\n"),
-    "\"embeds\".1":encoder.encode("\nContent-Disposition: form-data; name=embeds\nContent-Type: application/json\n\n"),
-    "\"allowed_mentions\".1":encoder.encode("\nContent-Disposition: form-data; name=allowed_mentions\nContent-Type: application/json\n\n"),
-    "\"components\".1":encoder.encode("\nContent-Disposition: form-data; name=components\nContent-Type: application/json\n\n"),
-    "\"attachments\".1":encoder.encode("\nContent-Disposition: form-data; name=attachments\nContent-Type: application/json\n\n"),
-    "\"tts\".1":encoder.encode("\nContent-Disposition: form-data; name=tts\nContent-Type: application/json\n\n"),
-    "\"flags\".1":encoder.encode("\nContent-Disposition: form-data; name=flags\nContent-Type: application/json\n\n"),
-    "\"username\".1":encoder.encode("\nContent-Disposition: form-data; name=username\nContent-Type: application/json\n\n"),
-    "\"avatar_url\".1":encoder.encode("\nContent-Disposition: form-data; name=avatar_url\nContent-Type: application/json\n\n"),
-    "\"thread_name\".1":encoder.encode("\nContent-Disposition: form-data; name=thread_name\nContent-Type: application/json\n\n"),
-    "\"applied_tags\".1":encoder.encode("\nContent-Disposition: form-data; name=applied_tags\nContent-Type: application/json\n\n")
-} as const;

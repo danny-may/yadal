@@ -104,37 +104,15 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = SlackWebhook;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
-    const boundary = encoder.encode(boundaryStr);
-    const chunks = [
-        
-    ];
-    if ("text" in model) {
-        const value = model["text"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"text\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("username" in model) {
-        const value = model["username"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"username\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("icon_url" in model) {
-        const value = model["icon_url"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"icon_url\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    if ("attachments" in model) {
-        const value = model["attachments"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"attachments\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
-    return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "text": model["text" as keyof typeof model],
+            "username": model["username" as keyof typeof model],
+            "icon_url": model["icon_url" as keyof typeof model],
+            "attachments": model["attachments" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -149,11 +127,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const formEncoded = {
-    "--":encoder.encode("--"),
-    "lf":encoder.encode("\n"),
-    "\"text\".1":encoder.encode("\nContent-Disposition: form-data; name=text\nContent-Type: application/json\n\n"),
-    "\"username\".1":encoder.encode("\nContent-Disposition: form-data; name=username\nContent-Type: application/json\n\n"),
-    "\"icon_url\".1":encoder.encode("\nContent-Disposition: form-data; name=icon_url\nContent-Type: application/json\n\n"),
-    "\"attachments\".1":encoder.encode("\nContent-Disposition: form-data; name=attachments\nContent-Type: application/json\n\n")
-} as const;

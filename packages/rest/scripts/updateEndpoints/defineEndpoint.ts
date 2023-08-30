@@ -23,7 +23,7 @@ export function defineEndpoint(
     const pathType = types.get(operation, schemes.path ?? Symbol()) ?? emptyObj;
     const headerType = types.get(operation, schemes.header ?? Symbol());
     const bodyTypes = Object.entries(noRef(operation.requestBody)?.content ?? {})
-        .map(([contentType, definition]) => ({ contentType, type: types.get(noRef(definition).schema ?? {}) }));
+        .map(([contentType, definition]) => ({ contentType, type: types.get(noRef(definition).schema ?? {}) ?? (() => { throw new Error('Channot find type'); })() }));
     const responseTypes = Object.entries(operation.responses ?? {})
         .map(x => [x[0], noRef(x[1])] as const)
         .flatMap(([statusPattern, response]) => response.content === undefined
@@ -54,7 +54,7 @@ ${() => source([], ...Object.values(extern))}`,
 
 
 
-function defineRequest(bodyTypes: { contentType: string; type: Type | undefined; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL, extern: Record<string, Iterable<string>>) {
+function defineRequest(bodyTypes: { contentType: string; type: Type; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL, extern: Record<string, Iterable<string>>) {
     if (bodyTypes.length === 0) {
         return source`export type Body = {};
 export function createBody(_: Body): undefined {
@@ -63,13 +63,11 @@ export function createBody(_: Body): undefined {
     }
     imports.push({ file: helperUrl, exported: 'DiscordRestError', isType: false });
     for (const { type } of bodyTypes)
-        if (type?.name !== undefined)
+        if (type.name !== undefined)
             imports.push({ file: typesUrl, exported: type.name, isType: true });
 
     const bodyTypeUnion = new Set<Type>();
     for (const { type } of bodyTypes) {
-        if (type === undefined)
-            continue;
         if (isNonObjectType(type)) {
             if (type.name !== undefined)
                 imports.push({ file: typesUrl, exported: type.name, isType: true });
@@ -87,17 +85,16 @@ export function createBody(_: Body): undefined {
     }
 
     const bodyUnion = new UnionType({ types: bodyTypeUnion });
-    const parts = differentiateBodyTypes(bodyTypes, (type, contentType) => {
-        if (isNonObjectType(type))
-            return defineNestedBody(contentType, 'data', extern);
-        const props = getAllProperties(type);
-        if (props !== null)
-            return defineInlineBody(contentType, props, extern);
-        return source`throw new DiscordRestError(null, "Unsupported type")`;
-    });
     return source`export type Body = ${bodyUnion.inline('~')};
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    ${source([], ...parts)}
+    ${differentiateBodyTypes('model', bodyTypes, (type, contentType) => {
+        if (isNonObjectType(type))
+            return defineNestedBody('model', contentType, 'data', extern);
+        const props = getAllProperties(type);
+        if (props !== null)
+            return defineInlineBody('model', contentType, props, extern);
+        return source`throw new DiscordRestError(null, "Unsupported type")`;
+    })}
 }`;
 }
 
@@ -123,127 +120,111 @@ function decode(content: ArrayBufferView) {
     return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
 }
 `;
-function defineInlineBody(contentType: string, props: Iterable<{ name: string; optional: boolean; type: Type; }>, extern: Record<string, Iterable<string>>) {
+function defineInlineBody(model: string, contentType: string, props: Iterable<{ name: string; optional: boolean; type: Type; }>, extern: Record<string, Iterable<string>>) {
     switch (contentType) {
-        case 'application/json': return defineJsonInlineRequest(props, extern);
-        case 'multipart/form-data': return defineFormDataRequest(props, 'model', extern);
+        case 'application/json': return defineJsonInlineRequest(model, props, extern);
+        case 'multipart/form-data': return defineFormDataRequest(model, props, extern);
     }
     throw new Error(`Unsupported content type ${contentType}`);
 }
 
-function defineNestedBody(contentType: string, prop: string, extern: Record<string, Iterable<string>>) {
+function defineNestedBody(model: string, contentType: string, prop: string, extern: Record<string, Iterable<string>>) {
     switch (contentType) {
-        case 'application/json': return defineJsonNestedRequest(prop, extern);
+        case 'application/json': return defineJsonNestedRequest(model, prop, extern);
     }
     throw new Error(`Unsupported content type ${contentType}`);
 }
 
-function* differentiateBodyTypes(bodyTypes: { contentType: string; type: Type | undefined; }[], selector: (type: Type, contentType: string) => Iterable<string>) {
+function differentiateBodyTypes(model: string, bodyTypes: { contentType: string; type: Type; }[], selector: (type: Type, contentType: string) => Iterable<string>) {
     if (bodyTypes.length === 1) {
         const { type, contentType } = bodyTypes[0]!;
-        yield source`${selector(type!, contentType)}\n`;
-    } else {
-        const match = bodyTypes.find(b => b.contentType === 'multipart/form-data')
-            ?? bodyTypes.find(b => b.contentType === 'application/json');
-        if (match === undefined)
+        return source`${selector(type, contentType)}\n`;
+    }
+    const form = bodyTypes.find(b => b.contentType === 'multipart/form-data');
+    const json = bodyTypes.find(b => b.contentType === 'application/json');
+    if (form === undefined) {
+        if (json === undefined) {
             throw new Error('No supported body type found');
-        const { type, contentType } = match;
-        yield source`${selector(type!, contentType)}\n`;
-    }
-}
-
-function defineJsonInlineRequest(props: Iterable<{ name: string, optional: boolean; }>, extern: Record<string, Iterable<string>>) {
-    const preEncoded = {
-        ',': ',',
-        '{': '{',
-        '}': '}'
-    } as Record<string, string>;
-    const optional: string[] = [];
-    const chunkInit = [source`jsonEncoded["{"]`];
-    for (const prop of props) {
-        const name = JSON.stringify(prop.name);
-        preEncoded[`${name}:`] = `${name}:`;
-        if (prop.optional)
-            optional.push(name);
-        else
-            chunkInit.push(source`,${chunkInit.length === 1 ? '' : 'jsonEncoded[","],'}
-jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(model[${name}]))`);
-    }
-    const conditional = [];
-    if (optional.length === 0)
-        chunkInit.push(source`,\njsonEncoded["}"]`);
-    else {
-        const conditionallyPushChunk = chunkInit.length === 1
-            ? conditionallyPushChunkWithMaybeComma
-            : conditionallyPushChunkWithComma;
-        for (const name of optional) {
-            conditional.push(conditionallyPushChunk(name))
         }
-        conditional.push(source`chunks.push(jsonEncoded["}"]);`);
+        return source`${selector(json.type, json.contentType)}\n`;
     }
-    const jsonEncodedProps = Object.entries(preEncoded)
-        .map(x => `${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
-        .join(',\n')
-    extern.encoder = declareEncoder;
-    extern.jsonEncoded = source`const jsonEncoded = {
-    ${jsonEncodedProps}
-} as const;\n`;
-
-    return source`const chunks = [
-    ${sourceJoin(chunkInit, '')}
-];
-${sourceJoin(conditional, '\n')}
-return { type: \`application/json; charset=\${encoder.encoding}\`, content: chunks };`;
-}
-
-function conditionallyPushChunkWithComma(name: string) {
-    return source`if (${name} in model) {
-    const value = model[${name}];
-    if (value !== undefined) {
-        chunks.push(jsonEncoded[","], jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
+    if (json === undefined)
+        return source`${selector(form.type, form.contentType)}\n`;
+    const properties = [...getAllProperties(form.type) ?? []].filter(p => isBinaryType(p.type));
+    if (properties.length === 0)
+        return source`${selector(json.type, json.contentType)}\n`;
+    const conditions = [];
+    for (const property of properties) {
+        if (!property.optional)
+            return source`${selector(form.type, form.contentType)}\n`;
+        conditions.push(source`(${JSON.stringify(property.name)} in ${model} && ${model}[${JSON.stringify(property.name)}] != null)`);
     }
+    return source`if (
+    ${sourceJoin(conditions, '\n|| ')}
+) {
+    ${selector(form.type, form.contentType)}
+} else {
+    ${selector(json.type, json.contentType)}
 }`;
 }
 
-function conditionallyPushChunkWithMaybeComma(name: string) {
-    return source`if (${name} in model) {
-    const value = model[${name}];
-    if (value !== undefined) {
-        if (chunks.length > 1)
-            chunks.push(jsonEncoded[","]);
-        chunks.push(jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
-    }
-}`;
+function defineJsonInlineRequest(model: string, props: Iterable<{ name: string, optional: boolean; }>, extern: Record<string, Iterable<string>>) {
+    return source`return {
+    type: \`application/json; charset=\${encoder.encoding}\`,
+    content: [${pickEncodeJson(model, [...props].map(p => p.name), extern)}]
+};`
 }
 
-function defineJsonNestedRequest(propName: string, extern: Record<string, Iterable<string>>) {
+function pickEncodeJson(model: string, props: readonly string[], extern: Record<string, Iterable<string>>) {
     extern.encoder = declareEncoder;
-    return source`return { type: \`application/json; charset=\${encoder.encoding}\`, content: [encoder.encode(JSON.stringify(model[${JSON.stringify(propName)}]))] };`;
+    return source`encoder.encode(JSON.stringify({
+    ${sourceJoin(props.map(p => JSON.stringify(p)).map(p => `${p}: ${model}[${p} as keyof typeof ${model}]`), ',\n')}
+}))`
 }
 
-function defineFormDataRequest(props: Iterable<{ name: string, optional: boolean; type: Type; }>, model: string, extern: Record<string, Iterable<string>>) {
+function defineJsonNestedRequest(model: string, propName: string, extern: Record<string, Iterable<string>>) {
+    extern.encoder = declareEncoder;
+    return source`return { 
+    type: \`application/json; charset=\${encoder.encoding}\`, 
+    content: [encoder.encode(JSON.stringify(
+        ${model}[${JSON.stringify(propName)} as keyof typeof ${model}]
+    ))] 
+};`;
+}
+
+function defineFormDataRequest(model: string, props: Iterable<{ name: string, optional: boolean; type: Type; }>, extern: Record<string, Iterable<string>>) {
     const preEncoded = {
         '--': '--',
         'lf': '\n',
     } as Record<string, string>;
-    const chunkInit = [];
-    const conditional = [];
-    for (const prop of props) {
-        if (prop.optional)
-            conditional.push(source`if (${JSON.stringify(prop.name)} in ${model}) {
-    const value = ${model}[${JSON.stringify(prop.name)}];
-    if (value !== undefined) {
-        chunks.push(${propertyChunks(prop.name, 'value', prop.type, preEncoded)});
-    }
-}`);
-        else if (chunkInit.length === 0)
-            chunkInit.push(propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type, preEncoded));
+    const payloadJsonProperties = [];
+    const fileProperties = [];
+    for (const { type, name, optional } of props) {
+        if (isBinaryType(type))
+            fileProperties.push({ name, optional });
         else
-            chunkInit.push(source`,
-${propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type, preEncoded)}`);
+            payloadJsonProperties.push(name);
+    }
+
+    preEncoded.payload_json = `\nContent-Disposition: form-data; name="payload_json"\nContent-Type: application/json\n\n`;
+    const chunkInit = [source`formEncoded["--"], boundary, formEncoded["payload_json"], 
+${pickEncodeJson(model, payloadJsonProperties, extern)}, formEncoded["lf"]`];
+    const conditional = [];
+    for (const { name, optional } of fileProperties) {
+        if (!optional)
+            chunkInit.push(source`,\n${propertyChunks(name, `${model}[${JSON.stringify(name)}]`, preEncoded)}`);
+        else
+            conditional.push(source`if (${JSON.stringify(name)} in ${model}) {
+    const value = ${model}[${JSON.stringify(name)}];
+    if (value !== undefined) {
+        chunks.push(
+            ${propertyChunks(name, 'value', preEncoded)}
+        );
+    }
+}`)
     }
     if (conditional.length === 0)
-        chunkInit.push(source`formEncoded["--"], boundary, formEncoded["--"]`)
+        chunkInit.push(source`,\nformEncoded["--"], boundary, formEncoded["--"]`)
     else
         conditional.push(source`chunks.push(formEncoded["--"], boundary, formEncoded["--"]);`);
 
@@ -257,26 +238,26 @@ ${propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type,
 
     return source`const boundaryStr = \`boundary-\${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join(\'-\')}\`;
 const boundary = encoder.encode(boundaryStr);
-const chunks = [
+const chunks: ArrayBufferView[] = [
     ${sourceJoin(chunkInit, '')}
 ];
 ${sourceJoin(conditional, '\n')}
 return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encoder.encoding}\`, content: chunks };`;
 
-    function propertyChunks(key: string, value: string, type: Type, formEncoded: Record<string, string>) {
-        if (type === wellKnownEncodings.binary || (type instanceof LiteralType && type.value === wellKnownEncodings.binary.name)) {
-            const k1 = `${JSON.stringify(key)}.1`;
-            const k2 = `${JSON.stringify(key)}.2`;
-            formEncoded[k1] = `\nContent-Disposition: form-data; name=${key}; filename=`;
-            formEncoded[k2] = `\nContent-Type: `;
+    function propertyChunks(key: string, value: string, formEncoded: Record<string, string>) {
+        const k1 = `${JSON.stringify(key)}.1`;
+        const k2 = `${JSON.stringify(key)}.2`;
+        formEncoded[k1] = `\nContent-Disposition: form-data; name=${key}; filename="`;
+        formEncoded[k2] = `"\nContent-Type: `;
 
-            return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(${value}.name ?? ${JSON.stringify(key)})), formEncoded[${JSON.stringify(k2)}], encoder.encode(${value}.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], ${value}.content, formEncoded["lf"]`;
-        } else {
-            const k = `${JSON.stringify(key)}.1`;
-            formEncoded[k] = `\nContent-Disposition: form-data; name=${key}\nContent-Type: application/json\n\n`;
-            return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k)}], encoder.encode(JSON.stringify(${value})), formEncoded["lf"]`;
-        }
+        return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(${value}.name ?? ${JSON.stringify(key)})), 
+formEncoded[${JSON.stringify(k2)}], encoder.encode(${value}.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+${value}.content, formEncoded["lf"]`;
     }
+}
+
+function isBinaryType(type: Type) {
+    return type === wellKnownEncodings.binary || (type instanceof LiteralType && type.value === wellKnownEncodings.binary.name);
 }
 
 function defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseType: LiteralType | UnionType, fullName: string, responseTypes: { statusPattern: string; contentType: string; type: Type | undefined; }[], typesUrl: URL, extern: Record<string, Iterable<string>>) {

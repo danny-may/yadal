@@ -94,35 +94,14 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = UpdateWebhookRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"]
-    ];
-    if ("name" in model) {
-        const value = model["name"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("avatar" in model) {
-        const value = model["avatar"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"avatar\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("channel_id" in model) {
-        const value = model["channel_id"];
-        if (value !== undefined) {
-            if (chunks.length > 1)
-                chunks.push(jsonEncoded[","]);
-            chunks.push(jsonEncoded["\"channel_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "avatar": model["avatar" as keyof typeof model],
+            "channel_id": model["channel_id" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -137,11 +116,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"avatar\":":encoder.encode("\"avatar\":"),
-    "\"channel_id\":":encoder.encode("\"channel_id\":")
-} as const;

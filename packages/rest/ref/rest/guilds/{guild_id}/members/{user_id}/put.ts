@@ -98,42 +98,17 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = AddGuildMemberRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"access_token\":"], encoder.encode(JSON.stringify(model["access_token"]))
-    ];
-    if ("nick" in model) {
-        const value = model["nick"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"nick\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("roles" in model) {
-        const value = model["roles"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"roles\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("mute" in model) {
-        const value = model["mute"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"mute\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("deaf" in model) {
-        const value = model["deaf"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"deaf\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("flags" in model) {
-        const value = model["flags"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"flags\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "nick": model["nick" as keyof typeof model],
+            "roles": model["roles" as keyof typeof model],
+            "mute": model["mute" as keyof typeof model],
+            "deaf": model["deaf" as keyof typeof model],
+            "access_token": model["access_token" as keyof typeof model],
+            "flags": model["flags" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -148,14 +123,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"nick\":":encoder.encode("\"nick\":"),
-    "\"roles\":":encoder.encode("\"roles\":"),
-    "\"mute\":":encoder.encode("\"mute\":"),
-    "\"deaf\":":encoder.encode("\"deaf\":"),
-    "\"access_token\":":encoder.encode("\"access_token\":"),
-    "\"flags\":":encoder.encode("\"flags\":")
-} as const;

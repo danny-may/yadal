@@ -94,44 +94,19 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = CreateAutoModerationRuleRequestJSON;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"])),jsonEncoded[","],
-        jsonEncoded["\"event_type\":"], encoder.encode(JSON.stringify(model["event_type"])),jsonEncoded[","],
-        jsonEncoded["\"trigger_type\":"], encoder.encode(JSON.stringify(model["trigger_type"]))
-    ];
-    if ("actions" in model) {
-        const value = model["actions"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"actions\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("enabled" in model) {
-        const value = model["enabled"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"enabled\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("exempt_roles" in model) {
-        const value = model["exempt_roles"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"exempt_roles\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("exempt_channels" in model) {
-        const value = model["exempt_channels"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"exempt_channels\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("trigger_metadata" in model) {
-        const value = model["trigger_metadata"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"trigger_metadata\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "event_type": model["event_type" as keyof typeof model],
+            "actions": model["actions" as keyof typeof model],
+            "enabled": model["enabled" as keyof typeof model],
+            "exempt_roles": model["exempt_roles" as keyof typeof model],
+            "exempt_channels": model["exempt_channels" as keyof typeof model],
+            "trigger_type": model["trigger_type" as keyof typeof model],
+            "trigger_metadata": model["trigger_metadata" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -146,16 +121,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"event_type\":":encoder.encode("\"event_type\":"),
-    "\"actions\":":encoder.encode("\"actions\":"),
-    "\"enabled\":":encoder.encode("\"enabled\":"),
-    "\"exempt_roles\":":encoder.encode("\"exempt_roles\":"),
-    "\"exempt_channels\":":encoder.encode("\"exempt_channels\":"),
-    "\"trigger_type\":":encoder.encode("\"trigger_type\":"),
-    "\"trigger_metadata\":":encoder.encode("\"trigger_metadata\":")
-} as const;

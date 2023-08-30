@@ -94,108 +94,28 @@ export async function readResponse(statusCode: number, contentType: string | und
 }
 export type Body = CreateGuildChannelRequest;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    const chunks = [
-        jsonEncoded["{"],
-        jsonEncoded["\"name\":"], encoder.encode(JSON.stringify(model["name"]))
-    ];
-    if ("type" in model) {
-        const value = model["type"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"type\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("position" in model) {
-        const value = model["position"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"position\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("topic" in model) {
-        const value = model["topic"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"topic\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("bitrate" in model) {
-        const value = model["bitrate"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"bitrate\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("user_limit" in model) {
-        const value = model["user_limit"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"user_limit\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("nsfw" in model) {
-        const value = model["nsfw"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"nsfw\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("rate_limit_per_user" in model) {
-        const value = model["rate_limit_per_user"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"rate_limit_per_user\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("parent_id" in model) {
-        const value = model["parent_id"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"parent_id\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("permission_overwrites" in model) {
-        const value = model["permission_overwrites"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"permission_overwrites\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("rtc_region" in model) {
-        const value = model["rtc_region"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"rtc_region\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("video_quality_mode" in model) {
-        const value = model["video_quality_mode"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"video_quality_mode\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_auto_archive_duration" in model) {
-        const value = model["default_auto_archive_duration"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"default_auto_archive_duration\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_reaction_emoji" in model) {
-        const value = model["default_reaction_emoji"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"default_reaction_emoji\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_sort_order" in model) {
-        const value = model["default_sort_order"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"default_sort_order\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("default_forum_layout" in model) {
-        const value = model["default_forum_layout"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"default_forum_layout\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    if ("available_tags" in model) {
-        const value = model["available_tags"];
-        if (value !== undefined) {
-            chunks.push(jsonEncoded[","], jsonEncoded["\"available_tags\":"], encoder.encode(JSON.stringify(value)));
-        }
-    }
-    chunks.push(jsonEncoded["}"]);
-    return { type: `application/json; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "type": model["type" as keyof typeof model],
+            "name": model["name" as keyof typeof model],
+            "position": model["position" as keyof typeof model],
+            "topic": model["topic" as keyof typeof model],
+            "bitrate": model["bitrate" as keyof typeof model],
+            "user_limit": model["user_limit" as keyof typeof model],
+            "nsfw": model["nsfw" as keyof typeof model],
+            "rate_limit_per_user": model["rate_limit_per_user" as keyof typeof model],
+            "parent_id": model["parent_id" as keyof typeof model],
+            "permission_overwrites": model["permission_overwrites" as keyof typeof model],
+            "rtc_region": model["rtc_region" as keyof typeof model],
+            "video_quality_mode": model["video_quality_mode" as keyof typeof model],
+            "default_auto_archive_duration": model["default_auto_archive_duration" as keyof typeof model],
+            "default_reaction_emoji": model["default_reaction_emoji" as keyof typeof model],
+            "default_sort_order": model["default_sort_order" as keyof typeof model],
+            "default_forum_layout": model["default_forum_layout" as keyof typeof model],
+            "available_tags": model["available_tags" as keyof typeof model]
+        }))]
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
@@ -210,25 +130,3 @@ function decode(content: ArrayBufferView) {
 declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
-const jsonEncoded = {
-    ",":encoder.encode(","),
-    "{":encoder.encode("{"),
-    "}":encoder.encode("}"),
-    "\"type\":":encoder.encode("\"type\":"),
-    "\"name\":":encoder.encode("\"name\":"),
-    "\"position\":":encoder.encode("\"position\":"),
-    "\"topic\":":encoder.encode("\"topic\":"),
-    "\"bitrate\":":encoder.encode("\"bitrate\":"),
-    "\"user_limit\":":encoder.encode("\"user_limit\":"),
-    "\"nsfw\":":encoder.encode("\"nsfw\":"),
-    "\"rate_limit_per_user\":":encoder.encode("\"rate_limit_per_user\":"),
-    "\"parent_id\":":encoder.encode("\"parent_id\":"),
-    "\"permission_overwrites\":":encoder.encode("\"permission_overwrites\":"),
-    "\"rtc_region\":":encoder.encode("\"rtc_region\":"),
-    "\"video_quality_mode\":":encoder.encode("\"video_quality_mode\":"),
-    "\"default_auto_archive_duration\":":encoder.encode("\"default_auto_archive_duration\":"),
-    "\"default_reaction_emoji\":":encoder.encode("\"default_reaction_emoji\":"),
-    "\"default_sort_order\":":encoder.encode("\"default_sort_order\":"),
-    "\"default_forum_layout\":":encoder.encode("\"default_forum_layout\":"),
-    "\"available_tags\":":encoder.encode("\"available_tags\":")
-} as const;

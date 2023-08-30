@@ -96,18 +96,19 @@ export type Body = CreateGuildStickerRequestFormData;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
     const boundary = encoder.encode(boundaryStr);
-    const chunks = [
-        formEncoded["--"], boundary, formEncoded["\"name\".1"], encoder.encode(JSON.stringify(model["name"])), formEncoded["lf"],
-        formEncoded["--"], boundary, formEncoded["\"tags\".1"], encoder.encode(JSON.stringify(model["tags"])), formEncoded["lf"],
-        formEncoded["--"], boundary, formEncoded["\"file\".1"], encoder.encode(encodeURIComponent(model["file"].name ?? "file")), formEncoded["\"file\".2"], encoder.encode(model["file"].contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], model["file"].content, formEncoded["lf"]
+    const chunks: ArrayBufferView[] = [
+        formEncoded["--"], boundary, formEncoded["payload_json"], 
+        encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "tags": model["tags" as keyof typeof model],
+            "description": model["description" as keyof typeof model]
+        })), formEncoded["lf"],
+        formEncoded["--"], boundary, formEncoded["\"file\".1"], encoder.encode(encodeURIComponent(model["file"].name ?? "file")), 
+        formEncoded["\"file\".2"], encoder.encode(model["file"].contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+        model["file"].content, formEncoded["lf"],
+        formEncoded["--"], boundary, formEncoded["--"]
     ];
-    if ("description" in model) {
-        const value = model["description"];
-        if (value !== undefined) {
-            chunks.push(formEncoded["--"], boundary, formEncoded["\"description\".1"], encoder.encode(JSON.stringify(value)), formEncoded["lf"]);
-        }
-    }
-    chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
+    
     return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
     
 }
@@ -126,9 +127,7 @@ const encoder = new TextEncoder();
 const formEncoded = {
     "--":encoder.encode("--"),
     "lf":encoder.encode("\n"),
-    "\"name\".1":encoder.encode("\nContent-Disposition: form-data; name=name\nContent-Type: application/json\n\n"),
-    "\"tags\".1":encoder.encode("\nContent-Disposition: form-data; name=tags\nContent-Type: application/json\n\n"),
-    "\"description\".1":encoder.encode("\nContent-Disposition: form-data; name=description\nContent-Type: application/json\n\n"),
-    "\"file\".1":encoder.encode("\nContent-Disposition: form-data; name=file; filename="),
-    "\"file\".2":encoder.encode("\nContent-Type: ")
+    "payload_json":encoder.encode("\nContent-Disposition: form-data; name=\"payload_json\"\nContent-Type: application/json\n\n"),
+    "\"file\".1":encoder.encode("\nContent-Disposition: form-data; name=file; filename=\""),
+    "\"file\".2":encoder.encode("\"\nContent-Type: ")
 } as const;
