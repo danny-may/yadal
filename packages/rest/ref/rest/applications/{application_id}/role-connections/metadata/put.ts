@@ -96,11 +96,11 @@ export type Body = {
     data: UpdateApplicationRoleConnectionsMetadataRequestJSON;
 };
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    return { 
-        type: `application/json; charset=${encoder.encoding}`, 
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
         content: [encoder.encode(JSON.stringify(
             model["data" as keyof typeof model]
-        ))] 
+        ))]
     };
     
 }

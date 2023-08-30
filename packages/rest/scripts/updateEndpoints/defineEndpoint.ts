@@ -184,11 +184,11 @@ function pickEncodeJson(model: string, props: readonly string[], extern: Record<
 
 function defineJsonNestedRequest(model: string, propName: string, extern: Record<string, Iterable<string>>) {
     extern.encoder = declareEncoder;
-    return source`return { 
-    type: \`application/json; charset=\${encoder.encoding}\`, 
+    return source`return {
+    type: \`application/json; charset=\${encoder.encoding}\`,
     content: [encoder.encode(JSON.stringify(
         ${model}[${JSON.stringify(propName)} as keyof typeof ${model}]
-    ))] 
+    ))]
 };`;
 }
 
@@ -207,7 +207,7 @@ function defineFormDataRequest(model: string, props: Iterable<{ name: string, op
     }
 
     preEncoded.payload_json = `\nContent-Disposition: form-data; name="payload_json"\nContent-Type: application/json\n\n`;
-    const chunkInit = [source`formEncoded["--"], boundary, formEncoded["payload_json"], 
+    const chunkInit = [source`formEncoded["--"], boundary, formEncoded["payload_json"],
 ${pickEncodeJson(model, payloadJsonProperties, extern)}, formEncoded["lf"]`];
     const conditional = [];
     for (const { name, optional } of fileProperties) {
@@ -242,7 +242,10 @@ const chunks: ArrayBufferView[] = [
     ${sourceJoin(chunkInit, '')}
 ];
 ${sourceJoin(conditional, '\n')}
-return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encoder.encoding}\`, content: chunks };`;
+return {
+    type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encoder.encoding}\`,
+    content: chunks
+};`;
 
     function propertyChunks(key: string, value: string, formEncoded: Record<string, string>) {
         const k1 = `${JSON.stringify(key)}.1`;
@@ -250,8 +253,8 @@ return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encod
         formEncoded[k1] = `\nContent-Disposition: form-data; name=${key}; filename="`;
         formEncoded[k2] = `"\nContent-Type: `;
 
-        return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(${value}.name ?? ${JSON.stringify(key)})), 
-formEncoded[${JSON.stringify(k2)}], encoder.encode(${value}.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+        return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(${value}.name ?? ${JSON.stringify(key)})),
+formEncoded[${JSON.stringify(k2)}], encoder.encode(${value}.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
 ${value}.content, formEncoded["lf"]`;
     }
 }

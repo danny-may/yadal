@@ -110,7 +110,7 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
         const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
         const boundary = encoder.encode(boundaryStr);
         const chunks: ArrayBufferView[] = [
-            formEncoded["--"], boundary, formEncoded["payload_json"], 
+            formEncoded["--"], boundary, formEncoded["payload_json"],
             encoder.encode(JSON.stringify({
                 "content": model["content" as keyof typeof model],
                 "embeds": model["embeds" as keyof typeof model],
@@ -125,8 +125,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[0]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[0]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[0]")), 
-                    formEncoded["\"files[0]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[0]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[0]")),
+                    formEncoded["\"files[0]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -135,8 +135,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[1]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[1]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[1]")), 
-                    formEncoded["\"files[1]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[1]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[1]")),
+                    formEncoded["\"files[1]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -145,8 +145,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[2]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[2]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[2]")), 
-                    formEncoded["\"files[2]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[2]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[2]")),
+                    formEncoded["\"files[2]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -155,8 +155,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[3]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[3]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[3]")), 
-                    formEncoded["\"files[3]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[3]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[3]")),
+                    formEncoded["\"files[3]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -165,8 +165,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[4]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[4]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[4]")), 
-                    formEncoded["\"files[4]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[4]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[4]")),
+                    formEncoded["\"files[4]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -175,8 +175,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[5]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[5]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[5]")), 
-                    formEncoded["\"files[5]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[5]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[5]")),
+                    formEncoded["\"files[5]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -185,8 +185,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[6]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[6]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[6]")), 
-                    formEncoded["\"files[6]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[6]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[6]")),
+                    formEncoded["\"files[6]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -195,8 +195,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[7]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[7]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[7]")), 
-                    formEncoded["\"files[7]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[7]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[7]")),
+                    formEncoded["\"files[7]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -205,8 +205,8 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[8]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[8]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[8]")), 
-                    formEncoded["\"files[8]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[8]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[8]")),
+                    formEncoded["\"files[8]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
@@ -215,14 +215,17 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             const value = model["files[9]"];
             if (value !== undefined) {
                 chunks.push(
-                    formEncoded["--"], boundary, formEncoded["\"files[9]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[9]")), 
-                    formEncoded["\"files[9]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+                    formEncoded["--"], boundary, formEncoded["\"files[9]\".1"], encoder.encode(encodeURIComponent(value.name ?? "files[9]")),
+                    formEncoded["\"files[9]\".2"], encoder.encode(value.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
                     value.content, formEncoded["lf"]
                 );
             }
         }
         chunks.push(formEncoded["--"], boundary, formEncoded["--"]);
-        return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+        return {
+            type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`,
+            content: chunks
+        };
     } else {
         return {
             type: `application/json; charset=${encoder.encoding}`,

@@ -97,19 +97,22 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
     const boundaryStr = `boundary-${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join('-')}`;
     const boundary = encoder.encode(boundaryStr);
     const chunks: ArrayBufferView[] = [
-        formEncoded["--"], boundary, formEncoded["payload_json"], 
+        formEncoded["--"], boundary, formEncoded["payload_json"],
         encoder.encode(JSON.stringify({
             "name": model["name" as keyof typeof model],
             "tags": model["tags" as keyof typeof model],
             "description": model["description" as keyof typeof model]
         })), formEncoded["lf"],
-        formEncoded["--"], boundary, formEncoded["\"file\".1"], encoder.encode(encodeURIComponent(model["file"].name ?? "file")), 
-        formEncoded["\"file\".2"], encoder.encode(model["file"].contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], 
+        formEncoded["--"], boundary, formEncoded["\"file\".1"], encoder.encode(encodeURIComponent(model["file"].name ?? "file")),
+        formEncoded["\"file\".2"], encoder.encode(model["file"].contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"],
         model["file"].content, formEncoded["lf"],
         formEncoded["--"], boundary, formEncoded["--"]
     ];
     
-    return { type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`, content: chunks };
+    return {
+        type: `multipart/form-data; boundary=${boundaryStr}; charset=${encoder.encoding}`,
+        content: chunks
+    };
     
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
