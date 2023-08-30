@@ -61,18 +61,16 @@ export const headers = {
 } as const;
 Object.freeze(headers);
 export type Response = (ArrayBufferView | Record<string, unknown>);
-export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
+export async function readResponse(statusCode: number, contentType: string | undefined, content: () => Promise<ArrayBufferView>): Promise<Response> {
     if (statusCode === 200) {
         if (contentType === "image/png") {
-            return await resolve(contentType, content) as ArrayBufferView;
+            return await content() as ArrayBufferView;
         }
-        
         if (contentType === "application/json") {
-            return await resolve(contentType, content) as Record<string, unknown>;
+            return JSON.parse(decode(await content())) as Record<string, unknown>;
         }
-        
         if (contentType === "image/gif") {
-            return await resolve(contentType, content) as ArrayBufferView;
+            return await content() as ArrayBufferView;
         }
         throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }
@@ -81,4 +79,13 @@ export async function readResponse<R>(statusCode: number, contentType: string | 
 export type Body = {};
 export function createBody(_: Body): undefined {
     return undefined;
+}
+declare const TextDecoder: typeof import('node:util').TextDecoder;
+declare type TextDecoder = import('node:util').TextDecoder;
+const decoder = new TextDecoder();
+const typedArray: new () => Exclude<Extract<Parameters<TextDecoder["decode"]>[0], ArrayBufferView>, DataView> = Object.getPrototypeOf(Uint8Array.prototype).constructor;
+function decode(content: ArrayBufferView) {
+    if (content instanceof typedArray || content instanceof DataView)
+        return decoder.decode(content);
+    return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
 }

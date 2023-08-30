@@ -120,7 +120,7 @@ function loadOperationResponses(types: TypeBuilder, id: string, operation: Opera
                 types.parse(schema, `${snakeCaseToPascalCase(id)}ResponseJSON`);
                 break;
             case 'image/png':
-                types.parse(schema, `${snakeCaseToPascalCase(id)}ResponsePNG`);
+                types.define(schema, () => new LiteralType({ value: 'ArrayBufferView' }));
                 break;
             default: throw new Error(`Unsupported response media type ${mediaType}`)
         }

@@ -63,22 +63,19 @@ export const headers = {
 } as const;
 Object.freeze(headers);
 export type Response = ArrayBufferView;
-export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
+export async function readResponse(statusCode: number, contentType: string | undefined, content: () => Promise<ArrayBufferView>): Promise<Response> {
     if (statusCode === 200) {
         if (contentType === "image/png") {
-            return await resolve(contentType, content) as ArrayBufferView;
+            return await content() as ArrayBufferView;
         }
-        
         if (contentType === "image/jpeg") {
-            return await resolve(contentType, content) as ArrayBufferView;
+            return await content() as ArrayBufferView;
         }
-        
         if (contentType === "image/webp") {
-            return await resolve(contentType, content) as ArrayBufferView;
+            return await content() as ArrayBufferView;
         }
-        
         if (contentType === "image/gif") {
-            return await resolve(contentType, content) as ArrayBufferView;
+            return await content() as ArrayBufferView;
         }
         throw new DiscordRestError(null, `Unexpected content type ${JSON.stringify(contentType)} response with status code ${statusCode}`);
     }

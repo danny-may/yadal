@@ -15,7 +15,7 @@ export function buildEndpoint<T extends EndpointDefinition>(baseUrl: URL, option
     return Object.freeze<IEndpoint<any, unknown>>({
         route,
         readResponse(response) {
-            return readResponse(response.status, response.headers.get('content-type'), response.body, decodeResponse);
+            return readResponse(response.status, response.headers.get('content-type'), getBody.bind(null, response.body));
         },
         createRequest(model) {
             const headers = new HttpHeaders(headerValues(model));
@@ -37,37 +37,19 @@ export function buildEndpoint<T extends EndpointDefinition>(baseUrl: URL, option
     })
 }
 
-async function decodeResponse(type: string, content: IHttpContent) {
-    if (!(type in responseReaders))
-        throw new Error(`Unsupported content type ${type}`);
-    return await responseReaders[type as keyof typeof responseReaders](content);
+async function getBody(content: IHttpContent) {
+    const chunks = [];
+    for await (const chunk of content.stream())
+        chunks.push(new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength));
+    const result = new Uint8Array(chunks.reduce((p, c) => p + c.byteLength, 0));
+    let offset = 0;
+    for (const chunk of chunks) {
+        result.set(chunk, offset);
+        offset += chunk.byteLength;
+    }
+    return result;
 }
-const responseReaders = {
-    async 'application/json'(content: IHttpContent) {
-        const json = [];
-        for await (const chunk of content.stream())
-            json.push(decoder.decode(new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength)));
-        return JSON.parse(json.join(''));
-    },
-    async 'application/octet-stream'(content: IHttpContent) {
-        const chunks = [];
-        for await (const chunk of content.stream())
-            chunks.push(new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength));
-        const result = new Uint8Array(chunks.reduce((p, c) => p + c.byteLength, 0));
-        let offset = 0;
-        for (const chunk of chunks) {
-            result.set(chunk, offset);
-            offset += chunk.byteLength;
-        }
-        return result;
-    },
-    get 'image/png'() { return this['application/octet-stream'] },
-    get 'image/jpeg'() { return this['application/octet-stream'] },
-    get 'image/webp'() { return this['application/octet-stream'] },
-    get 'image/gif'() { return this['application/octet-stream'] }
-};
 
-const decoder = new TextDecoder();
 export function buildEndpoints<T extends EndpointDefinition>(baseUrl: URL, options: Iterable<T>) {
     const result = {} as Record<PropertyKey, BuildEndpoint<T>>;
     for (const option of options) {
@@ -92,7 +74,7 @@ export interface EndpointDefinition<
     readonly route: Route<HttpMethod, Path>;
     readonly query: QueryDefinition<Query>;
     readonly headers: HeadersDefinition<Headers>;
-    readResponse<Content>(statusCode: number, contentType: string | undefined, content: Content, resolve: (contentType: string, content: Content) => Promise<unknown>): Promise<Response>;
+    readResponse(statusCode: number, contentType: string | undefined, content: () => Promise<ArrayBufferView>): Promise<Response>;
     createBody(model: Body): { type: string; content: ArrayBufferView[]; } | undefined;
 }
 

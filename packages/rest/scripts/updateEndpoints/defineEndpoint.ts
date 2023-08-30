@@ -30,7 +30,7 @@ export function* defineEndpoint(
     const responseTypes = Object.entries(operation.responses ?? {})
         .map(x => [x[0], noRef(x[1])] as const)
         .flatMap(([statusPattern, response]) => response.content === undefined
-            ? [{ statusPattern, contentType: undefined as string | undefined, type: undefined as Type | undefined }]
+            ? [{ statusPattern, contentType: '', type: undefined as Type | undefined }]
             : Object.entries(response.content)
                 .map(([contentType, definition]) => ({ statusPattern, contentType, type: types.get(definition.schema ?? {}) })));
     const successTypes = responseTypes.filter(t => t.statusPattern === 'default' || t.statusPattern.startsWith('2'));
@@ -39,6 +39,7 @@ export function* defineEndpoint(
     for (const tag of operation.tags?.map(t => `${t}/`) ?? ['']) {
         const fullName = snakeCaseToCamelCase(`${tag.slice(0, -1)}_${id}`);
         const imports: ImportFromDetails[] = [];
+        const extern: Record<string, Iterable<string>> = {};
 
         yield {
             imports,
@@ -46,8 +47,9 @@ export function* defineEndpoint(
 ${defineRoute(method, pathType, imports, typesUrl, fullName, url, ratelimited, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
 ${defineQuery(queryType, imports, typesUrl, fullName)}
 ${defineHeader(headerType, imports, typesUrl, fullName)}
-${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl)}
-${defineRequest(bodyTypes, imports, helperUrl, typesUrl)}`,
+${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl, extern)}
+${defineRequest(bodyTypes, imports, helperUrl, typesUrl, extern)}
+${() => source([], ...Object.values(extern))}`,
             name: `${tag}${name}.ts`
         };
     }
@@ -55,7 +57,7 @@ ${defineRequest(bodyTypes, imports, helperUrl, typesUrl)}`,
 
 
 
-function defineRequest(bodyTypes: { contentType: string; type: Type | undefined; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL) {
+function defineRequest(bodyTypes: { contentType: string; type: Type | undefined; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL, extern: Record<string, Iterable<string>>) {
     if (bodyTypes.length === 0) {
         return source`export type Body = {};
 export function createBody(_: Body): undefined {
@@ -87,7 +89,6 @@ export function createBody(_: Body): undefined {
         }
     }
 
-    const extern = {} as Record<string, Iterable<string>>;
     const bodyUnion = new UnionType({ types: bodyTypeUnion });
     const parts = [...differentiateBodyTypes(bodyTypes, (type, contentType) => {
         if (isNonObjectType(type))
@@ -100,8 +101,7 @@ export function createBody(_: Body): undefined {
     return source`export type Body = ${bodyUnion.inline('~')};
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     ${parts}
-}
-${source([], ...Object.values(extern))}`;
+}`;
 }
 
 function isNonObjectType(type: Type): boolean {
@@ -115,6 +115,16 @@ function isNonObjectType(type: Type): boolean {
 const declareEncoder = source`declare const TextEncoder: typeof import('node:util').TextEncoder;
 declare type TextEncoder = import('node:util').TextEncoder;
 const encoder = new TextEncoder();
+`;
+const declareDecoder = source`declare const TextDecoder: typeof import('node:util').TextDecoder;
+declare type TextDecoder = import('node:util').TextDecoder;
+const decoder = new TextDecoder();
+const typedArray: new () => Exclude<Extract<Parameters<TextDecoder["decode"]>[0], ArrayBufferView>, DataView> = Object.getPrototypeOf(Uint8Array.prototype).constructor;
+function decode(content: ArrayBufferView) {
+    if (content instanceof typedArray || content instanceof DataView)
+        return decoder.decode(content);
+    return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
+}
 `;
 function defineInlineBody(contentType: string, props: Iterable<{ name: string; optional: boolean; type: Type; }>, extern: Record<string, Iterable<string>>) {
     switch (contentType) {
@@ -274,35 +284,33 @@ return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encod
     }
 }
 
-function defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseType: LiteralType | UnionType, fullName: string, responseTypes: { statusPattern: string; contentType: string | undefined; type: Type | undefined; }[], typesUrl: URL) {
+function defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseType: LiteralType | UnionType, fullName: string, responseTypes: { statusPattern: string; contentType: string; type: Type | undefined; }[], typesUrl: URL, extern: Record<string, Iterable<string>>) {
     imports.push({ file: helperUrl, exported: 'DiscordRestError', isType: false });
     const conditions: Record<string, { precision: number; contentTypes: Record<string, { kind: ResponseKind; type: Type | undefined; }>; }> = {};
     for (const { statusPattern, contentType, type } of responseTypes) {
         if (type?.name !== undefined)
             imports.push({ file: typesUrl, exported: type.name, isType: true });
         const [statusConditionKey, precision] = statusPattern === 'default' ? ['', 0] : statusToCondition(statusPattern, 'statusCode');
-        const contentTypeKey = contentType === undefined ? '' : `contentType === ${JSON.stringify(contentType)}`;
         const { contentTypes } = conditions[statusConditionKey] ??= { precision, contentTypes: {} };
-        if (contentTypes[contentTypeKey] !== undefined)
-            throw new Error(`Duplicate content types for ${statusPattern} ${contentType ?? '*/*'} response handler`);
-        contentTypes[contentTypeKey] = {
+        contentTypes[contentType] = {
             kind: statusConditionKey === '' ? 'default' : statusToResponseKind(statusPattern),
-            type: type
-        };
-    }
-    const { '': { contentTypes: statusElse } = { contentTypes: undefined }, ...statuses } = conditions;
-    return source`export type Response = ${responseType.inline(`${fullName}Response`)};
-export async function readResponse<R>(statusCode: number, contentType: string | undefined, content: R, resolve: (contentType: string, content: R) => Promise<unknown>): Promise<Response> {
-    ${source([], ...(function* () {
-        for (const [condition, { contentTypes }] of Object.entries(statuses).sort((a, b) => a[1].precision - b[1].precision)) {
-            yield source`if (${condition}) {
-    ${generateReadResponseStatusCodeHandler(contentTypes, imports, helperUrl)}
-}
-`
+            type
         }
-    })())}${statusElse !== undefined
-        ? generateReadResponseStatusCodeHandler(statusElse, imports, helperUrl)
-        : ''}throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);
+    }
+    const { '': fallback, ...statuses } = conditions;
+    const sources = Object.entries(statuses)
+        .sort((a, b) => a[1].precision - b[1].precision)
+        .map(([condition, { contentTypes }]) => source`if (${condition}) {
+    ${generateReadResponseStatusCodeHandler(contentTypes, imports, helperUrl, extern)}
+}`);
+    if (fallback !== undefined)
+        sources.push(generateReadResponseStatusCodeHandler(fallback.contentTypes, imports, helperUrl, extern));
+    else
+        sources.push(source`throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`);
+
+    return source`export type Response = ${responseType.inline(`${fullName}Response`)};
+export async function readResponse(statusCode: number, contentType: string | undefined, content: () => Promise<ArrayBufferView>): Promise<Response> {
+    ${source(['', ...new Array(sources.length - 1).fill('\n'), ''], ...sources)}
 }`;
 }
 
@@ -473,43 +481,59 @@ function statusToResponseKind(status: string): ResponseKind {
 }
 
 
-function generateReadResponseContentTypeHandler(type: Type | undefined, kind: ResponseKind, imports: ImportFromDetails[], helperUrl: URL) {
+function generateReadResponseContentTypeHandler(type: Type | undefined, kind: ResponseKind, contentType: string, imports: ImportFromDetails[], helperUrl: URL, extern: Record<string, Iterable<string>>) {
     switch (kind) {
         case 'error':
             return type === undefined
                 ? source`throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`
-                : source`throw new DiscordRestError(await resolve(contentType, content) as ${type.inline('~')});`;
+                : source`throw new DiscordRestError(${readContentType(contentType, extern)} as ${type.inline('~')});`;
         case 'ratelimit':
             if (type === undefined)
                 return source`throw new DiscordRestError(null, \`Unexpected status code \${statusCode} response\`);`;
             imports.push({ file: helperUrl, exported: 'DiscordRateLimitError', isType: false });
-            return source`throw new DiscordRateLimitError(await resolve(contentType, content) as ${type.inline('~')});`
+            return source`throw new DiscordRateLimitError(${readContentType(contentType, extern)} as ${type.inline('~')});`
         case 'data':
             return type === undefined
                 ? source`return undefined;`
-                : source`return await resolve(contentType, content) as ${type.inline('~')};`;
+                : source`return ${readContentType(contentType, extern)} as ${type.inline('~')};`;
         case 'default':
             return type === undefined
                 ? source`return undefined;`
                 : source`if (statusCode >= 200 && statusCode < 300) {
-    return await resolve(contentType, content) as ${type.inline('~')});
+    return ${readContentType(contentType, extern)} as ${type.inline('~')});
 } else {
-    throw new DiscordRestError(await resolve(contentType, content) as ${type.inline('~')});
+    throw new DiscordRestError(${readContentType(contentType, extern)} as ${type.inline('~')});
 }`;
     }
 }
 
-function generateReadResponseStatusCodeHandler(config: Record<string, { kind: ResponseKind; type: Type | undefined; }>, imports: ImportFromDetails[], helperUrl: URL) {
-    const { '': defaultContent, ...contentTypes } = config;
-    return source`${Object.entries(contentTypes).flatMap(([condition, { kind, type }]) => [
-        ...source`if (${condition}) {
-    ${generateReadResponseContentTypeHandler(type, kind, imports, helperUrl)}
+function readContentType(contentType: string, extern: Record<string, Iterable<string>>) {
+    const result = contentTypeReaders[contentType];
+    if (result === undefined)
+        throw new Error('Unsupported content type reader ' + JSON.stringify(contentType));
+    const [source, declare] = result;
+    if (declare !== undefined)
+        extern[declare[0]] = declare[1];
+    return source;
 }
-`
-    ])}${defaultContent !== undefined
-        ? generateReadResponseContentTypeHandler(defaultContent.type, defaultContent.kind, imports, helperUrl)
-        : source`throw new DiscordRestError(null, \`Unexpected content type \${JSON.stringify(contentType)} response with status code \${statusCode}\`);`
-        }`;
+const contentTypeReaders = {
+    'application/json': [source`JSON.parse(decode(await content()))`, ['decoder', declareDecoder]],
+    'image/png': [source`await content()`],
+    'image/jpeg': [source`await content()`],
+    'image/gif': [source`await content()`],
+    'image/webp': [source`await content()`],
+} as Record<string, [Iterable<string>, [string, Iterable<string>]?]>;
+
+function generateReadResponseStatusCodeHandler(config: Record<string, { kind: ResponseKind; type: Type | undefined; }>, imports: ImportFromDetails[], helperUrl: URL, extern: Record<string, Iterable<string>>) {
+    const { '': fallback, ...rest } = config;
+    const conditions = Object.entries(rest).map(([contentType, { kind, type }]) => source`if (contentType === ${JSON.stringify(contentType)}) {
+    ${generateReadResponseContentTypeHandler(type, kind, contentType, imports, helperUrl, extern)}
+}`);
+    if (fallback !== undefined)
+        conditions.push(generateReadResponseContentTypeHandler(fallback.type, fallback.kind, '', imports, helperUrl, extern));
+    else
+        conditions.push(source`throw new DiscordRestError(null, \`Unexpected content type \${JSON.stringify(contentType)} response with status code \${statusCode}\`);`);
+    return source(['', ...new Array(conditions.length - 1).fill('\n'), ''], ...conditions);
 }
 
 function getAllProperties(type: Type): Iterable<{ name: string; optional: boolean; type: Type; }> | null {

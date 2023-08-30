@@ -7124,7 +7124,6 @@ export interface ListGuildAuditLogEntriesRequestPath {
 export interface ListGuildAuditLogEntriesRequestHeaders {
     "x-audit-log-reason"?: string;
 }
-export type GetGuildWidgetPngResponsePNG = File;
 export interface GetGuildWidgetPngRequestQuery {
     style?: (null | WidgetImageStyle);
 }
@@ -7882,11 +7881,11 @@ export type SlashCommandMessageTag = `</${string}:${bigint}>`;
 export type CustomEmojiMessageTag = `<${'a'|''}:${string}:${bigint}>`;
 export type TimestampMessageTag = `<t:${bigint}${''|`:${'t'|'T'|'d'|'D'|'f'|'F'|'R'}`}>`;
 export type MessageTag = UserMessageTag | ChannelMessageTag | RoleMessageTag | SlashCommandMessageTag | CustomEmojiMessageTag | TimestampMessageTag;
+export type Int32 = number;
+export type Base64String = `data:image/${"jpeg"|"png"|"gif"};base64,${string}`;
 export interface File {
     content: ArrayBufferView;
     name?: string;
     contentType?: string;
 }
-export type Int32 = number;
-export type Base64String = `data:image/${"jpeg"|"png"|"gif"};base64,${string}`;
 export type Int64 = number;
