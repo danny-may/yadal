@@ -1,5 +1,5 @@
 import { OperationObject, ParameterObject } from "openapi-typescript";
-import { HttpMethod } from "../../lib/http/index.js";
+import { HttpMethod } from "../../../rest/lib/http/index.js";
 import { wellKnownEncodings } from "./parser/parseStringType.js";
 import { escapeRegex } from "@yadal/core";
 import { noRef, snakeCaseToCamelCase, source, sourceJoin } from "./util/index.js";

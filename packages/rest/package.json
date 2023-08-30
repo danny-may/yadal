@@ -13,14 +13,7 @@
     ".": {
       "import": "./lib/index.js",
       "types": "./lib/index.ts"
-    },
-    "./ref": {
-      "import": "./ref/index.js",
-      "types": "./ref/index.ts"
     }
-  },
-  "scripts": {
-    "update": "node ./scripts/updateEndpoints.js && tsc"
   },
   "repository": {
     "type": "git",
@@ -31,7 +24,7 @@
   },
   "dependencies": {
     "@yadal/core": "workspace:^",
-    "discord-api-types": "^0.37.55"
+    "@yadal/discord-spec": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

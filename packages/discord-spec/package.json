@@ -1,0 +1,38 @@
+{
+    "name": "@yadal/discord-spec",
+    "version": "1.0.0-alpha.5",
+    "description": "Yet another discord api discord spec",
+    "keywords": [
+        "discord"
+    ],
+    "author": "Danny May <dannyjmay97@gmail.com>",
+    "homepage": "https://github.com/danny-may/yadal/tree/main/packages/rest#readme",
+    "license": "GPL-3.0-or-later",
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./lib/index.js",
+            "types": "./lib/index.ts"
+        }
+    },
+    "scripts": {
+        "update": "node ./scripts/updateEndpoints.js && tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/danny-may/yadal.git"
+    },
+    "bugs": {
+        "url": "https://github.com/danny-may/yadal/issues"
+    },
+    "dependencies": {
+        "@yadal/core": "workspace:^"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "devDependencies": {
+        "@apidevtools/json-schema-ref-parser": "^10.1.0",
+        "openapi-typescript": "^6.5.3"
+    }
+}

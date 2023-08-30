@@ -39,11 +39,27 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
 
+  packages/discord-spec:
+    dependencies:
+      '@yadal/core':
+        specifier: workspace:^
+        version: link:../core
+    devDependencies:
+      '@apidevtools/json-schema-ref-parser':
+        specifier: ^10.1.0
+        version: 10.1.0
+      openapi-typescript:
+        specifier: ^6.5.3
+        version: 6.5.3
+
   packages/gateway:
     dependencies:
       '@yadal/core':
         specifier: workspace:^
         version: link:../core
+      '@yadal/discord-spec':
+        specifier: workspace:^
+        version: link:../discord-spec
       discord-api-types:
         specifier: ^0.37.55
         version: 0.37.55
@@ -72,9 +88,9 @@ importers:
       '@yadal/core':
         specifier: workspace:^
         version: link:../core
-      discord-api-types:
-        specifier: ^0.37.55
-        version: 0.37.55
+      '@yadal/discord-spec':
+        specifier: workspace:^
+        version: link:../discord-spec
     devDependencies:
       '@apidevtools/json-schema-ref-parser':
         specifier: ^10.1.0
@@ -88,9 +104,6 @@ importers:
       '@yadal/rest':
         specifier: workspace:^
         version: link:../rest
-      discord-api-types:
-        specifier: ^0.37.55
-        version: 0.37.55
     devDependencies:
       '@types/express':
         specifier: ^4.17.17
