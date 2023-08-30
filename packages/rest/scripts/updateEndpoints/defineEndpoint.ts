@@ -2,14 +2,14 @@ import { OperationObject, ParameterObject } from "openapi-typescript";
 import { HttpMethod } from "../../lib/http/index.js";
 import { wellKnownEncodings } from "./parser/parseStringType.js";
 import { escapeRegex } from "@yadal/core";
-import { noRef, snakeCaseToCamelCase, source } from "./util/index.js";
+import { noRef, snakeCaseToCamelCase, source, sourceJoin } from "./util/index.js";
 import { ImportFromDetails } from "./output.js";
 import { TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, IntersectionType, LiteralType, Type, UnionType } from "./types/index.js";
 
 const emptyObj = new InterfaceType({ properties: [] });
 const empty = new LiteralType({ value: 'undefined' });
-export function* defineEndpoint(
+export function defineEndpoint(
     id: string,
     method: Lowercase<HttpMethod>,
     operation: OperationObject,
@@ -17,8 +17,7 @@ export function* defineEndpoint(
     types: TypeBuilderResult,
     typesUrl: URL,
     helperUrl: URL,
-    schemes: Partial<Record<ParameterObject['in'], symbol>>,
-    ratelimited: boolean
+    schemes: Partial<Record<ParameterObject['in'], symbol>>
 ) {
     const name = snakeCaseToCamelCase(id);
 
@@ -35,24 +34,23 @@ export function* defineEndpoint(
                 .map(([contentType, definition]) => ({ statusPattern, contentType, type: types.get(definition.schema ?? {}) })));
     const successTypes = responseTypes.filter(t => t.statusPattern === 'default' || t.statusPattern.startsWith('2'));
     const responseType = successTypes.length === 0 ? empty : new UnionType({ types: new Set(successTypes.map(t => t.type ?? empty)) });
+    const fullName = snakeCaseToCamelCase(id);
+    const tag = operation.tags?.map(t => `/${t}`)[0] ?? url;
+    const imports: ImportFromDetails[] = [];
+    const extern: Record<string, Iterable<string>> = {};
 
-    for (const tag of operation.tags?.map(t => `${t}/`) ?? ['']) {
-        const fullName = snakeCaseToCamelCase(`${tag.slice(0, -1)}_${id}`);
-        const imports: ImportFromDetails[] = [];
-        const extern: Record<string, Iterable<string>> = {};
-
-        yield {
-            imports,
-            contents: source`export const name = ${JSON.stringify(fullName)};
-${defineRoute(method, pathType, imports, typesUrl, fullName, url, ratelimited, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
+    return {
+        imports,
+        contents: source`export const name = ${JSON.stringify(fullName)};
+${defineRoute(method, pathType, imports, typesUrl, fullName, url, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
+${defineRateLimit(operation)}
 ${defineQuery(queryType, imports, typesUrl, fullName)}
 ${defineHeader(headerType, imports, typesUrl, fullName)}
 ${defineResponse(imports, helperUrl, responseType, fullName, responseTypes, typesUrl, extern)}
 ${defineRequest(bodyTypes, imports, helperUrl, typesUrl, extern)}
 ${() => source([], ...Object.values(extern))}`,
-            name: `${tag}${name}.ts`
-        };
-    }
+        name: `${tag}/${name}.ts`
+    };
 }
 
 
@@ -90,17 +88,17 @@ export function createBody(_: Body): undefined {
     }
 
     const bodyUnion = new UnionType({ types: bodyTypeUnion });
-    const parts = [...differentiateBodyTypes(bodyTypes, (type, contentType) => {
+    const parts = differentiateBodyTypes(bodyTypes, (type, contentType) => {
         if (isNonObjectType(type))
             return defineNestedBody(contentType, 'data', extern);
         const props = getAllProperties(type);
         if (props !== null)
             return defineInlineBody(contentType, props, extern);
         return source`throw new DiscordRestError(null, "Unsupported type")`;
-    })];
+    });
     return source`export type Body = ${bodyUnion.inline('~')};
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
-    ${parts}
+    ${source([], ...parts)}
 }`;
 }
 
@@ -141,17 +139,17 @@ function defineNestedBody(contentType: string, prop: string, extern: Record<stri
     throw new Error(`Unsupported content type ${contentType}`);
 }
 
-function differentiateBodyTypes(bodyTypes: { contentType: string; type: Type | undefined; }[], selector: (type: Type, contentType: string) => Iterable<string>) {
+function* differentiateBodyTypes(bodyTypes: { contentType: string; type: Type | undefined; }[], selector: (type: Type, contentType: string) => Iterable<string>) {
     if (bodyTypes.length === 1) {
         const { type, contentType } = bodyTypes[0]!;
-        return source`${selector(type!, contentType)}\n`;
+        yield source`${selector(type!, contentType)}\n`;
     } else {
         const match = bodyTypes.find(b => b.contentType === 'multipart/form-data')
             ?? bodyTypes.find(b => b.contentType === 'application/json');
         if (match === undefined)
             throw new Error('No supported body type found');
         const { type, contentType } = match;
-        return source`${selector(type!, contentType)}\n`;
+        yield source`${selector(type!, contentType)}\n`;
     }
 }
 
@@ -162,58 +160,61 @@ function defineJsonInlineRequest(props: Iterable<{ name: string, optional: boole
         '}': '}'
     } as Record<string, string>;
     const optional: string[] = [];
-    const required: string[] = [];
+    const chunkInit = [source`jsonEncoded["{"]`];
     for (const prop of props) {
         const name = JSON.stringify(prop.name);
         preEncoded[`${name}:`] = `${name}:`;
         if (prop.optional)
             optional.push(name);
         else
-            required.push(name);
+            chunkInit.push(source`,${chunkInit.length === 1 ? '' : 'jsonEncoded[","],'}
+jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(model[${name}]))`);
+    }
+    const conditional = [];
+    if (optional.length === 0)
+        chunkInit.push(source`,\njsonEncoded["}"]`);
+    else {
+        const conditionallyPushChunk = chunkInit.length === 1
+            ? conditionallyPushChunkWithMaybeComma
+            : conditionallyPushChunkWithComma;
+        for (const name of optional) {
+            conditional.push(conditionallyPushChunk(name))
+        }
+        conditional.push(source`chunks.push(jsonEncoded["}"]);`);
     }
     const jsonEncodedProps = Object.entries(preEncoded)
-        .map(x => `    ${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
+        .map(x => `${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
         .join(',\n')
     extern.encoder = declareEncoder;
-    extern.jsonEncoded = source`const jsonEncoded = {\n${jsonEncodedProps}\n} as const;\n`;
+    extern.jsonEncoded = source`const jsonEncoded = {
+    ${jsonEncodedProps}
+} as const;\n`;
+
     return source`const chunks = [
-    jsonEncoded["{"]${source([], ...(function* () {
-        for (let i = 0; i < required.length; i++)
-            yield source`,${i === 0 ? '' : 'jsonEncoded[","],'}\njsonEncoded[${JSON.stringify(`${required[i]!}:`)}], encoder.encode(JSON.stringify(model[${required[i]!}]))`;
-        yield optional.length === 0
-            ? source`,\njsonEncoded["}"]`
-            : source``;
-    })())}
+    ${sourceJoin(chunkInit, '')}
 ];
-${source([], ...(function* () {
-        if (required.length === 0) {
-            for (const name of optional) {
-                yield source`if (${name} in model) {
+${sourceJoin(conditional, '\n')}
+return { type: \`application/json; charset=\${encoder.encoding}\`, content: chunks };`;
+}
+
+function conditionallyPushChunkWithComma(name: string) {
+    return source`if (${name} in model) {
+    const value = model[${name}];
+    if (value !== undefined) {
+        chunks.push(jsonEncoded[","], jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
+    }
+}`;
+}
+
+function conditionallyPushChunkWithMaybeComma(name: string) {
+    return source`if (${name} in model) {
     const value = model[${name}];
     if (value !== undefined) {
         if (chunks.length > 1)
             chunks.push(jsonEncoded[","]);
         chunks.push(jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
     }
-}
-`
-            }
-        } else {
-            for (const name of optional) {
-                yield source`if (${name} in model) {
-    const value = model[${name}];
-    if (value !== undefined) {
-        chunks.push(jsonEncoded[","], jsonEncoded[${JSON.stringify(`${name}:`)}], encoder.encode(JSON.stringify(value)));
-    }
-}
-`
-            }
-        }
-        if (optional.length > 0) {
-            yield source`chunks.push(jsonEncoded["}"]);`;
-        }
-    })())}
-return { type: \`application/json; charset=\${encoder.encoding}\`, content: chunks };`;
+}`;
 }
 
 function defineJsonNestedRequest(propName: string, extern: Record<string, Iterable<string>>) {
@@ -226,46 +227,41 @@ function defineFormDataRequest(props: Iterable<{ name: string, optional: boolean
         '--': '--',
         'lf': '\n',
     } as Record<string, string>;
-    const optional: Map<string, Iterable<string>> = new Map();
-    const required: Array<Iterable<string>> = [];
+    const chunkInit = [];
+    const conditional = [];
     for (const prop of props) {
         if (prop.optional)
-            optional.set(prop.name, propertyChunks(prop.name, 'value', prop.type, preEncoded));
-        else
-            required.push(propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type, preEncoded))
+            conditional.push(source`if (${JSON.stringify(prop.name)} in ${model}) {
+    const value = ${model}[${JSON.stringify(prop.name)}];
+    if (value !== undefined) {
+        chunks.push(${propertyChunks(prop.name, 'value', prop.type, preEncoded)});
     }
+}`);
+        else if (chunkInit.length === 0)
+            chunkInit.push(propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type, preEncoded));
+        else
+            chunkInit.push(source`,
+${propertyChunks(prop.name, `${model}[${JSON.stringify(prop.name)}]`, prop.type, preEncoded)}`);
+    }
+    if (conditional.length === 0)
+        chunkInit.push(source`formEncoded["--"], boundary, formEncoded["--"]`)
+    else
+        conditional.push(source`chunks.push(formEncoded["--"], boundary, formEncoded["--"]);`);
+
     const formEncodedProps = Object.entries(preEncoded)
-        .map(x => `    ${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
+        .map(x => `${JSON.stringify(x[0])}:encoder.encode(${JSON.stringify(x[1])})`)
         .join(',\n')
     extern.encoder = declareEncoder;
-    extern.formEncoded = [`const formEncoded = {\n${formEncodedProps}\n} as const;`, ''];
+    extern.formEncoded = source`const formEncoded = {
+    ${formEncodedProps}
+} as const;\n`;
+
     return source`const boundaryStr = \`boundary-\${[...new Array(4)].map(() => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).join(\'-\')}\`;
 const boundary = encoder.encode(boundaryStr);
 const chunks = [
-    ${source([], ...(function* () {
-        for (let i = 0; i < required.length; i++) {
-            yield i === 0 ? required[i]! : source`,\n${required[i]!}`;
-        }
-        if (optional.size === 0) {
-            yield source`formEncoded["--"], boundary, formEncoded["--"]`
-        }
-    })())}
+    ${sourceJoin(chunkInit, '')}
 ];
-${source([], ...(function* () {
-        if (optional.size === 0)
-            return;
-
-        for (const [key, chunks] of optional) {
-            yield source`if (${JSON.stringify(key)} in ${model}) {
-    const value = ${model}[${JSON.stringify(key)}];
-    if (value !== undefined) {
-        chunks.push(${chunks});
-    }
-}
-`;
-        }
-        yield source`chunks.push(formEncoded["--"], boundary, formEncoded["--"]);`;
-    })())}
+${sourceJoin(conditional, '\n')}
 return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encoder.encoding}\`, content: chunks };`;
 
     function propertyChunks(key: string, value: string, type: Type, formEncoded: Record<string, string>) {
@@ -275,7 +271,7 @@ return { type: \`multipart/form-data; boundary=\${boundaryStr}; charset=\${encod
             formEncoded[k1] = `\nContent-Disposition: form-data; name=${key}; filename=`;
             formEncoded[k2] = `\nContent-Type: `;
 
-            return source`...(({ name, content, contentType }) => [formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(name ?? ${JSON.stringify(key)})), formEncoded[${JSON.stringify(k2)}], encoder.encode(contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], content, formEncoded["lf"]])(${value})`;
+            return source`formEncoded["--"], boundary, formEncoded[${JSON.stringify(k1)}], encoder.encode(encodeURIComponent(${value}.name ?? ${JSON.stringify(key)})), formEncoded[${JSON.stringify(k2)}], encoder.encode(${value}.contentType ?? "application/octet-stream"), formEncoded["lf"], formEncoded["lf"], ${value}.content, formEncoded["lf"]`;
         } else {
             const k = `${JSON.stringify(key)}.1`;
             formEncoded[k] = `\nContent-Disposition: form-data; name=${key}\nContent-Type: application/json\n\n`;
@@ -310,11 +306,11 @@ function defineResponse(imports: ImportFromDetails[], helperUrl: URL, responseTy
 
     return source`export type Response = ${responseType.inline(`${fullName}Response`)};
 export async function readResponse(statusCode: number, contentType: string | undefined, content: () => Promise<ArrayBufferView>): Promise<Response> {
-    ${source(['', ...new Array(sources.length - 1).fill('\n'), ''], ...sources)}
+    ${sourceJoin(sources, '\n')}
 }`;
 }
 
-function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string, ratelimited: boolean, security: Record<string, string[]>) {
+function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: ImportFromDetails[], typesUrl: URL, fullName: string, url: string, security: Record<string, string[]>) {
     if (pathType.name !== undefined)
         imports.push({ file: typesUrl, exported: pathType.name, isType: true });
     const regexSource = [];
@@ -354,11 +350,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: \`/\${string}\`) {
-        const match = url.match(routeRegex);
-        return match === null
+        const match = url.match(routeRegex)?.groups;
+        return match === undefined
             ? null
             : {
-                ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n')}
+                ${matchKeys.map(k => `[${k}]: decodeURIComponent(match[${k}]!)`).join(',\n')}
             };
     },
     parse(url: \`/\${string}\`) {
@@ -368,53 +364,62 @@ export const route = {
         return result;
     }
 } as const;
-Object.freeze(route);
-${ratelimited ? defineRateLimit(method, url) : ''}`;
+Object.freeze(route);`;
 }
 
-function defineRateLimit(method: Lowercase<HttpMethod>, url: string) {
-    const rateLimitKeys = [] as string[];
-    const ratelimitSource = JSON.stringify(url)
+function defineRateLimit(operation: OperationObject) {
+    const { 'x-discord-ratelimit': template, 'x-discord-ratelimit-global': global } = operation;
+    if (typeof template !== 'string' || typeof global !== 'boolean')
+        return source``;
+
+    const keys: string[] = [];
+    const ratelimitSource = JSON.stringify(template)
         .slice(1, -1)
         .replace(/`/g, '\\`')
-        .replace(/\{(\w+)\}/g, (_, key: string) => getRateLimitTemplateArg(key, url, method, rateLimitKeys));
-    const ratelimitArgName = rateLimitKeys.length === 0 ? '_?' : `model`;
+        .replace(/\{(.*?)\}/g, (_, key: string) => {
+            const [name, source] = computeRateLimit(key)
+            keys.push(`"${name}"`);
+            return [...source].join('\n');
+        });
+    const ratelimitArgName = keys.length === 0 ? '_?' : `model`;
+    if (keys.length === 0)
+        keys.push('never');
     return source`export const rateLimit = {
-    global: ${hasGlobalRateLimit(rateLimitKeys).toString()},
-    bucket(${ratelimitArgName}: { ${rateLimitKeys.map(k => `["${k}"]: RouteModel["${k}"] | string;`).join(' ')} }) {
-        return \`${method} ${ratelimitSource}\` as const;
+    global: ${global},
+    bucket(${ratelimitArgName}: { [P in ${keys.join(' | ')}]: RouteModel[P] | string; }) {
+        return \`${ratelimitSource}\` as const;
     }
 } as const;
 Object.freeze(rateLimit);`
 }
 
-function hasGlobalRateLimit(keys: string[]) {
-    return !keys.includes('interaction_id');
+function computeRateLimit(key: string) {
+    const match = key.match(/^(.*?):(.*?)\((.*?)\)$/);
+    if (match === null) {
+        if (key.includes(':'))
+            throw new Error(`Malformed ratelimit transform ${JSON.stringify(key)}`);
+        return [key, source`\${model.${key}}`] as const;
+    }
+    const [, name, transform, argStr] = match as [string, string, string, string];
+    const t = rateLimitValueTransforms[transform];
+    if (t === undefined)
+        throw new Error(`Unsupported transform ${JSON.stringify(transform)}`);
+    return [name, t(name, argStr)] as const;
 }
 
-function getRateLimitTemplateArg(paramName: string, url: string, method: string, rateLimitKeys: string[]) {
-    if (rateLimitKeyCompatibility[paramName]?.some(k => k === undefined ? rateLimitKeys.length === 0 : rateLimitKeys.includes(k))) {
-        rateLimitKeys.push(paramName);
-        return `\${model.${paramName}}`;
+const rateLimitValueTransforms = {
+    age(name, args) {
+        const bounds = args.split(',').map(v => Number(v.trim())).sort((a, b) => a - b);
+        if (bounds.some(isNaN))
+            throw new Error(`Invalid age transform arguments ${JSON.stringify(args)}`);
+        const conditions = bounds.map((v, i) => source`if (age < ${v}) return "group-${i}";`);
+        return source`\${((id: string) => {
+    const age = Date.now() - Number((BigInt(id) >> 22n) + 1420070400000n /* Discord epoch */);
+    ${sourceJoin(conditions, '\n')}
+    return "group-rest";
+})(model.${name})}`;
     }
-    if (paramName === 'message_id' && url === '/channels/{channel_id}/messages/{message_id}' && method === 'delete') {
-        rateLimitKeys.push(paramName);
-        return `\${${deleteMessageMessageIdFn('model.message_id')}}`;
-    }
-    return `<any>`;
-}
-const rateLimitKeyCompatibility: Record<string, Array<string | undefined>> = {
-    guild_id: [undefined],
-    channel_id: [undefined],
-    webhook_id: [undefined],
-    interaction_id: [undefined],
-    webhook_token: ['webhook_id'],
-    interaction_token: ['interaction_id'],
-}
-const deleteMessageMessageIdFn = (value: string) => `((message_id: string) => {
-    const age = Date.now() - Number((BigInt(message_id) >> 22n) + 1420070400000n /* Discord epoch */);
-    return age < 10000 /* 10 seconds */ ? 'new' : age < 1209600000 /* 2 weeks */ ? 'recent' : 'old';
-})(${value})`;
+} as Record<string, (name: string, args: string) => Iterable<string>>;
 
 function defineHeader(headerType: Type | undefined, imports: ImportFromDetails[], typesUrl: URL, fullName: string) {
     headerType ??= emptyObj;
@@ -533,7 +538,7 @@ function generateReadResponseStatusCodeHandler(config: Record<string, { kind: Re
         conditions.push(generateReadResponseContentTypeHandler(fallback.type, fallback.kind, '', imports, helperUrl, extern));
     else
         conditions.push(source`throw new DiscordRestError(null, \`Unexpected content type \${JSON.stringify(contentType)} response with status code \${statusCode}\`);`);
-    return source(['', ...new Array(conditions.length - 1).fill('\n'), ''], ...conditions);
+    return sourceJoin(conditions, '\n');
 }
 
 function getAllProperties(type: Type): Iterable<{ name: string; optional: boolean; type: Type; }> | null {

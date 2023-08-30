@@ -1,5 +1,5 @@
 import refParser from '@apidevtools/json-schema-ref-parser';
-import { OpenAPI3, OperationObject, ParameterObject, PathItemObject, SchemaObject } from 'openapi-typescript';
+import { HeaderObject, OpenAPI3, OperationObject, ParameterObject, PathItemObject, ResponseObject } from 'openapi-typescript';
 import { TypeBuilder, TypeBuilderResult } from './parser/index.js';
 import { locateComponentSchemas, locateOperations, locateRequests, locateResponses } from './locate.js';
 import { noRef, preventShadowGlobal, snakeCaseToPascalCase } from './util/index.js';
@@ -20,37 +20,21 @@ export async function getRest() {
         query: Symbol('Query')
     }
 
-    const rateLimitError: SchemaObject = {
-        type: 'object',
-        properties: {
-            'code': {
-                type: 'number'
-            },
-            'global': {
-                type: 'boolean'
-            },
-            'message': {
-                type: 'string'
-            },
-            'retry_after': {
-                type: 'number'
-            }
-        },
-        required: ['global', 'message', 'retry_after']
-    }
     schema.components ??= {};
     schema.components.schemas ??= {};
-    schema.components.schemas['RateLimitError'] = rateLimitError;
+    schema.components.schemas['RateLimitError'] = rateLimitError.content['application/json'].schema;
 
-    for (const { operation } of locateOperations(schema)) {
+    for (const { operation, method, url } of locateOperations(schema)) {
+        const rateLimitKeys: string[] = [];
+        operation['x-discord-ratelimit'] = `${method} ${url.replace(/\{(\w+)\}/g, (_, key: string) => getRateLimitTemplateArg(key, url, method, rateLimitKeys))}`;
+        operation['x-discord-ratelimit-global'] = !rateLimitKeys.includes('interaction_id');
+        operation.tags ??= [url];
         operation.responses ??= {};
-        operation.responses[429] ??= {
-            description: 'Rate limit error',
-            content: {
-                'application/json': {
-                    schema: rateLimitError
-                }
-            }
+        operation.responses[429] ??= rateLimitError;
+        for (const response of Object.values(operation.responses ?? {}).map(noRef)) {
+            response.headers ??= {};
+            for (const [key, value] of Object.entries(rateLimitHeaders))
+                response.headers[key] ??= value;
         }
     }
 
@@ -62,11 +46,10 @@ export async function getRest() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const { id, method, operation, url } of locateOperations(schema)) {
-                for (const { imports, contents, name } of defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes, true)) {
-                    const endpointFile = new URL(`./${name}`, outDir);
-                    files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
-                    await writeFile({ imports, contents }, endpointFile);
-                }
+                const { imports, contents, name } = defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes)
+                const endpointFile = new URL(`./${name}`, outDir);
+                files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
+                await writeFile({ imports, contents }, endpointFile);
             }
 
             const index = new URL('./index.ts', outDir)
@@ -76,6 +59,25 @@ export async function getRest() {
     }
 }
 
+function getRateLimitTemplateArg(paramName: string, url: string, method: string, rateLimitKeys: string[]) {
+    if (rateLimitKeyCompatibility[paramName]?.some(k => k === undefined ? rateLimitKeys.length === 0 : rateLimitKeys.includes(k))) {
+        rateLimitKeys.push(paramName);
+        return `{${paramName}}`;
+    }
+    if (paramName === 'message_id' && url === '/channels/{channel_id}/messages/{message_id}' && method === 'delete') {
+        rateLimitKeys.push(paramName);
+        return `{${paramName}:age(10000,1209600000)}`;
+    }
+    return `<any>`;
+}
+const rateLimitKeyCompatibility: Record<string, Array<string | undefined>> = {
+    guild_id: [undefined],
+    channel_id: [undefined],
+    webhook_id: [undefined],
+    interaction_id: [undefined],
+    webhook_token: ['webhook_id'],
+    interaction_token: ['interaction_id'],
+}
 function loadComponentTypes(types: TypeBuilder, schema: OpenAPI3) {
     for (const { name, definition } of locateComponentSchemas(schema))
         types.parse(definition, preventShadowGlobal(name, 'Discord'));
@@ -167,3 +169,87 @@ function loadOperationParameters(types: TypeBuilder, schemes: SchemeSymbols, id:
         }, scheme)
     }
 }
+
+const rateLimitError = {
+    description: 'Rate limit error response',
+    content: {
+        'application/json': {
+            schema: {
+                type: 'object',
+                properties: {
+                    'code': {
+                        type: 'number'
+                    },
+                    'global': {
+                        type: 'boolean'
+                    },
+                    'message': {
+                        type: 'string'
+                    },
+                    'retry_after': {
+                        type: 'number'
+                    }
+                },
+                required: ['global', 'message', 'retry_after']
+            }
+        }
+    },
+    headers: {
+        'x-ratelimit-global': {
+            description: 'Indicates if the rate limit encountered is the global rate limit (not per-route)',
+            schema: {
+                type: 'boolean'
+            },
+            required: true,
+        },
+        'x-ratelimit-scope': {
+            description: 'Value can be user (per bot or user limit), global (per bot or user global limit), or shared (per resource limit)',
+            schema: {
+                type: 'string',
+                oneOf: [
+                    { const: 'user' },
+                    { const: 'global' },
+                    { const: 'shared' }
+                ]
+            },
+            required: true,
+        }
+    }
+} satisfies ResponseObject;
+const rateLimitHeaders = {
+    'x-ratelimit-limit': {
+        description: 'The number of requests that can be made',
+        schema: {
+            type: 'integer'
+        },
+        required: false,
+    },
+    'x-ratelimit-remaining': {
+        description: 'The number of remaining requests that can be made',
+        schema: {
+            type: 'integer'
+        },
+        required: false,
+    },
+    'x-ratelimit-reset': {
+        description: 'Epoch time (seconds since 00:00:00 UTC on January 1, 1970) at which the rate limit resets',
+        schema: {
+            type: 'integer'
+        },
+        required: false,
+    },
+    'x-ratelimit-reset-after': {
+        description: 'Total time (in seconds) of when the current rate limit bucket will reset. Can have decimals to match previous millisecond ratelimit precision',
+        schema: {
+            type: 'number'
+        },
+        required: false,
+    },
+    'x-ratelimit-bucket': {
+        description: 'A unique string denoting the rate limit being encountered (non-inclusive of top-level resources in the path)',
+        schema: {
+            type: 'string'
+        },
+        required: false,
+    }
+} satisfies Record<string, HeaderObject>;

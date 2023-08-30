@@ -3,6 +3,13 @@ export function source(template: readonly string[], ...args: ReadonlyArray<Sourc
     return new SourceIterable(template, args);
 }
 
+export function sourceJoin(values: Iterable<SourceArg | (() => SourceArg)>, separator: string) {
+    const v = [...values];
+    if (v.length === 0)
+        return source``;
+    return new SourceIterable(['', ...new Array(v.length - 1).fill(separator), ''], v);
+}
+
 class SourceIterable implements Iterable<string> {
     readonly #template: readonly string[];
     readonly #args: ReadonlyArray<SourceArg | (() => SourceArg)>;

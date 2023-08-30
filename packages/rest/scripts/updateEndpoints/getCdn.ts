@@ -78,11 +78,10 @@ export async function getCdn() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const endpoint of endpoints) {
-                for (const { imports, contents, name } of defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path}.{format}`, types, typesFile, helperFile, schemes, false)) {
-                    const endpointFile = new URL(`./${name}`, outDir);
-                    files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
-                    await writeFile({ imports, contents }, endpointFile);
-                }
+                const { imports, contents, name } = defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path}.{format}`, types, typesFile, helperFile, schemes)
+                const endpointFile = new URL(`./${name}`, outDir);
+                files.push({ file: endpointFile, name: path.basename(fileURLToPath(endpointFile)).slice(0, -3), isType: false });
+                await writeFile({ imports, contents }, endpointFile);
             }
             const index = new URL('./index.ts', outDir)
             await writeFile({ exports: files }, index);
