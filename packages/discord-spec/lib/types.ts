@@ -5915,7 +5915,7 @@ export type ListMyConnectionsResponseJSON = Array<ConnectedAccountResponse> | nu
 export interface ListMyConnectionsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
-export type CreateDmResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export type CreateDmResponseJSON = PrivateChannelResponse | PrivateGroupChannelResponse;
 export interface CreateDmRequestHeaders {
     "x-audit-log-reason"?: string;
 }

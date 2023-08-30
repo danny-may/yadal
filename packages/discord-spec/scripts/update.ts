@@ -1,4 +1,4 @@
-import { parser, TypeBuilder, augmentations, typesToSource, writeFile, exposeViaExport, deleteFsItem, defineHelpers, getRest, getCdn } from './updateEndpoints/index.js';
+import { parser, TypeBuilder, augmentations, typesToSource, writeFile, exposeViaExport, deleteFsItem, defineHelpers, getRest, getCdn } from './update/index.js';
 
 const [rest, cdn] = await Promise.all([
     getRest(),
@@ -10,15 +10,15 @@ rest.loadTypes(builder);
 cdn.loadTypes(builder);
 
 const types = builder.build();
-const typesFile = new URL('../ref/types.ts', import.meta.url);
-const helperFile = new URL('../ref/helpers.ts', import.meta.url);
+const lib = new URL('../lib/', import.meta.url);
+const typesFile = new URL('./types.ts', lib);
+const helperFile = new URL('./helpers.ts', lib);
 
-await deleteFsItem(new URL('../ref', import.meta.url));
-
+await deleteFsItem(lib);
 await writeFile({ contents: typesToSource(types.values(), exposeViaExport) }, typesFile);
 await writeFile(defineHelpers(typesFile), helperFile);
-const restIndex = await rest.writeFiles(new URL('../ref/rest/', import.meta.url), types, typesFile, helperFile);
-const cdnIndex = await cdn.writeFiles(new URL('../ref/cdn/', import.meta.url), types, typesFile, helperFile);
+const restIndex = await rest.writeFiles(new URL('./rest/', lib), types, typesFile, helperFile);
+const cdnIndex = await cdn.writeFiles(new URL('./cdn/', lib), types, typesFile, helperFile);
 
 await writeFile({
     exports: [
@@ -27,7 +27,7 @@ await writeFile({
         { file: restIndex, isType: false, name: 'rest' },
         { file: cdnIndex, isType: false, name: 'cdn' }
     ]
-}, new URL('../ref/index.ts', import.meta.url));
+}, new URL('./index.ts', lib));
 
 function loadAugmentations(types: TypeBuilder) {
     for (const type of augmentations)

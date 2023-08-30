@@ -16,7 +16,7 @@
         }
     },
     "scripts": {
-        "update": "node ./scripts/updateEndpoints.js && tsc"
+        "build": "node ./scripts/update.js"
     },
     "repository": {
         "type": "git",
