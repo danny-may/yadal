@@ -1,6 +1,6 @@
 {
   "name": "@yadal/cdn",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "Yet another discord cdn client",
   "keywords": [
     "discord"
@@ -23,8 +23,8 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "dependencies": {
-    "@yadal/rest": "workspace:^",
-    "@yadal/discord-spec": "workspace:^"
+    "@yadal/discord-spec": "workspace:^",
+    "@yadal/rest": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

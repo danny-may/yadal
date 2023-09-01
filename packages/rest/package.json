@@ -1,6 +1,6 @@
 {
   "name": "@yadal/rest",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "Yet another discord api rest client",
   "keywords": [
     "discord"

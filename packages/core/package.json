@@ -1,6 +1,6 @@
 {
   "name": "@yadal/core",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.6",
   "description": "Dependency injection for yadal",
   "author": "Danny May <dannyjmay97@gmail.com>",
   "homepage": "https://github.com/danny-may/yadal/tree/main/packages/core#readme",
