@@ -1,6 +1,6 @@
 import { snakeCaseToPascalCase } from "@yadal/core";
 import { snowflake } from "./augmentations/index.js";
-import { defineEndpoint } from "./defineEndpoint.js";
+import { defineOperation } from "./defineOperation.js";
 import { ExportFromDetails, writeFile } from "./output.js";
 import { TypeBuilder, TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, LiteralType, UnionType } from "./types/index.js";
@@ -19,12 +19,12 @@ export async function getCdn() {
         throw new Error('Cannot find the CDN table definition');
 
 
-    const endpoints: Array<{ name: string, path: string, formats: string[], schemas: Record<string, SchemaObject>, operation: OperationObject }> = [];
+    const operations: Array<{ name: string, path: string, formats: string[], schemas: Record<string, SchemaObject>, operation: OperationObject }> = [];
     for (const match of markdown.slice(tableStart + 1, tableEnd).matchAll(/\| ([\w ]+?) +\| ([^ .]+)(?:\.png)?[ *\\]+\| ([\w, ]+?) \|(?:\n|$)/g)) {
         const [, name, path, formatStr] = match;
         const formats = formatStr!.toLowerCase().split(',').map(f => f.trim());
         const schemas = formats.reduce((p, c) => Object.assign(p, { [c]: {} }), {}) as Record<string, {}>;
-        endpoints.push({
+        operations.push({
             name: 'get_' + name!.trim().replace(/ /g, '_').toLowerCase(),
             path: path!.replace(/\[(.*?)\]\(.*?\)/g, '{$1}').trim().replace(/[ \\*]*$/g, ''),
             formats,
@@ -40,7 +40,7 @@ export async function getCdn() {
             } as OperationObject
         })
     }
-    if (endpoints.length !== markdown.slice(tableStart + 1, tableEnd).split('\n').length - 2)
+    if (operations.length !== markdown.slice(tableStart + 1, tableEnd).split('\n').length - 2)
         throw new Error('Reading table data failed');
 
     const schemes = {
@@ -49,9 +49,9 @@ export async function getCdn() {
 
     return {
         loadTypes(builder: TypeBuilder) {
-            for (const endpoint of endpoints) {
+            for (const operation of operations) {
                 const properties: InterfaceProperty[] = [];
-                for (const match of endpoint.path.matchAll(/\{.*?\}/g)) {
+                for (const match of operation.path.matchAll(/\{.*?\}/g)) {
                     const name = match[0].slice(1, -1);
                     const type = name.endsWith('_id') ? snowflake : new LiteralType({ value: 'string' });
                     properties.push(new InterfaceProperty({ name, type }));
@@ -59,27 +59,27 @@ export async function getCdn() {
                 properties.push(new InterfaceProperty({
                     name: 'format',
                     type: new UnionType({
-                        types: endpoint.formats.flatMap(formatToExt).map(f => new LiteralType({
+                        types: operation.formats.flatMap(formatToExt).map(f => new LiteralType({
                             value: JSON.stringify(f)
                         }))
                     })
                 }));
-                for (const [format, schema] of Object.entries(endpoint.schemas)) {
+                for (const [format, schema] of Object.entries(operation.schemas)) {
                     builder.define(schema, () => formatToSchema(format));
                 }
-                builder.define(endpoint.operation, () => new InterfaceType({
-                    name: `${snakeCaseToPascalCase(endpoint.name)}RequestPath`,
+                builder.define(operation.operation, () => new InterfaceType({
+                    name: `${snakeCaseToPascalCase(operation.name)}RequestPath`,
                     properties
                 }), schemes.path)
             }
         },
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
-            for (const endpoint of endpoints) {
-                const { imports, contents, name, file } = defineEndpoint(endpoint.name, 'get', endpoint.operation, `/${endpoint.path}.{format}`, types, typesFile, helperFile, schemes)
-                const endpointFile = new URL(`./${file}`, outDir);
-                files.push({ file: endpointFile, name, isType: false });
-                await writeFile({ imports, contents }, endpointFile);
+            for (const operation of operations) {
+                const { imports, contents, name, file } = defineOperation(operation.name, 'get', operation.operation, `/${operation.path}.{format}`, types, typesFile, helperFile, schemes)
+                const fileUrl = new URL(`./${file}`, outDir);
+                files.push({ file: fileUrl, name, isType: false });
+                await writeFile({ imports, contents }, fileUrl);
             }
             const index = new URL('./index.ts', outDir)
             await writeFile({ exports: files }, index);

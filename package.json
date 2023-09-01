@@ -45,7 +45,8 @@
   "dependencies": {
     "@yadal/core": "workspace:^",
     "@yadal/gateway": "workspace:^",
-    "@yadal/rest": "workspace:^"
+    "@yadal/api": "workspace:^",
+    "@yadal/cdn": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

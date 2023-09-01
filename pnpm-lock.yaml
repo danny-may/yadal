@@ -4,15 +4,18 @@ importers:
 
   .:
     dependencies:
+      '@yadal/api':
+        specifier: workspace:^
+        version: link:packages/api
+      '@yadal/cdn':
+        specifier: workspace:^
+        version: link:packages/cdn
       '@yadal/core':
         specifier: workspace:^
         version: link:packages/core
       '@yadal/gateway':
         specifier: workspace:^
         version: link:packages/gateway
-      '@yadal/rest':
-        specifier: workspace:^
-        version: link:packages/rest
     devDependencies:
       '@types/node':
         specifier: ^20.5.7
@@ -35,6 +38,37 @@ importers:
       ws:
         specifier: ^8.13.0
         version: 8.13.0
+
+  packages/api:
+    dependencies:
+      '@yadal/discord-spec':
+        specifier: workspace:^
+        version: link:../discord-spec
+      '@yadal/rest':
+        specifier: workspace:^
+        version: link:../rest
+
+  packages/api-proxy:
+    dependencies:
+      '@yadal/rest':
+        specifier: workspace:^
+        version: link:../rest
+    devDependencies:
+      '@types/express':
+        specifier: ^4.17.17
+        version: 4.17.17
+      fastify:
+        specifier: ^4.22.0
+        version: 4.22.0
+
+  packages/cdn:
+    dependencies:
+      '@yadal/discord-spec':
+        specifier: workspace:^
+        version: link:../discord-spec
+      '@yadal/rest':
+        specifier: workspace:^
+        version: link:../rest
 
   packages/core:
     dependencies:
@@ -60,9 +94,6 @@ importers:
       '@yadal/core':
         specifier: workspace:^
         version: link:../core
-      '@yadal/discord-spec':
-        specifier: workspace:^
-        version: link:../discord-spec
       discord-api-types:
         specifier: ^0.37.55
         version: 0.37.55
@@ -91,29 +122,6 @@ importers:
       '@yadal/core':
         specifier: workspace:^
         version: link:../core
-      '@yadal/discord-spec':
-        specifier: workspace:^
-        version: link:../discord-spec
-    devDependencies:
-      '@apidevtools/json-schema-ref-parser':
-        specifier: ^10.1.0
-        version: 10.1.0
-      openapi-typescript:
-        specifier: ^6.5.3
-        version: 6.5.3
-
-  packages/rest-proxy:
-    dependencies:
-      '@yadal/rest':
-        specifier: workspace:^
-        version: link:../rest
-    devDependencies:
-      '@types/express':
-        specifier: ^4.17.17
-        version: 4.17.17
-      fastify:
-        specifier: ^4.22.0
-        version: 4.22.0
 
 packages:
 

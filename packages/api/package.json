@@ -1,12 +1,12 @@
 {
-  "name": "@yadal/rest",
+  "name": "@yadal/api",
   "version": "1.0.0-alpha.5",
-  "description": "Yet another discord api rest client",
+  "description": "Yet another discord api client",
   "keywords": [
     "discord"
   ],
   "author": "Danny May <dannyjmay97@gmail.com>",
-  "homepage": "https://github.com/danny-may/yadal/tree/main/packages/rest#readme",
+  "homepage": "https://github.com/danny-may/yadal/tree/main/packages/api#readme",
   "license": "GPL-3.0-or-later",
   "type": "module",
   "exports": {
@@ -23,7 +23,8 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "dependencies": {
-    "@yadal/core": "workspace:^"
+    "@yadal/rest": "workspace:^",
+    "@yadal/discord-spec": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

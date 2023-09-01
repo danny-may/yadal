@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@yadal/core": "workspace:^",
-    "@yadal/discord-spec": "workspace:^",
     "discord-api-types": "^0.37.55"
   },
   "devDependencies": {

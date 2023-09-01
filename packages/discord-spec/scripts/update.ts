@@ -17,14 +17,14 @@ const helperFile = new URL('./helpers.ts', lib);
 await deleteFsItem(lib);
 await writeFile({ contents: typesToSource(types.values(), exposeViaExport) }, typesFile);
 await writeFile(defineHelpers(typesFile), helperFile);
-const restIndex = await rest.writeFiles(new URL('./rest/', lib), types, typesFile, helperFile);
+const restIndex = await rest.writeFiles(new URL('./api/', lib), types, typesFile, helperFile);
 const cdnIndex = await cdn.writeFiles(new URL('./cdn/', lib), types, typesFile, helperFile);
 
 await writeFile({
     exports: [
         { file: typesFile, isType: false },
         { file: helperFile, isType: false },
-        { file: restIndex, isType: false, name: 'rest' },
+        { file: restIndex, isType: false, name: 'api' },
         { file: cdnIndex, isType: false, name: 'cdn' }
     ]
 }, new URL('./index.ts', lib));

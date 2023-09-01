@@ -1,0 +1,1 @@
+# `@yadal/discord-spec`

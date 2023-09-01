@@ -6,5 +6,5 @@ export * from './types/index.js';
 export * from './locate.js';
 export * from './util/index.js';
 export * from './augmentations/index.js';
-export * from './defineEndpoint.js';
+export * from './defineOperation.js';
 export * from './defineHelpers.js';

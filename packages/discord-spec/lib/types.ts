@@ -6297,10 +6297,11 @@ export interface LeaveThreadRequestHeaders {
 }
 export interface BulkDeleteMessagesRequestJSON {
     /**
-     * @maxItems 1521
+     * @maxItems 100
+     * @minItems 2
      * @distinct 
      */
-    messages?: (Array<Snowflake> | null);
+    messages: Array<Snowflake>;
 }
 export interface BulkDeleteMessagesRequestPath {
     channel_id: Snowflake;

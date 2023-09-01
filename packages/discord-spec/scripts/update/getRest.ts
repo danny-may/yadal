@@ -5,7 +5,7 @@ import { locateComponentSchemas, locateOperations, locateRequests, locateRespons
 import { noRef, preventShadowGlobal } from './util/index.js';
 import { InterfaceProperty, InterfaceType, LiteralType } from './types/index.js';
 import { ExportFromDetails, writeFile } from './output.js';
-import { defineEndpoint } from './defineEndpoint.js';
+import { defineOperation } from './defineOperation.js';
 import { snakeCaseToPascalCase } from '@yadal/core';
 
 export async function getRest() {
@@ -45,10 +45,10 @@ export async function getRest() {
         async writeFiles(outDir: URL, types: TypeBuilderResult, typesFile: URL, helperFile: URL) {
             const files: Array<ExportFromDetails> = [];
             for (const { id, method, operation, url } of locateOperations(schema)) {
-                const { imports, contents, name, file } = defineEndpoint(id, method, operation, url, types, typesFile, helperFile, schemes)
-                const endpointFile = new URL(`./${file}`, outDir);
-                files.push({ file: endpointFile, name, isType: false });
-                await writeFile({ imports, contents }, endpointFile);
+                const { imports, contents, name, file } = defineOperation(id, method, operation, url, types, typesFile, helperFile, schemes)
+                const fileUrl = new URL(`./${file}`, outDir);
+                files.push({ file: fileUrl, name, isType: false });
+                await writeFile({ imports, contents }, fileUrl);
             }
 
             const index = new URL('./index.ts', outDir)

@@ -6,7 +6,7 @@
         "discord"
     ],
     "author": "Danny May <dannyjmay97@gmail.com>",
-    "homepage": "https://github.com/danny-may/yadal/tree/main/packages/rest#readme",
+    "homepage": "https://github.com/danny-may/yadal/tree/main/packages/discord-spec#readme",
     "license": "GPL-3.0-or-later",
     "type": "module",
     "exports": {
