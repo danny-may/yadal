@@ -16,5 +16,5 @@ export interface WebSocket {
     once(event: 'close', handler: (code?: number, reason?: string) => void): void;
     off(event: 'close', handler: (code?: number, reason?: string) => void): void;
     close(code?: number, reason?: string): void;
-    send(data: ArrayBufferView): Promise<void>;
+    send(data: ArrayBufferView, signal?: AbortSignal): Promise<void>;
 }

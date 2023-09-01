@@ -9,7 +9,7 @@ export class NoOpCompressorFactory implements IMessageCompressorFactory {
 export class NoOpCompressor implements IMessageCompressor {
     readonly type = 'none';
 
-    *decompress(data: ArrayBufferView): Iterable<ArrayBufferView> {
-        yield data;
+    decompress(data: ArrayBufferView): ArrayBufferView {
+        return data;
     }
 }

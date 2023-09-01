@@ -1,34 +1,40 @@
-import * as Discord from "discord-api-types/v10";
+import * as Discord from 'discord-api-types/v10';
 import { Deferred, scopedTimeout } from "@yadal/core";
-import { IDiscordGatewayConnection } from "./DiscordGatewayConnection.js";
+import { IGatewayConnection } from "./GatewayConnection.js";
 
 export class Heartbeat {
     #ack: boolean;
-    readonly #connection: IDiscordGatewayConnection;
+    #seq: null | number;
+    readonly #connection: IGatewayConnection;
     readonly #stopped: Deferred<void>;
     readonly #stack: DisposableStack;
 
-    readonly startTime: Date;
+    readonly startTime: number;
     readonly interval: number;
 
-    get nextBeat() {
+    get #nextBeat() {
         const now = Date.now();
-        const sinceStart = now - this.startTime.valueOf();
+        const sinceStart = now - this.startTime;
         if (sinceStart < 0)
             return this.startTime;
-        return new Date(now + this.interval - sinceStart % this.interval);
+        return now + this.interval - sinceStart % this.interval;
     }
 
-    constructor(startTime: Date, interval: number, connection: IDiscordGatewayConnection) {
+    constructor(startTime: number, interval: number, connection: IGatewayConnection) {
         this.startTime = startTime;
         this.interval = interval;
         this.#connection = connection;
         this.#ack = false;
+        this.#seq = null;
         this.#stopped = new Deferred<void>();
         this.#stack = new DisposableStack();
-        this.#stack.use(scopedTimeout(this.#start.bind(this), this.nextBeat.valueOf() - Date.now()));
-        this.#stack.use(this.#connection.handle(Discord.GatewayOpcodes.HeartbeatAck, () => void (this.#ack = true)));
-        this.#stack.use(this.#connection.handle(Discord.GatewayOpcodes.Heartbeat, () => this.#beat(true)));
+        this.#stack.use(scopedTimeout(this.#start.bind(this), this.#nextBeat - Date.now()));
+        this.#stack.use(this.#connection.handle({
+            [Discord.GatewayOpcodes.Dispatch]: p => this.#seq = p.s,
+            [Discord.GatewayOpcodes.HeartbeatAck]: () => this.#ack = true,
+            [Discord.GatewayOpcodes.Heartbeat]: () => void this.#beat(true),
+            'close': () => this.stop()
+        }))
     }
 
     stop() {
@@ -36,8 +42,8 @@ export class Heartbeat {
         this.#stack[Symbol.dispose]();
     }
 
-    async throwIfErrored() {
-        await this.#stopped.promise;
+    get stopped() {
+        return this.#stopped.promise;
     }
 
     async #start() {
@@ -50,7 +56,7 @@ export class Heartbeat {
         try {
             if (checkAck && !this.#ack)
                 throw new Error('Previous heartbeat wasnt acknowledged');
-            await this.#connection.send({ op: Discord.GatewayOpcodes.Heartbeat, d: this.#connection.sequenceId });
+            await this.#connection.send({ op: Discord.GatewayOpcodes.Heartbeat, d: this.#seq });
             this.#ack = false;
         } catch (err) {
             this.#stopped.reject(err);

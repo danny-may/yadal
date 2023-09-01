@@ -22,10 +22,12 @@ export class ZLibStreamTransportCompressor implements IMessageCompressor {
         this.#inflator = inflator;
     }
 
-    * decompress(value: ArrayBufferView) {
+    decompress(value: ArrayBufferView) {
         this.#inflator.push(value)
         if (lastInt32(value) === 0x0000FFFF)
-            yield this.#inflator.flush();
+            return this.#inflator.flush();
+        else
+            return null;
     }
 }
 

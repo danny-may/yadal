@@ -1,8 +1,8 @@
 import { OperationObject, ParameterObject } from "openapi-typescript";
 import { HttpMethod } from "../../../rest/lib/http/index.js";
 import { wellKnownEncodings } from "./parser/parseStringType.js";
-import { escapeRegex } from "@yadal/core";
-import { noRef, snakeCaseToCamelCase, source, sourceJoin } from "./util/index.js";
+import { escapeRegex, snakeCaseToCamelCase } from "@yadal/core";
+import { noRef, source, sourceJoin } from "./util/index.js";
 import { ImportFromDetails } from "./output.js";
 import { TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, IntersectionType, LiteralType, Type, UnionType } from "./types/index.js";

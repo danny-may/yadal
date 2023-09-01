@@ -17,6 +17,9 @@ importers:
       '@types/node':
         specifier: ^20.5.7
         version: 20.5.7
+      '@types/ws':
+        specifier: ^8.5.5
+        version: 8.5.5
       c8:
         specifier: ^8.0.1
         version: 8.0.1

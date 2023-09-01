@@ -1,9 +1,9 @@
+import { snakeCaseToPascalCase } from "@yadal/core";
 import { snowflake } from "./augmentations/index.js";
 import { defineEndpoint } from "./defineEndpoint.js";
 import { ExportFromDetails, writeFile } from "./output.js";
 import { TypeBuilder, TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, LiteralType, UnionType } from "./types/index.js";
-import { snakeCaseToPascalCase } from "./util/index.js";
 import { OperationObject, SchemaObject } from "openapi-typescript";
 
 declare function fetch(url: string): Promise<{ text(): Promise<string>; }>;

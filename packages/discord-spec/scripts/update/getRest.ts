@@ -2,10 +2,11 @@ import refParser from '@apidevtools/json-schema-ref-parser';
 import { HeaderObject, OpenAPI3, OperationObject, ParameterObject, PathItemObject, ResponseObject } from 'openapi-typescript';
 import { TypeBuilder, TypeBuilderResult } from './parser/index.js';
 import { locateComponentSchemas, locateOperations, locateRequests, locateResponses } from './locate.js';
-import { noRef, preventShadowGlobal, snakeCaseToPascalCase } from './util/index.js';
+import { noRef, preventShadowGlobal } from './util/index.js';
 import { InterfaceProperty, InterfaceType, LiteralType } from './types/index.js';
 import { ExportFromDetails, writeFile } from './output.js';
 import { defineEndpoint } from './defineEndpoint.js';
+import { snakeCaseToPascalCase } from '@yadal/core';
 
 export async function getRest() {
     const schema = await refParser.dereference({

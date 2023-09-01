@@ -28,8 +28,7 @@ describeFile(() => {
                 const actual = [];
 
                 // act
-                for (const item of sut.decompress(input))
-                    actual.push(item);
+                actual.push(sut.decompress(input));
 
 
                 // assert

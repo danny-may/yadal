@@ -4108,7 +4108,7 @@ export interface MessageEditRequestPartial {
 export interface MessageEmbedAuthorResponse {
     name: string;
     url?: (string | null);
-    icon_url?: (URIString | null);
+    icon_url?: (string | null);
     proxy_icon_url?: (URIString | null);
 }
 export interface MessageEmbedFieldResponse {
@@ -4118,11 +4118,11 @@ export interface MessageEmbedFieldResponse {
 }
 export interface MessageEmbedFooterResponse {
     text: string;
-    icon_url?: (URIString | null);
+    icon_url?: (string | null);
     proxy_icon_url?: (URIString | null);
 }
 export interface MessageEmbedImageResponse {
-    url?: (URIString | null);
+    url?: (string | null);
     proxy_url?: (URIString | null);
     /**
      * @maximum 2147483647
@@ -4159,7 +4159,7 @@ export interface MessageEmbedResponse {
     footer?: (null | MessageEmbedFooterResponse);
 }
 export interface MessageEmbedVideoResponse {
-    url?: (URIString | null);
+    url?: (string | null);
     proxy_url?: (URIString | null);
     /**
      * @maximum 2147483647

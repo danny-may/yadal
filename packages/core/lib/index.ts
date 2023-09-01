@@ -13,4 +13,6 @@ export * from './escapeRegex.js';
 export * from './distinct.js';
 export * from './stringSort.js';
 export * from './Sorter.js';
+export * from './stringCase.js';
+export * from './waitAll.js';
 export * as snowflake from './snowflake.js';

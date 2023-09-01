@@ -59,6 +59,6 @@ export class WsWebSocketAdapter implements WebSocket {
     }
 
     send(data: ArrayBufferView): Promise<void> {
-        return new Promise((res, rej) => this.#socket.send(data, err => err === undefined ? res() : rej(err)));
+        return new Promise((res, rej) => this.#socket.send(data, err => (err ?? null) === null ? res() : rej(err)));
     }
 }

@@ -22,7 +22,7 @@ export class ZLibPayloadCompressor implements IMessageCompressor {
         this.#inflator = inflator;
     }
 
-    * decompress(value: ArrayBufferView) {
-        yield this.#inflator.inflate(value);
+    decompress(value: ArrayBufferView) {
+        return this.#inflator.inflate(value);
     }
 }
