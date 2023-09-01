@@ -1,1 +1,1 @@
-# `@yadal/rest`
+# `@yadal/api-proxy`
