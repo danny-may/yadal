@@ -1,6 +1,6 @@
 {
   "name": "@yadal/gateway",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.9",
   "description": "Yet another discord api gateway library",
   "keywords": [
     "discord"
