@@ -23,7 +23,9 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "dependencies": {
-    "@yadal/rest": "workspace:^"
+    "@yadal/core": "workspace:^",
+    "@yadal/rest": "workspace:^",
+    "@yadal/api": "workspace:^"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",

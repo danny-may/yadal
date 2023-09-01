@@ -1,20 +1,7 @@
 {
-  "name": "yadal",
-  "version": "1.0.0-alpha.5",
-  "description": "Yet another discord api library",
-  "main": "dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/danny-may/yadal.git"
-  },
-  "keywords": [
-    "discord"
-  ],
-  "author": "danny-may",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/danny-may/yadal/issues"
-  },
+  "name": "yadal-dev",
+  "version": "0",
+  "private": true,
   "scripts": {
     "build:all": "lerna run build",
     "watch": "tsc -w",
@@ -22,13 +9,6 @@
     "test": "lerna run build && c8 node --test"
   },
   "type": "module",
-  "exports": {
-    ".": {
-      "import": "./lib/index.js",
-      "types": "./lib/index.ts"
-    }
-  },
-  "homepage": "https://github.com/danny-may/yadal#readme",
   "workspaces": [
     "packages/*",
     "."
@@ -43,10 +23,7 @@
     "ws": "^8.13.0"
   },
   "dependencies": {
-    "@yadal/core": "workspace:^",
-    "@yadal/gateway": "workspace:^",
-    "@yadal/api": "workspace:^",
-    "@yadal/cdn": "workspace:^"
+    "yadal": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

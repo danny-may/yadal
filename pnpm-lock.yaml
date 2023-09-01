@@ -4,18 +4,9 @@ importers:
 
   .:
     dependencies:
-      '@yadal/api':
+      yadal:
         specifier: workspace:^
-        version: link:packages/api
-      '@yadal/cdn':
-        specifier: workspace:^
-        version: link:packages/cdn
-      '@yadal/core':
-        specifier: workspace:^
-        version: link:packages/core
-      '@yadal/gateway':
-        specifier: workspace:^
-        version: link:packages/gateway
+        version: link:packages/yadal
     devDependencies:
       '@types/node':
         specifier: ^20.5.7
@@ -50,6 +41,12 @@ importers:
 
   packages/api-proxy:
     dependencies:
+      '@yadal/api':
+        specifier: workspace:^
+        version: link:../api
+      '@yadal/core':
+        specifier: workspace:^
+        version: link:../core
       '@yadal/rest':
         specifier: workspace:^
         version: link:../rest
@@ -122,6 +119,18 @@ importers:
       '@yadal/core':
         specifier: workspace:^
         version: link:../core
+
+  packages/yadal:
+    dependencies:
+      '@yadal/api':
+        specifier: workspace:^
+        version: link:../api
+      '@yadal/cdn':
+        specifier: workspace:^
+        version: link:../cdn
+      '@yadal/gateway':
+        specifier: workspace:^
+        version: link:../gateway
 
 packages:
 
