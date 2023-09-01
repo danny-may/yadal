@@ -1,6 +1,6 @@
 {
   "name": "yadal",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.7",
   "description": "Yet another discord api library",
   "main": "dist/index.js",
   "repository": {
@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/danny-may/yadal/packages/yadal#readme",
   "dependencies": {
-    "@yadal/gateway": "workspace:^",
     "@yadal/api": "workspace:^",
-    "@yadal/cdn": "workspace:^"
+    "@yadal/cdn": "workspace:^",
+    "@yadal/gateway": "workspace:^"
   },
   "publishConfig": {
     "access": "public"
