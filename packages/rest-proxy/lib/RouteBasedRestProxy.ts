@@ -1,11 +1,13 @@
 import { HttpHeaders, IHttpRequest, IHttpResponse, IRouteMatcher } from '@yadal/rest';
-import { IDiscordRestProxyHandler } from './IDiscordRestProxyHandler.js';
+import { IRestProxyHandler } from './IRestProxyHandler.js';
+import { IRestProxy } from './IRestProxy.js';
 
-export class DiscordRestProxy<T extends object> {
-    readonly #handler: IDiscordRestProxyHandler;
+
+export class RouteBasedRestProxy<T extends object> implements IRestProxy {
+    readonly #handler: IRestProxyHandler;
     readonly #routes: IRouteMatcher<T>;
 
-    constructor(handler: IDiscordRestProxyHandler, routes: IRouteMatcher<T>) {
+    constructor(handler: IRestProxyHandler, routes: IRouteMatcher<T>) {
         this.#handler = handler;
         this.#routes = routes;
     }
@@ -16,6 +18,7 @@ export class DiscordRestProxy<T extends object> {
         return notFound;
     }
 }
+
 
 const notFound: IHttpResponse = {
     headers: new HttpHeaders(),

@@ -1,43 +1,38 @@
-import { URLResolverMiddleware, HeaderMiddleware, HttpRequestMiddleware, IOperationSenderMiddleware, MiddlewareOperationSender, RetryMiddleware, HttpClient, defineOperationClient } from "@yadal/rest";
-import { IRateLimitService, RateLimitManager, RateLimitMiddleware, RateLimitService } from "./rateLimit/index.js";
-import { ProtocolURLResolver, URlResolver, createUrlMerger } from "@yadal/core";
-import { operations, defaultUserAgent, rateLimits } from "./defaults.js";
+import { ApiClient, IRateLimitService, RateLimitManager, RateLimitService } from '@yadal/api';
+import { ProtocolURLResolver, URlResolver, createUrlMerger } from '@yadal/core';
+import { HttpClient, RouteMatcher, RouteModel } from '@yadal/rest';
+import { HttpRequestMiddleware, IRestProxyMiddleware, MiddlewareRestProxyHandler, RetryMiddleware, RouteBasedRestProxy, URLResolverMiddleware } from '@yadal/rest-proxy'
+import { RateLimitMiddleware } from './RateLimitMiddleware.js';
 
-export class ApiClient extends defineOperationClient(operations) {
-    static readonly rateLimits = rateLimits;
-
+export class ApiProxy extends RouteBasedRestProxy<RouteModel<Routes>> {
     readonly rateLimit: IRateLimitService;
     readonly http: HttpClient;
 
-    constructor(options: ApiClientOptions = {}) {
+    constructor(options: ApiProxyOptions) {
         const http = options.http ?? new HttpClient();
         const rateLimit = options.rateLimit ?? new RateLimitService({
             globalLimit: 50,
             globalReset: 1000,
             fallbackReset: 60000
         });
-        super(new MiddlewareOperationSender([
+        super(new MiddlewareRestProxyHandler([
             new URLResolverMiddleware(makeUrlResolver(options.urlResolver)),
-            new HeaderMiddleware({
-                'Authorization': options.authHeader,
-                'User-Agent': options.userAgent ?? defaultUserAgent
-            }),
             ...options.middleware ?? [],
             new RetryMiddleware(),
             new RateLimitMiddleware(
                 new RateLimitManager(
                     rateLimit,
-                    Object.values(rateLimits)
+                    Object.values(ApiClient.rateLimits)
                 )
             ),
             new HttpRequestMiddleware(http)
-        ]));
+        ]), matcher);
         this.rateLimit = rateLimit;
         this.http = http;
     }
 }
 
-function makeUrlResolver(options: ApiClientOptions['urlResolver']) {
+function makeUrlResolver(options: ApiProxyOptions['urlResolver']) {
     if (typeof options === 'object' && 'resolve' in options)
         return options;
 
@@ -47,13 +42,14 @@ function makeUrlResolver(options: ApiClientOptions['urlResolver']) {
     });
 }
 
-export interface ApiClientOptions {
+const matcher = RouteMatcher.fromOperations(ApiClient.operations);
+type Routes = typeof ApiClient['operations'][keyof typeof ApiClient['operations']]['route'];
+export interface ApiProxyOptions {
     readonly authHeader?: string;
     readonly http?: HttpClient;
     readonly urlResolver?: URlResolver | {
         readonly rest?: URL | ((url: URL) => URL);
     };
-    readonly middleware?: Iterable<IOperationSenderMiddleware>;
+    readonly middleware?: Iterable<IRestProxyMiddleware>;
     readonly rateLimit?: IRateLimitService;
-    readonly userAgent?: `${string} (${string}, ${string})`;
 }

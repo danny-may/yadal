@@ -1,8 +1,8 @@
 import { IHttpResponse, Route, HttpMethod } from "@yadal/rest";
-import { IDiscordRestProxyMiddleware } from "./IDiscordRestProxyMiddleware.js";
+import { IRestProxyMiddleware } from "@yadal/rest-proxy";
 import { IRateLimitManager, RateLimitHeaders } from "@yadal/api";
 
-export class RateLimitMiddleware implements IDiscordRestProxyMiddleware {
+export class RateLimitMiddleware implements IRestProxyMiddleware {
     readonly #rateLimits: IRateLimitManager;
 
     constructor(rateLimits: IRateLimitManager) {

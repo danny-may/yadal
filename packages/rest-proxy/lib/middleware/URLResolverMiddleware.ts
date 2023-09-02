@@ -1,8 +1,8 @@
 import { Route, IHttpRequest, IHttpResponse, HttpMethod } from "@yadal/rest";
-import { IDiscordRestProxyMiddleware } from "./IDiscordRestProxyMiddleware.js";
+import { IRestProxyMiddleware } from "./IRestProxyMiddleware.js";
 import { URlResolver } from "@yadal/core";
 
-export class URLResolverMiddleware implements IDiscordRestProxyMiddleware {
+export class URLResolverMiddleware implements IRestProxyMiddleware {
     readonly #resolver: URlResolver;
 
     constructor(resolver: URlResolver) {

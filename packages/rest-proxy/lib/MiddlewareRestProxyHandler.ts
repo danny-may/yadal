@@ -1,14 +1,14 @@
 import { CompositeAbortController } from "@yadal/core";
 import { HttpMethod, IHttpRequest, IHttpResponse, Route } from "@yadal/rest";
-import { IDiscordRestProxyHandler } from './IDiscordRestProxyHandler.js';
-import { IDiscordRestProxyMiddleware } from "./middleware/index.js";
+import { IRestProxyHandler } from './IRestProxyHandler.js';
+import { IRestProxyMiddleware } from "./middleware/index.js";
 
-export class MiddlewareDiscordRestProxyHandler implements IDiscordRestProxyHandler {
-    readonly #send: IDiscordRestProxyHandler['handleRequest'];
+export class MiddlewareRestProxyHandler implements IRestProxyHandler {
+    readonly #send: IRestProxyHandler['handleRequest'];
 
-    constructor(middleware: Iterable<IDiscordRestProxyMiddleware>) {
+    constructor(middleware: Iterable<IRestProxyMiddleware>) {
         this.#send = [...middleware]
-            .reduceRight<IDiscordRestProxyHandler['handleRequest']>(
+            .reduceRight<IRestProxyHandler['handleRequest']>(
                 (p, c) => (route, params, req, sig1) => c.handle(route, params, req, async sig2 => {
                     if (sig2 === undefined)
                         return await p(route, params, req, sig1);

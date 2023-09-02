@@ -1,8 +1,8 @@
 import { HttpClient, HttpMethod, IHttpRequest, Route } from "@yadal/rest";
-import { IDiscordRestProxyMiddleware } from "./IDiscordRestProxyMiddleware.js";
+import { IRestProxyMiddleware } from "./IRestProxyMiddleware.js";
 
 
-export class HttpRequestMiddleware implements IDiscordRestProxyMiddleware {
+export class HttpRequestMiddleware implements IRestProxyMiddleware {
     readonly #client: HttpClient;
 
     constructor(client: HttpClient) {
