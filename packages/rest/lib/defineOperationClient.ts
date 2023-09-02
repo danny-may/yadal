@@ -1,14 +1,15 @@
+import { HttpMethod } from "./http/index.js";
 import { IOperation, IOperationSender } from "./operation/index.js";
 
-type RestMethods<T extends Record<PropertyKey, IOperation<object, unknown>>> = {
-    [P in keyof T]: T[P] extends IOperation<infer Model, infer Result>
+type RestMethods<T extends Record<PropertyKey, IOperation<HttpMethod, object, unknown>>> = {
+    [P in keyof T]: T[P] extends IOperation<HttpMethod, infer Model, infer Result>
     ? RestMethod<Model, Result>
     : never;
 }
 type RestMethod<Model extends object, Result> = (...args: RestMethodArgs<Model>) => Promise<Result>
 type RestMethodArgs<Model extends object> = ([{}] extends [Model] ? [signal?: AbortSignal] : never) | [request: Model, signal?: AbortSignal];
 
-export function defineOperationClient<T extends Record<PropertyKey, IOperation<any, any>>>(operations: T) {
+export function defineOperationClient<T extends Record<PropertyKey, IOperation<HttpMethod, any, any>>>(operations: T) {
     return class BoundOperationClient {
         static readonly operations = operations
 
@@ -27,7 +28,7 @@ export function defineOperationClient<T extends Record<PropertyKey, IOperation<a
             }
         }
 
-        static #bindOperation<K extends PropertyKey, Model extends object, Result>(key: K, operation: IOperation<Model, Result>) {
+        static #bindOperation<K extends PropertyKey, Model extends object, Result>(key: K, operation: IOperation<HttpMethod, Model, Result>) {
             const result = {
                 [key](this: BoundOperationClient, ...args: RestMethodArgs<Model>) {
                     return args[0] instanceof AbortSignal

@@ -1,6 +1,6 @@
 import { HttpMethod } from "../http/index.js";
 
-export type RouteModel<T extends Route> = T extends Route<HttpMethod, infer Model> ? Model : never;
+export type RouteModel<T extends Route<any, any>> = T extends Route<HttpMethod, infer Model> ? Model : never;
 export interface Route<Method extends HttpMethod = HttpMethod, Model extends object = object> {
     readonly method: Method;
     readonly regex: RegExp;
@@ -14,6 +14,6 @@ export interface Route<Method extends HttpMethod = HttpMethod, Model extends obj
 
 export interface RouteTemplate<Model extends object> {
     readonly raw: `/${string}`;
-    readonly keys: readonly (keyof Model)[];
+    readonly keys: readonly ([object] extends [Model] ? PropertyKey : keyof Model)[];
     readonly segments: readonly string[];
 }

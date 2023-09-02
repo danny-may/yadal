@@ -122,6 +122,10 @@ importers:
       '@yadal/core':
         specifier: workspace:^
         version: link:../core
+    devDependencies:
+      '@yadal/discord-spec':
+        specifier: workspace:^
+        version: link:../discord-spec
 
   packages/yadal:
     dependencies:

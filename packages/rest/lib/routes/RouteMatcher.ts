@@ -1,5 +1,4 @@
 import { HttpMethod } from "../http/index.js";
-import { IOperation } from "../index.js";
 import { Route, RouteModel } from "./Route.js";
 
 export interface IRouteMatcher<T extends object> {
@@ -9,7 +8,7 @@ export interface IRouteMatcher<T extends object> {
 
 export class RouteMatcher<T extends object> implements IRouteMatcher<T> {
     readonly #locators: { [P in HttpMethod]?: IRouteLocator<P, T>; };
-    static fromOperations<T extends Record<PropertyKey, IOperation<any, any>>>(operations: T) {
+    static fromOperations<T extends Record<PropertyKey, { route: Route<HttpMethod, any> }>>(operations: T) {
         return new RouteMatcher(Object.values(operations).map(o => o.route)) as RouteMatcher<RouteModel<T[keyof T]['route']>>;
     }
 
@@ -69,10 +68,10 @@ class RouteLocatorBuilder<M extends HttpMethod, T extends object> {
     }
 
     add(route: Route<M, T>) {
-        this.#add(route, route.template.toLowerCase().split(/\{.*?\}/g), 0);
+        this.#add(route, route.template.segments, 0);
     }
 
-    #add(route: Route<M, T>, segments: string[], index: number): void {
+    #add(route: Route<M, T>, segments: readonly string[], index: number): void {
         if (index === segments.length)
             return void this.#routes.push(route);
 

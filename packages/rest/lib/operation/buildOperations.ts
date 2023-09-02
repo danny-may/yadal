@@ -3,7 +3,7 @@ import { HttpHeaders, HttpMethod, IHttpContent } from '../http/index.js';
 import { Route } from '../routes/index.js';
 
 export function buildOperation<T extends OperationDefinition>(baseUrl: URL, options: T): BuildOperation<T>
-export function buildOperation<T extends OperationDefinition>(baseUrl: URL, options: T): IOperation<any, unknown> {
+export function buildOperation<T extends OperationDefinition>(baseUrl: URL, options: T): IOperation<HttpMethod, any, unknown> {
     const {
         createBody,
         headers: { getValues: headerValues },
@@ -12,7 +12,7 @@ export function buildOperation<T extends OperationDefinition>(baseUrl: URL, opti
         route
     } = options;
 
-    return Object.freeze<IOperation<any, unknown>>({
+    return Object.freeze<IOperation<HttpMethod, any, unknown>>({
         route,
         readResponse(response) {
             return readResponse(response.status, response.headers.get('content-type'), getBody.bind(null, response.body));
@@ -60,19 +60,20 @@ export function buildOperations<T extends OperationDefinition>(baseUrl: URL, opt
 
 type ExcludePlainObject<T extends object> = [object] extends [T] ? {} : T;
 type BuildOperation<Operation extends OperationDefinition> =
-    Operation extends OperationDefinition<infer Path, infer Query, infer Headers, infer Response, infer Body>
-    ? IOperation<ExcludePlainObject<Path> & ExcludePlainObject<Body> & ExcludePlainObject<Headers> & ExcludePlainObject<Query>, Response>
+    Operation extends OperationDefinition<infer Path, infer Method, infer Query, infer Headers, infer Response, infer Body>
+    ? IOperation<Method, ExcludePlainObject<Path> & ExcludePlainObject<Body> & ExcludePlainObject<Headers> & ExcludePlainObject<Query>, Response>
     : never
 
 export interface OperationDefinition<
     Path extends object = any,
+    Method extends HttpMethod = HttpMethod,
     Query extends object = any,
     Headers extends object = any,
     Response = unknown,
     Body extends object = any
 > {
     readonly name: PropertyKey;
-    readonly route: Route<HttpMethod, Path>;
+    readonly route: Route<Method, Path>;
     readonly query: QueryDefinition<Query>;
     readonly headers: HeadersDefinition<Headers>;
     readResponse(statusCode: number, contentType: string | undefined, content: () => Promise<ArrayBufferView>): Promise<Response>;

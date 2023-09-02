@@ -4,6 +4,7 @@ import { IOperationSender } from "./IOperationSender.js";
 import { IOperationRequest } from "./IOperationRequest.js";
 import { IOperationResponse } from "./IOperationResponse.js";
 import { IOperationSenderMiddleware } from "./middleware/IOperationSenderMiddleware.js";
+import { HttpMethod } from "../http/index.js";
 
 type Send = <TModel extends object, TResult>(request: IOperationRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IOperationResponse<TModel, TResult>>;
 
@@ -23,9 +24,9 @@ export class MiddlewareOperationSender implements IOperationSender {
             )
     }
 
-    async send<TModel extends object, TResult>(operation: IOperation<TModel, TResult>, model: TModel, signal?: AbortSignal | undefined): Promise<TResult>
-    async send<TResult>(operation: IOperation<{}, TResult>, model?: undefined, signal?: AbortSignal | undefined): Promise<TResult>
-    async send<TModel extends object, TResult>(operation: IOperation<TModel, TResult>, model: TModel, signal?: AbortSignal | undefined) {
+    async send<TModel extends object, TResult>(operation: IOperation<HttpMethod, TModel, TResult>, model: TModel, signal?: AbortSignal | undefined): Promise<TResult>
+    async send<TResult>(operation: IOperation<HttpMethod, {}, TResult>, model?: undefined, signal?: AbortSignal | undefined): Promise<TResult>
+    async send<TModel extends object, TResult>(operation: IOperation<HttpMethod, TModel, TResult>, model: TModel, signal?: AbortSignal | undefined) {
         let request;
         const { result } = await this.#send<TModel, TResult>({
             operation,
