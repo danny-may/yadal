@@ -1,6 +1,6 @@
 {
   "name": "@yadal/api-proxy",
-  "version": "1.0.0-alpha.9",
+  "version": "1.0.0-alpha.10",
   "description": "Yet another discord api proxy",
   "keywords": [
     "discord"
@@ -23,8 +23,8 @@
     "url": "https://github.com/danny-may/yadal/issues"
   },
   "dependencies": {
-    "@yadal/rest-proxy": "workspace:^",
-    "@yadal/api": "workspace:^"
+    "@yadal/api": "workspace:^",
+    "@yadal/rest-proxy": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

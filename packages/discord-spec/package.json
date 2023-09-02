@@ -1,6 +1,6 @@
 {
     "name": "@yadal/discord-spec",
-    "version": "1.0.0-alpha.9",
+    "version": "1.0.0-alpha.10",
     "description": "Yet another discord api spec",
     "keywords": [
         "discord"
