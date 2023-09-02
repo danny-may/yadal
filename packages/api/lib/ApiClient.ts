@@ -17,7 +17,7 @@ export class ApiClient extends defineOperationClient(operations) {
             fallbackReset: 60000
         });
         super(new MiddlewareOperationSender([
-            new URLResolverMiddleware(makeUrlResolver(options.urlResolver)),
+            new URLResolverMiddleware(ApiClient.makeUrlResolver(options.urlResolver)),
             new HeaderMiddleware({
                 'Authorization': options.authHeader,
                 'User-Agent': options.userAgent ?? defaultUserAgent
@@ -35,23 +35,23 @@ export class ApiClient extends defineOperationClient(operations) {
         this.rateLimit = rateLimit;
         this.http = http;
     }
-}
 
-function makeUrlResolver(options: ApiClientOptions['urlResolver']) {
-    if (typeof options === 'object' && 'resolve' in options)
-        return options;
+    static makeUrlResolver(options: ApiClientOptions['urlResolver']) {
+        if (typeof options === 'object' && 'resolve' in options)
+            return options;
 
-    const { rest } = options ?? {};
-    return new ProtocolURLResolver({
-        ['api:']: typeof rest === 'function' ? rest : createUrlMerger(rest ?? new URL('https://discord.com/api/v10')),
-    });
+        const { api } = options ?? {};
+        return new ProtocolURLResolver({
+            ['api:']: typeof api === 'function' ? api : createUrlMerger(api ?? new URL('https://discord.com/api/v10')),
+        });
+    }
 }
 
 export interface ApiClientOptions {
     readonly authHeader?: string;
     readonly http?: HttpClient;
     readonly urlResolver?: URlResolver | {
-        readonly rest?: URL | ((url: URL) => URL);
+        readonly api?: URL | ((url: URL) => URL);
     };
     readonly middleware?: Iterable<IOperationSenderMiddleware>;
     readonly rateLimit?: IRateLimitService;

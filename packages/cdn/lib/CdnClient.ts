@@ -8,7 +8,7 @@ export class CdnClient extends defineOperationClient(operations) {
     constructor(options: CdnClientOptions = {}) {
         const http = options.http ?? new HttpClient();
         super(new MiddlewareOperationSender([
-            new URLResolverMiddleware(makeUrlResolver(options.urlResolver)),
+            new URLResolverMiddleware(CdnClient.makeUrlResolver(options.urlResolver)),
             new HeaderMiddleware({
                 'User-Agent': options.userAgent ?? defaultUserAgent
             }),
@@ -18,16 +18,16 @@ export class CdnClient extends defineOperationClient(operations) {
         ]));
         this.http = http;
     }
-}
 
-function makeUrlResolver(options: CdnClientOptions['urlResolver']) {
-    if (typeof options === 'object' && 'resolve' in options)
-        return options;
+    static makeUrlResolver(options: CdnClientOptions['urlResolver']) {
+        if (typeof options === 'object' && 'resolve' in options)
+            return options;
 
-    const { cdn } = options ?? {};
-    return new ProtocolURLResolver({
-        ['cdn:']: typeof cdn === 'function' ? cdn : createUrlMerger(cdn ?? new URL('https://cdn.discordapp.com/'))
-    });
+        const { cdn } = options ?? {};
+        return new ProtocolURLResolver({
+            ['cdn:']: typeof cdn === 'function' ? cdn : createUrlMerger(cdn ?? new URL('https://cdn.discordapp.com/'))
+        });
+    }
 }
 
 export interface CdnClientOptions {

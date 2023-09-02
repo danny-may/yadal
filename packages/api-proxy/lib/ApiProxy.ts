@@ -1,5 +1,4 @@
-import { ApiClient, IRateLimitService, RateLimitManager, RateLimitService } from '@yadal/api';
-import { ProtocolURLResolver, URlResolver, createUrlMerger } from '@yadal/core';
+import { ApiClient, ApiClientOptions, IRateLimitService, RateLimitManager, RateLimitService } from '@yadal/api';
 import { HttpClient, RouteMatcher, RouteModel } from '@yadal/rest';
 import { HttpRequestMiddleware, IRestProxyMiddleware, MiddlewareRestProxyHandler, RetryMiddleware, RouteBasedRestProxy, URLResolverMiddleware } from '@yadal/rest-proxy'
 import { RateLimitMiddleware } from './RateLimitMiddleware.js';
@@ -16,7 +15,7 @@ export class ApiProxy extends RouteBasedRestProxy<RouteModel<Routes>> {
             fallbackReset: 60000
         });
         super(new MiddlewareRestProxyHandler([
-            new URLResolverMiddleware(makeUrlResolver(options.urlResolver)),
+            new URLResolverMiddleware(ApiClient.makeUrlResolver(options.urlResolver)),
             ...options.middleware ?? [],
             new RetryMiddleware(),
             new RateLimitMiddleware(
@@ -32,24 +31,12 @@ export class ApiProxy extends RouteBasedRestProxy<RouteModel<Routes>> {
     }
 }
 
-function makeUrlResolver(options: ApiProxyOptions['urlResolver']) {
-    if (typeof options === 'object' && 'resolve' in options)
-        return options;
-
-    const { rest } = options ?? {};
-    return new ProtocolURLResolver({
-        ['api:']: typeof rest === 'function' ? rest : createUrlMerger(rest ?? new URL('https://discord.com/api/v10')),
-    });
-}
-
 const matcher = RouteMatcher.fromOperations(ApiClient.operations);
 type Routes = typeof ApiClient['operations'][keyof typeof ApiClient['operations']]['route'];
 export interface ApiProxyOptions {
     readonly authHeader?: string;
     readonly http?: HttpClient;
-    readonly urlResolver?: URlResolver | {
-        readonly rest?: URL | ((url: URL) => URL);
-    };
+    readonly urlResolver?: ApiClientOptions['urlResolver'];
     readonly middleware?: Iterable<IRestProxyMiddleware>;
     readonly rateLimit?: IRateLimitService;
 }
