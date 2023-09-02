@@ -23,7 +23,8 @@
     "ws": "^8.13.0"
   },
   "dependencies": {
-    "yadal": "workspace:^"
+    "yadal": "workspace:^",
+    "@yadal/rest": "workspace:^"
   },
   "publishConfig": {
     "access": "public"

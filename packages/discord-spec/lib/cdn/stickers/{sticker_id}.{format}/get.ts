@@ -8,8 +8,11 @@ export type RouteModel = GetStickerRequestPath;
 const routeRegex = /^\/stickers\/(?<sticker_id>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/stickers/{sticker_id}.{format}",
-    keys: Object.freeze(["sticker_id","format"] as const),
+    template: Object.freeze({
+        raw: "/stickers/{sticker_id}.{format}" as const,
+        keys: Object.freeze(["sticker_id","format"] as const),
+        segments: Object.freeze(["/stickers/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/stickers\/(?<sticker_id>.*?)\.(?<format>.*?)$/i;
@@ -21,13 +24,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["sticker_id"]: decodeURIComponent(match["sticker_id"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["sticker_id"]: decodeURIComponent(match.groups!["sticker_id"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

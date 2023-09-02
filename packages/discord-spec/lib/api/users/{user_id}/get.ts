@@ -8,8 +8,11 @@ export type RouteModel = GetUserRequestPath;
 const routeRegex = /^\/users\/(?<user_id>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/users/{user_id}",
-    keys: Object.freeze(["user_id"] as const),
+    template: Object.freeze({
+        raw: "/users/{user_id}" as const,
+        keys: Object.freeze(["user_id"] as const),
+        segments: Object.freeze(["/users/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,12 +26,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["user_id"]: decodeURIComponent(match["user_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["user_id"]: decodeURIComponent(match.groups!["user_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

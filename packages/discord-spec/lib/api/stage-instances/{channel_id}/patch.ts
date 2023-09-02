@@ -8,8 +8,11 @@ export type RouteModel = UpdateStageInstanceRequestPath;
 const routeRegex = /^\/stage-instances\/(?<channel_id>.*?)$/i;
 export const route = {
     method: "PATCH",
-    template: "/stage-instances/{channel_id}",
-    keys: Object.freeze(["channel_id"] as const),
+    template: Object.freeze({
+        raw: "/stage-instances/{channel_id}" as const,
+        keys: Object.freeze(["channel_id"] as const),
+        segments: Object.freeze(["/stage-instances/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,12 +26,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["channel_id"]: decodeURIComponent(match["channel_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

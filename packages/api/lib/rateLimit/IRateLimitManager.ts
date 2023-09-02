@@ -2,7 +2,7 @@ import { HttpMethod, Route } from "@yadal/rest";
 import { RateLimitHeaders } from "./RateLimitHeaders.js";
 
 export interface IRateLimitManager {
-    get<T extends object>(route: Route<HttpMethod, T>, model: T): IRateLimiter | undefined;
+    get<T extends object>(route: Route<HttpMethod, T>, model: Record<keyof T, string>): IRateLimiter | undefined;
     clear(): void;
 }
 

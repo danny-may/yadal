@@ -8,8 +8,11 @@ export type RouteModel = CreateApplicationCommandRequestPath;
 const routeRegex = /^\/applications\/(?<application_id>.*?)\/commands$/i;
 export const route = {
     method: "POST",
-    template: "/applications/{application_id}/commands",
-    keys: Object.freeze(["application_id"] as const),
+    template: Object.freeze({
+        raw: "/applications/{application_id}/commands" as const,
+        keys: Object.freeze(["application_id"] as const),
+        segments: Object.freeze(["/applications/","/commands"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const),
         "OAuth2": Object.freeze([
@@ -26,12 +29,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

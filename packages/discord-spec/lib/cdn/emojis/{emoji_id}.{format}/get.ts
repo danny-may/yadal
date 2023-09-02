@@ -8,8 +8,11 @@ export type RouteModel = GetCustomEmojiRequestPath;
 const routeRegex = /^\/emojis\/(?<emoji_id>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/emojis/{emoji_id}.{format}",
-    keys: Object.freeze(["emoji_id","format"] as const),
+    template: Object.freeze({
+        raw: "/emojis/{emoji_id}.{format}" as const,
+        keys: Object.freeze(["emoji_id","format"] as const),
+        segments: Object.freeze(["/emojis/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/emojis\/(?<emoji_id>.*?)\.(?<format>.*?)$/i;
@@ -21,13 +24,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["emoji_id"]: decodeURIComponent(match["emoji_id"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["emoji_id"]: decodeURIComponent(match.groups!["emoji_id"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

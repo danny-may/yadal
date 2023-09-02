@@ -19,7 +19,7 @@ export class MiddlewareDiscordRestProxyHandler implements IDiscordRestProxyHandl
             )
     }
 
-    async handleRequest<T extends object>(route: Route<HttpMethod, T>, params: T, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
+    async handleRequest<T extends object>(route: Route<HttpMethod, T>, params: Record<keyof T, string>, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
         return await this.#send(route, params, request, signal);
     }
 }

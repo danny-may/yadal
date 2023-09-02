@@ -8,8 +8,11 @@ export type RouteModel = CreateGuildFromTemplateRequestPath;
 const routeRegex = /^\/guilds\/templates\/(?<code>.*?)$/i;
 export const route = {
     method: "POST",
-    template: "/guilds/templates/{code}",
-    keys: Object.freeze(["code"] as const),
+    template: Object.freeze({
+        raw: "/guilds/templates/{code}" as const,
+        keys: Object.freeze(["code"] as const),
+        segments: Object.freeze(["/guilds/templates/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,12 +26,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["code"]: decodeURIComponent(match["code"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["code"]: decodeURIComponent(match.groups!["code"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

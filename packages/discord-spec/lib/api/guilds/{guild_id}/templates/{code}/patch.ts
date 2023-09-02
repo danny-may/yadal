@@ -8,8 +8,11 @@ export type RouteModel = UpdateGuildTemplateRequestPath;
 const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/templates\/(?<code>.*?)$/i;
 export const route = {
     method: "PATCH",
-    template: "/guilds/{guild_id}/templates/{code}",
-    keys: Object.freeze(["guild_id","code"] as const),
+    template: Object.freeze({
+        raw: "/guilds/{guild_id}/templates/{code}" as const,
+        keys: Object.freeze(["guild_id","code"] as const),
+        segments: Object.freeze(["/guilds/","/templates/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!),
-                ["code"]: decodeURIComponent(match["code"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+            ["code"]: decodeURIComponent(match.groups!["code"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

@@ -298,16 +298,26 @@ function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: Imp
         imports.push({ file: typesUrl, exported: pathType.name, isType: true });
     const regexSource = [];
     const matchKeys = [];
+    const template = [];
+    const segments = []
     const matcher = /\{.*?\}/g;
     let match = matcher.exec(url);
     let start = 0;
     while (match !== null) {
+        const property = JSON.stringify(match[0].slice(1, -1));
+        const segment = JSON.stringify(url.slice(start, match.index));
+        matchKeys.push(property);
+        segments.push(segment);
+        template.push(segment);
+        template.push(`Object.freeze({ key: ${property} } as const)`);
         regexSource.push(escapeRegex(url.slice(start, match.index)));
         regexSource.push(`(?<${match[0].slice(1, -1)}>.*?)`);
-        matchKeys.push(JSON.stringify(match[0].slice(1, -1)));
         start = match.index + match[0].length;
         match = matcher.exec(url);
     }
+    const segment = JSON.stringify(url.slice(start));
+    template.push(segment);
+    segments.push(segment);
     regexSource.push(escapeRegex(url.slice(start)));
     const createSource = JSON.stringify(url)
         .slice(1, -1)
@@ -320,8 +330,11 @@ function defineRoute(method: Lowercase<HttpMethod>, pathType: Type, imports: Imp
 const routeRegex = /^${regexSource.join('')}$/i;
 export const route = {
     method: ${JSON.stringify(method.toUpperCase())},
-    template: ${JSON.stringify(url)},
-    keys: Object.freeze([${matchKeys.join(',')}] as const),
+    template: Object.freeze({
+        raw: ${JSON.stringify(url)} as const,
+        keys: Object.freeze([${matchKeys.join(',')}] as const),
+        segments: Object.freeze([${segments.join(',')}] as const)
+    }),
     authentication: Object.freeze(${JSON.stringify(security, null, 4).replace(/\[.*?\]/gs, 'Object.freeze($& as const)').split('\n')} as const),
     get regex(){
         return /^${regexSource.join('')}$/i;
@@ -333,12 +346,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: \`/\${string}\`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ${matchKeys.map(k => `[${k}]: decodeURIComponent(match[${k}]!)`).join(',\n')}
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ${matchKeys.map(k => `[${k}]: decodeURIComponent(match.groups![${k}]!)`).join(',\n')}
+        };
     },
     parse(url: \`/\${string}\`) {
         const result = route.tryParse(url);

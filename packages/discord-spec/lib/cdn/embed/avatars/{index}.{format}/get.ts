@@ -8,8 +8,11 @@ export type RouteModel = GetDefaultUserAvatarRequestPath;
 const routeRegex = /^\/embed\/avatars\/(?<index>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/embed/avatars/{index}.{format}",
-    keys: Object.freeze(["index","format"] as const),
+    template: Object.freeze({
+        raw: "/embed/avatars/{index}.{format}" as const,
+        keys: Object.freeze(["index","format"] as const),
+        segments: Object.freeze(["/embed/avatars/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/embed\/avatars\/(?<index>.*?)\.(?<format>.*?)$/i;
@@ -21,13 +24,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["index"]: decodeURIComponent(match["index"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["index"]: decodeURIComponent(match.groups!["index"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

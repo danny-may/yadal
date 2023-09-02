@@ -8,8 +8,11 @@ export type RouteModel = GetGuildScheduledEventCoverRequestPath;
 const routeRegex = /^\/guild-events\/(?<scheduled_event_id>.*?)\/(?<scheduled_event_cover_image>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/guild-events/{scheduled_event_id}/{scheduled_event_cover_image}.{format}",
-    keys: Object.freeze(["scheduled_event_id","scheduled_event_cover_image","format"] as const),
+    template: Object.freeze({
+        raw: "/guild-events/{scheduled_event_id}/{scheduled_event_cover_image}.{format}" as const,
+        keys: Object.freeze(["scheduled_event_id","scheduled_event_cover_image","format"] as const),
+        segments: Object.freeze(["/guild-events/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/guild-events\/(?<scheduled_event_id>.*?)\/(?<scheduled_event_cover_image>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["scheduled_event_id"]: decodeURIComponent(match["scheduled_event_id"]!),
-                ["scheduled_event_cover_image"]: decodeURIComponent(match["scheduled_event_cover_image"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["scheduled_event_id"]: decodeURIComponent(match.groups!["scheduled_event_id"]!),
+            ["scheduled_event_cover_image"]: decodeURIComponent(match.groups!["scheduled_event_cover_image"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

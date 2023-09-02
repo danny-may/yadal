@@ -8,8 +8,11 @@ export type RouteModel = GetRoleIconRequestPath;
 const routeRegex = /^\/role-icons\/(?<role_id>.*?)\/(?<role_icon>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/role-icons/{role_id}/{role_icon}.{format}",
-    keys: Object.freeze(["role_id","role_icon","format"] as const),
+    template: Object.freeze({
+        raw: "/role-icons/{role_id}/{role_icon}.{format}" as const,
+        keys: Object.freeze(["role_id","role_icon","format"] as const),
+        segments: Object.freeze(["/role-icons/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/role-icons\/(?<role_id>.*?)\/(?<role_icon>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["role_id"]: decodeURIComponent(match["role_id"]!),
-                ["role_icon"]: decodeURIComponent(match["role_icon"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["role_id"]: decodeURIComponent(match.groups!["role_id"]!),
+            ["role_icon"]: decodeURIComponent(match.groups!["role_icon"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

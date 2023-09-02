@@ -8,8 +8,11 @@ export type RouteModel = CreateInteractionResponseRequestPath;
 const routeRegex = /^\/interactions\/(?<interaction_id>.*?)\/(?<interaction_token>.*?)\/callback$/i;
 export const route = {
     method: "POST",
-    template: "/interactions/{interaction_id}/{interaction_token}/callback",
-    keys: Object.freeze(["interaction_id","interaction_token"] as const),
+    template: Object.freeze({
+        raw: "/interactions/{interaction_id}/{interaction_token}/callback" as const,
+        keys: Object.freeze(["interaction_id","interaction_token"] as const),
+        segments: Object.freeze(["/interactions/","/","/callback"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["interaction_id"]: decodeURIComponent(match["interaction_id"]!),
-                ["interaction_token"]: decodeURIComponent(match["interaction_token"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["interaction_id"]: decodeURIComponent(match.groups!["interaction_id"]!),
+            ["interaction_token"]: decodeURIComponent(match.groups!["interaction_token"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

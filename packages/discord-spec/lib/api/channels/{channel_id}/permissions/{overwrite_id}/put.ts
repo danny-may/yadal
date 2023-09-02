@@ -8,8 +8,11 @@ export type RouteModel = SetChannelPermissionOverwriteRequestPath;
 const routeRegex = /^\/channels\/(?<channel_id>.*?)\/permissions\/(?<overwrite_id>.*?)$/i;
 export const route = {
     method: "PUT",
-    template: "/channels/{channel_id}/permissions/{overwrite_id}",
-    keys: Object.freeze(["channel_id","overwrite_id"] as const),
+    template: Object.freeze({
+        raw: "/channels/{channel_id}/permissions/{overwrite_id}" as const,
+        keys: Object.freeze(["channel_id","overwrite_id"] as const),
+        segments: Object.freeze(["/channels/","/permissions/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["channel_id"]: decodeURIComponent(match["channel_id"]!),
-                ["overwrite_id"]: decodeURIComponent(match["overwrite_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!),
+            ["overwrite_id"]: decodeURIComponent(match.groups!["overwrite_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

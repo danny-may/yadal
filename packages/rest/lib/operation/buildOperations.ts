@@ -58,9 +58,10 @@ export function buildOperations<T extends OperationDefinition>(baseUrl: URL, opt
     return Object.freeze(result) as { readonly [P in T as P['name']]: BuildOperation<P> }
 }
 
+type ExcludePlainObject<T extends object> = [object] extends [T] ? {} : T;
 type BuildOperation<Operation extends OperationDefinition> =
     Operation extends OperationDefinition<infer Path, infer Query, infer Headers, infer Response, infer Body>
-    ? IOperation<Path & Body & Headers & Query, Response>
+    ? IOperation<ExcludePlainObject<Path> & ExcludePlainObject<Body> & ExcludePlainObject<Headers> & ExcludePlainObject<Query>, Response>
     : never
 
 export interface OperationDefinition<

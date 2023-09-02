@@ -8,8 +8,11 @@ export type RouteModel = InviteResolveRequestPath;
 const routeRegex = /^\/invites\/(?<code>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/invites/{code}",
-    keys: Object.freeze(["code"] as const),
+    template: Object.freeze({
+        raw: "/invites/{code}" as const,
+        keys: Object.freeze(["code"] as const),
+        segments: Object.freeze(["/invites/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,12 +26,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["code"]: decodeURIComponent(match["code"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["code"]: decodeURIComponent(match.groups!["code"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

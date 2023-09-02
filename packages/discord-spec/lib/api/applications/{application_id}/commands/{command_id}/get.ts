@@ -8,8 +8,11 @@ export type RouteModel = GetApplicationCommandRequestPath;
 const routeRegex = /^\/applications\/(?<application_id>.*?)\/commands\/(?<command_id>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/applications/{application_id}/commands/{command_id}",
-    keys: Object.freeze(["application_id","command_id"] as const),
+    template: Object.freeze({
+        raw: "/applications/{application_id}/commands/{command_id}" as const,
+        keys: Object.freeze(["application_id","command_id"] as const),
+        segments: Object.freeze(["/applications/","/commands/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const),
         "OAuth2": Object.freeze([
@@ -26,13 +29,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!),
-                ["command_id"]: decodeURIComponent(match["command_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!),
+            ["command_id"]: decodeURIComponent(match.groups!["command_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

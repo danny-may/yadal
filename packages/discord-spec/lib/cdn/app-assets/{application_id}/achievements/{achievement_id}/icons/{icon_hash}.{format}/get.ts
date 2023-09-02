@@ -8,8 +8,11 @@ export type RouteModel = GetAchievementIconRequestPath;
 const routeRegex = /^\/app-assets\/(?<application_id>.*?)\/achievements\/(?<achievement_id>.*?)\/icons\/(?<icon_hash>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/app-assets/{application_id}/achievements/{achievement_id}/icons/{icon_hash}.{format}",
-    keys: Object.freeze(["application_id","achievement_id","icon_hash","format"] as const),
+    template: Object.freeze({
+        raw: "/app-assets/{application_id}/achievements/{achievement_id}/icons/{icon_hash}.{format}" as const,
+        keys: Object.freeze(["application_id","achievement_id","icon_hash","format"] as const),
+        segments: Object.freeze(["/app-assets/","/achievements/","/icons/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/app-assets\/(?<application_id>.*?)\/achievements\/(?<achievement_id>.*?)\/icons\/(?<icon_hash>.*?)\.(?<format>.*?)$/i;
@@ -21,15 +24,13 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!),
-                ["achievement_id"]: decodeURIComponent(match["achievement_id"]!),
-                ["icon_hash"]: decodeURIComponent(match["icon_hash"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!),
+            ["achievement_id"]: decodeURIComponent(match.groups!["achievement_id"]!),
+            ["icon_hash"]: decodeURIComponent(match.groups!["icon_hash"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

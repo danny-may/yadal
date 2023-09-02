@@ -10,8 +10,11 @@ export type RouteModel = {
 const routeRegex = /^\/oauth2\/@me$/i;
 export const route = {
     method: "GET",
-    template: "/oauth2/@me",
-    keys: Object.freeze([] as const),
+    template: Object.freeze({
+        raw: "/oauth2/@me" as const,
+        keys: Object.freeze([] as const),
+        segments: Object.freeze(["/oauth2/@me"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const),
         "OAuth2": Object.freeze([
@@ -59,12 +62,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

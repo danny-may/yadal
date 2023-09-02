@@ -8,8 +8,11 @@ export type RouteModel = GetGuildDiscoverySplashRequestPath;
 const routeRegex = /^\/discovery-splashes\/(?<guild_id>.*?)\/(?<guild_discovery_splash>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/discovery-splashes/{guild_id}/{guild_discovery_splash}.{format}",
-    keys: Object.freeze(["guild_id","guild_discovery_splash","format"] as const),
+    template: Object.freeze({
+        raw: "/discovery-splashes/{guild_id}/{guild_discovery_splash}.{format}" as const,
+        keys: Object.freeze(["guild_id","guild_discovery_splash","format"] as const),
+        segments: Object.freeze(["/discovery-splashes/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/discovery-splashes\/(?<guild_id>.*?)\/(?<guild_discovery_splash>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!),
-                ["guild_discovery_splash"]: decodeURIComponent(match["guild_discovery_splash"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+            ["guild_discovery_splash"]: decodeURIComponent(match.groups!["guild_discovery_splash"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

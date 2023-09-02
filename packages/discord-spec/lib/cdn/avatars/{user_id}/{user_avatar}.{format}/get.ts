@@ -8,8 +8,11 @@ export type RouteModel = GetUserAvatarRequestPath;
 const routeRegex = /^\/avatars\/(?<user_id>.*?)\/(?<user_avatar>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/avatars/{user_id}/{user_avatar}.{format}",
-    keys: Object.freeze(["user_id","user_avatar","format"] as const),
+    template: Object.freeze({
+        raw: "/avatars/{user_id}/{user_avatar}.{format}" as const,
+        keys: Object.freeze(["user_id","user_avatar","format"] as const),
+        segments: Object.freeze(["/avatars/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/avatars\/(?<user_id>.*?)\/(?<user_avatar>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["user_id"]: decodeURIComponent(match["user_id"]!),
-                ["user_avatar"]: decodeURIComponent(match["user_avatar"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["user_id"]: decodeURIComponent(match.groups!["user_id"]!),
+            ["user_avatar"]: decodeURIComponent(match.groups!["user_avatar"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

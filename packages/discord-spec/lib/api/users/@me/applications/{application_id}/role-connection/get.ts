@@ -8,8 +8,11 @@ export type RouteModel = GetApplicationUserRoleConnectionRequestPath;
 const routeRegex = /^\/users\/@me\/applications\/(?<application_id>.*?)\/role-connection$/i;
 export const route = {
     method: "GET",
-    template: "/users/@me/applications/{application_id}/role-connection",
-    keys: Object.freeze(["application_id"] as const),
+    template: Object.freeze({
+        raw: "/users/@me/applications/{application_id}/role-connection" as const,
+        keys: Object.freeze(["application_id"] as const),
+        segments: Object.freeze(["/users/@me/applications/","/role-connection"] as const)
+    }),
     authentication: Object.freeze({
         "OAuth2": Object.freeze([
             "role_connections.write"
@@ -25,12 +28,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

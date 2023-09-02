@@ -10,8 +10,11 @@ export type RouteModel = {
 const routeRegex = /^\/users\/@me\/channels$/i;
 export const route = {
     method: "POST",
-    template: "/users/@me/channels",
-    keys: Object.freeze([] as const),
+    template: Object.freeze({
+        raw: "/users/@me/channels" as const,
+        keys: Object.freeze([] as const),
+        segments: Object.freeze(["/users/@me/channels"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -25,12 +28,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

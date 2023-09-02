@@ -8,8 +8,11 @@ export type RouteModel = DeleteGuildMemberRequestPath;
 const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/members\/(?<user_id>.*?)$/i;
 export const route = {
     method: "DELETE",
-    template: "/guilds/{guild_id}/members/{user_id}",
-    keys: Object.freeze(["guild_id","user_id"] as const),
+    template: Object.freeze({
+        raw: "/guilds/{guild_id}/members/{user_id}" as const,
+        keys: Object.freeze(["guild_id","user_id"] as const),
+        segments: Object.freeze(["/guilds/","/members/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!),
-                ["user_id"]: decodeURIComponent(match["user_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+            ["user_id"]: decodeURIComponent(match.groups!["user_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

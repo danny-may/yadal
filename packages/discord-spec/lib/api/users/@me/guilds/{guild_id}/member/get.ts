@@ -8,8 +8,11 @@ export type RouteModel = GetMyGuildMemberRequestPath;
 const routeRegex = /^\/users\/@me\/guilds\/(?<guild_id>.*?)\/member$/i;
 export const route = {
     method: "GET",
-    template: "/users/@me/guilds/{guild_id}/member",
-    keys: Object.freeze(["guild_id"] as const),
+    template: Object.freeze({
+        raw: "/users/@me/guilds/{guild_id}/member" as const,
+        keys: Object.freeze(["guild_id"] as const),
+        segments: Object.freeze(["/users/@me/guilds/","/member"] as const)
+    }),
     authentication: Object.freeze({
         "OAuth2": Object.freeze([
             "guilds.members.read"
@@ -25,12 +28,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

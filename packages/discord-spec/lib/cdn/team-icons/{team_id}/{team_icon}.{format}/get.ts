@@ -8,8 +8,11 @@ export type RouteModel = GetTeamIconRequestPath;
 const routeRegex = /^\/team-icons\/(?<team_id>.*?)\/(?<team_icon>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/team-icons/{team_id}/{team_icon}.{format}",
-    keys: Object.freeze(["team_id","team_icon","format"] as const),
+    template: Object.freeze({
+        raw: "/team-icons/{team_id}/{team_icon}.{format}" as const,
+        keys: Object.freeze(["team_id","team_icon","format"] as const),
+        segments: Object.freeze(["/team-icons/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/team-icons\/(?<team_id>.*?)\/(?<team_icon>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["team_id"]: decodeURIComponent(match["team_id"]!),
-                ["team_icon"]: decodeURIComponent(match["team_icon"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["team_id"]: decodeURIComponent(match.groups!["team_id"]!),
+            ["team_icon"]: decodeURIComponent(match.groups!["team_icon"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

@@ -8,8 +8,11 @@ export type RouteModel = DeleteAllMessageReactionsByEmojiRequestPath;
 const routeRegex = /^\/channels\/(?<channel_id>.*?)\/messages\/(?<message_id>.*?)\/reactions\/(?<emoji_name>.*?)$/i;
 export const route = {
     method: "DELETE",
-    template: "/channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}",
-    keys: Object.freeze(["channel_id","message_id","emoji_name"] as const),
+    template: Object.freeze({
+        raw: "/channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}" as const,
+        keys: Object.freeze(["channel_id","message_id","emoji_name"] as const),
+        segments: Object.freeze(["/channels/","/messages/","/reactions/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,14 +26,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["channel_id"]: decodeURIComponent(match["channel_id"]!),
-                ["message_id"]: decodeURIComponent(match["message_id"]!),
-                ["emoji_name"]: decodeURIComponent(match["emoji_name"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!),
+            ["message_id"]: decodeURIComponent(match.groups!["message_id"]!),
+            ["emoji_name"]: decodeURIComponent(match.groups!["emoji_name"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

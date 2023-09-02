@@ -8,8 +8,11 @@ export type RouteModel = GetGuildEmojiRequestPath;
 const routeRegex = /^\/guilds\/(?<guild_id>.*?)\/emojis\/(?<emoji_id>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/guilds/{guild_id}/emojis/{emoji_id}",
-    keys: Object.freeze(["guild_id","emoji_id"] as const),
+    template: Object.freeze({
+        raw: "/guilds/{guild_id}/emojis/{emoji_id}" as const,
+        keys: Object.freeze(["guild_id","emoji_id"] as const),
+        segments: Object.freeze(["/guilds/","/emojis/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!),
-                ["emoji_id"]: decodeURIComponent(match["emoji_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+            ["emoji_id"]: decodeURIComponent(match.groups!["emoji_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

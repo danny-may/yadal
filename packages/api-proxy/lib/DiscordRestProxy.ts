@@ -1,17 +1,17 @@
-import { HttpHeaders, IHttpRequest, IHttpResponse, Route, RouteMatcher } from '@yadal/rest';
+import { HttpHeaders, IHttpRequest, IHttpResponse, IRouteMatcher } from '@yadal/rest';
 import { IDiscordRestProxyHandler } from './IDiscordRestProxyHandler.js';
 
-export class DiscordRestProxy {
+export class DiscordRestProxy<T extends object> {
     readonly #handler: IDiscordRestProxyHandler;
-    readonly #routes: RouteMatcher<object>;
+    readonly #routes: IRouteMatcher<T>;
 
-    constructor(handler: IDiscordRestProxyHandler, routes: Iterable<Route>) {
+    constructor(handler: IDiscordRestProxyHandler, routes: IRouteMatcher<T>) {
         this.#handler = handler;
-        this.#routes = new RouteMatcher(routes);
+        this.#routes = routes;
     }
 
     async handle(request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
-        for (const route of this.#routes.match(request.method, request.url.href.slice(request.url.protocol.length) as `/${string}`))
+        for (const route of this.#routes.matchAll(request.method, request.url.href.slice(request.url.protocol.length) as `/${string}`))
             return await this.#handler.handleRequest(route.route, route.model, request, signal);
         return notFound;
     }

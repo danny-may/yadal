@@ -8,8 +8,11 @@ export type RouteModel = SetGuildApplicationCommandPermissionsRequestPath;
 const routeRegex = /^\/applications\/(?<application_id>.*?)\/guilds\/(?<guild_id>.*?)\/commands\/(?<command_id>.*?)\/permissions$/i;
 export const route = {
     method: "PUT",
-    template: "/applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions",
-    keys: Object.freeze(["application_id","guild_id","command_id"] as const),
+    template: Object.freeze({
+        raw: "/applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions" as const,
+        keys: Object.freeze(["application_id","guild_id","command_id"] as const),
+        segments: Object.freeze(["/applications/","/guilds/","/commands/","/permissions"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const),
         "OAuth2": Object.freeze([
@@ -26,14 +29,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!),
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!),
-                ["command_id"]: decodeURIComponent(match["command_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!),
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+            ["command_id"]: decodeURIComponent(match.groups!["command_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

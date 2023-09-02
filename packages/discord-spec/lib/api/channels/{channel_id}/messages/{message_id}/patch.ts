@@ -8,8 +8,11 @@ export type RouteModel = UpdateMessageRequestPath;
 const routeRegex = /^\/channels\/(?<channel_id>.*?)\/messages\/(?<message_id>.*?)$/i;
 export const route = {
     method: "PATCH",
-    template: "/channels/{channel_id}/messages/{message_id}",
-    keys: Object.freeze(["channel_id","message_id"] as const),
+    template: Object.freeze({
+        raw: "/channels/{channel_id}/messages/{message_id}" as const,
+        keys: Object.freeze(["channel_id","message_id"] as const),
+        segments: Object.freeze(["/channels/","/messages/",""] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["channel_id"]: decodeURIComponent(match["channel_id"]!),
-                ["message_id"]: decodeURIComponent(match["message_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["channel_id"]: decodeURIComponent(match.groups!["channel_id"]!),
+            ["message_id"]: decodeURIComponent(match.groups!["message_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

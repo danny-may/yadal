@@ -4,6 +4,9 @@ importers:
 
   .:
     dependencies:
+      '@yadal/rest':
+        specifier: workspace:^
+        version: link:packages/rest
       yadal:
         specifier: workspace:^
         version: link:packages/yadal

@@ -19,7 +19,7 @@ export class RateLimitManager implements IRateLimitManager {
             this.#config.set(entry.route, entry);
     }
 
-    get<T extends object>(route: Route<HttpMethod, T>, model: T): IRateLimiter | undefined {
+    get<T extends object>(route: Route<HttpMethod, T>, model: Record<keyof T, string>): IRateLimiter | undefined {
         const config = this.#config.get(route) as IRouteRateLimitConfig<T> | undefined;
         if (config === undefined)
             return undefined

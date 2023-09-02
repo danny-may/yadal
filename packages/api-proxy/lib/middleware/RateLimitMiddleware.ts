@@ -9,7 +9,7 @@ export class RateLimitMiddleware implements IDiscordRestProxyMiddleware {
         this.#rateLimits = rateLimits;
     }
 
-    async handle<T extends object>(route: Route<HttpMethod, T>, params: T, _: unknown, next: (signal?: AbortSignal | undefined) => PromiseLike<IHttpResponse>, signal?: AbortSignal | undefined): Promise<IHttpResponse> {
+    async handle<T extends object>(route: Route<HttpMethod, T>, params: Record<keyof T, string>, _: unknown, next: (signal?: AbortSignal | undefined) => PromiseLike<IHttpResponse>, signal?: AbortSignal | undefined): Promise<IHttpResponse> {
         const ratelimit = this.#rateLimits.get(route, params);
         if (ratelimit === undefined)
             return await next();

@@ -8,8 +8,11 @@ export type RouteModel = GetGuildIconRequestPath;
 const routeRegex = /^\/icons\/(?<guild_id>.*?)\/(?<guild_icon>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/icons/{guild_id}/{guild_icon}.{format}",
-    keys: Object.freeze(["guild_id","guild_icon","format"] as const),
+    template: Object.freeze({
+        raw: "/icons/{guild_id}/{guild_icon}.{format}" as const,
+        keys: Object.freeze(["guild_id","guild_icon","format"] as const),
+        segments: Object.freeze(["/icons/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/icons\/(?<guild_id>.*?)\/(?<guild_icon>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["guild_id"]: decodeURIComponent(match["guild_id"]!),
-                ["guild_icon"]: decodeURIComponent(match["guild_icon"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["guild_id"]: decodeURIComponent(match.groups!["guild_id"]!),
+            ["guild_icon"]: decodeURIComponent(match.groups!["guild_icon"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

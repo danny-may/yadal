@@ -9,7 +9,7 @@ export class HttpRequestMiddleware implements IDiscordRestProxyMiddleware {
         this.#client = client;
     }
 
-    async handle<T extends object>(_route: Route<HttpMethod, T>, _params: T, request: IHttpRequest, _: unknown, signal: AbortSignal | undefined) {
+    async handle<T extends object>(_route: Route<HttpMethod, T>, _params: Record<keyof T, string>, request: IHttpRequest, _: unknown, signal: AbortSignal | undefined) {
         return await this.#client.send(request, signal);
     }
 }

@@ -8,8 +8,11 @@ export type RouteModel = GetApplicationAssetRequestPath;
 const routeRegex = /^\/app-assets\/(?<application_id>.*?)\/(?<asset_id>.*?)\.(?<format>.*?)$/i;
 export const route = {
     method: "GET",
-    template: "/app-assets/{application_id}/{asset_id}.{format}",
-    keys: Object.freeze(["application_id","asset_id","format"] as const),
+    template: Object.freeze({
+        raw: "/app-assets/{application_id}/{asset_id}.{format}" as const,
+        keys: Object.freeze(["application_id","asset_id","format"] as const),
+        segments: Object.freeze(["/app-assets/","/",".",""] as const)
+    }),
     authentication: Object.freeze({} as const),
     get regex(){
         return /^\/app-assets\/(?<application_id>.*?)\/(?<asset_id>.*?)\.(?<format>.*?)$/i;
@@ -21,14 +24,12 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!),
-                ["asset_id"]: decodeURIComponent(match["asset_id"]!),
-                ["format"]: decodeURIComponent(match["format"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!),
+            ["asset_id"]: decodeURIComponent(match.groups!["asset_id"]!),
+            ["format"]: decodeURIComponent(match.groups!["format"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

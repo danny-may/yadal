@@ -9,7 +9,7 @@ export class URLResolverMiddleware implements IDiscordRestProxyMiddleware {
         this.#resolver = resolver;
     }
 
-    handle<T extends object>(_route: Route<HttpMethod, T>, _params: T, request: IHttpRequest, next: (signal?: AbortSignal) => PromiseLike<IHttpResponse>): PromiseLike<IHttpResponse> {
+    handle<T extends object>(_route: Route<HttpMethod, T>, _params: Record<keyof T, string>, request: IHttpRequest, next: (signal?: AbortSignal) => PromiseLike<IHttpResponse>): PromiseLike<IHttpResponse> {
         const url = request.url;
         if (url.protocol === 'rel:')
             request.url = this.#resolver.resolve(url);

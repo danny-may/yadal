@@ -41,7 +41,7 @@ function makeUrlResolver(options: ApiClientOptions['urlResolver']) {
 
     const { rest } = options ?? {};
     return new ProtocolURLResolver({
-        ['rest:']: typeof rest === 'function' ? rest : createUrlMerger(rest ?? new URL('https://discord.com/api/v10')),
+        ['api:']: typeof rest === 'function' ? rest : createUrlMerger(rest ?? new URL('https://discord.com/api/v10')),
     });
 }
 

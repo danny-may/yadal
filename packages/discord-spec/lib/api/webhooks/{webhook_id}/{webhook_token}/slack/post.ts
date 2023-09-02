@@ -8,8 +8,11 @@ export type RouteModel = ExecuteSlackCompatibleWebhookRequestPath;
 const routeRegex = /^\/webhooks\/(?<webhook_id>.*?)\/(?<webhook_token>.*?)\/slack$/i;
 export const route = {
     method: "POST",
-    template: "/webhooks/{webhook_id}/{webhook_token}/slack",
-    keys: Object.freeze(["webhook_id","webhook_token"] as const),
+    template: Object.freeze({
+        raw: "/webhooks/{webhook_id}/{webhook_token}/slack" as const,
+        keys: Object.freeze(["webhook_id","webhook_token"] as const),
+        segments: Object.freeze(["/webhooks/","/","/slack"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,13 +26,11 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["webhook_id"]: decodeURIComponent(match["webhook_id"]!),
-                ["webhook_token"]: decodeURIComponent(match["webhook_token"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["webhook_id"]: decodeURIComponent(match.groups!["webhook_id"]!),
+            ["webhook_token"]: decodeURIComponent(match.groups!["webhook_token"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

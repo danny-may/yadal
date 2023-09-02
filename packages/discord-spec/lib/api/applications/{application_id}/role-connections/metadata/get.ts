@@ -8,8 +8,11 @@ export type RouteModel = GetApplicationRoleConnectionsMetadataRequestPath;
 const routeRegex = /^\/applications\/(?<application_id>.*?)\/role-connections\/metadata$/i;
 export const route = {
     method: "GET",
-    template: "/applications/{application_id}/role-connections/metadata",
-    keys: Object.freeze(["application_id"] as const),
+    template: Object.freeze({
+        raw: "/applications/{application_id}/role-connections/metadata" as const,
+        keys: Object.freeze(["application_id"] as const),
+        segments: Object.freeze(["/applications/","/role-connections/metadata"] as const)
+    }),
     authentication: Object.freeze({
         "BotToken": Object.freeze([] as const)
     } as const),
@@ -23,12 +26,10 @@ export const route = {
         return routeRegex.test(url);
     },
     tryParse(url: `/${string}`) {
-        const match = url.match(routeRegex)?.groups;
-        return match === undefined
-            ? null
-            : {
-                ["application_id"]: decodeURIComponent(match["application_id"]!)
-            };
+        const match = url.match(routeRegex);
+        return match === null ? null : {
+            ["application_id"]: decodeURIComponent(match.groups!["application_id"]!)
+        };
     },
     parse(url: `/${string}`) {
         const result = route.tryParse(url);

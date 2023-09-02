@@ -6,7 +6,7 @@ type RestMethods<T extends Record<PropertyKey, IOperation<object, unknown>>> = {
     : never;
 }
 type RestMethod<Model extends object, Result> = (...args: RestMethodArgs<Model>) => Promise<Result>
-type RestMethodArgs<Model extends object> = [{}] extends [Model] ? [signal?: AbortSignal] : [request: Model, signal?: AbortSignal];
+type RestMethodArgs<Model extends object> = ([{}] extends [Model] ? [signal?: AbortSignal] : never) | [request: Model, signal?: AbortSignal];
 
 export function defineOperationClient<T extends Record<PropertyKey, IOperation<any, any>>>(operations: T) {
     return class BoundOperationClient {
@@ -37,5 +37,8 @@ export function defineOperationClient<T extends Record<PropertyKey, IOperation<a
             };
             return result[key as keyof typeof result];
         }
-    } as unknown as new (client: IOperationSender) => RestMethods<T>
+    } as unknown as {
+        new(client: IOperationSender): RestMethods<T>;
+        readonly operations: T;
+    }
 }
