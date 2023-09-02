@@ -6,7 +6,8 @@
     "build:all": "lerna run build",
     "watch": "tsc -w",
     "build": "tsc",
-    "test": "lerna run build && c8 node --test"
+    "test": "lerna run build && c8 node --test",
+    "prepack": "tsc"
   },
   "type": "module",
   "workspaces": [
