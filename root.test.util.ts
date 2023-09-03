@@ -13,7 +13,7 @@ function getFileUnderTest(caller: Function, meta?: ImportMeta) {
     const f = meta === undefined ? getCallerFileName(caller) : fileURLToPath(meta.url);
     if (!f.endsWith('.test.js'))
         throw new Error('Called from a non-test file');
-    return path.relative(projectRoot, `${f.slice(0, -'.test.js'.length)}.js`);
+    return path.relative(projectRoot, `${f.replace('/test/', '/lib/').slice(0, -'.test.js'.length)}.js`);
 }
 
 function getCallerFileName(callee: Function) {
