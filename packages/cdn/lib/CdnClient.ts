@@ -3,13 +3,15 @@ import { ProtocolURLResolver, createUrlMerger } from "@yadal/core";
 import { operations, defaultUserAgent } from "./defaults.js";
 
 export class CdnClient extends defineOperationClient(operations) {
+    static readonly protocol = 'cdn:';
+
     static get defaultBaseUrl() {
         return new URL('https://cdn.discordapp.com/')
     }
 
     static urlResolver(baseUrl?: URL) {
         return new ProtocolURLResolver({
-            'cdn:': createUrlMerger(baseUrl ?? this.defaultBaseUrl)
+            [this.protocol]: createUrlMerger(baseUrl ?? this.defaultBaseUrl)
         })
     }
 

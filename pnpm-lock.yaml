@@ -8,9 +8,12 @@ importers:
 
   .:
     dependencies:
-      '@yadal/rest':
+      '@yadal/api-proxy':
         specifier: workspace:^
-        version: link:packages/rest
+        version: link:packages/api-proxy
+      '@yadal/cdn-proxy':
+        specifier: workspace:^
+        version: link:packages/cdn-proxy
       yadal:
         specifier: workspace:^
         version: link:packages/yadal
@@ -147,9 +150,18 @@ importers:
       '@yadal/cdn':
         specifier: workspace:^
         version: link:../cdn
+      '@yadal/core':
+        specifier: workspace:^
+        version: link:../core
+      '@yadal/discord-spec':
+        specifier: workspace:^
+        version: link:../discord-spec
       '@yadal/gateway':
         specifier: workspace:^
         version: link:../gateway
+      '@yadal/rest':
+        specifier: workspace:^
+        version: link:../rest
 
 packages:
 

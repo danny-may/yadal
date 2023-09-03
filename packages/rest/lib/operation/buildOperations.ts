@@ -17,7 +17,7 @@ export function buildOperation<T extends OperationDefinition>(baseUrl: URL, opti
         name,
         route,
         readResponse(response) {
-            return readResponse(response.status, response.headers.get('content-type'), getBody.bind(null, response.body));
+            return readResponse(response.status, response.headers.get('content-type')[0], getBody.bind(null, response.body));
         },
         createRequest(model) {
             const headers = new HttpHeaders(headerValues(model));

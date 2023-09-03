@@ -25,9 +25,7 @@
   },
   "dependencies": {
     "yadal": "workspace:^",
-    "@yadal/rest": "workspace:^"
-  },
-  "publishConfig": {
-    "access": "public"
+    "@yadal/api-proxy": "workspace:^",
+    "@yadal/cdn-proxy": "workspace:^"
   }
 }

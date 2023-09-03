@@ -5,13 +5,14 @@ import { HttpHeaders, type HttpMethod } from '@yadal/rest';
 export function toNodeHttp<
     Request extends typeof IncomingMessage = typeof IncomingMessage,
     Response extends typeof ServerResponse = typeof ServerResponse,
->(proxy: IRestProxy, onError: (error: unknown) => void = e => { throw e; }): RequestListener<Request, Response> {
+>(protocol: `${string}:`, proxy: IRestProxy, onError: (error: unknown) => void = e => { throw e; }): RequestListener<Request, Response> {
     return async (req, resp) => {
         try {
+            const headers = new HttpHeaders(req.headers);
             const response = await proxy.handle({
-                headers: new HttpHeaders(req.headers),
+                headers,
                 method: req.method!.toUpperCase() as HttpMethod,
-                url: new URL(`rel:${req.url}`),
+                url: new URL(`${protocol}${req.url}`),
                 body: {
                     stream() {
                         return req
@@ -25,9 +26,12 @@ export function toNodeHttp<
             });
             for await (const chunk of response.body.stream())
                 resp.write(chunk);
-            resp.end();
         } catch (err) {
+            if (!resp.headersSent)
+                resp.writeHead(500);
             onError(err)
+        } finally {
+            resp.end();
         }
     }
 }

@@ -11,8 +11,8 @@ export class AuthorizeMiddleware implements IRestProxyMiddleware {
 
     handle<T extends object>(context: IRestProxyInvocation<T>, next: () => PromiseLike<IHttpResponse> | IHttpResponse): PromiseLike<IHttpResponse> | IHttpResponse {
         const schemes = context.route.authentication;
-        const header = context.request.headers.get('Authorize');
-        if (!this.#validator.validate(schemes, header))
+        const header = context.request.headers.get('Authorization');
+        if (!this.#validator.validate(schemes, header[0]))
             throw new Error('Authorization failed to match any of the defined schemes');
 
         return next();

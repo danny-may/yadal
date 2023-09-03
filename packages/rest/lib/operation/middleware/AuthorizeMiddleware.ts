@@ -22,7 +22,7 @@ export class AuthorizeMiddleware implements IOperationSenderMiddleware {
             case null:
                 break;
             default:
-                request.http.headers.set('Authorize', auth);
+                request.http.headers.set('Authorization', auth);
         }
 
         return next();

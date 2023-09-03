@@ -1,8 +1,8 @@
 import { HttpHeaders } from "./HttpHeaders.js";
-import { request as createRequest } from 'node:https';
+import { request as createHttpsRequest } from 'node:https';
 import { IHttpRequest } from "./IHttpRequest.js";
 import { Deferred, abortListener } from "@yadal/core";
-import { IncomingMessage } from "node:http";
+import { IncomingMessage, request as createHttpRequest, RequestOptions } from "node:http";
 import { IHttpResponse } from "./IHttpResponse.js";
 
 export async function defaultHttpHandler(request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
@@ -18,6 +18,7 @@ export async function defaultHttpHandler(request: IHttpRequest, signal?: AbortSi
             ...request.body?.headers?.toDict()
         },
     }, defer.resolve);
+    message.on('error', () => console.log('AAAAAAA'));
     message.on('error', defer.reject);
     if (request.body !== undefined) {
         for await (const chunk of request.body.stream())
@@ -36,6 +37,14 @@ export async function defaultHttpHandler(request: IHttpRequest, signal?: AbortSi
             },
         },
         headers
+    }
+}
+
+function createRequest(url: URL, options: RequestOptions, callback: (message: IncomingMessage) => void) {
+    switch (url.protocol) {
+        case 'https:': return createHttpsRequest(url, options, callback);
+        case 'http:': return createHttpRequest(url, options, callback);
+        default: throw new Error(`Unsupported protocol ${url.protocol}`);
     }
 }
 

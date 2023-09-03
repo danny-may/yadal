@@ -11,8 +11,7 @@ export class URLResolverMiddleware implements IRestProxyMiddleware {
 
     handle<T extends object>(context: IRestProxyInvocation<T>, next: () => PromiseLike<IHttpResponse>): PromiseLike<IHttpResponse> {
         const url = context.request.url;
-        if (url.protocol === 'rel:')
-            context.request.url = this.#resolver.resolve(url);
+        context.request.url = this.#resolver.resolve(url);
         return next();
     }
 }

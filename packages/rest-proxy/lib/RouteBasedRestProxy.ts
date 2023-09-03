@@ -13,6 +13,8 @@ export class RouteBasedRestProxy<T extends object> implements IRestProxy {
     }
 
     async handle(request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
+        request.headers.delete('host');
+        request.headers.delete('origin');
         for (const route of this.#routes.matchAll(request.method, request.url.href.slice(request.url.protocol.length) as `/${string}`))
             return await this.#handler.handleRequest(route.route, route.model, request, signal);
         return notFound;

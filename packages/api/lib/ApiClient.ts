@@ -5,13 +5,18 @@ import { operations, defaultUserAgent, rateLimits } from "./defaults.js";
 
 export class ApiClient extends defineOperationClient(operations) {
     static readonly rateLimits = rateLimits;
+    static readonly protocol = 'api:';
     static get defaultBaseUrl() {
         return new URL('https://discord.com/api/v10');
     }
     static urlResolver(baseUrl?: URL) {
         return new ProtocolURLResolver({
-            'api:': createUrlMerger(baseUrl ?? this.defaultBaseUrl)
+            [this.protocol]: createUrlMerger(baseUrl ?? this.defaultBaseUrl)
         })
+    }
+
+    static botTokenHeader(token?: string) {
+        return token === undefined ? false : `Bot ${token}`;
     }
 
     static readonly rateLimitBucketConfig = Object.freeze({
@@ -25,11 +30,11 @@ export class ApiClient extends defineOperationClient(operations) {
     constructor(options: ApiClientOptions = {}) {
         const http = options.http ?? new HttpClient();
         const rateLimit = options.rateLimit ?? new RateLimitService(ApiClient.rateLimitBucketConfig);
-        const { authHeader = false } = options;
+        const header = ApiClient.botTokenHeader(options.token);
         super(new MiddlewareOperationSender([
             new URLResolverMiddleware(ApiClient.urlResolver(options.baseUrl)),
             new AuthorizeMiddleware(new AuthorizationProvider({
-                'BotToken': () => authHeader,
+                'BotToken': () => header,
                 'Anonymous': () => null
             })),
             new HeaderMiddleware({
@@ -51,7 +56,7 @@ export class ApiClient extends defineOperationClient(operations) {
 }
 
 export interface ApiClientOptions {
-    readonly authHeader?: string;
+    readonly token?: string;
     readonly http?: HttpClient;
     readonly baseUrl?: URL;
     readonly middleware?: Iterable<IOperationSenderMiddleware>;
