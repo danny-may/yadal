@@ -9,10 +9,12 @@ export function buildOperation<T extends OperationDefinition>(baseUrl: URL, opti
         headers: { getValues: headerValues },
         query: { getValues: queryValues },
         readResponse,
-        route
+        route,
+        name
     } = options;
 
     return Object.freeze<IOperation<HttpMethod, any, unknown>>({
+        name,
         route,
         readResponse(response) {
             return readResponse(response.status, response.headers.get('content-type'), getBody.bind(null, response.body));
@@ -72,7 +74,7 @@ export interface OperationDefinition<
     Response = unknown,
     Body extends object = any
 > {
-    readonly name: PropertyKey;
+    readonly name: string;
     readonly route: Route<Method, Path>;
     readonly query: QueryDefinition<Query>;
     readonly headers: HeadersDefinition<Headers>;

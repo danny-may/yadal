@@ -13,7 +13,9 @@ export const route = {
         keys: Object.freeze(["sticker_pack_banner_asset_id","format"] as const),
         segments: Object.freeze(["/app-assets/710982414301790216/store/",".",""] as const)
     }),
-    authentication: Object.freeze({} as const),
+    authentication: Object.freeze({
+        "Anonymous": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/app-assets\/710982414301790216\/store\/(?<sticker_pack_banner_asset_id>.*?)\.(?<format>.*?)$/i;
     },

@@ -14,6 +14,7 @@ export const route = {
         segments: Object.freeze(["/webhooks/","/","/slack"] as const)
     }),
     authentication: Object.freeze({
+        "Anonymous": Object.freeze([] as const),
         "BotToken": Object.freeze([] as const)
     } as const),
     get regex(){

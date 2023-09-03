@@ -13,7 +13,9 @@ export const route = {
         keys: Object.freeze(["guild_id","user_id","member_avatar","format"] as const),
         segments: Object.freeze(["/guilds/","/users/","/avatars/",".",""] as const)
     }),
-    authentication: Object.freeze({} as const),
+    authentication: Object.freeze({
+        "Anonymous": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/guilds\/(?<guild_id>.*?)\/users\/(?<user_id>.*?)\/avatars\/(?<member_avatar>.*?)\.(?<format>.*?)$/i;
     },

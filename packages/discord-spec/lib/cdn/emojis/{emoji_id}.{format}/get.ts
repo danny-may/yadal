@@ -13,7 +13,9 @@ export const route = {
         keys: Object.freeze(["emoji_id","format"] as const),
         segments: Object.freeze(["/emojis/",".",""] as const)
     }),
-    authentication: Object.freeze({} as const),
+    authentication: Object.freeze({
+        "Anonymous": Object.freeze([] as const)
+    } as const),
     get regex(){
         return /^\/emojis\/(?<emoji_id>.*?)\.(?<format>.*?)$/i;
     },

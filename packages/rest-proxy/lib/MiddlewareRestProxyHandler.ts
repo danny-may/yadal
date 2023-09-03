@@ -1,26 +1,20 @@
-import { CompositeAbortController } from "@yadal/core";
+import { IMiddlewareInvoker, combineMiddleware } from "@yadal/core";
 import { HttpMethod, IHttpRequest, IHttpResponse, Route } from "@yadal/rest";
 import { IRestProxyHandler } from './IRestProxyHandler.js';
-import { IRestProxyMiddleware } from "./middleware/index.js";
+import { IRestProxyInvocation, IRestProxyMiddleware } from "./middleware/index.js";
 
 export class MiddlewareRestProxyHandler implements IRestProxyHandler {
-    readonly #send: IRestProxyHandler['handleRequest'];
+    readonly #send: IMiddlewareInvoker<IRestProxyInvocation<object>, IHttpResponse>;
 
     constructor(middleware: Iterable<IRestProxyMiddleware>) {
-        this.#send = [...middleware]
-            .reduceRight<IRestProxyHandler['handleRequest']>(
-                (p, c) => (route, params, req, sig1) => c.handle(route, params, req, async sig2 => {
-                    if (sig2 === undefined)
-                        return await p(route, params, req, sig1);
-                    using controller = new CompositeAbortController(sig1, sig2);
-                    return await p(route, params, req, controller.signal);
-                }, sig1),
-                () => { throw new Error('No middleware handled the request') }
-            )
+        this.#send = combineMiddleware(middleware, () => {
+            throw new Error('No middleware handled the request')
+        });
     }
 
-    async handleRequest<T extends object>(route: Route<HttpMethod, T>, params: Record<keyof T, string>, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
-        return await this.#send(route, params, request, signal);
+    async handleRequest<T extends object>(route: Route<HttpMethod, T>, params: Record<keyof T, string>, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse>;
+    async handleRequest(route: Route, params: Record<PropertyKey, string>, request: IHttpRequest, signal?: AbortSignal): Promise<IHttpResponse> {
+        return await this.#send(Object.freeze({ route, params, request }), signal);
     }
 }
 

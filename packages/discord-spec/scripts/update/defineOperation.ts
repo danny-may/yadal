@@ -41,7 +41,7 @@ export function defineOperation(
         name,
         imports,
         contents: source`export const name = ${JSON.stringify(name)};
-${defineRoute(method, pathType, imports, typesUrl, name, url, operation.security?.reduce((p, c) => Object.assign(p, c), {}) ?? {})}
+${defineRoute(method, pathType, imports, typesUrl, name, url, getSecurityOpions(operation))}
 ${defineRateLimit(operation)}
 ${defineQuery(queryType, imports, typesUrl, name)}
 ${defineHeader(headerType, imports, typesUrl, name)}
@@ -52,7 +52,23 @@ ${() => source([], ...Object.values(extern))}`,
     };
 }
 
+function isEmptyObject(value: unknown) {
+    return typeof value === 'object' && value !== null && Object.keys(value).length === 0;
+}
 
+function getSecurityOpions(operation: OperationObject) {
+    if (operation.security === undefined || operation.security.length === 0)
+        return { Anonymous: [] };
+
+    const result: Record<string, string[]> = {};
+    for (const scheme of operation.security) {
+        if (isEmptyObject(scheme))
+            Object.assign(result, { Anonymous: [] });
+        else
+            Object.assign(result, scheme);
+    }
+    return result;
+}
 
 function defineRequest(bodyTypes: { contentType: string; type: Type; }[], imports: ImportFromDetails[], helperUrl: URL, typesUrl: URL, extern: Record<string, Iterable<string>>) {
     if (bodyTypes.length === 0) {

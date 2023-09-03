@@ -1,4 +1,4 @@
-import { CompositeAbortController } from "@yadal/core";
+import { IMiddlewareInvoker, combineMiddleware } from "@yadal/core";
 import { IOperation } from "./IOperation.js";
 import { IOperationSender } from "./IOperationSender.js";
 import { IOperationRequest } from "./IOperationRequest.js";
@@ -6,29 +6,19 @@ import { IOperationResponse } from "./IOperationResponse.js";
 import { IOperationSenderMiddleware } from "./middleware/IOperationSenderMiddleware.js";
 import { HttpMethod } from "../http/index.js";
 
-type Send = <TModel extends object, TResult>(request: IOperationRequest<TModel, TResult>, signal?: AbortSignal) => PromiseLike<IOperationResponse<TModel, TResult>>;
-
 export class MiddlewareOperationSender implements IOperationSender {
-    readonly #send: Send;
+    readonly #send: IMiddlewareInvoker<IOperationRequest<object, unknown>, IOperationResponse<object, unknown>>;
 
     constructor(middleware: Iterable<IOperationSenderMiddleware>) {
-        this.#send = [...middleware]
-            .reduceRight<Send>(
-                (p, c) => (req, sig1) => c.handle(req, async sig2 => {
-                    if (sig2 === undefined)
-                        return await p(req, sig1);
-                    using controller = new CompositeAbortController(sig1, sig2);
-                    return await p(req, controller.signal)
-                }, sig1),
-                () => { throw new Error('No middleware handled the request') }
-            )
+        this.#send = combineMiddleware(middleware, () => {
+            throw new Error('No middleware handled the request')
+        })
     }
 
-    async send<TModel extends object, TResult>(operation: IOperation<HttpMethod, TModel, TResult>, model: TModel, signal?: AbortSignal | undefined): Promise<TResult>
-    async send<TResult>(operation: IOperation<HttpMethod, {}, TResult>, model?: undefined, signal?: AbortSignal | undefined): Promise<TResult>
-    async send<TModel extends object, TResult>(operation: IOperation<HttpMethod, TModel, TResult>, model: TModel, signal?: AbortSignal | undefined) {
+    async send<TModel extends object, TResult>(operation: IOperation<HttpMethod, TModel, TResult>, model: TModel, signal?: AbortSignal): Promise<TResult>
+    async send(operation: IOperation<HttpMethod, object, unknown>, model: object, signal?: AbortSignal) {
         let request;
-        const { result } = await this.#send<TModel, TResult>({
+        const { result } = await this.#send({
             operation,
             model,
             get http() {

@@ -1,0 +1,32 @@
+{
+  "name": "@yadal/cdn-proxy",
+  "version": "1.0.0-alpha.11",
+  "description": "Yet another discord cdn proxy",
+  "keywords": [
+    "discord"
+  ],
+  "author": "Danny May <dannyjmay97@gmail.com>",
+  "homepage": "https://github.com/danny-may/yadal/tree/main/packages/cdn-proxy#readme",
+  "license": "GPL-3.0-or-later",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danny-may/yadal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danny-may/yadal/issues"
+  },
+  "dependencies": {
+    "@yadal/cdn": "workspace:^",
+    "@yadal/rest-proxy": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

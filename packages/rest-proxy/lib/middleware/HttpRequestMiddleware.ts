@@ -1,5 +1,5 @@
-import { HttpClient, HttpMethod, IHttpRequest, Route } from "@yadal/rest";
-import { IRestProxyMiddleware } from "./IRestProxyMiddleware.js";
+import { HttpClient } from "@yadal/rest";
+import { IRestProxyInvocation, IRestProxyMiddleware } from "./IRestProxyMiddleware.js";
 
 
 export class HttpRequestMiddleware implements IRestProxyMiddleware {
@@ -9,7 +9,7 @@ export class HttpRequestMiddleware implements IRestProxyMiddleware {
         this.#client = client;
     }
 
-    async handle<T extends object>(_route: Route<HttpMethod, T>, _params: Record<keyof T, string>, request: IHttpRequest, _: unknown, signal: AbortSignal | undefined) {
-        return await this.#client.send(request, signal);
+    async handle<T extends object>(context: IRestProxyInvocation<T>, _: unknown, signal?: AbortSignal) {
+        return await this.#client.send(context.request, signal);
     }
 }

@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -59,6 +63,15 @@ importers:
       '@yadal/rest':
         specifier: workspace:^
         version: link:../rest
+
+  packages/cdn-proxy:
+    dependencies:
+      '@yadal/cdn':
+        specifier: workspace:^
+        version: link:../cdn
+      '@yadal/rest-proxy':
+        specifier: workspace:^
+        version: link:../rest-proxy
 
   packages/core:
     dependencies:
@@ -2227,6 +2240,7 @@ packages:
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
     dev: true

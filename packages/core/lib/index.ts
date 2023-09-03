@@ -15,4 +15,5 @@ export * from './stringSort.js';
 export * from './Sorter.js';
 export * from './stringCase.js';
 export * from './waitAll.js';
+export * from './IMiddleware.js';
 export * as snowflake from './snowflake.js';

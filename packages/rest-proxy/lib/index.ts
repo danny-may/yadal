@@ -1,3 +1,4 @@
+export * from './authorization/index.js';
 export * from './adapters/index.js';
 export * from './middleware/index.js';
 export * from './IRestProxy.js';
