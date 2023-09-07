@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type BanUserFromGuildRequestPath, type BanUserFromGuildRequestHeaders, type RateLimitError, type ErrorResponse } from '../../../../../types.js';
+import { type BanUserFromGuildRequestPath, type BanUserFromGuildRequestHeaders, type RateLimitError, type ErrorResponse, type BanUserFromGuildRequestJSON } from '../../../../../types.js';
 import { DiscordRestError, DiscordRateLimitError } from '../../../../../helpers.js';
 export const name = "banUserFromGuild";
 export type RouteModel = BanUserFromGuildRequestPath;
@@ -91,9 +91,16 @@ export async function readResponse(statusCode: number, contentType: string | und
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }
-export type Body = {};
-export function createBody(_: Body): undefined {
-    return undefined;
+export type Body = BanUserFromGuildRequestJSON;
+export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "delete_message_seconds": model["delete_message_seconds" as keyof typeof model],
+            "delete_message_days": model["delete_message_days" as keyof typeof model]
+        }))]
+    };
+    
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
 declare type TextDecoder = import('node:util').TextDecoder;
@@ -104,3 +111,6 @@ function decode(content: ArrayBufferView) {
         return decoder.decode(content);
     return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
 }
+declare const TextEncoder: typeof import('node:util').TextEncoder;
+declare type TextEncoder = import('node:util').TextEncoder;
+const encoder = new TextEncoder();

@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type UpdateMyUserRequestHeaders, type UserPIIResponse, type RateLimitError, type ErrorResponse, type UpdateMyUserRequestJSON } from '../../../types.js';
+import { type UpdateMyUserRequestHeaders, type UserPIIResponse, type RateLimitError, type ErrorResponse, type BotAccountPatchRequest } from '../../../types.js';
 import { DiscordRestError, DiscordRateLimitError } from '../../../helpers.js';
 export const name = "updateMyUser";
 export type RouteModel = {
@@ -95,7 +95,7 @@ export async function readResponse(statusCode: number, contentType: string | und
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }
-export type Body = UpdateMyUserRequestJSON;
+export type Body = BotAccountPatchRequest;
 export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
     return {
         type: `application/json; charset=${encoder.encoding}`,

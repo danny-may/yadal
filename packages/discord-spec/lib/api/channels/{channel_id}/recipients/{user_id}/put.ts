@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type AddGroupDmUserRequestPath, type AddGroupDmUserRequestHeaders, type AddGroupDmUserResponseJSON, type RateLimitError, type ErrorResponse } from '../../../../../types.js';
+import { type AddGroupDmUserRequestPath, type AddGroupDmUserRequestHeaders, type AddGroupDmUserResponseJSON, type RateLimitError, type ErrorResponse, type AddGroupDmUserRequestJSON } from '../../../../../types.js';
 import { DiscordRestError, DiscordRateLimitError } from '../../../../../helpers.js';
 export const name = "addGroupDmUser";
 export type RouteModel = AddGroupDmUserRequestPath;
@@ -97,9 +97,16 @@ export async function readResponse(statusCode: number, contentType: string | und
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }
-export type Body = {};
-export function createBody(_: Body): undefined {
-    return undefined;
+export type Body = AddGroupDmUserRequestJSON;
+export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "access_token": model["access_token" as keyof typeof model],
+            "nick": model["nick" as keyof typeof model]
+        }))]
+    };
+    
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
 declare type TextDecoder = import('node:util').TextDecoder;
@@ -110,3 +117,6 @@ function decode(content: ArrayBufferView) {
         return decoder.decode(content);
     return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
 }
+declare const TextEncoder: typeof import('node:util').TextEncoder;
+declare type TextEncoder = import('node:util').TextEncoder;
+const encoder = new TextEncoder();

@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@yadal/core": "workspace:^",
-    "discord-api-types": "^0.37.55"
+    "discord-api-types": "^0.37.56"
   },
   "devDependencies": {
     "@types/websocket": "^1.0.6",

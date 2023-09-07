@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type PruneGuildRequestPath, type PruneGuildRequestHeaders, type GuildPruneResponse, type RateLimitError, type ErrorResponse } from '../../../../types.js';
+import { type PruneGuildRequestPath, type PruneGuildRequestHeaders, type GuildPruneResponse, type RateLimitError, type ErrorResponse, type PruneGuildRequestJSON } from '../../../../types.js';
 import { DiscordRestError, DiscordRateLimitError } from '../../../../helpers.js';
 export const name = "pruneGuild";
 export type RouteModel = PruneGuildRequestPath;
@@ -93,9 +93,17 @@ export async function readResponse(statusCode: number, contentType: string | und
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }
-export type Body = {};
-export function createBody(_: Body): undefined {
-    return undefined;
+export type Body = PruneGuildRequestJSON;
+export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "days": model["days" as keyof typeof model],
+            "compute_prune_count": model["compute_prune_count" as keyof typeof model],
+            "include_roles": model["include_roles" as keyof typeof model]
+        }))]
+    };
+    
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
 declare type TextDecoder = import('node:util').TextDecoder;
@@ -106,3 +114,6 @@ function decode(content: ArrayBufferView) {
         return decoder.decode(content);
     return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
 }
+declare const TextEncoder: typeof import('node:util').TextEncoder;
+declare type TextEncoder = import('node:util').TextEncoder;
+const encoder = new TextEncoder();

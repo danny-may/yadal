@@ -22,8 +22,8 @@ export function defineOperation(
     const queryType = types.get(operation, schemes.query ?? Symbol());
     const pathType = types.get(operation, schemes.path ?? Symbol()) ?? emptyObj;
     const headerType = types.get(operation, schemes.header ?? Symbol());
-    const bodyTypes = Object.entries(noRef(operation.requestBody)?.content ?? {})
-        .map(([contentType, definition]) => ({ contentType, type: types.get(noRef(definition).schema ?? {}) ?? (() => { throw new Error('Channot find type'); })() }));
+    const bodyTypes = method === 'get' ? [] : Object.entries(noRef(operation.requestBody)?.content ?? {})
+        .map(([contentType, definition]) => ({ contentType, type: types.get(noRef(definition).schema ?? {}) ?? (() => { throw new Error('Cannot find type'); })() }));
     const responseTypes = Object.entries(operation.responses ?? {})
         .map(x => [x[0], noRef(x[1])] as const)
         .flatMap(([statusPattern, response]) => response.content === undefined

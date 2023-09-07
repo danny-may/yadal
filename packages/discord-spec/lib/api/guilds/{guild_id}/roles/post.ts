@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type CreateGuildRoleRequestPath, type CreateGuildRoleRequestHeaders, type GuildRoleResponse, type RateLimitError, type ErrorResponse } from '../../../../types.js';
+import { type CreateGuildRoleRequestPath, type CreateGuildRoleRequestHeaders, type GuildRoleResponse, type RateLimitError, type ErrorResponse, type CreateGuildRoleRequestJSON } from '../../../../types.js';
 import { DiscordRestError, DiscordRateLimitError } from '../../../../helpers.js';
 export const name = "createGuildRole";
 export type RouteModel = CreateGuildRoleRequestPath;
@@ -93,9 +93,21 @@ export async function readResponse(statusCode: number, contentType: string | und
     }
     throw new DiscordRestError(null, `Unexpected status code ${statusCode} response`);
 }
-export type Body = {};
-export function createBody(_: Body): undefined {
-    return undefined;
+export type Body = CreateGuildRoleRequestJSON;
+export function createBody(model: Body): { type: string; content: ArrayBufferView[]; } {
+    return {
+        type: `application/json; charset=${encoder.encoding}`,
+        content: [encoder.encode(JSON.stringify({
+            "name": model["name" as keyof typeof model],
+            "permissions": model["permissions" as keyof typeof model],
+            "color": model["color" as keyof typeof model],
+            "hoist": model["hoist" as keyof typeof model],
+            "mentionable": model["mentionable" as keyof typeof model],
+            "icon": model["icon" as keyof typeof model],
+            "unicode_emoji": model["unicode_emoji" as keyof typeof model]
+        }))]
+    };
+    
 }
 declare const TextDecoder: typeof import('node:util').TextDecoder;
 declare type TextDecoder = import('node:util').TextDecoder;
@@ -106,3 +118,6 @@ function decode(content: ArrayBufferView) {
         return decoder.decode(content);
     return decoder.decode(new Uint8Array(content.buffer, content.byteOffset, content.byteLength));
 }
+declare const TextEncoder: typeof import('node:util').TextEncoder;
+declare type TextEncoder = import('node:util').TextEncoder;
+const encoder = new TextEncoder();
