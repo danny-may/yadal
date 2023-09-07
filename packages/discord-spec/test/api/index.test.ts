@@ -43,6 +43,34 @@ function testDataFn(): {
 } {
     return {
         "createBody": {
+            "addGroupDmUser": [
+                {
+                    model: {},
+                    content: '{}',
+                    type: 'application/json; charset=utf-8'
+                }
+            ],
+            "createGuildRole": [
+                {
+                    model: {},
+                    content: '{}',
+                    type: 'application/json; charset=utf-8'
+                }
+            ],
+            "pruneGuild": [
+                {
+                    model: {},
+                    content: '{}',
+                    type: 'application/json; charset=utf-8'
+                }
+            ],
+            "banUserFromGuild": [
+                {
+                    model: {},
+                    content: '{}',
+                    type: 'application/json; charset=utf-8'
+                }
+            ],
             "createDm": [
                 {
                     model: {
@@ -72,8 +100,10 @@ function testDataFn(): {
             ],
             "updateMyUser": [
                 {
-                    model: {},
-                    content: '{}',
+                    model: {
+                        username: 'abc'
+                    },
+                    content: '{"username":"abc"}',
                     type: 'application/json; charset=utf-8'
                 }
             ],
