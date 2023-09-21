@@ -232,16 +232,8 @@ export interface ApplicationCommandIntegerOption {
      * @maxItems 25
      */
     choices?: (Array<ApplicationCommandOptionIntegerChoice> | null);
-    /**
-     * @maximum 9007199254740991
-     * @minimum -9007199254740991
-     */
-    min_value?: (number | null);
-    /**
-     * @maximum 9007199254740991
-     * @minimum -9007199254740991
-     */
-    max_value?: (number | null);
+    min_value?: (null | Int53Type);
+    max_value?: (null | Int53Type);
 }
 export interface ApplicationCommandIntegerOptionResponse {
     type: typeof ApplicationCommandOptionType["INTEGER"];
@@ -258,16 +250,8 @@ export interface ApplicationCommandIntegerOptionResponse {
     required?: (boolean | null);
     autocomplete?: (boolean | null);
     choices?: (Array<ApplicationCommandOptionIntegerChoiceResponse> | null);
-    /**
-     * @maximum 9007199254740991
-     * @minimum -9007199254740991
-     */
-    min_value?: (number | null);
-    /**
-     * @maximum 9007199254740991
-     * @minimum -9007199254740991
-     */
-    max_value?: (number | null);
+    min_value?: (null | Int53Type);
+    max_value?: (null | Int53Type);
 }
 export interface ApplicationCommandMentionableOption {
     type: typeof ApplicationCommandOptionType["MENTIONABLE"];
@@ -396,7 +380,7 @@ export interface ApplicationCommandOptionIntegerChoice {
      * @maximum 9007199254740991
      * @minimum -9007199254740991
      */
-    value: number;
+    value: Int53Type;
 }
 export interface ApplicationCommandOptionIntegerChoiceResponse {
     name: string;
@@ -408,7 +392,7 @@ export interface ApplicationCommandOptionIntegerChoiceResponse {
      * @maximum 9007199254740991
      * @minimum -9007199254740991
      */
-    value: number;
+    value: Int53Type;
 }
 export interface ApplicationCommandOptionNumberChoice {
     /**
@@ -514,7 +498,10 @@ export const ApplicationCommandOptionType = {
 } as const;
 Object.freeze(ApplicationCommandOptionType);
 export interface ApplicationCommandPermission {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: ApplicationCommandPermissionType;
     permission: boolean;
 }
@@ -526,9 +513,18 @@ export const ApplicationCommandPermissionType = {
 } as const;
 Object.freeze(ApplicationCommandPermissionType);
 export interface ApplicationCommandResponse {
-    id: Snowflake;
-    application_id: Snowflake;
-    version: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    application_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    version: SnowflakeType;
     default_member_permissions?: (string | null);
     type: ApplicationCommandType;
     name: string;
@@ -541,7 +537,7 @@ export interface ApplicationCommandResponse {
     description_localizations?: ({
         [key: string]: string;
     } | null);
-    guild_id?: (Snowflake | null);
+    guild_id?: (null | SnowflakeType);
     dm_permission?: (boolean | null);
     options?: (Array<(ApplicationCommandAttachmentOptionResponse | ApplicationCommandBooleanOptionResponse | ApplicationCommandChannelOptionResponse | ApplicationCommandIntegerOptionResponse | ApplicationCommandMentionableOptionResponse | ApplicationCommandNumberOptionResponse | ApplicationCommandRoleOptionResponse | ApplicationCommandStringOptionResponse | ApplicationCommandSubcommandGroupOptionResponse | ApplicationCommandSubcommandOptionResponse | ApplicationCommandUserOptionResponse)> | null);
     nsfw?: (boolean | null);
@@ -658,15 +654,7 @@ export interface ApplicationCommandStringOptionResponse {
     required?: (boolean | null);
     autocomplete?: (boolean | null);
     choices?: (Array<ApplicationCommandOptionStringChoiceResponse> | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_length?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_length?: (Int32 | null);
 }
 export interface ApplicationCommandSubcommandGroupOption {
@@ -854,7 +842,7 @@ export interface ApplicationFormPartial {
     } | null);
     icon?: (Base64String | null);
     cover_image?: (Base64String | null);
-    team_id?: (Snowflake | null);
+    team_id?: (null | SnowflakeType);
     flags?: (number | null);
     /**
      * @maxLength 2048
@@ -863,7 +851,7 @@ export interface ApplicationFormPartial {
     /**
      * @minimum -1
      */
-    max_participants?: (number | null);
+    max_participants?: (Int32 | null);
     type?: (null | ApplicationType);
     /**
      * @maxItems 5
@@ -881,11 +869,14 @@ export interface ApplicationFormPartial {
     role_connections_verification_url?: (URIString | null);
 }
 export interface ApplicationIncomingWebhookResponse {
-    application_id?: (Snowflake | null);
+    application_id?: (null | SnowflakeType);
     avatar?: (string | null);
-    channel_id?: (Snowflake | null);
-    guild_id?: (Snowflake | null);
-    id: Snowflake;
+    channel_id?: (null | SnowflakeType);
+    guild_id?: (null | SnowflakeType);
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     type: typeof WebhookType["APPLICATION_INCOMING"];
     user?: (null | UserResponse);
@@ -910,16 +901,19 @@ export interface ApplicationOAuth2ParamsResponse {
     permissions: string;
 }
 export interface ApplicationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description: string;
     type?: (null | ApplicationType);
     cover_image?: (string | null);
-    primary_sku_id?: (Snowflake | null);
+    primary_sku_id?: (null | SnowflakeType);
     bot?: (null | UserResponse);
     slug?: (string | null);
-    guild_id?: (Snowflake | null);
+    guild_id?: (null | SnowflakeType);
     rpc_origins?: (Array<(string | null)> | null);
     bot_public?: (boolean | null);
     bot_require_code_grant?: (boolean | null);
@@ -928,15 +922,7 @@ export interface ApplicationResponse {
     custom_install_url?: (URIString | null);
     install_params?: (null | ApplicationOAuth2ParamsResponse);
     verify_key: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_participants?: (Int32 | null);
     /**
      * @distinct 
@@ -1082,10 +1068,13 @@ export const AuditLogActionType = {
 } as const;
 Object.freeze(AuditLogActionType);
 export interface AuditLogEntryResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     action_type: AuditLogActionType;
-    user_id?: (Snowflake | null);
-    target_id?: (Snowflake | null);
+    user_id?: (null | SnowflakeType);
+    target_id?: (null | SnowflakeType);
     changes?: (Array<AuditLogObjectChangeResponse> | null);
     options?: ({
         [key: string]: string;
@@ -1318,7 +1307,7 @@ export interface BaseCreateMessageCreateRequest {
     /**
      * @maxItems 3
      */
-    sticker_ids?: (Array<Snowflake> | null);
+    sticker_ids?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 5
      */
@@ -1330,20 +1319,29 @@ export interface BaseCreateMessageCreateRequest {
     attachments?: (Array<MessageAttachmentRequest> | null);
 }
 export interface BasicApplicationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description: string;
     type?: (null | ApplicationType);
     cover_image?: (string | null);
-    primary_sku_id?: (Snowflake | null);
+    primary_sku_id?: (null | SnowflakeType);
     bot?: (null | UserResponse);
 }
 export interface BasicMessageResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: MessageType;
     content: string;
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     author: UserResponse;
     attachments: Array<MessageAttachmentResponse>;
     embeds: Array<MessageEmbedResponse>;
@@ -1351,34 +1349,26 @@ export interface BasicMessageResponse {
     /**
      * @distinct 
      */
-    mention_roles: Array<Snowflake>;
+    mention_roles: Array<SnowflakeType>;
     pinned: boolean;
     mention_everyone: boolean;
     tts: boolean;
     timestamp: ISO8601DateTime;
     edited_timestamp?: (ISO8601DateTime | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
     components: Array<(MessageComponentActionRowResponse | MessageComponentButtonResponse | MessageComponentChannelSelectResponse | MessageComponentInputTextResponse | MessageComponentMentionableSelectResponse | MessageComponentRoleSelectResponse | MessageComponentStringSelectResponse | MessageComponentUserSelectResponse)>;
     activity?: (null | MessageActivityResponse);
     application?: (null | BasicApplicationResponse);
-    application_id?: (Snowflake | null);
+    application_id?: (null | SnowflakeType);
     interaction?: (null | MessageInteractionResponse);
     nonce?: (Int64 | string | null);
-    webhook_id?: (Snowflake | null);
+    webhook_id?: (null | SnowflakeType);
     message_reference?: (null | MessageReferenceResponse);
     thread?: (null | ThreadResponse);
     mention_channels?: (Array<(null | MessageMentionChannelResponse)> | null);
     stickers?: (Array<(GuildStickerResponse | StandardStickerResponse)> | null);
     sticker_items?: (Array<MessageStickerItemResponse> | null);
     role_subscription_data?: (null | MessageRoleSubscriptionDataResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     position?: (Int32 | null);
 }
 export interface BlockMessageAction {
@@ -1434,15 +1424,24 @@ export const ButtonStyleType = {
 } as const;
 Object.freeze(ButtonStyleType);
 export interface ChannelFollowerResponse {
-    channel_id: Snowflake;
-    webhook_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    webhook_id: SnowflakeType;
 }
 export interface ChannelFollowerWebhookResponse {
-    application_id?: (Snowflake | null);
+    application_id?: (null | SnowflakeType);
     avatar?: (string | null);
-    channel_id?: (Snowflake | null);
-    guild_id?: (Snowflake | null);
-    id: Snowflake;
+    channel_id?: (null | SnowflakeType);
+    guild_id?: (null | SnowflakeType);
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     type: typeof WebhookType["CHANNEL_FOLLOWER"];
     user?: (null | UserResponse);
@@ -1450,13 +1449,19 @@ export interface ChannelFollowerWebhookResponse {
     source_channel?: (null | WebhookSourceChannelResponse);
 }
 export interface ChannelPermissionOverwriteRequest {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type?: (null | ChannelPermissionOverwrite);
     allow?: (number | null);
     deny?: (number | null);
 }
 export interface ChannelPermissionOverwriteResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: ChannelPermissionOverwrite;
     allow: string;
     deny: string;
@@ -1546,18 +1551,33 @@ export const ChannelType = {
 } as const;
 Object.freeze(ChannelType);
 export interface CommandPermissionResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: ApplicationCommandPermissionType;
     permission: boolean;
 }
 export interface CommandPermissionsResponse {
-    id: Snowflake;
-    application_id: Snowflake;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    application_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     permissions: Array<CommandPermissionResponse>;
 }
 export interface ConnectedAccountGuildResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
 }
@@ -1623,7 +1643,7 @@ export interface CreateForumThreadRequest {
     /**
      * @maxItems 5
      */
-    applied_tags?: (Array<Snowflake> | null);
+    applied_tags?: (Array<SnowflakeType> | null);
     message: BaseCreateMessageCreateRequest;
 }
 export interface CreateGroupDMInviteRequest {
@@ -1641,7 +1661,6 @@ export interface CreateGuildChannelRequest {
      */
     name: string;
     /**
-     * @maximum 2147483647
      * @minimum 0
      */
     position?: (Int32 | null);
@@ -1653,18 +1672,18 @@ export interface CreateGuildChannelRequest {
     /**
      * @minimum 8000
      */
-    bitrate?: (number | null);
+    bitrate?: (Int32 | null);
     /**
      * @minimum 0
      */
-    user_limit?: (number | null);
+    user_limit?: (Int32 | null);
     nsfw?: (boolean | null);
     /**
      * @maximum 21600
      * @minimum 0
      */
     rate_limit_per_user?: (number | null);
-    parent_id?: (Snowflake | null);
+    parent_id?: (null | SnowflakeType);
     /**
      * @maxItems 100
      */
@@ -1673,6 +1692,11 @@ export interface CreateGuildChannelRequest {
     video_quality_mode?: (null | VideoQualityMode);
     default_auto_archive_duration?: (null | ThreadAutoArchiveDuration);
     default_reaction_emoji?: (null | UpdateDefaultReactionEmojiRequest);
+    /**
+     * @maximum 21600
+     * @minimum 0
+     */
+    default_thread_rate_limit_per_user?: (number | null);
     default_sort_order?: (null | ThreadSortOrder);
     default_forum_layout?: (null | ForumLayout);
     /**
@@ -1693,8 +1717,8 @@ export interface CreateGuildInviteRequest {
      */
     max_uses?: (number | null);
     unique?: (boolean | null);
-    target_user_id?: (Snowflake | null);
-    target_application_id?: (Snowflake | null);
+    target_user_id?: (null | SnowflakeType);
+    target_application_id?: (null | SnowflakeType);
     target_type?: (null | (typeof InviteTargetType["STREAM"] | typeof InviteTargetType["EMBEDDED_APPLICATION"]));
 }
 export interface CreateGuildRequestChannelItem {
@@ -1705,7 +1729,6 @@ export interface CreateGuildRequestChannelItem {
      */
     name: string;
     /**
-     * @maximum 2147483647
      * @minimum 0
      */
     position?: (Int32 | null);
@@ -1717,18 +1740,18 @@ export interface CreateGuildRequestChannelItem {
     /**
      * @minimum 8000
      */
-    bitrate?: (number | null);
+    bitrate?: (Int32 | null);
     /**
      * @minimum 0
      */
-    user_limit?: (number | null);
+    user_limit?: (Int32 | null);
     nsfw?: (boolean | null);
     /**
      * @maximum 21600
      * @minimum 0
      */
     rate_limit_per_user?: (number | null);
-    parent_id?: (Snowflake | null);
+    parent_id?: (null | SnowflakeType);
     /**
      * @maxItems 100
      */
@@ -1744,7 +1767,7 @@ export interface CreateGuildRequestChannelItem {
     default_thread_rate_limit_per_user?: (number | null);
     default_sort_order?: (null | ThreadSortOrder);
     default_forum_layout?: (null | ForumLayout);
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     /**
      * @maxItems 20
      */
@@ -1779,7 +1802,7 @@ export interface CreateOrUpdateThreadTagRequest {
      * @minLength 0
      */
     name: string;
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     /**
      * @maxLength 100
      */
@@ -1787,7 +1810,7 @@ export interface CreateOrUpdateThreadTagRequest {
     moderated?: (boolean | null);
 }
 export interface CreatePrivateChannelRequest {
-    recipient_id?: (Snowflake | null);
+    recipient_id?: (null | SnowflakeType);
     /**
      * @maxItems 1521
      * @distinct 
@@ -1832,54 +1855,35 @@ export interface CreateTextThreadWithoutMessageRequest {
     invitable?: (boolean | null);
 }
 export interface CreatedThreadResponse {
-    id: Snowflake;
-    type: (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]);
-    last_message_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    type: (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]);
+    last_message_id?: (null | SnowflakeType);
     flags: Int32;
     last_pin_timestamp?: (ISO8601DateTime | null);
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
-    parent_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    parent_id?: (null | SnowflakeType);
     rate_limit_per_user?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     bitrate?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     user_limit?: (Int32 | null);
     rtc_region?: (string | null);
     video_quality_mode?: (null | VideoQualityMode);
     permissions?: (string | null);
-    owner_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    owner_id: SnowflakeType;
     thread_metadata?: (null | ThreadMetadataResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     message_count: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     member_count: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     total_message_sent: Int32;
-    applied_tags?: (Array<Snowflake> | null);
+    applied_tags?: (Array<SnowflakeType> | null);
     member?: (null | ThreadMemberResponse);
 }
 export interface DefaultKeywordListTriggerMetadata {
@@ -1915,12 +1919,12 @@ export interface DefaultKeywordListUpsertRequest {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type: typeof AutomodTriggerType["DEFAULT_KEYWORD_LIST"];
     trigger_metadata: DefaultKeywordListTriggerMetadata;
 }
@@ -1940,19 +1944,28 @@ export interface DefaultKeywordListUpsertRequestPartial {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type?: typeof AutomodTriggerType["DEFAULT_KEYWORD_LIST"];
     trigger_metadata?: DefaultKeywordListTriggerMetadata;
 }
 export interface DefaultKeywordRuleResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
-    creator_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    creator_id: SnowflakeType;
     name: string;
     event_type: AutomodEventType;
     actions: Array<(BlockMessageActionResponse | FlagToChannelActionResponse | QuarantineUserActionResponse | UserCommunicationDisabledActionResponse)>;
@@ -1961,15 +1974,15 @@ export interface DefaultKeywordRuleResponse {
     /**
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_metadata: DefaultKeywordListTriggerMetadataResponse;
 }
 export interface DefaultReactionEmojiResponse {
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     emoji_name?: (string | null);
 }
 export interface DiscordIntegrationResponse {
@@ -1977,7 +1990,10 @@ export interface DiscordIntegrationResponse {
     name?: (string | null);
     account?: (null | AccountResponse);
     enabled?: (boolean | null);
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     application: IntegrationApplicationResponse;
     /**
      * @distinct 
@@ -1986,7 +2002,7 @@ export interface DiscordIntegrationResponse {
     user?: (null | UserResponse);
 }
 export interface Emoji {
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     /**
      * @maxLength 32
      */
@@ -1994,10 +2010,13 @@ export interface Emoji {
     animated?: (boolean | null);
 }
 export interface EmojiResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     user?: (null | UserResponse);
-    roles: Array<Snowflake>;
+    roles: Array<SnowflakeType>;
     require_colons: boolean;
     managed: boolean;
     animated: boolean;
@@ -2034,13 +2053,9 @@ export interface ExternalConnectionIntegrationResponse {
     revoked?: (boolean | null);
     expire_behavior?: (null | IntegrationExpireBehaviorType);
     expire_grace_period?: (null | IntegrationExpireGracePeriodType);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     subscriber_count?: (Int32 | null);
     synced_at?: (ISO8601DateTime | null);
-    role_id?: (Snowflake | null);
+    role_id?: (null | SnowflakeType);
     syncing?: (boolean | null);
     enable_emoticons?: (boolean | null);
 }
@@ -2058,7 +2073,7 @@ export interface ExternalScheduledEventCreateRequest {
     scheduled_end_time?: (ISO8601DateTime | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     entity_type: typeof GuildScheduledEventEntityType["EXTERNAL"];
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     entity_metadata: EntityMetadataExternal;
 }
 export interface ExternalScheduledEventPatchRequestPartial {
@@ -2076,27 +2091,29 @@ export interface ExternalScheduledEventPatchRequestPartial {
     scheduled_end_time?: (ISO8601DateTime | null);
     entity_type?: (null | typeof GuildScheduledEventEntityType["EXTERNAL"]);
     privacy_level?: GuildScheduledEventPrivacyLevel;
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     entity_metadata?: EntityMetadataExternal;
 }
 export interface ExternalScheduledEventResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
     description?: (string | null);
-    channel_id?: (Snowflake | null);
-    creator_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
+    creator_id?: (null | SnowflakeType);
     creator?: (null | UserResponse);
     image?: (string | null);
     scheduled_start_time: ISO8601DateTime;
     scheduled_end_time?: (ISO8601DateTime | null);
     status: GuildScheduledEventStatus;
     entity_type: typeof GuildScheduledEventEntityType["EXTERNAL"];
-    entity_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    entity_id?: (null | SnowflakeType);
     user_count?: (Int32 | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     user_rsvp?: (null | ScheduledEventUserResponse);
@@ -2107,10 +2124,16 @@ export interface FlagToChannelAction {
     metadata: FlagToChannelActionMetadata;
 }
 export interface FlagToChannelActionMetadata {
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
 }
 export interface FlagToChannelActionMetadataResponse {
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
 }
 export interface FlagToChannelActionResponse {
     type: typeof AutomodActionType["FLAG_TO_CHANNEL"];
@@ -2133,75 +2156,38 @@ export const ForumLayout = {
 } as const;
 Object.freeze(ForumLayout);
 export interface ForumTagResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     moderated: boolean;
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     emoji_name?: (string | null);
 }
 export interface FriendInviteResponse {
     type?: (null | typeof InviteType["FRIEND"]);
     code: string;
     inviter?: (null | UserResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_age?: (Int32 | null);
     created_at?: (ISO8601DateTime | null);
     expires_at?: (ISO8601DateTime | null);
     channel?: (null | InviteChannelResponse);
     is_contact?: (boolean | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     friends_count?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     uses?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_uses?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags?: (Int32 | null);
 }
 export interface GatewayBotResponse {
     url: URIString;
     session_start_limit: GatewayBotSessionStartLimitResponse;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     shards: Int32;
 }
 export interface GatewayBotSessionStartLimitResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_concurrency: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     remaining: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     reset_after: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     total: Int32;
 }
 export interface GatewayResponse {
@@ -2446,18 +2432,10 @@ export interface GroupDMInviteResponse {
     type?: (null | typeof InviteType["GROUP_DM"]);
     code: string;
     inviter?: (null | UserResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_age?: (Int32 | null);
     created_at?: (ISO8601DateTime | null);
     expires_at?: (ISO8601DateTime | null);
     channel?: (null | InviteChannelResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_member_count?: (Int32 | null);
 }
 export interface GuildAuditLogResponse {
@@ -2475,47 +2453,29 @@ export interface GuildBanResponse {
     reason?: (string | null);
 }
 export interface GuildChannelResponse {
-    id: Snowflake;
-    type: (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"] | typeof ChannelType["GUILD_ANNOUNCEMENT"] | typeof ChannelType["GUILD_STAGE_VOICE"] | typeof ChannelType["GUILD_DIRECTORY"] | typeof ChannelType["GUILD_FORUM"]);
-    last_message_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    type: (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"] | typeof ChannelType["GUILD_ANNOUNCEMENT"] | typeof ChannelType["GUILD_STAGE_VOICE"] | typeof ChannelType["GUILD_DIRECTORY"] | typeof ChannelType["GUILD_FORUM"]);
+    last_message_id?: (null | SnowflakeType);
     flags: Int32;
     last_pin_timestamp?: (ISO8601DateTime | null);
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
-    parent_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    parent_id?: (null | SnowflakeType);
     rate_limit_per_user?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     bitrate?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     user_limit?: (Int32 | null);
     rtc_region?: (string | null);
     video_quality_mode?: (null | VideoQualityMode);
     permissions?: (string | null);
     topic?: (string | null);
     default_auto_archive_duration?: (null | ThreadAutoArchiveDuration);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     default_thread_rate_limit_per_user?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     position: Int32;
     permission_overwrites?: (Array<ChannelPermissionOverwriteResponse> | null);
     nsfw?: (boolean | null);
@@ -2550,8 +2510,8 @@ export interface GuildCreateRequest {
      * @maxItems 1521
      */
     channels?: (Array<CreateGuildRequestChannelItem> | null);
-    afk_channel_id?: (Snowflake | null);
-    system_channel_id?: (Snowflake | null);
+    afk_channel_id?: (null | SnowflakeType);
+    system_channel_id?: (null | SnowflakeType);
     system_channel_flags?: (number | null);
 }
 export type GuildExplicitContentFilterType = typeof GuildExplicitContentFilterType[keyof typeof GuildExplicitContentFilterType];
@@ -2683,18 +2643,24 @@ export const GuildFeature = {
 } as const;
 Object.freeze(GuildFeature);
 export interface GuildHomeSettingsResponse {
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     enabled: boolean;
     welcome_message?: (null | WelcomeMessageResponse);
     new_member_actions?: (Array<(null | NewMemberActionResponse)> | null);
     resource_channels?: (Array<(null | ResourceChannelResponse)> | null);
 }
 export interface GuildIncomingWebhookResponse {
-    application_id?: (Snowflake | null);
+    application_id?: (null | SnowflakeType);
     avatar?: (string | null);
-    channel_id?: (Snowflake | null);
-    guild_id?: (Snowflake | null);
-    id: Snowflake;
+    channel_id?: (null | SnowflakeType);
+    guild_id?: (null | SnowflakeType);
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     type: typeof WebhookType["GUILD_INCOMING"];
     user?: (null | UserResponse);
@@ -2705,47 +2671,23 @@ export interface GuildInviteResponse {
     type?: (null | typeof InviteType["GUILD"]);
     code: string;
     inviter?: (null | UserResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_age?: (Int32 | null);
     created_at?: (ISO8601DateTime | null);
     expires_at?: (ISO8601DateTime | null);
     is_contact?: (boolean | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags?: (Int32 | null);
     guild?: (null | InviteGuildResponse);
-    guild_id?: (Snowflake | null);
+    guild_id?: (null | SnowflakeType);
     channel?: (null | InviteChannelResponse);
     stage_instance?: (null | InviteStageInstanceResponse);
     target_type?: (null | InviteTargetType);
     target_user?: (null | UserResponse);
     target_application?: (null | InviteApplicationResponse);
     guild_scheduled_event?: (null | ScheduledEventResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     uses?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_uses?: (Int32 | null);
     temporary?: (boolean | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_member_count?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_presence_count?: (Int32 | null);
 }
 export type GuildMFALevel = typeof GuildMFALevel[keyof typeof GuildMFALevel];
@@ -2766,10 +2708,6 @@ export interface GuildMFALevelResponse {
 export interface GuildMemberResponse {
     avatar?: (string | null);
     communication_disabled_until?: (ISO8601DateTime | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
     joined_at: ISO8601DateTime;
     nick?: (string | null);
@@ -2778,7 +2716,7 @@ export interface GuildMemberResponse {
     /**
      * @distinct 
      */
-    roles: Array<Snowflake>;
+    roles: Array<SnowflakeType>;
     user: UserResponse;
     mute: boolean;
     deaf: boolean;
@@ -2804,12 +2742,15 @@ export const GuildOnboardingMode = {
 } as const;
 Object.freeze(GuildOnboardingMode);
 export interface GuildOnboardingResponse {
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     prompts: Array<OnboardingPromptResponse>;
     /**
      * @distinct 
      */
-    default_channel_ids: Array<Snowflake>;
+    default_channel_ids: Array<SnowflakeType>;
     enabled: boolean;
 }
 export interface GuildPatchRequestPartial {
@@ -2830,9 +2771,12 @@ export interface GuildPatchRequestPartial {
     explicit_content_filter?: (null | GuildExplicitContentFilterType);
     preferred_locale?: (null | AvailableLocale);
     afk_timeout?: (null | AfkTimeout);
-    afk_channel_id?: (Snowflake | null);
-    system_channel_id?: (Snowflake | null);
-    owner_id?: Snowflake;
+    afk_channel_id?: (null | SnowflakeType);
+    system_channel_id?: (null | SnowflakeType);
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    owner_id?: SnowflakeType;
     splash?: (Base64String | null);
     banner?: (Base64String | null);
     system_channel_flags?: (number | null);
@@ -2843,13 +2787,16 @@ export interface GuildPatchRequestPartial {
     features?: (Array<(string | null)> | null);
     discovery_splash?: (Base64String | null);
     home_header?: (Base64String | null);
-    rules_channel_id?: (Snowflake | null);
-    safety_alerts_channel_id?: (Snowflake | null);
-    public_updates_channel_id?: (Snowflake | null);
+    rules_channel_id?: (null | SnowflakeType);
+    safety_alerts_channel_id?: (null | SnowflakeType);
+    public_updates_channel_id?: (null | SnowflakeType);
     premium_progress_bar_enabled?: (boolean | null);
 }
 export interface GuildPreviewResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description?: (string | null);
@@ -2860,28 +2807,19 @@ export interface GuildPreviewResponse {
      * @distinct 
      */
     features: Array<GuildFeature>;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_member_count: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_presence_count: Int32;
     emojis: Array<EmojiResponse>;
     stickers: Array<GuildStickerResponse>;
 }
 export interface GuildPruneResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     pruned?: (Int32 | null);
 }
 export interface GuildResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description?: (string | null);
@@ -2893,55 +2831,34 @@ export interface GuildResponse {
      */
     features: Array<GuildFeature>;
     banner?: (string | null);
-    owner_id: Snowflake;
-    application_id?: (Snowflake | null);
-    region: string;
-    afk_channel_id?: (Snowflake | null);
-    afk_timeout: AfkTimeout;
-    system_channel_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    owner_id: SnowflakeType;
+    application_id?: (null | SnowflakeType);
+    region: string;
+    afk_channel_id?: (null | SnowflakeType);
+    afk_timeout: AfkTimeout;
+    system_channel_id?: (null | SnowflakeType);
     system_channel_flags: Int32;
     widget_enabled: boolean;
-    widget_channel_id?: (Snowflake | null);
+    widget_channel_id?: (null | SnowflakeType);
     verification_level: VerificationLevel;
     roles: Array<GuildRoleResponse>;
     default_message_notifications: UserNotificationSetting;
     mfa_level: GuildMFALevel;
     explicit_content_filter: GuildExplicitContentFilterType;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_presences?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_members?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_stage_video_channel_users?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_video_channel_users?: (Int32 | null);
     vanity_url_code?: (string | null);
     premium_tier: PremiumGuildTier;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     premium_subscription_count: Int32;
     preferred_locale: AvailableLocale;
-    rules_channel_id?: (Snowflake | null);
-    safety_alerts_channel_id?: (Snowflake | null);
-    public_updates_channel_id?: (Snowflake | null);
+    rules_channel_id?: (null | SnowflakeType);
+    safety_alerts_channel_id?: (null | SnowflakeType);
+    public_updates_channel_id?: (null | SnowflakeType);
     premium_progress_bar_enabled: boolean;
     nsfw: boolean;
     nsfw_level: GuildNSFWContentLevel;
@@ -2949,19 +2866,14 @@ export interface GuildResponse {
     stickers: Array<GuildStickerResponse>;
 }
 export interface GuildRoleResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     description?: (string | null);
     permissions: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     position: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     color: Int32;
     hoist: boolean;
     managed: boolean;
@@ -2972,9 +2884,9 @@ export interface GuildRoleResponse {
 }
 export interface GuildRoleTagsResponse {
     premium_subscriber?: null;
-    bot_id?: (Snowflake | null);
-    integration_id?: (Snowflake | null);
-    subscription_listing_id?: (Snowflake | null);
+    bot_id?: (null | SnowflakeType);
+    integration_id?: (null | SnowflakeType);
+    subscription_listing_id?: (null | SnowflakeType);
     available_for_purchase?: null;
     guild_connections?: null;
 }
@@ -3003,14 +2915,20 @@ export const GuildScheduledEventStatus = {
 } as const;
 Object.freeze(GuildScheduledEventStatus);
 export interface GuildStickerResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     tags: string;
     type: typeof StickerType["GUILD"];
     format_type?: (null | StickerFormatType);
     description?: (string | null);
     available: boolean;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     user?: (null | UserResponse);
 }
 export interface GuildSubscriptionIntegrationResponse {
@@ -3018,61 +2936,36 @@ export interface GuildSubscriptionIntegrationResponse {
     name?: (string | null);
     account?: (null | AccountResponse);
     enabled?: (boolean | null);
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
 }
 export interface GuildTemplateChannelResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     id?: (Int32 | null);
     type: (typeof ChannelType["GUILD_TEXT"] | typeof ChannelType["GUILD_VOICE"] | typeof ChannelType["GUILD_CATEGORY"]);
     name?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     position?: (Int32 | null);
     topic?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     bitrate: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     user_limit: Int32;
     nsfw: boolean;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     rate_limit_per_user: Int32;
-    parent_id?: (Snowflake | null);
+    parent_id?: (null | SnowflakeType);
     default_auto_archive_duration?: (null | ThreadAutoArchiveDuration);
     permission_overwrites: Array<(null | ChannelPermissionOverwriteResponse)>;
     available_tags?: (Array<GuildTemplateChannelTags> | null);
     template: string;
     default_reaction_emoji?: (null | DefaultReactionEmojiResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     default_thread_rate_limit_per_user?: (Int32 | null);
     default_sort_order?: (null | ThreadSortOrder);
     default_forum_layout?: (null | ForumLayout);
     icon_emoji?: (null | IconEmojiResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     theme_color?: (Int32 | null);
 }
 export interface GuildTemplateChannelTags {
     name: string;
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     emoji_name?: (string | null);
     moderated?: (boolean | null);
 }
@@ -3080,31 +2973,25 @@ export interface GuildTemplateResponse {
     code: string;
     name: string;
     description?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     usage_count: Int32;
-    creator_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    creator_id: SnowflakeType;
     creator?: (null | UserResponse);
     created_at: ISO8601DateTime;
     updated_at: ISO8601DateTime;
-    source_guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    source_guild_id: SnowflakeType;
     serialized_source_guild: GuildTemplateSnapshotResponse;
     is_dirty?: (boolean | null);
 }
 export interface GuildTemplateRoleResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     id: Int32;
     name: string;
     permissions: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     color: Int32;
     hoist: boolean;
     mentionable: boolean;
@@ -3119,34 +3006,36 @@ export interface GuildTemplateSnapshotResponse {
     default_message_notifications: UserNotificationSetting;
     explicit_content_filter: GuildExplicitContentFilterType;
     preferred_locale: AvailableLocale;
-    afk_channel_id?: (Snowflake | null);
+    afk_channel_id?: (null | SnowflakeType);
     afk_timeout: AfkTimeout;
-    system_channel_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    system_channel_id?: (null | SnowflakeType);
     system_channel_flags: Int32;
     roles: Array<GuildTemplateRoleResponse>;
     channels: Array<GuildTemplateChannelResponse>;
 }
 export interface GuildWelcomeChannel {
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     /**
      * @maxLength 50
      * @minLength 1
      */
     description: string;
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     /**
      * @maxLength 152133
      */
     emoji_name?: (string | null);
 }
 export interface GuildWelcomeScreenChannelResponse {
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     description: string;
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     emoji_name?: (string | null);
 }
 export interface GuildWelcomeScreenResponse {
@@ -3154,7 +3043,10 @@ export interface GuildWelcomeScreenResponse {
     welcome_channels: Array<GuildWelcomeScreenChannelResponse>;
 }
 export interface GuildWithCountsResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description?: (string | null);
@@ -3166,69 +3058,40 @@ export interface GuildWithCountsResponse {
      */
     features: Array<GuildFeature>;
     banner?: (string | null);
-    owner_id: Snowflake;
-    application_id?: (Snowflake | null);
-    region: string;
-    afk_channel_id?: (Snowflake | null);
-    afk_timeout: AfkTimeout;
-    system_channel_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    owner_id: SnowflakeType;
+    application_id?: (null | SnowflakeType);
+    region: string;
+    afk_channel_id?: (null | SnowflakeType);
+    afk_timeout: AfkTimeout;
+    system_channel_id?: (null | SnowflakeType);
     system_channel_flags: Int32;
     widget_enabled: boolean;
-    widget_channel_id?: (Snowflake | null);
+    widget_channel_id?: (null | SnowflakeType);
     verification_level: VerificationLevel;
     roles: Array<GuildRoleResponse>;
     default_message_notifications: UserNotificationSetting;
     mfa_level: GuildMFALevel;
     explicit_content_filter: GuildExplicitContentFilterType;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_presences?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_members?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_stage_video_channel_users?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_video_channel_users?: (Int32 | null);
     vanity_url_code?: (string | null);
     premium_tier: PremiumGuildTier;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     premium_subscription_count: Int32;
     preferred_locale: AvailableLocale;
-    rules_channel_id?: (Snowflake | null);
-    safety_alerts_channel_id?: (Snowflake | null);
-    public_updates_channel_id?: (Snowflake | null);
+    rules_channel_id?: (null | SnowflakeType);
+    safety_alerts_channel_id?: (null | SnowflakeType);
+    public_updates_channel_id?: (null | SnowflakeType);
     premium_progress_bar_enabled: boolean;
     nsfw: boolean;
     nsfw_level: GuildNSFWContentLevel;
     emojis: Array<EmojiResponse>;
     stickers: Array<GuildStickerResponse>;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_member_count?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_presence_count?: (Int32 | null);
 }
 export interface IconEmojiResponse {
@@ -3292,7 +3155,7 @@ export interface IncomingWebhookRequestPartial {
     /**
      * @maxItems 5
      */
-    applied_tags?: (Array<Snowflake> | null);
+    applied_tags?: (Array<SnowflakeType> | null);
 }
 export interface IncomingWebhookUpdateForInteractionCallbackRequestPartial {
     /**
@@ -3365,14 +3228,22 @@ export interface InputText {
      */
     max_length?: (number | null);
 }
+/**
+ * @maximum 9007199254740991
+ * @minimum -9007199254740991
+ */
+export type Int53Type = Int64;
 export interface IntegrationApplicationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description: string;
     type?: (null | ApplicationType);
     cover_image?: (string | null);
-    primary_sku_id?: (Snowflake | null);
+    primary_sku_id?: (null | SnowflakeType);
     bot?: (null | UserResponse);
 }
 export type IntegrationExpireBehaviorType = typeof IntegrationExpireBehaviorType[keyof typeof IntegrationExpireBehaviorType];
@@ -3473,16 +3344,19 @@ export const InteractionType = {
 } as const;
 Object.freeze(InteractionType);
 export interface InviteApplicationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description: string;
     type?: (null | ApplicationType);
     cover_image?: (string | null);
-    primary_sku_id?: (Snowflake | null);
+    primary_sku_id?: (null | SnowflakeType);
     bot?: (null | UserResponse);
     slug?: (string | null);
-    guild_id?: (Snowflake | null);
+    guild_id?: (null | SnowflakeType);
     rpc_origins?: (Array<(string | null)> | null);
     bot_public?: (boolean | null);
     bot_require_code_grant?: (boolean | null);
@@ -3491,15 +3365,7 @@ export interface InviteApplicationResponse {
     custom_install_url?: (URIString | null);
     install_params?: (null | ApplicationOAuth2ParamsResponse);
     verify_key: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_participants?: (Int32 | null);
     /**
      * @distinct 
@@ -3510,14 +3376,20 @@ export interface InviteChannelRecipientResponse {
     username: string;
 }
 export interface InviteChannelResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: ChannelType;
     name?: (string | null);
     icon?: (string | null);
     recipients?: (Array<InviteChannelRecipientResponse> | null);
 }
 export interface InviteGuildResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     splash?: (string | null);
     banner?: (string | null);
@@ -3531,23 +3403,11 @@ export interface InviteGuildResponse {
     vanity_url_code?: (string | null);
     nsfw_level?: (null | GuildNSFWContentLevel);
     nsfw?: (boolean | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     premium_subscription_count?: (Int32 | null);
 }
 export interface InviteStageInstanceResponse {
     topic: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     participant_count?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     speaker_count?: (Int32 | null);
     members?: (Array<GuildMemberResponse> | null);
 }
@@ -3566,9 +3426,18 @@ export const InviteType = {
 } as const;
 Object.freeze(InviteType);
 export interface KeywordRuleResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
-    creator_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    creator_id: SnowflakeType;
     name: string;
     event_type: AutomodEventType;
     actions: Array<(BlockMessageActionResponse | FlagToChannelActionResponse | QuarantineUserActionResponse | UserCommunicationDisabledActionResponse)>;
@@ -3577,11 +3446,11 @@ export interface KeywordRuleResponse {
     /**
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_metadata: KeywordTriggerMetadataResponse;
 }
 export interface KeywordTriggerMetadata {
@@ -3619,12 +3488,12 @@ export interface KeywordUpsertRequest {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type: typeof AutomodTriggerType["KEYWORD"];
     trigger_metadata?: (null | KeywordTriggerMetadata);
 }
@@ -3644,19 +3513,28 @@ export interface KeywordUpsertRequestPartial {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type?: typeof AutomodTriggerType["KEYWORD"];
     trigger_metadata?: (null | KeywordTriggerMetadata);
 }
 export interface MLSpamRuleResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
-    creator_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    creator_id: SnowflakeType;
     name: string;
     event_type: AutomodEventType;
     actions: Array<(BlockMessageActionResponse | FlagToChannelActionResponse | QuarantineUserActionResponse | UserCommunicationDisabledActionResponse)>;
@@ -3665,11 +3543,11 @@ export interface MLSpamRuleResponse {
     /**
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_metadata: MLSpamTriggerMetadataResponse;
 }
 export interface MLSpamTriggerMetadata {
@@ -3694,12 +3572,12 @@ export interface MLSpamUpsertRequest {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type: typeof AutomodTriggerType["ML_SPAM"];
     trigger_metadata?: (null | MLSpamTriggerMetadata);
 }
@@ -3719,19 +3597,28 @@ export interface MLSpamUpsertRequestPartial {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type?: typeof AutomodTriggerType["ML_SPAM"];
     trigger_metadata?: (null | MLSpamTriggerMetadata);
 }
 export interface MentionSpamRuleResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
-    creator_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    creator_id: SnowflakeType;
     name: string;
     event_type: AutomodEventType;
     actions: Array<(BlockMessageActionResponse | FlagToChannelActionResponse | QuarantineUserActionResponse | UserCommunicationDisabledActionResponse)>;
@@ -3740,11 +3627,11 @@ export interface MentionSpamRuleResponse {
     /**
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_metadata: MentionSpamTriggerMetadataResponse;
 }
 export interface MentionSpamTriggerMetadata {
@@ -3756,10 +3643,6 @@ export interface MentionSpamTriggerMetadata {
     mention_raid_protection_enabled?: (boolean | null);
 }
 export interface MentionSpamTriggerMetadataResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     mention_total_limit: Int32;
 }
 export interface MentionSpamUpsertRequest {
@@ -3778,12 +3661,12 @@ export interface MentionSpamUpsertRequest {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type: typeof AutomodTriggerType["MENTION_SPAM"];
     trigger_metadata?: (null | MentionSpamTriggerMetadata);
 }
@@ -3803,12 +3686,12 @@ export interface MentionSpamUpsertRequestPartial {
      * @maxItems 20
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_type?: typeof AutomodTriggerType["MENTION_SPAM"];
     trigger_metadata?: (null | MentionSpamTriggerMetadata);
 }
@@ -3847,16 +3730,19 @@ export interface MessageAllowedMentionsRequest {
      * @maxItems 100
      * @distinct 
      */
-    users?: (Array<(Snowflake | null)> | null);
+    users?: (Array<(null | SnowflakeType)> | null);
     /**
      * @maxItems 100
      * @distinct 
      */
-    roles?: (Array<(Snowflake | null)> | null);
+    roles?: (Array<(null | SnowflakeType)> | null);
     replied_user?: (boolean | null);
 }
 export interface MessageAttachmentRequest {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     /**
      * @maxLength 1024
      */
@@ -3868,24 +3754,15 @@ export interface MessageAttachmentRequest {
     is_remix?: (boolean | null);
 }
 export interface MessageAttachmentResponse {
-    id: Snowflake;
-    filename: string;
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    filename: string;
     size: Int32;
     url: URIString;
     proxy_url: URIString;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     width?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     height?: (Int32 | null);
     duration_secs?: (number | null);
     waveform?: (string | null);
@@ -3913,15 +3790,7 @@ export interface MessageComponentChannelSelectResponse {
     type: typeof MessageComponentType["CHANNEL_SELECT"];
     custom_id: string;
     placeholder?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_values?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
     /**
@@ -3930,7 +3799,7 @@ export interface MessageComponentChannelSelectResponse {
     channel_types?: (Array<ChannelType> | null);
 }
 export interface MessageComponentEmojiResponse {
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     name: string;
     animated?: (boolean | null);
 }
@@ -3942,30 +3811,14 @@ export interface MessageComponentInputTextResponse {
     value?: (string | null);
     placeholder?: (string | null);
     required?: (boolean | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_length?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_length?: (Int32 | null);
 }
 export interface MessageComponentMentionableSelectResponse {
     type: typeof MessageComponentType["MENTIONABLE_SELECT"];
     custom_id: string;
     placeholder?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_values?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
 }
@@ -3973,15 +3826,7 @@ export interface MessageComponentRoleSelectResponse {
     type: typeof MessageComponentType["ROLE_SELECT"];
     custom_id: string;
     placeholder?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_values?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
 }
@@ -3989,15 +3834,7 @@ export interface MessageComponentStringSelectResponse {
     type: typeof MessageComponentType["STRING_SELECT"];
     custom_id: string;
     placeholder?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_values?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
     options?: (Array<(null | SelectOptionResponse)> | null);
@@ -4042,15 +3879,7 @@ export interface MessageComponentUserSelectResponse {
     type: typeof MessageComponentType["USER_SELECT"];
     custom_id: string;
     placeholder?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     min_values?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_values?: (Int32 | null);
     disabled?: (boolean | null);
 }
@@ -4067,7 +3896,7 @@ export interface MessageCreateRequest {
     /**
      * @maxItems 3
      */
-    sticker_ids?: (Array<Snowflake> | null);
+    sticker_ids?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 5
      */
@@ -4095,7 +3924,7 @@ export interface MessageEditRequestPartial {
     /**
      * @maxItems 1521
      */
-    sticker_ids?: (Array<(number | null)> | null);
+    sticker_ids?: (Array<(null | SnowflakeType)> | null);
     /**
      * @maxItems 5
      */
@@ -4124,16 +3953,8 @@ export interface MessageEmbedFooterResponse {
 export interface MessageEmbedImageResponse {
     url?: (string | null);
     proxy_url?: (URIString | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
-    width?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
-    height?: (Int32 | null);
+    width?: (null | UInt32Type);
+    height?: (null | UInt32Type);
 }
 export interface MessageEmbedProviderResponse {
     name: string;
@@ -4144,10 +3965,6 @@ export interface MessageEmbedResponse {
     url?: (URIString | null);
     title?: (string | null);
     description?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     color?: (Int32 | null);
     timestamp?: (ISO8601DateTime | null);
     fields?: (Array<MessageEmbedFieldResponse> | null);
@@ -4161,53 +3978,42 @@ export interface MessageEmbedResponse {
 export interface MessageEmbedVideoResponse {
     url?: (string | null);
     proxy_url?: (URIString | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
-    width?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
-    height?: (Int32 | null);
+    width?: (null | UInt32Type);
+    height?: (null | UInt32Type);
 }
 export interface MessageInteractionResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: InteractionType;
     name: string;
     user?: (null | UserResponse);
     name_localized?: (string | null);
 }
 export interface MessageMentionChannelResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     type: ChannelType;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
 }
 export interface MessageReactionCountDetailsResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     burst: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     normal: Int32;
 }
 export interface MessageReactionEmojiResponse {
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     name?: (string | null);
     animated?: (boolean | null);
 }
 export interface MessageReactionResponse {
     emoji: MessageReactionEmojiResponse;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     count: Int32;
     count_details: MessageReactionCountDetailsResponse;
     burst_colors: Array<string>;
@@ -4215,15 +4021,24 @@ export interface MessageReactionResponse {
     me: boolean;
 }
 export interface MessageReferenceResponse {
-    channel_id: Snowflake;
-    message_id?: (Snowflake | null);
-    guild_id?: (Snowflake | null);
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
+    message_id?: (null | SnowflakeType);
+    guild_id?: (null | SnowflakeType);
 }
 export interface MessageResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: MessageType;
     content: string;
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     author: UserResponse;
     attachments: Array<MessageAttachmentResponse>;
     embeds: Array<MessageEmbedResponse>;
@@ -4231,50 +4046,44 @@ export interface MessageResponse {
     /**
      * @distinct 
      */
-    mention_roles: Array<Snowflake>;
+    mention_roles: Array<SnowflakeType>;
     pinned: boolean;
     mention_everyone: boolean;
     tts: boolean;
     timestamp: ISO8601DateTime;
     edited_timestamp?: (ISO8601DateTime | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
     components: Array<(MessageComponentActionRowResponse | MessageComponentButtonResponse | MessageComponentChannelSelectResponse | MessageComponentInputTextResponse | MessageComponentMentionableSelectResponse | MessageComponentRoleSelectResponse | MessageComponentStringSelectResponse | MessageComponentUserSelectResponse)>;
     activity?: (null | MessageActivityResponse);
     application?: (null | BasicApplicationResponse);
-    application_id?: (Snowflake | null);
+    application_id?: (null | SnowflakeType);
     interaction?: (null | MessageInteractionResponse);
     nonce?: (Int64 | string | null);
-    webhook_id?: (Snowflake | null);
+    webhook_id?: (null | SnowflakeType);
     message_reference?: (null | MessageReferenceResponse);
     thread?: (null | ThreadResponse);
     mention_channels?: (Array<(null | MessageMentionChannelResponse)> | null);
     stickers?: (Array<(GuildStickerResponse | StandardStickerResponse)> | null);
     sticker_items?: (Array<MessageStickerItemResponse> | null);
     role_subscription_data?: (null | MessageRoleSubscriptionDataResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     position?: (Int32 | null);
     reactions?: (Array<MessageReactionResponse> | null);
     referenced_message?: (null | BasicMessageResponse);
 }
 export interface MessageRoleSubscriptionDataResponse {
-    role_subscription_listing_id: Snowflake;
-    tier_name: string;
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    role_subscription_listing_id: SnowflakeType;
+    tier_name: string;
     total_months_subscribed: Int32;
     is_renewal: boolean;
 }
 export interface MessageStickerItemResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     format_type: StickerFormatType;
 }
@@ -4369,7 +4178,10 @@ export interface ModalInteractionCallbackRequest {
     data: ModalInteractionCallbackData;
 }
 export interface MyGuildResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     owner: boolean;
@@ -4378,19 +4190,14 @@ export interface MyGuildResponse {
      * @distinct 
      */
     features: Array<GuildFeature>;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_member_count?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_presence_count?: (Int32 | null);
 }
 export interface NewMemberActionResponse {
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     action_type: NewMemberActionType;
     title: string;
     description: string;
@@ -4545,7 +4352,7 @@ export const OAuth2Scope = {
 } as const;
 Object.freeze(OAuth2Scope);
 export interface OnboardingPromptOptionRequest {
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     /**
      * @maxLength 50
      * @minLength 1
@@ -4555,7 +4362,7 @@ export interface OnboardingPromptOptionRequest {
      * @maxLength 100
      */
     description?: (string | null);
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     /**
      * @maxLength 100
      */
@@ -4565,29 +4372,35 @@ export interface OnboardingPromptOptionRequest {
      * @maxItems 50
      * @distinct 
      */
-    role_ids?: (Array<Snowflake> | null);
+    role_ids?: (Array<SnowflakeType> | null);
     /**
      * @maxItems 50
      * @distinct 
      */
-    channel_ids?: (Array<Snowflake> | null);
+    channel_ids?: (Array<SnowflakeType> | null);
 }
 export interface OnboardingPromptOptionResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     title: string;
     description: string;
     emoji: SettingsEmojiResponse;
     /**
      * @distinct 
      */
-    role_ids: Array<Snowflake>;
+    role_ids: Array<SnowflakeType>;
     /**
      * @distinct 
      */
-    channel_ids: Array<Snowflake>;
+    channel_ids: Array<SnowflakeType>;
 }
 export interface OnboardingPromptResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     title: string;
     options: Array<OnboardingPromptOptionResponse>;
     single_select: boolean;
@@ -4608,20 +4421,32 @@ export const OnboardingPromptType = {
 } as const;
 Object.freeze(OnboardingPromptType);
 export interface PartialDiscordIntegrationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: typeof IntegrationType["DISCORD"];
     name?: (string | null);
     account?: (null | AccountResponse);
-    application_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    application_id: SnowflakeType;
 }
 export interface PartialExternalConnectionIntegrationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: (typeof IntegrationType["TWITCH"] | typeof IntegrationType["YOUTUBE"]);
     name?: (string | null);
     account?: (null | AccountResponse);
 }
 export interface PartialGuildSubscriptionIntegrationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     type: typeof IntegrationType["GUILD_SUBSCRIPTION"];
     name?: (string | null);
     account?: (null | AccountResponse);
@@ -4670,16 +4495,19 @@ export const PremiumType = {
 } as const;
 Object.freeze(PremiumType);
 export interface PrivateApplicationResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     icon?: (string | null);
     description: string;
     type?: (null | ApplicationType);
     cover_image?: (string | null);
-    primary_sku_id?: (Snowflake | null);
+    primary_sku_id?: (null | SnowflakeType);
     bot?: (null | UserResponse);
     slug?: (string | null);
-    guild_id?: (Snowflake | null);
+    guild_id?: (null | SnowflakeType);
     rpc_origins?: (Array<(string | null)> | null);
     bot_public?: (boolean | null);
     bot_require_code_grant?: (boolean | null);
@@ -4688,15 +4516,7 @@ export interface PrivateApplicationResponse {
     custom_install_url?: (URIString | null);
     install_params?: (null | ApplicationOAuth2ParamsResponse);
     verify_key: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     max_participants?: (Int32 | null);
     /**
      * @distinct 
@@ -4706,10 +4526,6 @@ export interface PrivateApplicationResponse {
     interactions_endpoint_url?: (URIString | null);
     role_connections_verification_url?: (URIString | null);
     owner: UserResponse;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     approximate_guild_count?: (Int32 | null);
     team?: (null | TeamResponse);
 }
@@ -4722,41 +4538,35 @@ export interface PrivateChannelRequestPartial {
     icon?: (Base64String | null);
 }
 export interface PrivateChannelResponse {
-    id: Snowflake;
-    type: typeof ChannelType["DM"];
-    last_message_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    type: typeof ChannelType["DM"];
+    last_message_id?: (null | SnowflakeType);
     flags: Int32;
     last_pin_timestamp?: (ISO8601DateTime | null);
     recipients: Array<UserResponse>;
 }
 export interface PrivateGroupChannelResponse {
-    id: Snowflake;
-    type: typeof ChannelType["GROUP_DM"];
-    last_message_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    type: typeof ChannelType["GROUP_DM"];
+    last_message_id?: (null | SnowflakeType);
     flags: Int32;
     last_pin_timestamp?: (ISO8601DateTime | null);
     recipients: Array<UserResponse>;
     name?: (string | null);
     icon?: (string | null);
-    owner_id?: (Snowflake | null);
+    owner_id?: (null | SnowflakeType);
     managed?: (boolean | null);
-    application_id?: (Snowflake | null);
+    application_id?: (null | SnowflakeType);
 }
 export interface PrivateGuildMemberResponse {
     avatar?: (string | null);
     communication_disabled_until?: (ISO8601DateTime | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     flags: Int32;
     joined_at: ISO8601DateTime;
     nick?: (string | null);
@@ -4765,7 +4575,7 @@ export interface PrivateGuildMemberResponse {
     /**
      * @distinct 
      */
-    roles: Array<Snowflake>;
+    roles: Array<SnowflakeType>;
     user: UserResponse;
     mute: boolean;
     deaf: boolean;
@@ -4786,13 +4596,19 @@ export interface QuarantineUserActionResponse {
     metadata: QuarantineUserActionMetadataResponse;
 }
 export interface ReplyMessageReferenceRequest {
-    guild_id?: (Snowflake | null);
-    channel_id?: (Snowflake | null);
-    message_id: Snowflake;
+    guild_id?: (null | SnowflakeType);
+    channel_id?: (null | SnowflakeType);
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    message_id: SnowflakeType;
     fail_if_not_exists?: (boolean | null);
 }
 export interface ResourceChannelResponse {
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     title: string;
     emoji?: (null | SettingsEmojiResponse);
     icon?: (string | null);
@@ -4924,30 +4740,38 @@ export interface RoleSelect {
     disabled?: (boolean | null);
 }
 export interface ScheduledEventResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
     description?: (string | null);
-    channel_id?: (Snowflake | null);
-    creator_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
+    creator_id?: (null | SnowflakeType);
     creator?: (null | UserResponse);
     image?: (string | null);
     scheduled_start_time: ISO8601DateTime;
     scheduled_end_time?: (ISO8601DateTime | null);
     status: GuildScheduledEventStatus;
     entity_type: GuildScheduledEventEntityType;
-    entity_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    entity_id?: (null | SnowflakeType);
     user_count?: (Int32 | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     user_rsvp?: (null | ScheduledEventUserResponse);
 }
 export interface ScheduledEventUserResponse {
-    guild_scheduled_event_id: Snowflake;
-    user_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_scheduled_event_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    user_id: SnowflakeType;
     user?: (null | UserResponse);
     member?: (null | GuildMemberResponse);
 }
@@ -4977,7 +4801,7 @@ export interface SelectOptionResponse {
     default?: (boolean | null);
 }
 export interface SettingsEmojiResponse {
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     name?: (string | null);
     animated?: (boolean | null);
 }
@@ -4999,10 +4823,23 @@ export interface SlackWebhook {
      */
     attachments?: (Array<WebhookSlackEmbed> | null);
 }
+/**
+ * @pattern /^(0|[1-9][0-9]*)$/
+ */
+export type SnowflakeType = `${bigint}`;
 export interface SpamLinkRuleResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
-    creator_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    creator_id: SnowflakeType;
     name: string;
     event_type: AutomodEventType;
     actions: Array<(BlockMessageActionResponse | FlagToChannelActionResponse | QuarantineUserActionResponse | UserCommunicationDisabledActionResponse)>;
@@ -5011,24 +4848,33 @@ export interface SpamLinkRuleResponse {
     /**
      * @distinct 
      */
-    exempt_roles?: (Array<Snowflake> | null);
+    exempt_roles?: (Array<SnowflakeType> | null);
     /**
      * @distinct 
      */
-    exempt_channels?: (Array<Snowflake> | null);
+    exempt_channels?: (Array<SnowflakeType> | null);
     trigger_metadata: SpamLinkTriggerMetadataResponse;
 }
 export interface SpamLinkTriggerMetadataResponse {
 
 }
 export interface StageInstanceResponse {
-    guild_id: Snowflake;
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     topic: string;
     privacy_level: StageInstancesPrivacyLevel;
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     discoverable_disabled?: (boolean | null);
-    guild_scheduled_event_id?: (Snowflake | null);
+    guild_scheduled_event_id?: (null | SnowflakeType);
 }
 export type StageInstancesPrivacyLevel = typeof StageInstancesPrivacyLevel[keyof typeof StageInstancesPrivacyLevel];
 export const StageInstancesPrivacyLevel = {
@@ -5056,7 +4902,7 @@ export interface StageScheduledEventCreateRequest {
     scheduled_end_time?: (ISO8601DateTime | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     entity_type: typeof GuildScheduledEventEntityType["STAGE_INSTANCE"];
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     entity_metadata?: (null | EntityMetadataStageInstance);
 }
 export interface StageScheduledEventPatchRequestPartial {
@@ -5074,44 +4920,48 @@ export interface StageScheduledEventPatchRequestPartial {
     scheduled_end_time?: (ISO8601DateTime | null);
     entity_type?: (null | typeof GuildScheduledEventEntityType["STAGE_INSTANCE"]);
     privacy_level?: GuildScheduledEventPrivacyLevel;
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     entity_metadata?: (null | EntityMetadataStageInstance);
 }
 export interface StageScheduledEventResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
     description?: (string | null);
-    channel_id?: (Snowflake | null);
-    creator_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
+    creator_id?: (null | SnowflakeType);
     creator?: (null | UserResponse);
     image?: (string | null);
     scheduled_start_time: ISO8601DateTime;
     scheduled_end_time?: (ISO8601DateTime | null);
     status: GuildScheduledEventStatus;
     entity_type: typeof GuildScheduledEventEntityType["STAGE_INSTANCE"];
-    entity_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    entity_id?: (null | SnowflakeType);
     user_count?: (Int32 | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     user_rsvp?: (null | ScheduledEventUserResponse);
     entity_metadata?: (null | EntityMetadataStageInstanceResponse);
 }
 export interface StandardStickerResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     tags: string;
     type: typeof StickerType["STANDARD"];
     format_type?: (null | StickerFormatType);
     description?: (string | null);
-    pack_id: Snowflake;
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    pack_id: SnowflakeType;
     sort_value: Int32;
 }
 export type StickerFormatType = typeof StickerFormatType[keyof typeof StickerFormatType];
@@ -5126,13 +4976,19 @@ export interface StickerPackCollectionResponse {
     sticker_packs: Array<StickerPackResponse>;
 }
 export interface StickerPackResponse {
-    id: Snowflake;
-    sku_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    sku_id: SnowflakeType;
     name: string;
     description?: (string | null);
     stickers: Array<StandardStickerResponse>;
-    cover_sticker_id?: (Snowflake | null);
-    banner_asset_id?: (Snowflake | null);
+    cover_sticker_id?: (null | SnowflakeType);
+    banner_asset_id?: (null | SnowflakeType);
 }
 export type StickerType = typeof StickerType[keyof typeof StickerType];
 export const StickerType = {
@@ -5175,7 +5031,10 @@ export interface StringSelect {
 }
 export interface TeamMemberResponse {
     user: UserResponse;
-    team_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    team_id: SnowflakeType;
     membership_state: TeamMembershipState;
 }
 export type TeamMembershipState = typeof TeamMembershipState[keyof typeof TeamMembershipState];
@@ -5191,10 +5050,16 @@ export const TeamMembershipState = {
 } as const;
 Object.freeze(TeamMembershipState);
 export interface TeamResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     icon?: (string | null);
     name: string;
-    owner_user_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    owner_user_id: SnowflakeType;
     members: Array<TeamMemberResponse>;
 }
 export type TextStyleType = typeof TextStyleType[keyof typeof TextStyleType];
@@ -5230,13 +5095,15 @@ export const ThreadAutoArchiveDuration = {
 } as const;
 Object.freeze(ThreadAutoArchiveDuration);
 export interface ThreadMemberResponse {
-    id: Snowflake;
-    user_id: Snowflake;
-    join_timestamp: ISO8601DateTime;
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    user_id: SnowflakeType;
+    join_timestamp: ISO8601DateTime;
     flags: Int32;
     member?: (null | GuildMemberResponse);
 }
@@ -5249,54 +5116,35 @@ export interface ThreadMetadataResponse {
     invitable?: (boolean | null);
 }
 export interface ThreadResponse {
-    id: Snowflake;
-    type: (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]);
-    last_message_id?: (Snowflake | null);
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    type: (typeof ChannelType["ANNOUNCEMENT_THREAD"] | typeof ChannelType["PUBLIC_THREAD"] | typeof ChannelType["PRIVATE_THREAD"]);
+    last_message_id?: (null | SnowflakeType);
     flags: Int32;
     last_pin_timestamp?: (ISO8601DateTime | null);
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
-    parent_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    parent_id?: (null | SnowflakeType);
     rate_limit_per_user?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     bitrate?: (Int32 | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     user_limit?: (Int32 | null);
     rtc_region?: (string | null);
     video_quality_mode?: (null | VideoQualityMode);
     permissions?: (string | null);
-    owner_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    owner_id: SnowflakeType;
     thread_metadata?: (null | ThreadMetadataResponse);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     message_count: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     member_count: Int32;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     total_message_sent: Int32;
-    applied_tags?: (Array<Snowflake> | null);
+    applied_tags?: (Array<SnowflakeType> | null);
     member?: (null | ThreadMemberResponse);
 }
 export type ThreadSortOrder = typeof ThreadSortOrder[keyof typeof ThreadSortOrder];
@@ -5319,8 +5167,13 @@ export interface ThreadsResponse {
 export interface TypingIndicatorResponse {
 
 }
+/**
+ * @maximum 4294967295
+ * @minimum 0
+ */
+export type UInt32Type = Int64;
 export interface UpdateDefaultReactionEmojiRequest {
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     /**
      * @maxLength 100
      */
@@ -5334,7 +5187,6 @@ export interface UpdateGuildChannelRequestPartial {
      */
     name?: string;
     /**
-     * @maximum 2147483647
      * @minimum 0
      */
     position?: (Int32 | null);
@@ -5346,18 +5198,18 @@ export interface UpdateGuildChannelRequestPartial {
     /**
      * @minimum 8000
      */
-    bitrate?: (number | null);
+    bitrate?: (Int32 | null);
     /**
      * @minimum 0
      */
-    user_limit?: (number | null);
+    user_limit?: (Int32 | null);
     nsfw?: (boolean | null);
     /**
      * @maximum 21600
      * @minimum 0
      */
     rate_limit_per_user?: (number | null);
-    parent_id?: (Snowflake | null);
+    parent_id?: (null | SnowflakeType);
     /**
      * @maxItems 100
      */
@@ -5389,7 +5241,7 @@ export interface UpdateGuildOnboardingRequest {
      * @maxItems 500
      * @distinct 
      */
-    default_channel_ids?: (Array<Snowflake> | null);
+    default_channel_ids?: (Array<SnowflakeType> | null);
     mode?: (null | GuildOnboardingMode);
 }
 export interface UpdateMessageInteractionCallbackRequest {
@@ -5411,7 +5263,10 @@ export interface UpdateOnboardingPromptRequest {
     required?: (boolean | null);
     in_onboarding?: (boolean | null);
     type?: (null | OnboardingPromptType);
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
 }
 export interface UpdateThreadRequestPartial {
     /**
@@ -5432,11 +5287,11 @@ export interface UpdateThreadRequestPartial {
     /**
      * @maxItems 5
      */
-    applied_tags?: (Array<Snowflake> | null);
+    applied_tags?: (Array<SnowflakeType> | null);
     /**
      * @minimum 8000
      */
-    bitrate?: (number | null);
+    bitrate?: (Int32 | null);
     /**
      * @maximum 99
      * @minimum 0
@@ -5451,13 +5306,13 @@ export interface UpdateThreadTagRequest {
      * @minLength 0
      */
     name: string;
-    emoji_id?: (Snowflake | null);
+    emoji_id?: (null | SnowflakeType);
     /**
      * @maxLength 100
      */
     emoji_name?: (string | null);
     moderated?: (boolean | null);
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
 }
 export interface UserCommunicationDisabledAction {
     type: typeof AutomodActionType["USER_COMMUNICATION_DISABLED"];
@@ -5471,10 +5326,6 @@ export interface UserCommunicationDisabledActionMetadata {
     duration_seconds: number;
 }
 export interface UserCommunicationDisabledActionMetadataResponse {
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     duration_seconds: Int32;
 }
 export interface UserCommunicationDisabledActionResponse {
@@ -5482,12 +5333,15 @@ export interface UserCommunicationDisabledActionResponse {
     metadata: UserCommunicationDisabledActionMetadataResponse;
 }
 export interface UserGuildOnboardingResponse {
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     prompts: Array<OnboardingPromptResponse>;
     /**
      * @distinct 
      */
-    default_channel_ids: Array<Snowflake>;
+    default_channel_ids: Array<SnowflakeType>;
     enabled: boolean;
 }
 export type UserNotificationSetting = typeof UserNotificationSetting[keyof typeof UserNotificationSetting];
@@ -5503,27 +5357,22 @@ export const UserNotificationSetting = {
 } as const;
 Object.freeze(UserNotificationSetting);
 export interface UserPIIResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     username: string;
     avatar?: (string | null);
     discriminator: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     public_flags: Int32;
     /**
      * @maximum 9007199254740991
      * @minimum -9007199254740991
      */
-    flags: number;
+    flags: Int53Type;
     bot?: (boolean | null);
     system?: (boolean | null);
     banner?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     accent_color?: (Int32 | null);
     mfa_enabled: boolean;
     locale: AvailableLocale;
@@ -5532,27 +5381,22 @@ export interface UserPIIResponse {
     verified?: (boolean | null);
 }
 export interface UserResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     username: string;
     avatar?: (string | null);
     discriminator: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     public_flags: Int32;
     /**
      * @maximum 9007199254740991
      * @minimum -9007199254740991
      */
-    flags: number;
+    flags: Int53Type;
     bot?: (boolean | null);
     system?: (boolean | null);
     banner?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     accent_color?: (Int32 | null);
 }
 export interface UserSelect {
@@ -5579,18 +5423,10 @@ export interface UserSelect {
 }
 export interface VanityURLErrorResponse {
     message: string;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     code: Int32;
 }
 export interface VanityURLResponse {
     code?: (string | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     uses: Int32;
     error?: (null | VanityURLErrorResponse);
 }
@@ -5651,7 +5487,7 @@ export interface VoiceScheduledEventCreateRequest {
     scheduled_end_time?: (ISO8601DateTime | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     entity_type: typeof GuildScheduledEventEntityType["VOICE"];
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     entity_metadata?: (null | EntityMetadataVoice);
 }
 export interface VoiceScheduledEventPatchRequestPartial {
@@ -5669,27 +5505,29 @@ export interface VoiceScheduledEventPatchRequestPartial {
     scheduled_end_time?: (ISO8601DateTime | null);
     entity_type?: (null | typeof GuildScheduledEventEntityType["VOICE"]);
     privacy_level?: GuildScheduledEventPrivacyLevel;
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     entity_metadata?: (null | EntityMetadataVoice);
 }
 export interface VoiceScheduledEventResponse {
-    id: Snowflake;
-    guild_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    guild_id: SnowflakeType;
     name: string;
     description?: (string | null);
-    channel_id?: (Snowflake | null);
-    creator_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
+    creator_id?: (null | SnowflakeType);
     creator?: (null | UserResponse);
     image?: (string | null);
     scheduled_start_time: ISO8601DateTime;
     scheduled_end_time?: (ISO8601DateTime | null);
     status: GuildScheduledEventStatus;
     entity_type: typeof GuildScheduledEventEntityType["VOICE"];
-    entity_id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    entity_id?: (null | SnowflakeType);
     user_count?: (Int32 | null);
     privacy_level: GuildScheduledEventPrivacyLevel;
     user_rsvp?: (null | ScheduledEventUserResponse);
@@ -5763,11 +5601,17 @@ export interface WebhookSlackEmbedField {
     inline?: (boolean | null);
 }
 export interface WebhookSourceChannelResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
 }
 export interface WebhookSourceGuildResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     icon?: (string | null);
     name: string;
 }
@@ -5788,7 +5632,7 @@ export const WebhookType = {
 } as const;
 Object.freeze(WebhookType);
 export interface WelcomeMessageResponse {
-    author_ids: Array<Snowflake>;
+    author_ids: Array<SnowflakeType>;
     message: string;
 }
 export interface WelcomeScreenPatchRequestPartial {
@@ -5806,12 +5650,11 @@ export interface WidgetActivity {
     name: string;
 }
 export interface WidgetChannel {
-    id: Snowflake;
-    name: string;
     /**
-     * @maximum 2147483647
-     * @minimum -2147483648
+     * @pattern /^(0|[1-9][0-9]*)$/
      */
+    id: SnowflakeType;
+    name: string;
     position: Int32;
 }
 export type WidgetImageStyle = typeof WidgetImageStyle[keyof typeof WidgetImageStyle];
@@ -5851,23 +5694,22 @@ export interface WidgetMember {
     self_deaf?: (boolean | null);
     self_mute?: (boolean | null);
     suppress?: (boolean | null);
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
 }
 export interface WidgetResponse {
-    id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id: SnowflakeType;
     name: string;
     instant_invite?: (string | null);
     channels: Array<WidgetChannel>;
     members: Array<WidgetMember>;
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
     presence_count: Int32;
 }
 export interface WidgetSettingsResponse {
     enabled: boolean;
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
 }
 export type WidgetUserDiscriminator = typeof WidgetUserDiscriminator[keyof typeof WidgetUserDiscriminator];
 export const WidgetUserDiscriminator = {
@@ -5921,8 +5763,8 @@ export interface CreateDmRequestHeaders {
 }
 export type ListMyGuildsResponseJSON = Array<MyGuildResponse> | null;
 export interface ListMyGuildsRequestQuery {
-    before?: Snowflake;
-    after?: Snowflake;
+    before?: SnowflakeType;
+    after?: SnowflakeType;
     limit?: number;
     with_counts?: boolean;
 }
@@ -5957,9 +5799,12 @@ export interface CreateStageInstanceRequestJSON {
      * @minLength 1
      */
     topic: string;
-    channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    channel_id: SnowflakeType;
     privacy_level?: (null | StageInstancesPrivacyLevel);
-    guild_scheduled_event_id?: (Snowflake | null);
+    guild_scheduled_event_id?: (null | SnowflakeType);
     send_start_notification?: (boolean | null);
 }
 export interface CreateStageInstanceRequestHeaders {
@@ -5975,27 +5820,27 @@ export interface CreateGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface ListMyPrivateArchivedThreadsRequestQuery {
-    before?: Snowflake;
+    before?: SnowflakeType;
     limit?: number;
 }
 export interface ListMyPrivateArchivedThreadsRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListMyPrivateArchivedThreadsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListGuildApplicationCommandPermissionsResponseJSON = Array<CommandPermissionsResponse>;
 export interface ListGuildApplicationCommandPermissionsRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildApplicationCommandPermissionsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildApplicationCommandPermissionsRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface GetGuildApplicationCommandPermissionsRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6007,24 +5852,24 @@ export interface SetGuildApplicationCommandPermissionsRequestJSON {
     permissions?: (Array<ApplicationCommandPermission> | null);
 }
 export interface SetGuildApplicationCommandPermissionsRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface SetGuildApplicationCommandPermissionsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface AddMyMessageReactionRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
     emoji_name: string;
 }
 export interface AddMyMessageReactionRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteMyMessageReactionRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
     emoji_name: string;
 }
 export interface DeleteMyMessageReactionRequestHeaders {
@@ -6035,7 +5880,7 @@ export interface ListPrivateArchivedThreadsRequestQuery {
     limit?: number;
 }
 export interface ListPrivateArchivedThreadsRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListPrivateArchivedThreadsRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6045,13 +5890,13 @@ export interface ListPublicArchivedThreadsRequestQuery {
     limit?: number;
 }
 export interface ListPublicArchivedThreadsRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListPublicArchivedThreadsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetApplicationUserRoleConnectionRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface GetApplicationUserRoleConnectionRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6077,20 +5922,20 @@ export interface UpdateApplicationUserRoleConnectionRequestJSON {
     } | null);
 }
 export interface UpdateApplicationUserRoleConnectionRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface UpdateApplicationUserRoleConnectionRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetMyGuildMemberRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetMyGuildMemberRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type GetApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
 export interface GetApplicationRoleConnectionsMetadataRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface GetApplicationRoleConnectionsMetadataRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6101,23 +5946,23 @@ export interface GetApplicationRoleConnectionsMetadataRequestHeaders {
 export type UpdateApplicationRoleConnectionsMetadataRequestJSON = Array<ApplicationRoleConnectionsMetadataItemRequest> | null;
 export type UpdateApplicationRoleConnectionsMetadataResponseJSON = Array<ApplicationRoleConnectionsMetadataItemResponse> | null;
 export interface UpdateApplicationRoleConnectionsMetadataRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface UpdateApplicationRoleConnectionsMetadataRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildApplicationCommandRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface GetGuildApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildApplicationCommandRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface DeleteGuildApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6164,9 +6009,9 @@ export interface UpdateGuildApplicationCommandRequestJSON {
     dm_permission?: (boolean | null);
 }
 export interface UpdateGuildApplicationCommandRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface UpdateGuildApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6176,14 +6021,14 @@ export interface ListGuildApplicationCommandsRequestQuery {
     with_localizations?: boolean;
 }
 export interface ListGuildApplicationCommandsRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildApplicationCommandsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type BulkSetGuildApplicationCommandsRequestJSON = Array<{
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     /**
      * @maxLength 32
      * @minLength 1
@@ -6227,8 +6072,8 @@ export type BulkSetGuildApplicationCommandsRequestJSON = Array<{
 }>;
 export type BulkSetGuildApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
 export interface BulkSetGuildApplicationCommandsRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
 }
 export interface BulkSetGuildApplicationCommandsRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6276,20 +6121,20 @@ export interface CreateGuildApplicationCommandRequestJSON {
     type: ApplicationCommandType;
 }
 export interface CreateGuildApplicationCommandRequestPath {
-    application_id: Snowflake;
-    guild_id: Snowflake;
+    application_id: SnowflakeType;
+    guild_id: SnowflakeType;
 }
 export interface CreateGuildApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface JoinThreadRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface JoinThreadRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface LeaveThreadRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface LeaveThreadRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6300,80 +6145,80 @@ export interface BulkDeleteMessagesRequestJSON {
      * @minItems 2
      * @distinct 
      */
-    messages: Array<Snowflake>;
+    messages: Array<SnowflakeType>;
 }
 export interface BulkDeleteMessagesRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface BulkDeleteMessagesRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteUserMessageReactionRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
     emoji_name: string;
-    user_id: Snowflake;
+    user_id: SnowflakeType;
 }
 export interface DeleteUserMessageReactionRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListMessageReactionsByEmojiResponseJSON = Array<UserResponse>;
 export interface ListMessageReactionsByEmojiRequestQuery {
-    after?: Snowflake;
+    after?: SnowflakeType;
     limit?: number;
 }
 export interface ListMessageReactionsByEmojiRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
     emoji_name: string;
 }
 export interface ListMessageReactionsByEmojiRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteAllMessageReactionsByEmojiRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
     emoji_name: string;
 }
 export interface DeleteAllMessageReactionsByEmojiRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteAllMessageReactionsRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface DeleteAllMessageReactionsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface CrosspostMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface CrosspostMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface CreateThreadFromMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface CreateThreadFromMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetOriginalWebhookMessageRequestQuery {
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface GetOriginalWebhookMessageRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface GetOriginalWebhookMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteOriginalWebhookMessageRequestQuery {
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface DeleteOriginalWebhookMessageRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface DeleteOriginalWebhookMessageRequestHeaders {
@@ -6392,10 +6237,10 @@ export type UpdateOriginalWebhookMessageRequestFormData = IncomingWebhookUpdateR
     "files[9]"?: File;
 };
 export interface UpdateOriginalWebhookMessageRequestQuery {
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface UpdateOriginalWebhookMessageRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface UpdateOriginalWebhookMessageRequestHeaders {
@@ -6405,27 +6250,27 @@ export type ListGuildScheduledEventUsersResponseJSON = Array<ScheduledEventUserR
 export interface ListGuildScheduledEventUsersRequestQuery {
     with_member?: boolean;
     limit?: number;
-    before?: Snowflake;
-    after?: Snowflake;
+    before?: SnowflakeType;
+    after?: SnowflakeType;
 }
 export interface ListGuildScheduledEventUsersRequestPath {
-    guild_id: Snowflake;
-    guild_scheduled_event_id: Snowflake;
+    guild_id: SnowflakeType;
+    guild_scheduled_event_id: SnowflakeType;
 }
 export interface ListGuildScheduledEventUsersRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type GetAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
 export interface GetAutoModerationRuleRequestPath {
-    guild_id: Snowflake;
-    rule_id: Snowflake;
+    guild_id: SnowflakeType;
+    rule_id: SnowflakeType;
 }
 export interface GetAutoModerationRuleRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteAutoModerationRuleRequestPath {
-    guild_id: Snowflake;
-    rule_id: Snowflake;
+    guild_id: SnowflakeType;
+    rule_id: SnowflakeType;
 }
 export interface DeleteAutoModerationRuleRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6433,15 +6278,15 @@ export interface DeleteAutoModerationRuleRequestHeaders {
 export type UpdateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequestPartial | KeywordUpsertRequestPartial | MLSpamUpsertRequestPartial | MentionSpamUpsertRequestPartial;
 export type UpdateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
 export interface UpdateAutoModerationRuleRequestPath {
-    guild_id: Snowflake;
-    rule_id: Snowflake;
+    guild_id: SnowflakeType;
+    rule_id: SnowflakeType;
 }
 export interface UpdateAutoModerationRuleRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListAutoModerationRulesResponseJSON = Array<(DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse | null)> | null;
 export interface ListAutoModerationRulesRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListAutoModerationRulesRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6449,7 +6294,7 @@ export interface ListAutoModerationRulesRequestHeaders {
 export type CreateAutoModerationRuleRequestJSON = DefaultKeywordListUpsertRequest | KeywordUpsertRequest | MLSpamUpsertRequest | MentionSpamUpsertRequest;
 export type CreateAutoModerationRuleResponseJSON = DefaultKeywordRuleResponse | KeywordRuleResponse | MLSpamRuleResponse | MentionSpamRuleResponse | SpamLinkRuleResponse;
 export interface CreateAutoModerationRuleRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface CreateAutoModerationRuleRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6457,10 +6302,10 @@ export interface CreateAutoModerationRuleRequestHeaders {
 export interface UpdateSelfVoiceStateRequestJSON {
     request_to_speak_timestamp?: (ISO8601DateTime | null);
     suppress?: (boolean | null);
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
 }
 export interface UpdateSelfVoiceStateRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface UpdateSelfVoiceStateRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6471,13 +6316,13 @@ export interface SearchGuildMembersRequestQuery {
     query: string;
 }
 export interface SearchGuildMembersRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface SearchGuildMembersRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetActiveGuildThreadsRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetActiveGuildThreadsRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6489,43 +6334,43 @@ export interface UpdateMyGuildMemberRequestJSON {
     nick?: (string | null);
 }
 export interface UpdateMyGuildMemberRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface UpdateMyGuildMemberRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface AddGuildMemberRoleRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
-    role_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
+    role_id: SnowflakeType;
 }
 export interface AddGuildMemberRoleRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildMemberRoleRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
-    role_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
+    role_id: SnowflakeType;
 }
 export interface DeleteGuildMemberRoleRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface LeaveGuildRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface LeaveGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetApplicationCommandRequestPath {
-    application_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface GetApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteApplicationCommandRequestPath {
-    application_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface DeleteApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6572,8 +6417,8 @@ export interface UpdateApplicationCommandRequestJSON {
     dm_permission?: (boolean | null);
 }
 export interface UpdateApplicationCommandRequestPath {
-    application_id: Snowflake;
-    command_id: Snowflake;
+    application_id: SnowflakeType;
+    command_id: SnowflakeType;
 }
 export interface UpdateApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6583,13 +6428,13 @@ export interface ListApplicationCommandsRequestQuery {
     with_localizations?: boolean;
 }
 export interface ListApplicationCommandsRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface ListApplicationCommandsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type BulkSetApplicationCommandsRequestJSON = Array<{
-    id?: (Snowflake | null);
+    id?: (null | SnowflakeType);
     /**
      * @maxLength 32
      * @minLength 1
@@ -6633,7 +6478,7 @@ export type BulkSetApplicationCommandsRequestJSON = Array<{
 }>;
 export type BulkSetApplicationCommandsResponseJSON = Array<ApplicationCommandResponse> | null;
 export interface BulkSetApplicationCommandsRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface BulkSetApplicationCommandsRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6681,7 +6526,7 @@ export interface CreateApplicationCommandRequestJSON {
     type: ApplicationCommandType;
 }
 export interface CreateApplicationCommandRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface CreateApplicationCommandRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6690,7 +6535,7 @@ export type CreateInteractionResponseRequestJSON = ApplicationCommandAutocomplet
 export type CreateInteractionResponseRequestURLEncoded = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
 export type CreateInteractionResponseRequestFormData = ApplicationCommandAutocompleteCallbackRequest | CreateMessageInteractionCallbackRequest | ModalInteractionCallbackRequest | PongInteractionCallbackRequest | UpdateMessageInteractionCallbackRequest;
 export interface CreateInteractionResponseRequestPath {
-    interaction_id: Snowflake;
+    interaction_id: SnowflakeType;
     interaction_token: string;
 }
 export interface CreateInteractionResponseRequestHeaders {
@@ -6700,22 +6545,22 @@ export interface GetThreadMemberRequestQuery {
     with_member?: boolean;
 }
 export interface GetThreadMemberRequestPath {
-    channel_id: Snowflake;
-    user_id: Snowflake;
+    channel_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface GetThreadMemberRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface AddThreadMemberRequestPath {
-    channel_id: Snowflake;
-    user_id: Snowflake;
+    channel_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface AddThreadMemberRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteThreadMemberRequestPath {
-    channel_id: Snowflake;
-    user_id: Snowflake;
+    channel_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface DeleteThreadMemberRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6724,10 +6569,10 @@ export type ListThreadMembersResponseJSON = Array<ThreadMemberResponse>;
 export interface ListThreadMembersRequestQuery {
     with_member?: boolean;
     limit?: number;
-    after?: Snowflake;
+    after?: SnowflakeType;
 }
 export interface ListThreadMembersRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListThreadMembersRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6738,15 +6583,15 @@ export interface SetChannelPermissionOverwriteRequestJSON {
     deny?: (number | null);
 }
 export interface SetChannelPermissionOverwriteRequestPath {
-    channel_id: Snowflake;
-    overwrite_id: Snowflake;
+    channel_id: SnowflakeType;
+    overwrite_id: SnowflakeType;
 }
 export interface SetChannelPermissionOverwriteRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteChannelPermissionOverwriteRequestPath {
-    channel_id: Snowflake;
-    overwrite_id: Snowflake;
+    channel_id: SnowflakeType;
+    overwrite_id: SnowflakeType;
 }
 export interface DeleteChannelPermissionOverwriteRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6763,38 +6608,41 @@ export interface AddGroupDmUserRequestJSON {
 }
 export type AddGroupDmUserResponseJSON = PrivateChannelResponse | PrivateGroupChannelResponse;
 export interface AddGroupDmUserRequestPath {
-    channel_id: Snowflake;
-    user_id: Snowflake;
+    channel_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface AddGroupDmUserRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGroupDmUserRequestPath {
-    channel_id: Snowflake;
-    user_id: Snowflake;
+    channel_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface DeleteGroupDmUserRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface FollowChannelRequestJSON {
-    webhook_channel_id: Snowflake;
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    webhook_channel_id: SnowflakeType;
 }
 export interface FollowChannelRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface FollowChannelRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface GetMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface DeleteMessageRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6812,21 +6660,21 @@ export type UpdateMessageRequestFormData = MessageEditRequestPartial & {
     "files[9]"?: File;
 };
 export interface UpdateMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface UpdateMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListMessagesResponseJSON = Array<MessageResponse> | null;
 export interface ListMessagesRequestQuery {
-    around?: Snowflake;
-    before?: Snowflake;
-    after?: Snowflake;
+    around?: SnowflakeType;
+    before?: SnowflakeType;
+    after?: SnowflakeType;
     limit?: number;
 }
 export interface ListMessagesRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListMessagesRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6844,14 +6692,14 @@ export type CreateMessageRequestFormData = MessageCreateRequest & {
     "files[9]"?: File;
 };
 export interface CreateMessageRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface CreateMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListChannelWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
 export interface ListChannelWebhooksRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListChannelWebhooksRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6865,14 +6713,14 @@ export interface CreateWebhookRequestJSON {
     avatar?: (Base64String | null);
 }
 export interface CreateWebhookRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface CreateWebhookRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListChannelInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
 export interface ListChannelInvitesRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListChannelInvitesRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6880,7 +6728,7 @@ export interface ListChannelInvitesRequestHeaders {
 export type CreateChannelInviteRequestJSON = CreateGroupDMInviteRequest | CreateGuildInviteRequest;
 export type CreateChannelInviteResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export interface CreateChannelInviteRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface CreateChannelInviteRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6889,56 +6737,56 @@ export type CreateThreadRequestJSON = CreateForumThreadRequest | CreateTextThrea
 export type CreateThreadRequestURLEncoded = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
 export type CreateThreadRequestFormData = CreateForumThreadRequest | CreateTextThreadWithoutMessageRequest;
 export interface CreateThreadRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface CreateThreadRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface TriggerTypingIndicatorRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface TriggerTypingIndicatorRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface PinMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface PinMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UnpinMessageRequestPath {
-    channel_id: Snowflake;
-    message_id: Snowflake;
+    channel_id: SnowflakeType;
+    message_id: SnowflakeType;
 }
 export interface UnpinMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListPinnedMessagesResponseJSON = Array<MessageResponse> | null;
 export interface ListPinnedMessagesRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface ListPinnedMessagesRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetWebhookMessageRequestQuery {
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface GetWebhookMessageRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
-    message_id: Snowflake;
+    message_id: SnowflakeType;
 }
 export interface GetWebhookMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteWebhookMessageRequestQuery {
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface DeleteWebhookMessageRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
-    message_id: Snowflake;
+    message_id: SnowflakeType;
 }
 export interface DeleteWebhookMessageRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -6956,22 +6804,22 @@ export type UpdateWebhookMessageRequestFormData = IncomingWebhookUpdateRequestPa
     "files[9]"?: File;
 };
 export interface UpdateWebhookMessageRequestQuery {
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface UpdateWebhookMessageRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
-    message_id: Snowflake;
+    message_id: SnowflakeType;
 }
 export interface UpdateWebhookMessageRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface ExecuteGithubCompatibleWebhookRequestQuery {
     wait?: boolean;
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface ExecuteGithubCompatibleWebhookRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface ExecuteGithubCompatibleWebhookRequestHeaders {
@@ -6980,10 +6828,10 @@ export interface ExecuteGithubCompatibleWebhookRequestHeaders {
 export type ExecuteSlackCompatibleWebhookResponseJSON = string | null;
 export interface ExecuteSlackCompatibleWebhookRequestQuery {
     wait?: boolean;
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface ExecuteSlackCompatibleWebhookRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface ExecuteSlackCompatibleWebhookRequestHeaders {
@@ -7010,7 +6858,7 @@ export interface CreateGuildFromTemplateRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildNewMemberWelcomeRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildNewMemberWelcomeRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7020,15 +6868,15 @@ export interface GetGuildScheduledEventRequestQuery {
     with_user_count?: boolean;
 }
 export interface GetGuildScheduledEventRequestPath {
-    guild_id: Snowflake;
-    guild_scheduled_event_id: Snowflake;
+    guild_id: SnowflakeType;
+    guild_scheduled_event_id: SnowflakeType;
 }
 export interface GetGuildScheduledEventRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildScheduledEventRequestPath {
-    guild_id: Snowflake;
-    guild_scheduled_event_id: Snowflake;
+    guild_id: SnowflakeType;
+    guild_scheduled_event_id: SnowflakeType;
 }
 export interface DeleteGuildScheduledEventRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7036,8 +6884,8 @@ export interface DeleteGuildScheduledEventRequestHeaders {
 export type UpdateGuildScheduledEventRequestJSON = ExternalScheduledEventPatchRequestPartial | StageScheduledEventPatchRequestPartial | VoiceScheduledEventPatchRequestPartial;
 export type UpdateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
 export interface UpdateGuildScheduledEventRequestPath {
-    guild_id: Snowflake;
-    guild_scheduled_event_id: Snowflake;
+    guild_id: SnowflakeType;
+    guild_scheduled_event_id: SnowflakeType;
 }
 export interface UpdateGuildScheduledEventRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7047,7 +6895,7 @@ export interface ListGuildScheduledEventsRequestQuery {
     with_user_count?: boolean;
 }
 export interface ListGuildScheduledEventsRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildScheduledEventsRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7055,81 +6903,81 @@ export interface ListGuildScheduledEventsRequestHeaders {
 export type CreateGuildScheduledEventRequestJSON = ExternalScheduledEventCreateRequest | StageScheduledEventCreateRequest | VoiceScheduledEventCreateRequest;
 export type CreateGuildScheduledEventResponseJSON = ExternalScheduledEventResponse | StageScheduledEventResponse | VoiceScheduledEventResponse;
 export interface CreateGuildScheduledEventRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface CreateGuildScheduledEventRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildWelcomeScreenRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildWelcomeScreenRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildWelcomeScreenRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface UpdateGuildWelcomeScreenRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UpdateVoiceStateRequestJSON {
     suppress?: (boolean | null);
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
 }
 export interface UpdateVoiceStateRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface UpdateVoiceStateRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildIntegrationRequestPath {
-    guild_id: Snowflake;
-    integration_id: Snowflake;
+    guild_id: SnowflakeType;
+    integration_id: SnowflakeType;
 }
 export interface DeleteGuildIntegrationRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListGuildIntegrationsResponseJSON = Array<(DiscordIntegrationResponse | ExternalConnectionIntegrationResponse | GuildSubscriptionIntegrationResponse)> | null;
 export interface ListGuildIntegrationsRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildIntegrationsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildWidgetRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildWidgetRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildsOnboardingRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildsOnboardingRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface PutGuildsOnboardingRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface PutGuildsOnboardingRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildVanityUrlRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildVanityUrlRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface ListGuildAuditLogEntriesRequestQuery {
-    user_id?: Snowflake;
+    user_id?: SnowflakeType;
     action_type?: number;
-    before?: Snowflake;
-    after?: Snowflake;
+    before?: SnowflakeType;
+    after?: SnowflakeType;
     limit?: number;
 }
 export interface ListGuildAuditLogEntriesRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildAuditLogEntriesRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7138,20 +6986,20 @@ export interface GetGuildWidgetPngRequestQuery {
     style?: WidgetImageStyle;
 }
 export interface GetGuildWidgetPngRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildWidgetPngRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface SyncGuildTemplateRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
     code: string;
 }
 export interface SyncGuildTemplateRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildTemplateRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
     code: string;
 }
 export interface DeleteGuildTemplateRequestHeaders {
@@ -7169,7 +7017,7 @@ export interface UpdateGuildTemplateRequestJSON {
     description?: (string | null);
 }
 export interface UpdateGuildTemplateRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
     code: string;
 }
 export interface UpdateGuildTemplateRequestHeaders {
@@ -7177,7 +7025,7 @@ export interface UpdateGuildTemplateRequestHeaders {
 }
 export type ListGuildTemplatesResponseJSON = Array<GuildTemplateResponse> | null;
 export interface ListGuildTemplatesRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildTemplatesRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7194,21 +7042,21 @@ export interface CreateGuildTemplateRequestJSON {
     description?: (string | null);
 }
 export interface CreateGuildTemplateRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface CreateGuildTemplateRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildStickerRequestPath {
-    guild_id: Snowflake;
-    sticker_id: Snowflake;
+    guild_id: SnowflakeType;
+    sticker_id: SnowflakeType;
 }
 export interface GetGuildStickerRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildStickerRequestPath {
-    guild_id: Snowflake;
-    sticker_id: Snowflake;
+    guild_id: SnowflakeType;
+    sticker_id: SnowflakeType;
 }
 export interface DeleteGuildStickerRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7230,44 +7078,15 @@ export interface UpdateGuildStickerRequestJSON {
     description?: (string | null);
 }
 export interface UpdateGuildStickerRequestPath {
-    guild_id: Snowflake;
-    sticker_id: Snowflake;
+    guild_id: SnowflakeType;
+    sticker_id: SnowflakeType;
 }
 export interface UpdateGuildStickerRequestHeaders {
     "x-audit-log-reason"?: string;
 }
-export type ListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse)> | null;
-export interface ListGuildChannelsRequestPath {
-    guild_id: Snowflake;
-}
-export interface ListGuildChannelsRequestHeaders {
-    "x-audit-log-reason"?: string;
-}
-export interface CreateGuildChannelRequestPath {
-    guild_id: Snowflake;
-}
-export interface CreateGuildChannelRequestHeaders {
-    "x-audit-log-reason"?: string;
-}
-export type BulkUpdateGuildChannelsRequestJSON = Array<{
-    id?: Snowflake;
-    /**
-     * @maximum 2147483647
-     * @minimum 0
-     */
-    position?: (Int32 | null);
-    parent_id?: (Snowflake | null);
-    lock_permissions?: (boolean | null);
-}>;
-export interface BulkUpdateGuildChannelsRequestPath {
-    guild_id: Snowflake;
-}
-export interface BulkUpdateGuildChannelsRequestHeaders {
-    "x-audit-log-reason"?: string;
-}
 export type ListGuildStickersResponseJSON = Array<GuildStickerResponse>;
 export interface ListGuildStickersRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildStickersRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7290,21 +7109,52 @@ export interface CreateGuildStickerRequestFormData {
     file: File;
 }
 export interface CreateGuildStickerRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface CreateGuildStickerRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type GetGuildWebhooksResponseJSON = Array<(ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse)> | null;
 export interface GetGuildWebhooksRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildWebhooksRequestHeaders {
     "x-audit-log-reason"?: string;
 }
+export type ListGuildChannelsResponseJSON = Array<(GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse)> | null;
+export interface ListGuildChannelsRequestPath {
+    guild_id: SnowflakeType;
+}
+export interface ListGuildChannelsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export interface CreateGuildChannelRequestPath {
+    guild_id: SnowflakeType;
+}
+export interface CreateGuildChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export type BulkUpdateGuildChannelsRequestJSON = Array<{
+    /**
+     * @pattern /^(0|[1-9][0-9]*)$/
+     */
+    id?: SnowflakeType;
+    /**
+     * @minimum 0
+     */
+    position?: (Int32 | null);
+    parent_id?: (null | SnowflakeType);
+    lock_permissions?: (boolean | null);
+}>;
+export interface BulkUpdateGuildChannelsRequestPath {
+    guild_id: SnowflakeType;
+}
+export interface BulkUpdateGuildChannelsRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
 export interface GetGuildMemberRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface GetGuildMemberRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7318,7 +7168,7 @@ export interface AddGuildMemberRequestJSON {
      * @maxItems 1521
      * @distinct 
      */
-    roles?: (Array<(Snowflake | null)> | null);
+    roles?: (Array<(null | SnowflakeType)> | null);
     mute?: (boolean | null);
     deaf?: (boolean | null);
     /**
@@ -7328,15 +7178,15 @@ export interface AddGuildMemberRequestJSON {
     flags?: (number | null);
 }
 export interface AddGuildMemberRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface AddGuildMemberRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildMemberRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface DeleteGuildMemberRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7350,16 +7200,16 @@ export interface UpdateGuildMemberRequestJSON {
      * @maxItems 1521
      * @distinct 
      */
-    roles?: (Array<(Snowflake | null)> | null);
+    roles?: (Array<(null | SnowflakeType)> | null);
     mute?: (boolean | null);
     deaf?: (boolean | null);
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     communication_disabled_until?: (ISO8601DateTime | null);
     flags?: (number | null);
 }
 export interface UpdateGuildMemberRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface UpdateGuildMemberRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7370,41 +7220,41 @@ export interface ListGuildMembersRequestQuery {
     after?: number;
 }
 export interface ListGuildMembersRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildMembersRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildPreviewRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildPreviewRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListGuildInvitesResponseJSON = Array<(FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse)> | null;
 export interface ListGuildInvitesRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildInvitesRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListGuildVoiceRegionsResponseJSON = Array<VoiceRegionResponse> | null;
 export interface ListGuildVoiceRegionsRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildVoiceRegionsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildEmojiRequestPath {
-    guild_id: Snowflake;
-    emoji_id: Snowflake;
+    guild_id: SnowflakeType;
+    emoji_id: SnowflakeType;
 }
 export interface GetGuildEmojiRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildEmojiRequestPath {
-    guild_id: Snowflake;
-    emoji_id: Snowflake;
+    guild_id: SnowflakeType;
+    emoji_id: SnowflakeType;
 }
 export interface DeleteGuildEmojiRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7419,18 +7269,18 @@ export interface UpdateGuildEmojiRequestJSON {
      * @maxItems 1521
      * @distinct 
      */
-    roles?: (Array<(Snowflake | null)> | null);
+    roles?: (Array<(null | SnowflakeType)> | null);
 }
 export interface UpdateGuildEmojiRequestPath {
-    guild_id: Snowflake;
-    emoji_id: Snowflake;
+    guild_id: SnowflakeType;
+    emoji_id: SnowflakeType;
 }
 export interface UpdateGuildEmojiRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListGuildEmojisResponseJSON = Array<EmojiResponse> | null;
 export interface ListGuildEmojisRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildEmojisRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7446,33 +7296,33 @@ export interface CreateGuildEmojiRequestJSON {
      * @maxItems 1521
      * @distinct 
      */
-    roles?: (Array<(Snowflake | null)> | null);
+    roles?: (Array<(null | SnowflakeType)> | null);
 }
 export interface CreateGuildEmojiRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface CreateGuildEmojiRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildWidgetSettingsRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildWidgetSettingsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildWidgetSettingsRequestJSON {
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
     enabled?: (boolean | null);
 }
 export interface UpdateGuildWidgetSettingsRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface UpdateGuildWidgetSettingsRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildRoleRequestPath {
-    guild_id: Snowflake;
-    role_id: Snowflake;
+    guild_id: SnowflakeType;
+    role_id: SnowflakeType;
 }
 export interface DeleteGuildRoleRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7497,15 +7347,15 @@ export interface UpdateGuildRoleRequestJSON {
     unicode_emoji?: (string | null);
 }
 export interface UpdateGuildRoleRequestPath {
-    guild_id: Snowflake;
-    role_id: Snowflake;
+    guild_id: SnowflakeType;
+    role_id: SnowflakeType;
 }
 export interface UpdateGuildRoleRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type ListGuildRolesResponseJSON = Array<GuildRoleResponse>;
 export interface ListGuildRolesRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildRolesRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7530,28 +7380,28 @@ export interface CreateGuildRoleRequestJSON {
     unicode_emoji?: (string | null);
 }
 export interface CreateGuildRoleRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface CreateGuildRoleRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type BulkUpdateGuildRolesRequestJSON = Array<{
-    id?: (Snowflake | null);
-    /**
-     * @maximum 2147483647
-     * @minimum -2147483648
-     */
+    id?: (null | SnowflakeType);
     position?: (Int32 | null);
 }>;
 export type BulkUpdateGuildRolesResponseJSON = Array<GuildRoleResponse>;
 export interface BulkUpdateGuildRolesRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface BulkUpdateGuildRolesRequestHeaders {
     "x-audit-log-reason"?: string;
 }
+export interface PreviewPruneGuildRequestQuery {
+    days?: number;
+    include_roles?: (string | Array<(null | SnowflakeType)>);
+}
 export interface PreviewPruneGuildRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface PreviewPruneGuildRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7563,17 +7413,17 @@ export interface PruneGuildRequestJSON {
      */
     days?: (number | null);
     compute_prune_count?: (boolean | null);
-    include_roles?: (string | Array<(Snowflake | null)> | null);
+    include_roles?: (string | Array<(null | SnowflakeType)> | null);
 }
 export interface PruneGuildRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface PruneGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetGuildBanRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface GetGuildBanRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7591,15 +7441,15 @@ export interface BanUserFromGuildRequestJSON {
     delete_message_days?: (number | null);
 }
 export interface BanUserFromGuildRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface BanUserFromGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UnbanUserFromGuildRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: SnowflakeType;
+    user_id: SnowflakeType;
 }
 export interface UnbanUserFromGuildRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7607,11 +7457,11 @@ export interface UnbanUserFromGuildRequestHeaders {
 export type ListGuildBansResponseJSON = Array<GuildBanResponse> | null;
 export interface ListGuildBansRequestQuery {
     limit?: number;
-    before?: Snowflake;
-    after?: Snowflake;
+    before?: SnowflakeType;
+    after?: SnowflakeType;
 }
 export interface ListGuildBansRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface ListGuildBansRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7620,19 +7470,19 @@ export interface SetGuildMfaLevelRequestJSON {
     level: GuildMFALevel;
 }
 export interface SetGuildMfaLevelRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface SetGuildMfaLevelRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetStageInstanceRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface GetStageInstanceRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteStageInstanceRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface DeleteStageInstanceRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7646,26 +7496,26 @@ export interface UpdateStageInstanceRequestJSON {
     privacy_level?: StageInstancesPrivacyLevel;
 }
 export interface UpdateStageInstanceRequestPath {
-    channel_id: Snowflake;
+    channel_id: SnowflakeType;
 }
 export interface UpdateStageInstanceRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetApplicationRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface GetApplicationRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UpdateApplicationRequestPath {
-    application_id: Snowflake;
+    application_id: SnowflakeType;
 }
 export interface UpdateApplicationRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type GetWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export interface GetWebhookByTokenRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface GetWebhookByTokenRequestHeaders {
@@ -7676,17 +7526,17 @@ export type ExecuteWebhookRequestURLEncoded = IncomingWebhookRequestPartial | In
 export type ExecuteWebhookRequestFormData = IncomingWebhookRequestPartial | IncomingWebhookUpdateRequestPartial;
 export interface ExecuteWebhookRequestQuery {
     wait?: boolean;
-    thread_id?: Snowflake;
+    thread_id?: SnowflakeType;
 }
 export interface ExecuteWebhookRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface ExecuteWebhookRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteWebhookByTokenRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface DeleteWebhookByTokenRequestHeaders {
@@ -7702,50 +7552,28 @@ export interface UpdateWebhookByTokenRequestJSON {
 }
 export type UpdateWebhookByTokenResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export interface UpdateWebhookByTokenRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
     webhook_token: string;
 }
 export interface UpdateWebhookByTokenRequestHeaders {
     "x-audit-log-reason"?: string;
 }
-export type GetChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export interface GetChannelRequestPath {
-    channel_id: Snowflake;
-}
-export interface GetChannelRequestHeaders {
-    "x-audit-log-reason"?: string;
-}
-export type DeleteChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export interface DeleteChannelRequestPath {
-    channel_id: Snowflake;
-}
-export interface DeleteChannelRequestHeaders {
-    "x-audit-log-reason"?: string;
-}
-export type UpdateChannelRequestJSON = PrivateChannelRequestPartial | UpdateGuildChannelRequestPartial | UpdateThreadRequestPartial;
-export type UpdateChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
-export interface UpdateChannelRequestPath {
-    channel_id: Snowflake;
-}
-export interface UpdateChannelRequestHeaders {
-    "x-audit-log-reason"?: string;
-}
 export type GetStickerResponseJSON = GuildStickerResponse | StandardStickerResponse;
 export interface GetStickerRequestPath {
-    sticker_id: Snowflake;
+    sticker_id: SnowflakeType;
 }
 export interface GetStickerRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type GetWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export interface GetWebhookRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
 }
 export interface GetWebhookRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteWebhookRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
 }
 export interface DeleteWebhookRequestHeaders {
     "x-audit-log-reason"?: string;
@@ -7757,19 +7585,41 @@ export interface UpdateWebhookRequestJSON {
      */
     name?: string;
     avatar?: (Base64String | null);
-    channel_id?: (Snowflake | null);
+    channel_id?: (null | SnowflakeType);
 }
 export type UpdateWebhookResponseJSON = ApplicationIncomingWebhookResponse | ChannelFollowerWebhookResponse | GuildIncomingWebhookResponse;
 export interface UpdateWebhookRequestPath {
-    webhook_id: Snowflake;
+    webhook_id: SnowflakeType;
 }
 export interface UpdateWebhookRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export type GetChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export interface GetChannelRequestPath {
+    channel_id: SnowflakeType;
+}
+export interface GetChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export type DeleteChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export interface DeleteChannelRequestPath {
+    channel_id: SnowflakeType;
+}
+export interface DeleteChannelRequestHeaders {
+    "x-audit-log-reason"?: string;
+}
+export type UpdateChannelRequestJSON = PrivateChannelRequestPartial | UpdateGuildChannelRequestPartial | UpdateThreadRequestPartial;
+export type UpdateChannelResponseJSON = GuildChannelResponse | PrivateChannelResponse | PrivateGroupChannelResponse | ThreadResponse;
+export interface UpdateChannelRequestPath {
+    channel_id: SnowflakeType;
+}
+export interface UpdateChannelRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export type InviteResolveResponseJSON = FriendInviteResponse | GroupDMInviteResponse | GuildInviteResponse;
 export interface InviteResolveRequestQuery {
     with_counts?: boolean;
-    guild_scheduled_event_id?: Snowflake;
+    guild_scheduled_event_id?: SnowflakeType;
 }
 export interface InviteResolveRequestPath {
     code: string;
@@ -7788,55 +7638,55 @@ export interface GetGuildRequestQuery {
     with_counts?: boolean;
 }
 export interface GetGuildRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface GetGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface DeleteGuildRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface DeleteGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface UpdateGuildRequestPath {
-    guild_id: Snowflake;
+    guild_id: SnowflakeType;
 }
 export interface UpdateGuildRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetUserRequestPath {
-    user_id: Snowflake;
+    user_id: SnowflakeType;
 }
 export interface GetUserRequestHeaders {
     "x-audit-log-reason"?: string;
 }
 export interface GetCustomEmojiRequestPath {
-    emoji_id: Snowflake;
+    emoji_id: `${bigint}`;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
 export interface GetGuildIconRequestPath {
-    guild_id: Snowflake;
+    guild_id: `${bigint}`;
     guild_icon: string;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
 export interface GetGuildSplashRequestPath {
-    guild_id: Snowflake;
+    guild_id: `${bigint}`;
     guild_splash: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetGuildDiscoverySplashRequestPath {
-    guild_id: Snowflake;
+    guild_id: `${bigint}`;
     guild_discovery_splash: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetGuildBannerRequestPath {
-    guild_id: Snowflake;
+    guild_id: `${bigint}`;
     guild_banner: string;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
 export interface GetUserBannerRequestPath {
-    user_id: Snowflake;
+    user_id: `${bigint}`;
     user_banner: string;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
@@ -7845,79 +7695,75 @@ export interface GetDefaultUserAvatarRequestPath {
     format: "png";
 }
 export interface GetUserAvatarRequestPath {
-    user_id: Snowflake;
+    user_id: `${bigint}`;
     user_avatar: string;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
 export interface GetGuildMemberAvatarRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: `${bigint}`;
+    user_id: `${bigint}`;
     member_avatar: string;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
 export interface GetUserAvatarDecorationRequestPath {
-    user_id: Snowflake;
+    user_id: `${bigint}`;
     user_avatar_decoration: string;
     format: "png";
 }
 export interface GetApplicationIconRequestPath {
-    application_id: Snowflake;
+    application_id: `${bigint}`;
     icon: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetApplicationCoverRequestPath {
-    application_id: Snowflake;
+    application_id: `${bigint}`;
     cover_image: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetApplicationAssetRequestPath {
-    application_id: Snowflake;
-    asset_id: Snowflake;
+    application_id: `${bigint}`;
+    asset_id: `${bigint}`;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetAchievementIconRequestPath {
-    application_id: Snowflake;
-    achievement_id: Snowflake;
+    application_id: `${bigint}`;
+    achievement_id: `${bigint}`;
     icon_hash: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetStorePageAssetRequestPath {
-    application_id: Snowflake;
+    application_id: `${bigint}`;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetStickerPackBannerRequestPath {
-    sticker_pack_banner_asset_id: Snowflake;
+    sticker_pack_banner_asset_id: `${bigint}`;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetTeamIconRequestPath {
-    team_id: Snowflake;
+    team_id: `${bigint}`;
     team_icon: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetStickerRequestPath {
-    sticker_id: Snowflake;
+    sticker_id: `${bigint}`;
     format: ("png" | "json" | "gif");
 }
 export interface GetRoleIconRequestPath {
-    role_id: Snowflake;
+    role_id: `${bigint}`;
     role_icon: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetGuildScheduledEventCoverRequestPath {
-    scheduled_event_id: Snowflake;
+    scheduled_event_id: `${bigint}`;
     scheduled_event_cover_image: string;
     format: ("png" | "jpg" | "jpeg" | "webp");
 }
 export interface GetGuildMemberBannerRequestPath {
-    guild_id: Snowflake;
-    user_id: Snowflake;
+    guild_id: `${bigint}`;
+    user_id: `${bigint}`;
     member_banner: string;
     format: ("png" | "jpg" | "jpeg" | "webp" | "gif");
 }
-/**
- * @docs https://discord.com/developers/docs/reference#snowflakes
- */
-export type Snowflake = `${bigint}`;
 /**
  * @docs https://discord.com/developers/docs/reference#iso8601-datetime
  * @format yyyy-MM-dd'T'HH:mm:ss.SSSXXX
@@ -7931,6 +7777,7 @@ export type SlashCommandMessageTag = `</${string}:${bigint}>`;
 export type CustomEmojiMessageTag = `<${'a'|''}:${string}:${bigint}>`;
 export type TimestampMessageTag = `<t:${bigint}${''|`:${'t'|'T'|'d'|'D'|'f'|'F'|'R'}`}>`;
 export type MessageTag = UserMessageTag | ChannelMessageTag | RoleMessageTag | SlashCommandMessageTag | CustomEmojiMessageTag | TimestampMessageTag;
+export type Int64 = number;
 export type Int32 = number;
 export type Base64String = `data:image/${"jpeg"|"png"|"gif"};base64,${string}`;
 export interface File {
@@ -7938,4 +7785,3 @@ export interface File {
     name?: string;
     contentType?: string;
 }
-export type Int64 = number;

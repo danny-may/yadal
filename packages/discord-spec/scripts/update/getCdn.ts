@@ -1,10 +1,10 @@
 import { snakeCaseToPascalCase } from "@yadal/core";
-import { snowflake } from "./augmentations/index.js";
 import { defineOperation } from "./defineOperation.js";
 import { ExportFromDetails, writeFile } from "./output.js";
 import { TypeBuilder, TypeBuilderResult } from "./parser/index.js";
 import { InterfaceProperty, InterfaceType, LiteralType, UnionType } from "./types/index.js";
 import { OperationObject, SchemaObject } from "openapi-typescript";
+import { wellKnownFormats } from "./parser/parseStringType.js";
 
 declare function fetch(url: string): Promise<{ text(): Promise<string>; }>;
 export async function getCdn() {
@@ -53,7 +53,7 @@ export async function getCdn() {
                 const properties: InterfaceProperty[] = [];
                 for (const match of operation.path.matchAll(/\{.*?\}/g)) {
                     const name = match[0].slice(1, -1);
-                    const type = name.endsWith('_id') ? snowflake : new LiteralType({ value: 'string' });
+                    const type = name.endsWith('_id') ? wellKnownFormats.snowflake : new LiteralType({ value: 'string' });
                     properties.push(new InterfaceProperty({ name, type }));
                 }
                 properties.push(new InterfaceProperty({

@@ -1,13 +1,13 @@
 import { SchemaObject } from "openapi-typescript";
-import { snowflake, isoDateTime, uriString } from "../augmentations/index.js";
+import { isoDateTime, uriString } from "../augmentations/index.js";
 import { StringSchemaObject } from "../types.js";
 import { EnumType, EnumValue, InterfaceProperty, InterfaceType, LiteralType } from "../types/index.js";
 import { documentation } from "../util/index.js";
 import { ParserContext } from "./TypeBuilder.js";
 import { parsePluckedEnum } from "./parsePluckedEnum.js";
 
-const wellKnownFormats = {
-    snowflake: snowflake,
+export const wellKnownFormats = {
+    snowflake: new LiteralType({ value: '`${bigint}`' }),
     'date-time': isoDateTime,
     uri: uriString,
     nonce: new LiteralType({ value: 'string' }),

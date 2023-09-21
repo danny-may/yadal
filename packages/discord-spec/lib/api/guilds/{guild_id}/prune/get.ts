@@ -1,7 +1,7 @@
 /*
  * Auto generated file, do not edit
  */
-import { type PreviewPruneGuildRequestPath, type PreviewPruneGuildRequestHeaders, type GuildPruneResponse, type RateLimitError, type ErrorResponse } from '../../../../types.js';
+import { type PreviewPruneGuildRequestPath, type PreviewPruneGuildRequestQuery, type PreviewPruneGuildRequestHeaders, type GuildPruneResponse, type RateLimitError, type ErrorResponse } from '../../../../types.js';
 import { DiscordRestError, DiscordRateLimitError } from '../../../../helpers.js';
 export const name = "previewPruneGuild";
 export type RouteModel = PreviewPruneGuildRequestPath;
@@ -46,13 +46,22 @@ export const rateLimit = {
     }
 } as const;
 Object.freeze(rateLimit);
-export type QueryModel = {
-
-};
+export type QueryModel = PreviewPruneGuildRequestQuery;
 export const query = {
-    keys: Object.freeze([] as const),
-    * getValues(_?: QueryModel) {
-        
+    keys: Object.freeze(["days","include_roles"] as const),
+    * getValues(model: QueryModel) {
+        if ("days" in model) {
+            const value = model["days"];
+            if (value !== undefined && value !== null) {
+                yield ["days", String(value)] as ["days", string];
+            }
+        }
+        if ("include_roles" in model) {
+            const value = model["include_roles"];
+            if (value !== undefined && value !== null) {
+                yield ["include_roles", String(value)] as ["include_roles", string];
+            }
+        }
     }
 } as const;
 Object.freeze(query);

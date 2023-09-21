@@ -112,6 +112,7 @@ export function createBody(model: Body): { type: string; content: ArrayBufferVie
             "video_quality_mode": model["video_quality_mode" as keyof typeof model],
             "default_auto_archive_duration": model["default_auto_archive_duration" as keyof typeof model],
             "default_reaction_emoji": model["default_reaction_emoji" as keyof typeof model],
+            "default_thread_rate_limit_per_user": model["default_thread_rate_limit_per_user" as keyof typeof model],
             "default_sort_order": model["default_sort_order" as keyof typeof model],
             "default_forum_layout": model["default_forum_layout" as keyof typeof model],
             "available_tags": model["available_tags" as keyof typeof model]
